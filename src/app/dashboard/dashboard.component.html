@@ -1,0 +1,102 @@
+<div class="animated fadeInUp delay-2 w3-section">
+  
+  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">bar_chart</mat-icon> Dashboard General</h1>
+  
+  <mat-divider></mat-divider>
+
+  <div class="w3-row w3-margin-top">
+    <div class="w3-col s0 m1 l1"><p></p></div>
+    <div class="w3-col s12 m5 l5 w3-padding">
+      <div class="mat-elevation-z2 w3-hover-shadow w3-round w3-padding">
+        <mat-toolbar style="background: #fafafa">
+          <h2 class="ms-font-karla w3-hide-small w3-hide-medium" style="font-size:0.7em;font-weight:bold">Índice de Registrabilidad <abbr title="Centor de Recuperación de Componentes La Joya">CRCLJ</abbr></h2>
+          <button mat-icon-button class="ms-color-2b w3-hide-large" matTooltip="Índice de Registrabilidad CRC La Joya"><mat-icon>help_box</mat-icon></button>
+          <span class="ms-fill"></span>
+          <div>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="previewsYear()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+            <button mat-icon-button style="margin:0em 0.1em 0em 0.1em"  disabled="true"><h1 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentYear}}</h1></button>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="nextYear()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+          </div>
+        </mat-toolbar>
+        <canvas baseChart height="250"
+                    [datasets]="line1ChartData"
+                    [labels]="lineChartLabels"
+                    [options]="lineChartOptions"
+                    [colors]="lineChartColors"
+                    [legend]="lineChartLegend"
+                    [chartType]="lineChartType"
+                    ></canvas>
+      </div>
+    </div>
+    <div class="w3-col s12 m5 l5 w3-padding">
+      <div class="mat-elevation-z2 w3-hover-shadow w3-round w3-padding">
+        <mat-toolbar style="background: #fafafa">
+          <h2 class="ms-font-karla w3-hide-small w3-hide-medium" style="font-size:0.7em;font-weight:bold">Clasificación FRED - {{ currentMonth }}</h2>
+          <button mat-icon-button class="ms-color-2b w3-hide-large" matTooltip="Clasificación FRED"><mat-icon>help_box</mat-icon></button>
+          <span class="ms-fill"></span>
+          <div>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="previewsYear()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+            <button mat-icon-button style="margin:0em 0.1em 0em 0.1em"  disabled="true"><h1 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentYear}}</h1></button>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="nextYear()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+          </div>
+        </mat-toolbar>
+        <canvas baseChart height="250"
+            [data]="doughnutChartData"
+            [labels]="doughnutChartLabels"
+            [chartType]="doughnutChartType"></canvas>
+      </div>
+    </div>
+    <div class="w3-col s0 m1 l1"><p></p></div>
+  </div>
+
+  <div class="w3-row w3-margin-top">
+    <div class="w3-col s0 m1 l1"><p></p></div>
+    <div class="w3-col s12 m5 l5 w3-padding">
+      <div class="mat-elevation-z2 w3-hover-shadow w3-round w3-padding">
+        <h2 class="ms-font-karla" style="font-size:1em;font-weight:bold"></h2>
+        <mat-toolbar style="background: #fafafa">
+          <h2 class="ms-font-karla w3-hide-small w3-hide-medium" style="font-size:0.7em;font-weight:bold">Índice de Rehaceres <abbr title="Taller de Armado y Desarmado">TAD</abbr></h2>
+          <button mat-icon-button class="ms-color-2b w3-hide-large" matTooltip="Índice de Rehaceres - Taller de Armado y Desarmado"><mat-icon>help_box</mat-icon></button>
+          <span class="ms-fill"></span>
+          <div>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="previewsYear()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+            <button mat-icon-button style="margin:0em 0.1em 0em 0.1em"  disabled="true"><h1 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentYear}}</h1></button>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="nextYear()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+          </div>
+        </mat-toolbar>
+        <canvas baseChart height="250"
+                    [datasets]="line2ChartData"
+                    [labels]="lineChartLabels"
+                    [options]="lineChartOptions"
+                    [colors]="lineChartColors"
+                    [legend]="lineChartLegend"
+                    [chartType]="lineChartType"
+                    ></canvas>
+      </div>
+    </div>
+    <div class="w3-col s12 m5 l5 w3-padding">
+      <div class="mat-elevation-z2 w3-hover-shadow w3-round w3-padding">
+        <mat-toolbar style="background: #fafafa">
+          <h2 class="ms-font-karla w3-hide-small w3-hide-medium" style="font-size:0.7em;font-weight:bold">Índice de Rehaceres <abbr title="Taller de Mecanizado y Metalizado">TMM</abbr></h2>
+          <button mat-icon-button class="ms-color-2b w3-hide-large" matTooltip="Índice de Rehaceres - Taller de Mecanizado y Metalizado"><mat-icon>help_box</mat-icon></button>
+          <span class="ms-fill"></span>
+          <div>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="previewsYear()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+            <button mat-icon-button style="margin:0em 0.1em 0em 0.1em"  disabled="true"><h1 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentYear}}</h1></button>
+            <button mat-icon-button class="ms-color-2b" style="margin:0em 0.1em 0em 0.1em" (click)="nextYear()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+          </div>
+        </mat-toolbar>
+        <canvas baseChart height="250"
+                    [datasets]="line3ChartData"
+                    [labels]="lineChartLabels"
+                    [options]="lineChartOptions"
+                    [colors]="lineChartColors"
+                    [legend]="lineChartLegend"
+                    [chartType]="lineChartType"
+                    ></canvas>
+      </div>
+    </div>
+    <div class="w3-col s0 m1 l1"><p></p></div>
+  </div>
+
+</div>

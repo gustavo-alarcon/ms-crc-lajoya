@@ -1,0 +1,44 @@
+<div class="w3-display-container animated fadeIn delay-5 slower ms-login-bg" style="min-height:100vh">
+
+  <div class="w3-display-middle ms-login-card mat-elevation-z8" *ngIf="auth.userCRC.uid === ''; else getStarted">
+    <img style="width:100%; margin-bottom:1em" src="../assets/images/logo-crc-v1.png" alt="logo ferreyros">
+    <mat-divider color="primary"></mat-divider>
+    <form [formGroup]="loginForm" autocomplete="off">
+      <mat-progress-bar mode="indeterminate" *ngIf="auth.authLoader"></mat-progress-bar>
+      <mat-form-field color="primary" style="width:100%">
+        <input matInput  style="color:#000" type="text" placeholder="correo" formControlName="email">
+        <mat-error *ngIf="!loginForm.valid">
+          Correo <Strong>requerido</Strong>
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field color="primary" style="width:100%">
+        <input #passInput id="pass" style="color:#000" matInput (keyup.enter)="checkAuth()" type="password" placeholder="password" formControlName="password">
+        <button mat-icon-button *ngIf="passInput.value && visibility" matSuffix aria-label="mostrar password" (click)="showPassword()"><mat-icon style="font-size: 1.3em">visibility</mat-icon></button>
+        <button mat-icon-button *ngIf="passInput.value && !visibility" matSuffix aria-label="mostrar password" (click)="showPassword()"><mat-icon style="font-size: 1.3em">visibility_off</mat-icon></button>
+        <mat-error *ngIf="!loginForm.valid">
+          Password <Strong>requerido</Strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+    <br>
+    <div (click)="checkAuth()" class="w3-center w3-btn w3-block w3-round ms-login-btn">Ingresar</div>
+  </div>
+
+  <ng-template #getStarted>
+    <div class="w3-display-middle w3-center ms-session-card">
+      <div class="w3-round w3-amber w3-border w3-border-black w3-padding" style="background:rgba(252,194,16,1)">
+        <img style="width:100%" src="../assets/images/logo-crc-v1.png" alt="logo ferreyros">
+      </div>
+      <h1 class="ms-font-rubik w3-text-white" style="font-size:2em">Hola, {{auth.userCRC.name}} {{auth.userCRC.lastname}}</h1>
+      <div (click)="goToDashboard()" class="w3-center w3-btn w3-block ms-login-btn w3-round">Ir al dashboard</div>
+      <br>
+      <div (click)="auth.signOut()" class="w3-center w3-blue-gray w3-btn w3-block w3-round">Cerrar sesión</div>
+    </div>
+  </ng-template>
+  
+  <div class="w3-display-bottomright">
+    <p style="color: #2b2b2b; margin-right:1em">V 1.0</p>
+  </div>
+
+</div>

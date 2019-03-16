@@ -1,0 +1,67 @@
+<h2 mat-dialog-title class="ms-font-rubik ms-color-2b"><mat-icon style="vertical-align:middle">notifications</mat-icon>Notificaciones</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <!-- <mat-list class="w3-block">
+    
+    <mat-list-item class="w3-hover-light-gray" *ngFor="let note of auth.currentDataNotifications | async" >
+      
+      <mat-icon matRipple mat-list-icon (click)="seen(note['id'])" class="ms-color-2b" matTooltip="Tarea" *ngIf="note['type'] === 'task'">assignment</mat-icon>
+      <mat-icon matRipple mat-list-icon (click)="seen(note['id'])" class="ms-color-2b" matTooltip="Confirmar Tarea" *ngIf="note['type'] === 'task confirmation'">offline_pin</mat-icon>
+      <mat-icon matRipple mat-list-icon (click)="seen(note['id'])" class="ms-color-2b" matTooltip="Confirmación" *ngIf="note['type'] === 'confirmation'">compare_arrows</mat-icon>
+      <mat-icon matRipple mat-list-icon (click)="seen(note['id'])" class="ms-color-2b" matTooltip="Inspección" *ngIf="note['type'] === 'inspection'">search</mat-icon>
+      <span class="w3-small w3-margin-left">{{note['regDate'] | date : 'dd/MM/yyyy'}}</span>
+      <div mat-line *ngIf="note['type'] != 'task confirmation'" class="ms-color-2b">
+        <span mat-line><strong>{{note['senderName']}}</strong></span>
+        <span mat-line>{{note['subject']}}</span>
+      </div>
+      <div mat-line *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b">
+        <span mat-line><strong>{{note['senderName']}}</strong></span>
+        <span mat-line>{{note['subject']}}</span>
+        <mat-form-field>
+          <input matInput [matDatepicker]="datePicker" [formControl]="dateFormControl">
+          <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+          <mat-datepicker #datePicker></mat-datepicker>
+          <mat-hint>
+            <strong>Asigne una fecha de cumplimiento para la tarea</strong>
+          </mat-hint>
+        </mat-form-field>
+        <button mat-raised-button class="w3-margin-right" color="warn" (click)="reject()">Rechazar</button>
+        <button mat-raised-button class="w3-margin-right" color="primary" (click)="confirm()">Aceptar</button>
+      </div>
+
+    </mat-list-item>
+    
+  </mat-list> -->
+  <div matRipple class="w3-hover-light-gray w3-border-bottom" style="display:flex" *ngFor="let note of auth.currentDataNotifications | async">
+    <div style="width:100px;display:flex;justify-content:center;align-items:center" (click)="seen(note['id'])">
+      <mat-icon matRipple mat-list-icon class="ms-color-2b" matTooltip="Tarea" *ngIf="note['type'] === 'task'">assignment</mat-icon>
+      <mat-icon matRipple mat-list-icon class="ms-color-2b" matTooltip="Confirmar Tarea" *ngIf="note['type'] === 'task confirmation'">offline_pin</mat-icon>
+      <mat-icon matRipple mat-list-icon class="ms-color-2b" matTooltip="Confirmación" *ngIf="note['type'] === 'confirmation'">compare_arrows</mat-icon>
+      <mat-icon matRipple mat-list-icon class="ms-color-2b" matTooltip="Inspección" *ngIf="note['type'] === 'inspection'">search</mat-icon>
+    </div>
+    <div style="width:80%;padding:16px 16px 24px 16px;display:flex;justify-content:start;align-items:center">
+      <div *ngIf="note['type'] != 'task confirmation'" class="ms-color-2b">
+        <span><strong>{{note['senderName']}}</strong> <span *ngIf="note['staffName']" matTooltip="Personal observado"><mat-icon style="vertical-align:middle; margin: 0px 8px 0px 8px">arrow_forward</mat-icon> <strong>{{note['staffName']}}</strong></span> </span><br>
+        <span>{{note['subject']}}</span><br>
+      </div>
+      <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b">
+        <span><strong>{{note['senderName']}}</strong></span><br>
+        <span>{{note['subject']}}</span><br>
+        <span *ngIf="note['estimatedTerminationDate']"><strong>Fecha propuesta de realización: </strong> {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</span>
+        <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+          <input matInput [matDatepicker]="datePicker" [formControl]="dateFormControl" [value]="note['estimatedTerminationDate']">
+          <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+          <mat-datepicker #datePicker></mat-datepicker>
+          <mat-hint>
+            <strong>Asigne una fecha de cumplimiento para la tarea</strong> mm/dd/yyyy*
+          </mat-hint>
+        </mat-form-field>
+        <button mat-raised-button class="w3-margin-right" color="warn" (click)="reject(note['fredId'], note['areaSupervisorId'], note['id'])" *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+        <button mat-raised-button class="w3-margin-right" color="primary" (click)="confirm(note['fredId'], note['areaSupervisorId'], note['id'])" *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+      </div>
+    </div>
+    <div class="w3-hide-small" style="width:100px;display:flex;justify-content:center;align-items:center">
+      <span class="w3-small">{{note['regDate'] | date : 'dd/MM/yyyy'}}</span>
+    </div>
+  </div>
+</mat-dialog-content>

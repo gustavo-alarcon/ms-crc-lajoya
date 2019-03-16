@@ -1,0 +1,12 @@
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">assignment_turned_in</mat-icon> Guardar Observación</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <p class="ms-font-roboto">¿Está seguro de querer agreagar esta observación?</p>
+  <br>
+  <mat-progress-bar mode="buffer" [value]="uploadPercent | async" *ngIf="uploading"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading">{{uploadPercent | async | number: '.2'}}/100 % ... Subiendo imagen</p>
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-raised-button mat-dialog-close color="warn">No</button>
+  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,276 @@
+<div class="animated fadeIn dalay-4 slower">
+  <mat-toolbar style="background-image: linear-gradient(to right, #0F2027, #203A43, #2C5364)">
+
+    <button mat-icon-button style="color:white" (click)="toggleSideMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <ng-container>
+      <img src="../../assets/images/logo-crc-white.png" alt="logo ferreyros" style="height:80%">
+    </ng-container>
+    <span class="ms-fill"></span>
+    <div style="margin-right:1em">
+      <button mat-icon-button style="color:white" (click)="toggleSideNotifications()">
+        <mat-icon [matBadge]="auth.notifications.length" matBadgeColor="warn"
+          [matBadgeHidden]="auth.notifications.length === 0">notifications</mat-icon>
+      </button>
+    </div>
+    <div class="w3-hide-small" *ngIf="auth.userCRC">
+      <button mat-stroked-button class="ms-font-3"
+        style="font-size:0.7em;border-radius:15px;color:white;border-color:white"
+        [matMenuTriggerFor]="menu">{{auth.userCRC.displayName}} <mat-icon>keyboard_arrow_down</mat-icon></button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item class="ms-font-3" routerLink="configuration/users"
+          *ngIf="auth.permits['configurationSection']">
+          <mat-icon>settings_box</mat-icon> Configuración
+        </button>
+        <button mat-menu-item class="ms-font-3" (click)="auth.signOut()">
+          <mat-icon>exit_to_app</mat-icon> Cerrar sesión
+        </button>
+        <button mat-menu-item class="ms-font-3">
+          <mat-icon>help_box</mat-icon> Ayuda
+        </button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.0b</button>
+      </mat-menu>
+    </div>
+    <div class="w3-hide-large w3-hide-medium">
+      <button mat-icon-button color="primary" style="font-size:0.8em; border-radius:15px; color:white"
+        [matMenuTriggerFor]="menuResponsive">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #menuResponsive="matMenu">
+        <button mat-menu-item class="ms-font-3 w3-border-bottom" style="margin-top:0px" disabled>
+          <mat-icon>account_circle</mat-icon>
+          {{(auth.userCRC.displayName === 'undefined')? '...':auth.userCRC.displayName}}
+        </button>
+        <button mat-menu-item class="ms-font-3" routerLink="configuration/users"
+          *ngIf="auth.permits['configurationSection']">
+          <mat-icon>settings_box</mat-icon> Configuración
+        </button>
+        <button mat-menu-item class="ms-font-3" (click)="auth.signOut()">
+          <mat-icon>exit_to_app</mat-icon> Cerrar sesión
+        </button>
+        <button mat-menu-item class="ms-font-3">
+          <mat-icon>help_box</mat-icon> Ayuda
+        </button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.0b</button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container style="height:92vh">
+    <mat-sidenav mode="over" #sideMenu [(opened)]="openedMenu" class="mat-elevation-z8">
+      <div>
+
+        <button *ngIf="auth.permits['generalDashboard']" mat-button class="w3-block" routerLink="dashboard"
+          style="padding: 0.8em 0em 0em 1.2em;;text-align:left;font-weight:500" (click)="toggleSideMenu()">
+          <mat-icon class="ms-menu-icon" style="vertical-align: middle;margin-right:0.2em;margin-left:0.25em">bar_chart
+          </mat-icon> Dashboard
+        </button><br>
+
+        <mat-expansion-panel *ngIf="auth.permits['securitySection']"
+          style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey"
+          [ngClass]="{'ms-expansion-panel-menu':securityOpenedFlag}" (opened)="securityOpened()"
+          (closed)="securityClosed()">
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':securityOpenedFlag}">
+              <mat-icon style="vertical-align:middle; margin-right:0.3em">verified_user</mat-icon> Seguridad
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <button mat-button *ngIf="auth.permits['securityDashboard']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/dashboard"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
+            Dashboard
+          </button><br>
+          <button mat-button *ngIf="auth.permits['securityFred']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/fred"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assistant</mat-icon> FRED
+          </button><br>
+          <button mat-button *ngIf="auth.permits['securityInspections']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/inspections"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment_turned_in
+            </mat-icon> Inspecciones
+          </button><br>
+          <button mat-button *ngIf="auth.permits['securityTasks']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/tasks"
+            style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment</mat-icon> Tareas
+          </button><br>
+
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="auth.permits['qualitySection']"
+          style="width:15em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey"
+          [ngClass]="{'ms-expansion-panel-menu':qualityOpenedFlag}" (opened)="qualityOpened()"
+          (closed)="qualityClosed()">
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':qualityOpenedFlag}">
+              <mat-icon style="vertical-align:middle; margin-right:0.3em; border-radius:0px 0px 0px 0px">
+                check_circle_outline</mat-icon> Calidad
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <button mat-button *ngIf="auth.permits['qualityDashboard']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/dashboard"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
+            Dashboard
+          </button><br>
+          <button mat-button *ngIf="auth.permits['qualityRedos']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/restorations"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">repeat</mat-icon> Rehaceres
+          </button><br>
+          <button mat-button *ngIf="auth.permits['qualityUpgrades']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/upgrades"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">grade</mat-icon> Op. de
+            Mejora
+          </button><br>
+          <button mat-button *ngIf="auth.permits['qualityInspections']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/inspections"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment_turned_in
+            </mat-icon> Inspecciones
+          </button><br>
+          <button mat-button *ngIf="auth.permits['qualityTasks']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/tasks"
+            style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment</mat-icon> Tareas
+          </button><br>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel *ngIf="auth.permits['maintenanceSection']"
+          style="width:15em;box-shadow:none;border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey"
+          [ngClass]="{'ms-expansion-panel-menu':maintenanceOpenedFlag}" (opened)="maintenanceOpened()"
+          (closed)="maintenanceClosed()">
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':maintenanceOpenedFlag}">
+              <mat-icon style="vertical-align: middle; margin-right:0.3em">build</mat-icon> Mantenimiento
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <button mat-button *ngIf="auth.permits['maintenanceDashboard']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber"
+            routerLink="maintenance/dashboard" style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
+            Dashboard
+          </button><br>
+          <button mat-button *ngIf="auth.permits['maintenanceRequests']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="maintenance/requests"
+            style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">inbox</mat-icon> Solicitudes
+          </button><br>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel *ngIf="auth.permits['ssggSection']"
+          style="width:15em;box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey"
+          [ngClass]="{'ms-expansion-panel-menu':ssggOpenedFlag}" (opened)="ssggOpened()" (closed)="ssggClosed()">
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':ssggOpenedFlag}">
+              <mat-icon style="vertical-align: middle; margin-right:0.3em">extension</mat-icon> SSGG
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <button mat-button *ngIf="auth.permits['ssggDashboard']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="ssgg/dashboard"
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
+            Dashboard
+          </button><br>
+          <button mat-button *ngIf="auth.permits['ssggRequests']"
+            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="ssgg/requests"
+            style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
+            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">inbox</mat-icon> Solicitudes
+          </button><br>
+
+        </mat-expansion-panel>
+      </div>
+    </mat-sidenav>
+
+    <!-- SIDENAV NOTIFICATIONS -->
+    <mat-sidenav id="side-notifications" position="end" mode="over" #sideNotifications [(opened)]="openedNotifications"
+      class="mat-elevation-z8" style="background:#f5f5f5">
+
+      <mat-toolbar style="background:#333333">
+        <p style="font-weight:700" class="ms-font-raleway ms-color-wt">Notificaciones</p>
+        <span class="ms-fill"></span>
+        <button mat-icon-button routerLink="notifications" class="ms-color-wt" matTooltip="Ver historial"  (click)="toggleSideNotifications()">
+          <mat-icon>list_alt</mat-icon>
+        </button>
+      </mat-toolbar>
+
+      <div *ngFor="let note of auth.currentDataNotifications | async"
+        class="mat-elevation-z4 w3-round-large ms-notification-card">
+        <div style="display:flex" class="ms-font-raleway">
+          <p class="w3-small">{{note['senderName']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button (click)="seen(note['id'])" >
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+        <div>
+          <div *ngIf="note['type'] != 'task confirmation'" class="ms-color-2b">
+            <span>{{note['subject']}}</span><br>
+          </div>
+          <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b">
+            <span>{{note['subject']}}</span><br>
+            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+                realización: 
+              {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateFormControl"
+                [value]="note['estimatedTerminationDate']">
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              <mat-hint>
+                <strong>Asigne una fecha de cumplimiento para la tarea</strong> mm/dd/yyyy*
+              </mat-hint>
+            </mat-form-field>
+            <div style="margin: 1em 0em 0.5em 0em">
+              <button mat-raised-button class="w3-margin-right" color="warn"
+                (click)="reject(note['fredId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+              <button mat-raised-button class="w3-margin-right" color="primary"
+                (click)="confirm(note['fredId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+            </div>
+
+          </div>
+        </div>
+        <div style="display:flex">
+          <div>
+            <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'task'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Tarea" >assignment</mat-icon> Tarea
+            </button>
+            <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'task confirmation'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Confirmar Tarea" *ngIf="note['type'] === 'task confirmation'">offline_pin</mat-icon> Confirmar tarea
+            </button>
+            <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'confirmation'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Confirmación" *ngIf="note['type'] === 'confirmation'">compare_arrows</mat-icon> Confirmar
+            </button>
+            <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'inspection'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Inspección" *ngIf="note['type'] === 'inspection'">search</mat-icon> Inspección
+            </button>
+          </div>
+          <span class="ms-fill"></span>
+          <p class="w3-small w3-text-gray">{{note['regDate'] | timeAgo}}</p>
+        </div>
+
+      </div>
+
+      <div class="padding:1em 1em" *ngIf="auth.notifications.length === 0">
+        <p style="font-size:1.5em" class="ms-color-bt ms-font-raleway w3-center"> No tiene notificaciones nuevas</p>
+      </div>
+
+    </mat-sidenav>
+    <mat-sidenav-content class="w3-padding">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</div>

@@ -1,0 +1,153 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.ms-login-bg{
+    background-image: linear-gradient(to right, #0F2027, #203A43, #2C5364)
+}
+
+.ms-color-2b{
+    color: #2b2b2b !important;
+}
+
+.ms-color-wt{
+    color: rgba(255,255,255,0.7);
+}
+
+.ms-color-bt{
+    color: rgba(0,0,0,0.7);
+}
+
+.ms-font-rubik{
+    font-family: 'Rubik', sans-serif;
+}
+
+.ms-font-karla{
+    font-family: 'Karla', sans-serif;
+}
+
+.ms-font-roboto{
+    font-family: 'Roboto', sans-serif;
+}
+
+.ms-font-poppins{
+    font-family: 'Poppins', sans-serif;
+}
+
+.ms-font-raleway{
+    font-family: 'Raleway', sans-serif;
+}
+
+.ms-fill{
+    flex: 1 1 auto;
+}
+
+/* LOGIN STYLE --- START */
+.ms-login-card{
+    width:36vh;
+
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px 10px 10px 10px;
+    padding: 16px 16px 16px 16px;
+}
+
+.ms-session-card{
+    width: 40vh;
+}
+
+.ms-login-btn {
+    padding: 0.5em 0.5em;
+    margin: 0.4em 0 0.4em 0;
+    background-color: #fcc210;
+    color: #000;
+    font-weight: 500;
+}
+
+.ms-login-btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+@media only screen and (max-width: 600px) {
+    .ms-login-card {
+        width:90vw;
+    }
+}
+/* LOGIN STYLE --- END */
+
+/* MAT EXPANSION PANEL - MENU --- START */
+.mat-expansion-panel-body{
+    padding: 0px 0px !important;
+}
+
+.ms-expansion-panel-menu{
+    background: #203A43;
+}
+
+.ms-expansion-panel-title{
+    color: white;
+}
+/* MAT EXPANSION PANEL - MENU --- END*/
+
+/* 
+    STYLE FOR NOTIFICATIONS
+*/
+
+.ms-notification-parent{
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.ms-notification-child{
+    margin: auto;
+}
+
+.ms-nofiticacion-icon{
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+}
+
+.ms-hero-image {
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.ms-header-mobile{
+    font-family: 'Raleway';
+    font-weight: 700;
+    color: gray;
+    padding: 0.5em 0.5em 0.5em 0.7em;
+}
+
+#side-notifications {
+    max-width:300px;
+}
+
+.ms-notification-card {
+    margin: 1em 1em;
+    padding: 0.7em 0.7em;
+    background: white;
+}
+
+.ms-empty-list{
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-weight: 600;
+    font-size: 1.7em;
+}
+
+.ms-empty-container{
+    background-image: linear-gradient(to right, #333, #007991);
+    transition: 1s;
+}
+
+

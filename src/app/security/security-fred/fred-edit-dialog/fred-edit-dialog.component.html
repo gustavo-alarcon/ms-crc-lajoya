@@ -1,0 +1,216 @@
+<div class="w3-container">
+  <h2 class="ms-font-rubik ms-color-bt" style="font-size:1em">
+    <mat-icon>assistant</mat-icon> Editar FRED
+  </h2>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+    <!-- <mat-vertical-stepper #stepperFRED class="w3-margin-top w3-round-large">
+      <mat-step [stepControl]="firstFormGroup" errorMessage="Complete todos los campos requeridos" state="done"> -->
+        <form [formGroup]="firstFormGroup">
+          <!-- <ng-template matStepLabel>Cabecera</ng-template> -->
+          <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Cabecera</h2>
+          
+
+          <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+            <mat-label>Tipo de observación</mat-label>
+            <input type="text" matInput placeholder="Escriba y seleccione" formControlName="type"
+              [matAutocomplete]="autoType" required>
+            <mat-hint>
+              <strong>requerido *</strong>
+            </mat-hint>
+          </mat-form-field>
+          <mat-autocomplete #autoType="matAutocomplete">
+            <mat-option *ngFor="let type of filteredTypes | async" [value]="type" style="font-size:14px">
+              {{type}}
+            </mat-option>
+          </mat-autocomplete>
+
+          <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+            <mat-label>Área Observada</mat-label>
+            <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedArea"
+              [matAutocomplete]="autoArea" required>
+            <mat-hint>
+              <strong>requerido *</strong>
+            </mat-hint>
+          </mat-form-field>
+          <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
+            [displayWith]="showSelectedArea">
+            <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
+              <strong>{{option['name']}}</strong> | <span
+                class="w3-small">{{option['supervisor']['displayName']}}</span>
+            </mat-option>
+          </mat-autocomplete>
+
+          <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+            <mat-label>Persona observada</mat-label>
+            <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedStaff"
+              [matAutocomplete]="autoStaff" required>
+            <mat-hint>
+              <strong>requerido *</strong>
+            </mat-hint>
+          </mat-form-field>
+          <mat-autocomplete #autoStaff="matAutocomplete" (optionSelected)="selectedStaff($event)"
+            [displayWith]="showSelectedStaff">
+            <mat-option *ngFor="let option of filteredStaff |async" [value]="option" style="font-size:14px">
+              {{option['displayName']}}
+            </mat-option>
+          </mat-autocomplete>
+
+          <!-- <div class="w3-margin-top">
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div> -->
+        </form>
+      <!-- </mat-step>
+      <mat-step [stepControl]="secondFormGroup" errorMessage="Complete todos los campos requeridos"
+        *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'"> -->
+        <div *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
+          <form [formGroup]="secondFormGroup">
+            <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Observaciones</h2>
+            
+
+            <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+              <mat-label>Orden y Limpeza</mat-label>
+              <input type="text" matInput placeholder="Seleccione..." formControlName="list1"
+                [matAutocomplete]="autoList1" required>
+              <mat-hint>
+                <strong>requerido *</strong>
+              </mat-hint>
+            </mat-form-field>
+            <mat-autocomplete #autoList1="matAutocomplete">
+              <mat-option *ngFor="let option of filteredObsList1 | async" [value]="option['name']" style="font-size:14px">
+                {{option['name']}}
+              </mat-option>
+            </mat-autocomplete>
+
+            <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+              <mat-label>Equipos de Protección Personal</mat-label>
+              <input type="text" matInput placeholder="Seleccione..." formControlName="list2"
+                [matAutocomplete]="autoList2" required>
+              <mat-hint>
+                <strong>requerido *</strong>
+              </mat-hint>
+            </mat-form-field>
+            <mat-autocomplete #autoList2="matAutocomplete">
+              <mat-option *ngFor="let option of filteredObsList2 | async" [value]="option['name']" style="font-size:14px">
+                {{option['name']}}
+              </mat-option>
+            </mat-autocomplete>
+
+            <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+              <mat-label>Control de Riesgos Operacionales</mat-label>
+              <input type="text" matInput placeholder="Seleccione..." formControlName="list3"
+                [matAutocomplete]="autoList3" required>
+              <mat-hint>
+                <strong>requerido *</strong>
+              </mat-hint>
+            </mat-form-field>
+            <mat-autocomplete #autoList3="matAutocomplete">
+              <mat-option *ngFor="let option of filteredObsList3 | async" [value]="option['name']" style="font-size:14px">
+                {{option['name']}}
+              </mat-option>
+            </mat-autocomplete>
+
+            <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+              <mat-label>Herramientas y Equipos</mat-label>
+              <input type="text" matInput placeholder="Seleccione..." formControlName="list4"
+                [matAutocomplete]="autoList4" required>
+            </mat-form-field>
+            <mat-autocomplete #autoList4="matAutocomplete">
+              <mat-option *ngFor="let option of filteredObsList4 | async" [value]="option['name']" style="font-size:14px">
+                {{option['name']}}
+              </mat-option>
+            </mat-autocomplete>
+
+            <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+              <mat-label>Riesgos Críticos</mat-label>
+              <input type="text" matInput placeholder="Seleccione..." formControlName="list5"
+                [matAutocomplete]="autoList5" required>
+              <mat-hint>
+                <strong>requerido *</strong>
+              </mat-hint>
+            </mat-form-field>
+            <mat-autocomplete #autoList5="matAutocomplete">
+              <mat-option *ngFor="let option of filteredObsList5 | async" [value]="option['name']" style="font-size:14px">
+                {{option['name']}}
+              </mat-option>
+            </mat-autocomplete>
+
+            <!-- <div class="w3-margin-top">
+              <button mat-stroked-button matStepperPrevious class="w3-margin-right">Anterior</button>
+              <button mat-stroked-button matStepperNext class="w3-margin-right">Siguiente</button>
+            </div> -->
+          </form>
+        </div>
+      <!-- </mat-step>
+      <mat-step [stepControl]="thirdFormGroup" errorMessage="Complete todos los campos requeridos"> -->
+        <form [formGroup]="thirdFormGroup">
+          <!-- <ng-template matStepLabel>Reseñas</ng-template> -->
+          <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Reseñas</h2>
+          
+
+          <mat-form-field class="w3-margin-right" appearance="outline">
+            <mat-label>¿Incidente solucionado?</mat-label>
+            <mat-select formControlName="solved">
+              <mat-option value="true">Si</mat-option>
+              <mat-option value="false" selected>No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w3-margin-right" appearance="outline"
+            *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
+            <mat-label>Acto sub-estandar</mat-label>
+            <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardAct"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="w3-margin-right" appearance="outline"
+            *ngIf="firstFormGroup.value['type'] === 'Condición sub-estandar'">
+            <mat-label>Condición sub-estandar</mat-label>
+            <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardCondition"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="w3-margin-right" appearance="outline"
+            *ngIf="firstFormGroup.value['type'] === 'Acto destacable'">
+            <mat-label>Acto destacable</mat-label>
+            <textarea matInput placeholder="Describa..." rows="4" formControlName="remarkableAct"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="w3-margin-right" appearance="outline">
+            <mat-label>Oportunidad de Mejora</mat-label>
+            <textarea matInput placeholder="Describa..." rows="4" formControlName="upgradeOpportunity"></textarea>
+          </mat-form-field>
+
+          <br>
+          <div class="w3-padding">
+            <button mat-raised-button color="primary" matTooltip="Agregar imagen inicial" class="w3-margin-right w3-margin-bottom"
+              (click)="fileInput_initial.click()">
+              <mat-icon>add_photo_alternate</mat-icon> Foto inicial
+            </button>
+            <input #fileInput_initial style="display: none" type="file" (change)="onFileSelected_initial($event)">
+            <img [src]="imageSrc_initial || '../../../assets/images/no-image.png'" style="width:150px">
+          </div>
+
+          <br>
+          <div class="w3-padding">
+            <button mat-raised-button color="primary" matTooltip="Agregar imagen final" class="w3-margin-right w3-margin-bottom"
+              style="width:128px" (click)="fileInput_final.click()">
+              <mat-icon>add_photo_alternate</mat-icon> Foto final
+            </button>
+            <input #fileInput_final style="display: none" type="file" (change)="onFileSelected_final($event)">
+            <img [src]="imageSrc_final || '../../../assets/images/no-image.png'" style="width:150px">
+          </div>
+          <!-- <div class="w3-margin-top">
+            <button mat-stroked-button matStepperPrevious class="w3-margin-right w3-margin-top">Anterior</button>
+            <button mat-raised-button color="primary" class="w3-margin-right  w3-margin-top" (click)="save()"
+              [disabled]="!(firstFormGroup.valid && secondFormGroup.valid)">Guardar</button>
+          </div> -->
+          <p class="w3-margin-bottom"></p>
+        </form>
+
+      <!-- </mat-step>
+    </mat-vertical-stepper> -->
+  </mat-dialog-content>
+  <mat-dialog-actions class="w3-margin-bottom">
+    <button mat-raised-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-stroked-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,1212 @@
+<div class="w3-section">
+  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">
+    <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED
+  </h1>
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="Formulario">
+      <div class="w3-padding">
+        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Formulario FRED</h2>
+        <mat-vertical-stepper #stepperFRED class="mat-elevation-z8 w3-margin-top w3-round-large">
+          <mat-step [stepControl]="firstFormGroup" errorMessage="Complete todos los campos requeridos" state="done">
+            <form [formGroup]="firstFormGroup">
+              <ng-template matStepLabel>Cabecera</ng-template>
+
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Tipo de observación</mat-label>
+                <input type="text" matInput placeholder="Escriba y seleccione" formControlName="type"
+                  [matAutocomplete]="autoType" required>
+                <mat-hint>
+                  <strong>requerido *</strong>
+                </mat-hint>
+              </mat-form-field>
+              <mat-autocomplete #autoType="matAutocomplete">
+                <mat-option *ngFor="let type of filteredTypes | async" [value]="type" style="font-size:14px">
+                  {{type}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Área Observada</mat-label>
+                <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedArea"
+                  [matAutocomplete]="autoArea" required>
+                <mat-hint>
+                  <strong>requerido *</strong>
+                </mat-hint>
+              </mat-form-field>
+              <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
+                [displayWith]="showSelectedArea">
+                <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
+                  <strong>{{option['name']}}</strong> | <span
+                    class="w3-small">{{option['supervisor']['displayName']}}</span>
+                </mat-option>
+              </mat-autocomplete>
+
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Persona observada</mat-label>
+                <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedStaff"
+                  [matAutocomplete]="autoStaff" required>
+                <mat-hint>
+                  <strong>requerido *</strong>
+                </mat-hint>
+              </mat-form-field>
+              <mat-autocomplete #autoStaff="matAutocomplete" (optionSelected)="selectedStaff($event)"
+                [displayWith]="showSelectedStaff">
+                <mat-option *ngFor="let option of filteredStaff |async" [value]="option" style="font-size:14px">
+                  {{option['displayName']}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <div class="w3-margin-top">
+                <button mat-stroked-button matStepperNext>Siguiente</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="secondFormGroup" errorMessage="Complete todos los campos requeridos"
+            *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
+            <form [formGroup]="secondFormGroup">
+              <ng-template matStepLabel>Observaciones</ng-template>
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Orden y Limpeza</mat-label>
+                <input type="text" matInput placeholder="Seleccione..." formControlName="list1"
+                  [matAutocomplete]="autoList1" required>
+                <mat-hint>
+                  <strong>requerido *</strong>
+                </mat-hint>
+              </mat-form-field>
+              <mat-autocomplete #autoList1="matAutocomplete">
+                <mat-option *ngFor="let option of filteredObsList1 | async" [value]="option['name']"
+                  style="font-size:14px">
+                  {{option['name']}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Equipos de Protección Personal</mat-label>
+                <input type="text" matInput placeholder="Seleccione..." formControlName="list2"
+                  [matAutocomplete]="autoList2" required>
+                <mat-hint>
+                  <strong>requerido *</strong>
+                </mat-hint>
+              </mat-form-field>
+              <mat-autocomplete #autoList2="matAutocomplete">
+                <mat-option *ngFor="let option of filteredObsList2 | async" [value]="option['name']"
+                  style="font-size:14px">
+                  {{option['name']}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Control de Riesgos Operacionales</mat-label>
+                <input type="text" matInput placeholder="Seleccione..." formControlName="list3"
+                  [matAutocomplete]="autoList3" required>
+                <mat-hint>
+                  <strong>requerido *</strong>
+                </mat-hint>
+              </mat-form-field>
+              <mat-autocomplete #autoList3="matAutocomplete">
+                <mat-option *ngFor="let option of filteredObsList3 | async" [value]="option['name']"
+                  style="font-size:14px">
+                  {{option['name']}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Herramientas y Equipos</mat-label>
+                <input type="text" matInput placeholder="Seleccione..." formControlName="list4"
+                  [matAutocomplete]="autoList4" required>
+              </mat-form-field>
+              <mat-autocomplete #autoList4="matAutocomplete">
+                <mat-option *ngFor="let option of filteredObsList4 | async" [value]="option['name']"
+                  style="font-size:14px">
+                  {{option['name']}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+                <mat-label>Riesgos Críticos</mat-label>
+                <input type="text" matInput placeholder="Seleccione..." formControlName="list5"
+                  [matAutocomplete]="autoList5" required>
+                <mat-hint>
+                  <strong>requerido *</strong>
+                </mat-hint>
+              </mat-form-field>
+              <mat-autocomplete #autoList5="matAutocomplete">
+                <mat-option *ngFor="let option of filteredObsList5 | async" [value]="option['name']"
+                  style="font-size:14px">
+                  {{option['name']}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <div class="w3-margin-top">
+                <button mat-stroked-button matStepperPrevious class="w3-margin-right">Anterior</button>
+                <button mat-stroked-button matStepperNext class="w3-margin-right">Siguiente</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="thirdFormGroup" errorMessage="Complete todos los campos requeridos">
+            <form [formGroup]="thirdFormGroup">
+              <ng-template matStepLabel>Reseñas</ng-template>
+              <mat-form-field class="w3-margin-right" appearance="outline">
+                <mat-label>¿Incidente solucionado?</mat-label>
+                <mat-select formControlName="solved">
+                  <mat-option value="true">Si</mat-option>
+                  <mat-option value="false" selected>No</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="w3-margin-right" appearance="outline"
+                *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
+                <mat-label>Acto sub-estandar</mat-label>
+                <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardAct"></textarea>
+              </mat-form-field>
+
+              <mat-form-field class="w3-margin-right" appearance="outline"
+                *ngIf="firstFormGroup.value['type'] === 'Condición sub-estandar'">
+                <mat-label>Condición sub-estandar</mat-label>
+                <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardCondition"></textarea>
+              </mat-form-field>
+
+              <mat-form-field class="w3-margin-right" appearance="outline"
+                *ngIf="firstFormGroup.value['type'] === 'Acto destacable'">
+                <mat-label>Acto destacable</mat-label>
+                <textarea matInput placeholder="Describa..." rows="4" formControlName="remarkableAct"></textarea>
+              </mat-form-field>
+
+              <mat-form-field class="w3-margin-right" appearance="outline">
+                <mat-label>Oportunidad de Mejora</mat-label>
+                <textarea matInput placeholder="Describa..." rows="4" formControlName="upgradeOpportunity"></textarea>
+              </mat-form-field>
+
+              <button mat-raised-button color="primary" matTooltip="Agregar imagen"
+                class="w3-margin-right w3-margin-bottom" (click)="fileInput.click()">
+                <mat-icon>add_photo_alternate</mat-icon>
+              </button>
+              <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
+              <img [src]="imageSrc || '../../../assets/images/no-image.png'" style="width:150px">
+
+              <div class="w3-margin-top">
+                <button mat-stroked-button matStepperPrevious class="w3-margin-right w3-margin-top">Anterior</button>
+                <button mat-raised-button color="primary" class="w3-margin-right  w3-margin-top" (click)="save()"
+                  [disabled]="!(firstFormGroup.valid && secondFormGroup.valid)">Guardar</button>
+              </div>
+            </form>
+
+          </mat-step>
+
+          <ng-template matStepperIcon="done">
+            <mat-icon>done_all</mat-icon>
+          </ng-template>
+        </mat-vertical-stepper>
+      </div>
+    </mat-tab>
+    <mat-tab label="Lista">
+      <ng-template matTabContent>
+        <div class="w3-padding">
+          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Actos sub-estandar</h2>
+          <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
+            <div class="w3-amber w3-round-large" style="max-height:100vh; overflow:auto">
+              <table mat-table [dataSource]="dataSourceSubstandardAct" matSort style="width:100%">
+
+                <ng-container matColumnDef="index">
+                  <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding: 0px 1em 0px 1em">N°</th>
+                  <td mat-cell *matCellDef="let fred; let i = index" style="color:#2b2b2b; padding: 0px 1em 0px 1em">
+                    {{i+1}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha</th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small" style="font-weight:500">{{fred['regDate'] | date : 'dd/MM/yyyy'}}</span><br>
+                    <span class="w3-small">({{fred['regDate'] | date : 'hh:mm:ss'}})</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="observations" sticky>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:250px; border-left:1px solid lightgrey; border-right:1px solid lightgrey">
+                    Observaciones</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:250px; border-left:1px solid lightgrey; border-right:1px solid lightgrey">
+                    <ng-container *ngFor="let observation of fred['observations']">
+                      <span class="w3-small" style="font-weight:500">{{observation['group']}}</span>
+                      <ul style="margin-top:0px;margin-bottom:7px;padding-left:32px;">
+                        <li class="w3-small" *ngFor="let item of observation['observations']">
+                          {{item}}
+                        </li>
+                      </ul>
+                    </ng-container>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="initialPicture">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto inicial
+                  </th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <a href="{{fred['initialPicture']}}" target="_blank"
+                      *ngIf="fred['initialPicture']; else defaultPictureTable1">
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="{{fred['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                      </div>
+                    </a>
+                    <ng-template #defaultPictureTable1>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="observer">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Observador</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    <span class="w3-small" style="font-weight:500">{{fred['createdBy']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
+                      <li class="w3-small">Correo: <a
+                          href="mailto:{{fred['createdBy']['email']}}">{{fred['createdBy']['email']}}</a></li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="observedArea">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:200px; border-left:1px solid lightgrey">
+                    Área observada</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:200px; border-left:1px solid lightgrey">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Sup.: {{fred['observedArea']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="staffObserved">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Personal observado</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedStaff']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Área: {{fred['observedStaff']['area']['name']}}</li>
+                      <li class="w3-small">Correo: <a
+                          href="mailto:{{fred['observedStaff']['email']}}">{{fred['observedStaff']['email']}}</a></li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="substandardAct">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Ácto
+                    sub-estandar</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                    <span class="w3-small">{{fred['substandardAct']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="upgradeOpportunity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Mejora</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                    <span class="w3-small">{{fred['upgradeOpportunity']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['status']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="percent">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Porcentaje
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    {{fred['percent']}} %
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="terminationDates">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Fecha
+                    propuesta / Fecha cierre</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                      {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                      {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="finalPicture">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto final
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <a href="{{fred['finalPicture']}}" target="_blank"
+                      *ngIf="fred['finalPicture']; else defaultPictureTable1">
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="{{fred['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                      </div>
+                    </a>
+                    <ng-template #defaultPictureTable1>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey" rowspan="2">
+                    Acciones</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <button mat-icon-button color="primary" matTooltip="Editar tarea" (click)="edit(fred)">
+                      <mat-icon>edit</mat-icon>
+                    </button><br>
+                    <button mat-icon-button color="warn" matTooltip="Borrar tarea"
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                      <mat-icon>delete</mat-icon>
+                    </button><br>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsSubstandardAct; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsSubstandardAct;"></tr>
+
+              </table>
+            </div>
+            <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+
+          <!-- MOBIL VERSION SUB ACT-->
+          <div class="w3-hide-large w3-hide-medium">
+            <ng-container *ngFor="let fred of filteredSubstandardActFreds; let i = index">
+              <div [@openCloseCard]="isOpenSubstandardAct[i] ? 'open': 'closed'"
+                (click)="toggleCardSubstandardAct(i)"
+                class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+                <div class="w3-display-topright"
+                  style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+                  <p style="font-size:1em; color:white"><strong>{{fred['percent']}} %</strong></p>
+                </div>
+                <div [@openCloseDescription]="isOpenSubstandardAct[i] ? 'openDescription': 'closedDescription'"
+                  class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+                  <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                    {{(fred['upgradeOpportunity'].length>25 ? (fred['upgradeOpportunity'] | slice:0:25)+'...':(fred['upgradeOpportunity']))}}
+                  </p>
+                  <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                    *ngIf="fred['estimatedTerminationDate'] != 0">
+                    {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+                  <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                    *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+                </div>
+              </div>
+              <div [@openCloseContent]="isOpenSubstandardAct[i] ? 'openContent': 'closedContent'"
+                class="mat-elevation-z8">
+                <mat-toolbar style="background:#333333">
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" matTooltip="Borrar FRED"
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-toolbar>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Fecha</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                    <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Observaciones</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <ng-container *ngFor="let observation of fred['observations']">
+                      <span class="w3-small" style="font-weight:500">{{observation['group']}}</span>
+                      <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                        <li class="w3-small" *ngFor="let item of observation['observations']">
+                          {{item}}
+                        </li>
+                      </ul>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Observador</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['createdBy']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Área</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Sup.: {{fred['observedArea']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Personal</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedStaff']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Área: {{fred['observedStaff']['area']['name']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Acto sub-estandar</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['substandardAct']?fred['substandardAct']:'---'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Oportunidad de mejora</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['upgradeOpportunity']?fred['upgradeOpportunity']:'---'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Estado</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['status']}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Porcentaje</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['percent']}} %</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Fecha propuesta</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                      {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                      {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                      *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                    <ng-template #noImageLink>
+                      <span class="w3-small w3-text-gray">No disponible</span>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                      *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                    <ng-template #noImageLink>
+                      <span class="w3-small w3-text-gray">No disponible</span>
+                    </ng-template>
+                  </div>
+                </div>
+                <mat-toolbar>
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardSubstandardAct(i)">
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                  </button>
+                </mat-toolbar>
+              </div>
+            </ng-container>
+          </div>
+
+          <div *ngIf="dbs.securitySubstandardActFreds.length === 0"
+            class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+            <h2 class="ms-empty-list">
+              Sin novedades
+            </h2>
+          </div>
+
+          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Condiciones sub-estandar</h2>
+          <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
+            <div class="w3-amber w3-round-large" style="max-height:100vh; overflow:auto">
+              <table mat-table [dataSource]="dataSourceSubstandardCondition" matSort style="width:100%">
+
+                <ng-container matColumnDef="index">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">N°</th>
+                  <td mat-cell *matCellDef="let fred; let i = index"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    {{i+1}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Fecha</th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small" style="font-weight:500">{{fred['regDate'] | date : 'dd/MM/yyyy'}}</span><br>
+                    <span class="w3-small">({{fred['regDate'] | date : 'hh:mm:ss'}})</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="initialPicture">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto inicial
+                  </th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <a href="{{fred['initialPicture']}}" target="_blank"
+                      *ngIf="fred['initialPicture']; else defaultPictureTable2">
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="{{fred['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                      </div>
+                    </a>
+                    <ng-template #defaultPictureTable2>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="observer">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Observador
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['createdBy']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
+                      <li class="w3-small">Correo: <a
+                          href="mailto:{{fred['createdBy']['email']}}">{{fred['createdBy']['email']}}</a></li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="observedArea">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Área observada
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['observedArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Sup.: {{fred['observedArea']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="staffObserved">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Personal
+                    observado</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['observedStaff']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Área: {{fred['observedStaff']['area']['name']}}</li>
+                      <li class="w3-small">Correo: <a
+                          href="mailto:{{fred['observedStaff']['email']}}">{{fred['observedStaff']['email']}}</a></li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="substandardCondition">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Condición
+                    sub-estandar</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                    <span class="w3-small">{{fred['substandardCondition']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="upgradeOpportunity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Mejora</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                    <span class="w3-small">{{fred['upgradeOpportunity']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['status']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="percent">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Porcentaje
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    {{fred['percent']}} %
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="terminationDates">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Fecha
+                    propuesta / Fecha cierre</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                      {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                      {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="finalPicture">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto final
+                  </th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <a href="{{fred['finalPicture']}}" target="_blank"
+                      *ngIf="fred['finalPicture']; else defaultPictureTable2">
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="{{fred['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                      </div>
+                    </a>
+                    <ng-template #defaultPictureTable2>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding-left:0.5em">Editar</th>
+                  <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding-left:0.5em">
+                    <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)">
+                      <mat-icon>edit</mat-icon>
+                    </button><br>
+                    <button mat-icon-button color="warn" matTooltip="Borrar FRED"
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                      <mat-icon>delete</mat-icon>
+                    </button><br>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsSubstandardCondition; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsSubstandardCondition;"></tr>
+
+              </table>
+            </div>
+            <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+
+          <!-- MOBIL VERSION SUB CONDITION-->
+          <div class="w3-hide-large w3-hide-medium">
+            <ng-container *ngFor="let fred of filteredSubstandardConditionFreds; let i = index">
+              <div [@openCloseCard]="isOpenSubstandardCondition[i] ? 'open': 'closed'"
+                (click)="toggleCardSubstandardCondition(i)"
+                class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+                <div class="w3-display-topright"
+                  style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+                  <p style="font-size:1em; color:white"><strong>{{fred['percent']}} %</strong></p>
+                </div>
+                <div [@openCloseDescription]="isOpenSubstandardCondition[i] ? 'openDescription': 'closedDescription'"
+                  class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+                  <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                    {{(fred['upgradeOpportunity'].length>25 ? (fred['upgradeOpportunity'] | slice:0:25)+'...':(fred['upgradeOpportunity']))}}
+                  </p>
+                  <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                    *ngIf="fred['estimatedTerminationDate'] != 0">
+                    {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+                  <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                    *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+                </div>
+              </div>
+              <div [@openCloseContent]="isOpenSubstandardCondition[i] ? 'openContent': 'closedContent'"
+                class="mat-elevation-z8">
+                <mat-toolbar style="background:#333333">
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" matTooltip="Borrar FRED"
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-toolbar>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Fecha</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                    <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Observador</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['createdBy']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Área</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Sup.: {{fred['observedArea']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Personal</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedStaff']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Área: {{fred['observedStaff']['area']['name']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Condición sub-estandar</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['substandardCondition']?fred['substandardAct']:'---'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Oportunidad de mejora</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['upgradeOpportunity']?fred['upgradeOpportunity']:'---'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Estado</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['status']}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Porcentaje</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['percent']}} %</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Fecha propuesta</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                      {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                      {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                      *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                    <ng-template #noImageLink>
+                      <span class="w3-small w3-text-gray">No disponible</span>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                      *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                    <ng-template #noImageLink>
+                      <span class="w3-small w3-text-gray">No disponible</span>
+                    </ng-template>
+                  </div>
+                </div>
+                <mat-toolbar>
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardSubstandardCondition(i)">
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                  </button>
+                </mat-toolbar>
+              </div>
+            </ng-container>
+          </div>
+
+          <div *ngIf="dbs.securitySubstandardConditionFreds.length === 0"
+            class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+            <h2 class="ms-empty-list">
+              Sin novedades
+            </h2>
+          </div>
+
+          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Actos destacables</h2>
+          <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
+            <div class="w3-amber w3-round-large" style="max-height:57vh; overflow:auto">
+              <table mat-table [dataSource]="dataSourceRemarkableAct" matSort style="width:100%">
+
+                <ng-container matColumnDef="index">
+                  <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;">N°</th>
+                  <td mat-cell *matCellDef="let fred; let i = index" style="color:#2b2b2b;">
+                    {{i+1}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Fecha</th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small" style="font-weight:500">{{fred['regDate'] | date : 'dd/MM/yyyy'}}</span><br>
+                    <span class="w3-small">({{fred['regDate'] | date : 'hh:mm:ss'}})</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="initialPicture">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto inicial
+                  </th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <a href="{{fred['initialPicture']}}" target="_blank"
+                      *ngIf="fred['initialPicture']; else defaultPictureTable3">
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="{{fred['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                      </div>
+                    </a>
+                    <ng-template #defaultPictureTable3>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="observer">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Observador
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['createdBy']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
+                      <li class="w3-small">Correo: <a
+                          href="mailto:{{fred['createdBy']['email']}}">{{fred['createdBy']['email']}}</a></li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="observedArea">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Área observada
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['observedArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Sup.: {{fred['observedArea']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="staffObserved">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Personal
+                    observado</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['observedStaff']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Área: {{fred['observedStaff']['area']['name']}}</li>
+                      <li class="w3-small">Correo: <a
+                          href="mailto:{{fred['observedStaff']['email']}}">{{fred['observedStaff']['email']}}</a></li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="remarkableAct">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Ácto destacado
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                    <span class="w3-small">{{fred['remarkableAct']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="upgradeOpportunity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Mejora</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                    <span class="w3-small">{{fred['upgradeOpportunity']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small">{{fred['status']}}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="percent">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Porcentaje
+                  </th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    {{fred['percent']}} %
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="terminationDates">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Fecha
+                    propuesta /&#13;&#10; Fecha cierre</th>
+                  <td mat-cell *matCellDef="let fred"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                      {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                      {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="finalPicture">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto final
+                  </th>
+                  <td mat-cell *matCellDef="let fred" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                    <a href="{{fred['finalPicture']}}" target="_blank"
+                      *ngIf="fred['finalPicture']; else defaultPictureTable3">
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="{{fred['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                      </div>
+                    </a>
+                    <ng-template #defaultPictureTable3>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding-left:0.5em">Editar</th>
+                  <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding-left:0.5em">
+                    <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)">
+                      <mat-icon>edit</mat-icon>
+                    </button><br>
+                    <button mat-icon-button color="warn" matTooltip="Borrar FRED"
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                      <mat-icon>delete</mat-icon>
+                    </button><br>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsRemarkableAct; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsRemarkableAct;"></tr>
+
+              </table>
+            </div>
+            <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+
+          <!-- MOBIL VERSION REMARKABLE ACT-->
+          <div class="w3-hide-large w3-hide-medium">
+            <ng-container *ngFor="let fred of filteredRemarkableActFreds; let i = index">
+              <div [@openCloseCard]="isOpenRemarkableAct[i] ? 'open': 'closed'"
+                (click)="toggleCardRemarkableAct(i)"
+                class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+                <div class="w3-display-topright"
+                  style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+                  <p style="font-size:1em; color:white"><strong>{{fred['percent']}} %</strong></p>
+                </div>
+                <div [@openCloseDescription]="isOpenRemarkableAct[i] ? 'openDescription': 'closedDescription'"
+                  class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+                  <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                    {{(fred['upgradeOpportunity'].length>25 ? (fred['upgradeOpportunity'] | slice:0:25)+'...':(fred['upgradeOpportunity']))}}
+                  </p>
+                  <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                    *ngIf="fred['estimatedTerminationDate'] != 0">
+                    {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+                  <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                    *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+                </div>
+              </div>
+              <div [@openCloseContent]="isOpenRemarkableAct[i] ? 'openContent': 'closedContent'"
+                class="mat-elevation-z8">
+                <mat-toolbar style="background:#333333">
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" matTooltip="Borrar FRED"
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-toolbar>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Fecha</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                    <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Observador</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['createdBy']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Área</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Sup.: {{fred['observedArea']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Personal</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{fred['observedStaff']['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Área: {{fred['observedStaff']['area']['name']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Acto destacado</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['substandardCondition']?fred['substandardAct']:'---'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Oportunidad de mejora</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['upgradeOpportunity']?fred['upgradeOpportunity']:'---'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Estado</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['status']}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Porcentaje</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{fred['percent']}} %</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Fecha propuesta</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                      {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                    <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                      {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                      *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                    <ng-template #noImageLink>
+                      <span class="w3-small w3-text-gray">No disponible</span>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                      *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                    <ng-template #noImageLink>
+                      <span class="w3-small w3-text-gray">No disponible</span>
+                    </ng-template>
+                  </div>
+                </div>
+                <mat-toolbar>
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardRemarkableAct(i)">
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                  </button>
+                </mat-toolbar>
+              </div>
+            </ng-container>
+          </div>
+
+          <div *ngIf="dbs.securityRemarkableActFreds.length === 0"
+            class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+            <h2 class="ms-empty-list">
+              Sin novedades
+            </h2>
+          </div>
+
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+
+</div>

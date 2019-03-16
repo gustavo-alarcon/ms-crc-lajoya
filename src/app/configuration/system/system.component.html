@@ -1,0 +1,36 @@
+<mat-sidenav-container style="height:77vh">
+
+  <mat-sidenav mode="side" opened="true" class="w3-card-4">
+
+    <mat-expansion-panel style="width:20em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':generalOpenedFlag}" (opened)="generalOpened()" (closed)="generalClosed()">
+      <mat-expansion-panel-header>
+        <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':generalOpenedFlag}">
+          <mat-icon style="vertical-align:middle; margin-right:0.3em">category</mat-icon> General
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="areas" style="text-align:left;border-radius:0px 0px 0px 0px"><mat-icon style="margin-right:0.2em;margin-left:1.5em" class="w3-medium">trip_origin</mat-icon> Áreas</button><br>
+        
+    </mat-expansion-panel>
+
+    <mat-expansion-panel style="width:20em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':securityOpenedFlag}" (opened)="securityOpened()" (closed)="securityClosed()">
+      <mat-expansion-panel-header>
+        <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':securityOpenedFlag}">
+          <mat-icon style="vertical-align:middle; margin-right:0.3em; border-radius:0px 0px 0px 0px">verified_user</mat-icon> Seguridad
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="substandard-1" style="text-align:left;border-radius:0px 0px 0px 0px"><mat-icon style="margin-right:0.2em;margin-left:1.5em" class="w3-medium">trip_origin</mat-icon> Orden y Limpieza</button><br>
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="substandard-2" style="text-align:left;border-radius:0px 0px 0px 0px"><mat-icon style="margin-right:0.2em;margin-left:1.5em" class="w3-medium">trip_origin</mat-icon> Equipos de Protección Personal</button><br>
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="substandard-3" style="text-align:left;border-radius:0px 0px 0px 0px"><mat-icon style="margin-right:0.2em;margin-left:1.5em" class="w3-medium">trip_origin</mat-icon> Control de Riesgos Operacionales</button><br>
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="substandard-4" style="text-align:left;border-radius:0px 0px 0px 0px"><mat-icon style="margin-right:0.2em;margin-left:1.5em" class="w3-medium">trip_origin</mat-icon> Herramientas y Equipos</button><br>
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="substandard-5" style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em"><mat-icon style="margin-right:0.2em;margin-left:1.5em" class="w3-medium">trip_origin</mat-icon> Riesgos Críticos</button><br>
+    
+    </mat-expansion-panel>
+  </mat-sidenav>
+  
+  <mat-sidenav-content class="w3-padding">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

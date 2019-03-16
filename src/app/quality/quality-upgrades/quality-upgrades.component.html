@@ -1,0 +1,182 @@
+<div class="w3-section">
+  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">grade</mat-icon> Oportunidades de Mejora</h1>
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="Rehacer">
+      <div class="w3-padding">
+          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Formulario</h2>
+          <mat-vertical-stepper [linear]="false" #stepperRestoration class="mat-elevation-z8 w3-margin-top w3-round-large">
+            <mat-step [stepControl]="firstFormGroup" errorMessage="Complete todos los campos requeridos">
+              <form [formGroup]="firstFormGroup">
+
+                <ng-template matStepLabel>Cabecera</ng-template>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Fecha de creación</mat-label>
+                  <input matInput [matDatepicker]="myDatepicker" [value]="now" disabled="true">
+                  <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+                  <mat-datepicker #myDatepicker></mat-datepicker>
+                  <mat-hint>
+                    <strong>Formato: mes/día/año</strong>
+                  </mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Autor</mat-label>
+                  <input matInput type="text" formControlName="originator" autocomplete="off">
+                </mat-form-field>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Área</mat-label>
+                  <input matInput type="text" formControlName="area" [matAutocomplete]="autoArea" autocomplete="off">
+                  <mat-autocomplete #autoArea="matAutocomplete">
+                    <mat-option *ngFor="let option of areas" [value]="option" style="font-size:14px">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Encargado</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="owner" [matAutocomplete]="autoOwner" autocomplete="off">
+                  <mat-autocomplete #autoOwner="matAutocomplete">
+                    <mat-option *ngFor="let option of staff" [value]="option" style="font-size:14px">
+                      {{option['name']}}, {{option['lastname']}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field>
+
+                <div class="w3-margin-top">
+                  <button mat-stroked-button matStepperNext>Siguiente</button>
+                </div>
+              </form>
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup" errorMessage="Complete todos los campos requeridos">
+              <form [formGroup]="secondFormGroup">
+                <ng-template matStepLabel>Registros y Componente</ng-template>
+
+                <!-- <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Registrar MR ó MC del componente</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="regMRMC" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field>
+        
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Registrar OR cliente</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="regOTCustomer" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Registrar OT RHI</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="regOTRHI" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Registrar n/p del componente</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="regPartNumber" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Nombre del componente</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="componentName" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field> -->
+        
+                <div class="w3-margin-top">
+                  <button mat-stroked-button matStepperPrevious class="w3-margin-right">Anterior</button>
+                  <button mat-stroked-button matStepperNext class="w3-margin-right">Siguiente</button>
+                </div>
+              </form>
+            </mat-step>
+
+            <mat-step [stepControl]="thirdFormGroup" errorMessage="Complete todos los campos requeridos">
+              <form [formGroup]="thirdFormGroup">
+                <ng-template matStepLabel>Datos finales</ng-template>
+
+                <!-- <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>¿Dónde ocurrio el evento?</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="where" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                </mat-form-field>
+        
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Responsable del enveto</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="responsible" [matAutocomplete]="autoEventResponsible" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                  <mat-autocomplete #autoEventResponsible="matAutocomplete"
+                                    (optionSelected)="selectedResponsible($event)"
+                                    [displayWith]="showSelectedResponsible">
+                    <mat-option *ngFor="let option of responsibles" [value]="option" style="font-size:14px">
+                      {{option['name']}}, {{option['lastname']}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="w3-margin-right" appearance="outline">
+                  <mat-label>Supervisor de turno</mat-label>
+                  <input type="text" matInput placeholder="..." formControlName="areaSupervisor" [matAutocomplete]="autoAreaSupervisor" autocomplete="off" required>
+                  <mat-hint>
+                    <strong>requerido *</strong>
+                  </mat-hint>
+                  <mat-autocomplete #autoAreaSupervisor="matAutocomplete"
+                                    (optionSelected)="selectedAreaSupervisor($event)"
+                                    [displayWith]="showSelectedAreaSupervisor">
+                    <mat-option *ngFor="let option of areaSupervisors" [value]="option" style="font-size:14px">
+                      {{option['name']}}, {{option['lastname']}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <br>
+
+                <div class="w3-margin-top">
+                  <button mat-raised-button color="primary" matTooltip="Adjuntar hoja de ruta del componente" class="w3-margin-right w3-margin-top" (click)="fileInput1.click()"><mat-icon>note_add</mat-icon></button>
+                  <input #fileInput1 style="display: none" type="file" (change)="onFile1Selected($event)">
+
+                  <button mat-raised-button color="primary" matTooltip="Adjuntar información técninca que se adjuntó al componente" class="w3-margin-right w3-margin-top" (click)="fileInput2.click()"><mat-icon>note_add</mat-icon></button>
+                  <input #fileInput2 style="display: none" type="file" (change)="onFile2Selected($event)">
+
+                  <button mat-raised-button color="primary" matTooltip="Adjuntar imágenes del componente" class="w3-margin-right w3-margin-top" (click)="fileInput3.click()"><mat-icon>add_photo_alternate</mat-icon></button>
+                  <input #fileInput3 style="display: none" type="file" (change)="onFile3Selected($event)">
+                </div> -->
+        
+                <div class="w3-margin-top">
+                  <button mat-stroked-button matStepperPrevious class="w3-margin-right">Anterior</button>
+                  <button mat-raised-button class="w3-margin-right" [ngClass]="{'w3-amber w3-hover-black': firstFormGroup.valid && secondFormGroup.valid}" (click)="save()" [disabled]="!(firstFormGroup.valid && secondFormGroup.valid)">Guardar</button>
+                  <button mat-raised-button color="primary" class="w3-margin-right" (click)="saveAsTask()" [disabled]="!(firstFormGroup.valid && secondFormGroup.valid)">Guardar como tarea</button>
+                </div>
+              </form>
+            </mat-step>
+          </mat-vertical-stepper>
+      </div>
+    </mat-tab>
+    <mat-tab label="Lista">
+      <div class="w3-padding">
+        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Listado de Rehaceres</h2>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  
+</div>

@@ -1,0 +1,285 @@
+<div class="w3-section">
+  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assignment</mat-icon> Tareas</h1>
+  <mat-divider></mat-divider>
+  <div class="w3-padding">
+      <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por FRED</h2>
+      <div  class="mat-elevation-z8 w3-margin-top w3-round">
+        <div class="w3-amber w3-round-large" style="max-height:57vh; overflow:auto">
+          <table mat-table [dataSource]="dataSourceFredTasks" matSort style="width:100%">
+
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding: 0px 1em 0px 1em">N°</th>
+              <td mat-cell *matCellDef="let fred; let i = index"style="color:#2b2b2b; padding: 0px 1em 0px 1em">
+                {{i+1}}
+              </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha</th>
+              <td mat-cell *matCellDef="let fred" class="w3-center" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
+                <span class="w3-small" style="font-weight:500">{{fred['regDate'] | date : 'dd/MM/yyyy'}}</span><br>
+                <span class="w3-small">({{fred['regDate'] | date : 'hh:mm:ss'}})</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Tipo de Observación</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
+                <span class="w3-small">{{fred['type']}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="observations">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:250px; border-left:1px solid lightgrey">Observaciones</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:250px; border-left:1px solid lightgrey">
+                <ng-container *ngIf="fred['observations'], else blank">
+                  <ng-container *ngFor="let observation of fred['observations']" >
+                    <span class="w3-small" style="font-weight:500">{{observation['group']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:32px;">
+                      <li class="w3-small" *ngFor="let item of observation['observations']">
+                        {{item}}
+                      </li>
+                    </ul>
+                  </ng-container>
+                </ng-container>
+                
+                <ng-template #blank>
+                  <span class="w3-small" style="font-weight:500">***</span>
+                </ng-template>
+
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="initialPicture">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto inicial</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                <a href="{{fred['initialPicture']}}" target="_blank">
+                  <div style="width:200px;height:120px;padding:6px 6px">
+                    <img src="{{fred['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                  </div>
+                </a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="observer">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Observador</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                <span class="w3-small" style="font-weight:500">{{fred['createdBy']['displayName']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
+                  <li class="w3-small">Correo: <a href="mailto:{{fred['createdBy']['email']}}">{{fred['createdBy']['email']}}</a></li>
+                </ul>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="observedArea">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:200px; border-left:1px solid lightgrey">Área observada</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:200px; border-left:1px solid lightgrey">
+                <span class="w3-small" style="font-weight:500">{{fred['observedArea']['name']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li class="w3-small">Sup.: {{fred['observedArea']['supervisor']['displayName']}}</li>
+                </ul>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="staffObserved">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Personal observado</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                <span class="w3-small" style="font-weight:500">{{fred['observedStaff']['displayName']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li class="w3-small">Área: {{fred['observedStaff']['area']['name']}}</li>
+                  <li class="w3-small">Correo: <a href="mailto:{{fred['observedStaff']['email']}}">{{fred['observedStaff']['email']}}</a></li>
+                </ul>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="eventDescription">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Descripción</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                <span class="w3-small" *ngIf="fred['substandardAct']">{{fred['substandardAct']}}</span>
+                <span class="w3-small" *ngIf="fred['substandardCondition']">{{fred['substandardCondition']}}</span>
+                <span class="w3-small" *ngIf="fred['remarkableAct']">{{fred['remarkableAct']}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="upgradeOpportunity">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Mejora</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
+                <span class="w3-small">{{fred['upgradeOpportunity']}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                <span class="w3-small">{{fred['status']}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="percent">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Porcentaje</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                {{fred['percent']}} %
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="terminationDates">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Fecha propuesta / Fecha cierre</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">{{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">{{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="finalPicture">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto Levantamiento</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                <a href="{{fred['finalPicture']}}" target="_blank" *ngIf="fred['finalPicture'] != ''">
+                  <div style="width:200px;height:120px;padding:6px 6px">
+                    <img src="{{fred['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                  </div>
+                </a>
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="edit" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
+              <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                <button mat-icon-button ngClass="{'w3-hover-text-indigo': auth.userCRC.uid === fred['observedStaff']['uid']}" matTooltip="Registrar trabajo en la tarea" [disabled]="auth.userCRC.uid != fred['observedStaff']['uid']"><mat-icon>ballot</mat-icon></button>
+                <button mat-icon-button class="w3-hover-text-indigo" matTooltip="Editar tarea"><mat-icon>edit</mat-icon></button><br>
+                <button mat-icon-button class="w3-hover-text-red" matTooltip="Borrar tarea"><mat-icon>delete</mat-icon></button><br>
+              </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsFredTasks; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsFredTasks;"></tr>
+    
+          </table>
+        </div>
+        <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+      <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Inspección</h2>
+      <div  class="mat-elevation-z8 w3-margin-top w3-round">
+        <div class="w3-amber w3-round-large" style="max-height:57vh; overflow:auto">
+          <table mat-table [dataSource]="dataSourceInspectionTasks" matSort style="width:100%">
+    
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
+              <td mat-cell *matCellDef="let observation; let i = index" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{i+1}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="kindOfDanger">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Clase de Peligro</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{observation['kindOfDanger']}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="kindOfObservation">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Tipo de Observación</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{observation['kindOfObservation']}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="observationDescription">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">Descripción de la observación (Condición / Acto Subestándar)</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                {{observation['observationDescription']}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="initialPicture">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <a href="{{observation['initialPicture']}}" target="_blank">
+                  <div style="width:200px;height:120px;padding:6px 6px">
+                    <img src="{{observation['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                  </div>
+                </a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cause">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Causa</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{observation['cause']}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="recommendationDescription">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">Conclusiones / Recomendaciones / Medidas Correctivas</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                {{observation['recommendationDescription']}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">Área</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                <span style="font-weight:500">{{observation['area']['name']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li>Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                </ul>
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="terminationDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de Termino / Fecha Realización</th>
+              <td mat-cell *matCellDef="let observation" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">{{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                <p class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="observation['realTerminationDate'] > 0">{{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="percent">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Porcentaje</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{observation['percent']}} %
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{observation['status']}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="finalPicture">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto Levantamiento</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <a href="{{observation['finalPicture']}}" target="_blank" *ngIf="observation['finalPicture'] != ''">
+                  <div style="width:200px;height:120px;padding:6px 6px">
+                    <img src="{{observation['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                  </div>
+                </a>
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="edit" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
+              <td mat-cell *matCellDef="let user" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <button mat-icon-button class="w3-hover-text-indigo" matTooltip="Registrar trabajo en la tarea"><mat-icon>ballot</mat-icon></button>
+                <button mat-icon-button class="w3-hover-text-indigo" matTooltip="Editar tarea"><mat-icon>edit</mat-icon></button><br>
+                <button mat-icon-button class="w3-hover-text-red" matTooltip="Borrar tarea"><mat-icon>delete</mat-icon></button><br>
+              </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsInspectionTasks; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsInspectionTasks;"></tr>
+    
+          </table>
+        </div>
+        <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+    </div>
+</div>

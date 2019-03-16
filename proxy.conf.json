@@ -1,0 +1,8 @@
+
+{
+    "/msCreateUser/*":{
+        "target": "https://us-central1-crclajoya.cloudfunctions.net",
+        "secure": false,
+        "changeOrigin": true
+    }
+}
