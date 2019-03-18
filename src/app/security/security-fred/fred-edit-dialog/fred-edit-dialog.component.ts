@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
-import { MAT_DIALOG_DATA, MatSnackBar, MatDialog } from '@angular/material';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { MAT_DIALOG_DATA, MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
+import { Observable, Subscription } from 'rxjs';
+import { startWith, map, distinctUntilChanged } from 'rxjs/operators';
 import { FredConfirmEditComponent } from '../fred-confirm-edit/fred-confirm-edit.component';
 import { forEach } from '@angular/router/src/utils/collection';
 
@@ -12,7 +12,7 @@ import { forEach } from '@angular/router/src/utils/collection';
   templateUrl: './fred-edit-dialog.component.html',
   styles: []
 })
-export class FredEditDialogComponent implements OnInit {
+export class FredEditDialogComponent implements OnInit, OnDestroy {
 
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -34,18 +34,31 @@ export class FredEditDialogComponent implements OnInit {
   imageSrc_initial: string | ArrayBuffer;
   imageSrc_final: string | ArrayBuffer;
 
+  _estimatedDate: Date;
+  _realDate: Date;
+
   fredTypes: Array<string> = [
     'Acto sub-estandar',
     'Condición sub-estandar',
     'Acto destacable'
   ]
 
+  statusList: Array<string> = [
+    'Por confirmar',
+    'Confirmado',
+    'Rechazado',
+    'Finalizado'
+  ];
+
+  subscriptions: Array<Subscription> = [];
+
   constructor(
     private fb: FormBuilder,
     public dbs: DatabaseService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snackbar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<FredEditDialogComponent>
   ) {
     // ****************  TAB - FRED
     this.createForms();
@@ -113,11 +126,17 @@ export class FredEditDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy(){
+    this.subscriptions.forEach( sub => sub.unsubscribe());
+  }
+
   createForms(): void{
+
     this.firstFormGroup = this.fb.group({
-      type: [this.data['type'], [Validators.required]],
-      observedArea: [this.data['observedArea'], [Validators.required]],
-      observedStaff: [this.data['observedStaff'], [Validators.required]]
+      id: this.data['id'],
+      type: [{value: this.data['type'], disabled: false}, [Validators.required]],
+      observedArea: [{value: this.data['observedArea'], disabled: false}, [Validators.required]],
+      observedStaff: [{value: this.data['observedStaff'], disabled: false}, [Validators.required]]
     });
 
     this.secondFormGroup = this.fb.group({
@@ -146,8 +165,6 @@ export class FredEditDialogComponent implements OnInit {
       }
     });
 
-    console.log(this.data['solved'].toString());
-
     this.thirdFormGroup = this.fb.group({
       solved: this.data['solved'].toString(),
       substandardAct: this.data['substandardAct'],
@@ -156,15 +173,78 @@ export class FredEditDialogComponent implements OnInit {
       upgradeOpportunity: this.data['upgradeOpportunity']
     });
 
+    this._estimatedDate = new Date(this.data['estimatedTerminationDate']);
+    this._realDate = new Date(this.data['realTerminationDate']);
+
     this.fourthFormGroup = this.fb.group({
       status: this.data['status'],
       percent: this.data['percent'],
-      estimatedTerminationDate: this.data['estimatedTerminationDate'],
-      realTerminationDate: this.data['realTerminationDate'],
-    })
+      estimatedTerminationDate: [{value: this.data['estimatedTerminationDate']? this._estimatedDate:'', disabled: false}],
+      realTerminationDate: [{value: this.data['realTerminationDate']? this._realDate:'', disabled: false}]
+    });
 
     this.imageSrc_initial = this.data['initialPicture'];
     this.imageSrc_final = this.data['finalPicture'];
+
+    let typeSubs =  this.firstFormGroup.get('type').valueChanges
+                      .pipe(
+                        distinctUntilChanged()
+                      )
+                      .subscribe(res => {
+                        if(res === 'Condición sub-estandar'){
+                          this.secondFormGroup = this.fb.group({
+                            list1: ['No observado', [Validators.required]],
+                            list2: ['No observado', [Validators.required]],
+                            list3: ['No observado', [Validators.required]],
+                            list4: ['No observado', [Validators.required]],
+                            list5: ['No observado', [Validators.required]],
+                          });
+                        }else if(res === 'Acto sub-estandar'){
+                          this.data['observations'].forEach(element => {
+                            if(element['group'] === 'Orden y Limpieza'){
+                              this.secondFormGroup.get('list1').setValue(element['observations'][0])
+                            }
+                            if(element['group'] === 'Equipos de Protección Personal'){
+                              this.secondFormGroup.get('list2').setValue(element['observations'][0])
+                            }
+                            if(element['group'] === 'Control de Riesgos Operacionales'){
+                              this.secondFormGroup.get('list3').setValue(element['observations'][0])
+                            }
+                            if(element['group'] === 'Herramientas y equipos'){
+                              this.secondFormGroup.get('list4').setValue(element['observations'][0])
+                            }
+                            if(element['group'] === 'Riesgos Críticos'){
+                              this.secondFormGroup.get('list5').setValue(element['observations'][0])
+                            }
+                          });
+                      
+                        }
+                      });
+
+    let statusSubs = this.fourthFormGroup.get('status').valueChanges
+                      .pipe(
+                        distinctUntilChanged()
+                      )
+                      .subscribe(res => {
+                        if(res === 'Finalizado'){
+                          this.fourthFormGroup.get('percent').setValue(100);
+                        }
+                      });
+
+    let percentSubs = this.fourthFormGroup.get('percent').valueChanges
+                      .pipe(
+                        distinctUntilChanged()
+                      )
+                      .subscribe(res => {
+                        if(res === 100){
+                          this.fourthFormGroup.get('status').setValue("Finalizado");
+                        }
+                      });
+
+    
+    this.subscriptions.push(typeSubs);
+    this.subscriptions.push(statusSubs);
+    this.subscriptions.push(percentSubs);
   }
 
   showSelectedStaff(staff): string | undefined {
@@ -180,6 +260,15 @@ export class FredEditDialogComponent implements OnInit {
   }
 
   selectedArea(event): void{
+    
+  }
+
+  formatLabel(value: number | null) {
+    if(!value){
+      return 0;
+    }
+
+    return value + '%';
     
   }
 
@@ -222,15 +311,28 @@ export class FredEditDialogComponent implements OnInit {
           return;
         }
       }
-      
-      
+
+      if(this.fourthFormGroup.value['status'] === 'Finalizado' && this.fourthFormGroup.value['percent'] < 100){
+        this.snackbar.open("No se puede seleccionar el estado FINALIZADO, con menos del 100% de progreso", "Cerrar",{
+          duration: 6000
+        });
+        return;
+      }
+
       let dialogRef = this.dialog.open(FredConfirmEditComponent,{
-        data: [this.firstFormGroup.value, this.secondFormGroup.value, this.thirdFormGroup.value, this.fourthFormGroup.value, this.selectedFile_initial, this.selectedFile_final]
+        data: [
+          this.firstFormGroup.value,
+          this.secondFormGroup.value,
+          this.thirdFormGroup.value,
+          this.fourthFormGroup.value,
+          this.selectedFile_initial,
+          this.selectedFile_final
+        ]
       });
 
       dialogRef.afterClosed().subscribe(res => {
         if(res){
-          this.createForms();
+          this.dialogRef.close();
         }
       });
 

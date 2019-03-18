@@ -54,6 +54,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 // ANGULAR COMPONENTS
@@ -186,7 +187,8 @@ import { FredConfirmEditComponent } from './security/security-fred/fred-confirm-
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatSliderModule
   ],
   providers: [
     AuthService,

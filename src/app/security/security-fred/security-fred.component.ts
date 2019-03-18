@@ -384,7 +384,8 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
 
   edit(fred): void{
     this.dialog.open(FredEditDialogComponent,{
-      data: fred
+      data: fred,
+      autoFocus: false
     })
   }
 
