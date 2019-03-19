@@ -26,7 +26,7 @@ export class FredConfirmEditComponent implements OnInit {
     private storage: AngularFireStorage,
     private dialogRef: MatDialogRef<FredConfirmEditComponent>,
     private snackbar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) private data: any
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit() {
