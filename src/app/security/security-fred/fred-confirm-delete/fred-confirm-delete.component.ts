@@ -17,7 +17,6 @@ export class FredConfirmDeleteComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   delete(): void {
