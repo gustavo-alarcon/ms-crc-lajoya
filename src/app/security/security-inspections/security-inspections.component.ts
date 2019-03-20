@@ -14,56 +14,70 @@ import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-
   templateUrl: './security-inspections.component.html',
   animations: [
     trigger('openCloseCard',[
-      state('open', style({
-        height: '120px',
-        opacity: 0.8,
-        borderRadius: '10px 10px 0px 0px',
-        marginBottom: '0em'
+      state('openCard', style({
+        borderRadius: '8px 8px 0px 0px',
+        marginBottom: '0px'
       })),
-      state('closed', style({
-        height: '130px',
-        opacity: 1,
-        borderRadius: '10px 10px 10px 10px',
+      state('closedCard', style({
+        borderRadius: '8px',
         marginBottom: '1em'
       })),
-      transition('open => closed', [
+      transition('openCard => closedCard', [
         animate('1s ease-in')
       ]),
-      transition('closed => open', [
-        animate('0.5s ease-out')
+      transition('closedCard => openCard', [
+        animate('0.5s ease-in')
       ])
     ]),
-    trigger('openCloseContent',[
-      state('openContent', style({
-        maxHeight: '2000px',
+    trigger('openCloseToolbar',[
+      state('openToolbar', style({
+        height: '60px',
+        opacity: 1
+      })),
+      state('closedToolbar', style({
+        height: '0px',
+        opacity: 0
+      })),
+      transition('openToolbar => closedToolbar', [
+        animate('1s ease-in')
+      ]),
+      transition('closedToolbar => openToolbar', [
+        animate('0.5s ease-in')
+      ])
+    ]),
+    trigger('openCloseTable',[
+      state('openTable', style({
+        maxHeight: '4000px',
+        opacity: 1
+      })),
+      state('closedTable', style({
+        height: '0px',
+        opacity: 0
+      })),
+      transition('openTable => closedTable', [
+        animate('1s ease-in')
+      ]),
+      transition('closedTable => openTable', [
+        animate('0.5s ease-in')
+      ])
+    ]),
+    trigger('openCloseTableMobile',[
+      state('openTableMobile', style({
+        maxHeight: '10000px',
         opacity: 1,
         marginBottom: '1em'
       })),
-      state('closedContent', style({
+      state('closedTableMobile', style({
         height: '0px',
         opacity: 0,
-        display: 'none',
-        marginBottom: '0em'
+        marginBottom: '0em',
+        display: 'none'
       })),
-      transition('openContent => closedContent', [
+      transition('openTableMobile => closedTableMobile', [
         animate('1s ease-in')
       ]),
-      transition('closedContent => openContent', [
-        animate('0.5s')
-      ])
-    ]),
-    trigger('openCloseDescription',[
-      state('openDescription', style({
-        borderRadius: '10px 10px 0px 0px'
-      })),
-      state('closedDescription', style({
-        borderRadius: '10px 10px 10px 10px'
-      })),
-      transition('openDescription => closedDescription', [
-        animate('1s ease-in')
-      ]),
-      transition('closedDescription => openDescription', [
-        animate('0.5s ease-out')
+      transition('closedTableMobile => openTableMobile', [
+        animate('0.5s ease-in')
       ])
     ])
   ]
@@ -161,7 +175,8 @@ export class SecurityInspectionsComponent implements OnInit {
     datepicker.close();
   }
 
-  toggleCardInspection(index) {
+  toggleCardInspection(index, id_inspection) {
+    this.requestInspectionObservations(id_inspection);
     this.isOpenInspection[index] = !this.isOpenInspection[index];
   }
 
