@@ -119,6 +119,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+    cursor: hand;
 }
 
 .ms-header-mobile{

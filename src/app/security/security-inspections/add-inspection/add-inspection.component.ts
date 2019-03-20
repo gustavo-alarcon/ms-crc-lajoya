@@ -58,9 +58,7 @@ export class AddInspectionComponent implements OnInit {
                       )
                       .subscribe(area => {
                         if(area){
-                          console.log(area['supervisor']['displayName']);
                           this.newInspectionFormGroup.get('areaSupervisor').setValue(area['supervisor']['displayName']);
-                          console.log(this.newInspectionFormGroup.value['areaSupervisor']);
                         }
                       });
 
@@ -125,6 +123,7 @@ export class AddInspectionComponent implements OnInit {
         // Configuring notification for area supervisor
         let notificationObject = {
           regDate: Date.now(),
+          id:'',
           senderId: this.auth.userCRC.uid,
           senderName: this.auth.userCRC.displayName,
           areaId: this.newInspectionFormGroup.value['area']['id'],
@@ -139,13 +138,14 @@ export class AddInspectionComponent implements OnInit {
           type: 'inspection supervisor'
         }
 
-        console.log(notificationObject);
-
         // Sending notification to area supervisor
         this.dbs.usersCollection
           .doc(this.newInspectionFormGroup.value['area']['supervisor']['uid'])
           .collection('/notifications')
           .add(notificationObject)
+            .then(ref => {
+              ref.update({id: ref.id});
+            })
             .catch(error => {
               this.loading = false;
               console.log(error);
@@ -162,7 +162,8 @@ export class AddInspectionComponent implements OnInit {
           .doc(this.newInspectionFormGroup.value['inspector']['uid'])
           .collection('/notifications')
           .add(notificationObject)
-            .then(() => {
+            .then(ref => {
+              ref.update({id: ref.id});
               this.loading = false;
               this.dialogRef.close();
               this.snackbar.open("Listo!","Cerrar",{

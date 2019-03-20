@@ -30,6 +30,10 @@ export class NotificationsComponent implements OnInit {
     this.auth.notificationUnseen(id);
   }
 
+  deleteNotification(id): void{
+    this.auth.notificationsCompleteCollection.doc(id).delete();
+  }
+
   reject(fredId, supervisorId, notificationId): void{
     this.dbs.securityFredsCollection.doc(fredId).update({status: 'Rechazado'});
     this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({status: 'Rechazado'});

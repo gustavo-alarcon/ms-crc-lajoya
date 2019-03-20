@@ -14,56 +14,49 @@ import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-
   templateUrl: './security-inspections.component.html',
   animations: [
     trigger('openCloseCard',[
-      state('open', style({
-        height: '120px',
-        opacity: 0.8,
-        borderRadius: '10px 10px 0px 0px',
-        marginBottom: '0em'
+      state('openCard', style({
+        borderRadius: '8px 8px 0px 0px'
       })),
-      state('closed', style({
-        height: '130px',
-        opacity: 1,
-        borderRadius: '10px 10px 10px 10px',
-        marginBottom: '1em'
+      state('closedCard', style({
+        borderRadius: '8px'
       })),
-      transition('open => closed', [
+      transition('openCard => closedCard', [
         animate('1s ease-in')
       ]),
-      transition('closed => open', [
-        animate('0.5s ease-out')
+      transition('closedCard => openCard', [
+        animate('0.5s ease-in')
       ])
     ]),
-    trigger('openCloseContent',[
-      state('openContent', style({
-        maxHeight: '2000px',
-        opacity: 1,
-        marginBottom: '1em'
+    trigger('openCloseToolbar',[
+      state('openToolbar', style({
+        height: '60px',
+        opacity: 1
       })),
-      state('closedContent', style({
+      state('closedToolbar', style({
         height: '0px',
-        opacity: 0,
-        display: 'none',
-        marginBottom: '0em'
+        opacity: 0
       })),
-      transition('openContent => closedContent', [
+      transition('openToolbar => closedToolbar', [
         animate('1s ease-in')
       ]),
-      transition('closedContent => openContent', [
-        animate('0.5s')
+      transition('closedToolbar => openToolbar', [
+        animate('0.5s ease-in')
       ])
     ]),
-    trigger('openCloseDescription',[
-      state('openDescription', style({
-        borderRadius: '10px 10px 0px 0px'
+    trigger('openCloseTable',[
+      state('openTable', style({
+        maxHeight: '4000px',
+        opacity: 1
       })),
-      state('closedDescription', style({
-        borderRadius: '10px 10px 10px 10px'
+      state('closedTable', style({
+        height: '0px',
+        opacity: 0
       })),
-      transition('openDescription => closedDescription', [
+      transition('openTable => closedTable', [
         animate('1s ease-in')
       ]),
-      transition('closedDescription => openDescription', [
-        animate('0.5s ease-out')
+      transition('closedTable => openTable', [
+        animate('0.5s ease-in')
       ])
     ])
   ]
@@ -161,7 +154,8 @@ export class SecurityInspectionsComponent implements OnInit {
     datepicker.close();
   }
 
-  toggleCardInspection(index) {
+  toggleCardInspection(index, id_inspection) {
+    this.requestInspectionObservations(id_inspection);
     this.isOpenInspection[index] = !this.isOpenInspection[index];
   }
 
