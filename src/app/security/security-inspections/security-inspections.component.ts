@@ -5,11 +5,68 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
 import { map } from 'rxjs/operators';
 import { AddObservationToInspectionComponent } from './add-observation-to-inspection/add-observation-to-inspection.component';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Subscription } from 'rxjs';
+import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-confirm-delete/security-inspection-confirm-delete.component';
 
 @Component({
   selector: 'app-security-inspections',
   templateUrl: './security-inspections.component.html',
-  styles: []
+  animations: [
+    trigger('openCloseCard',[
+      state('open', style({
+        height: '120px',
+        opacity: 0.8,
+        borderRadius: '10px 10px 0px 0px',
+        marginBottom: '0em'
+      })),
+      state('closed', style({
+        height: '130px',
+        opacity: 1,
+        borderRadius: '10px 10px 10px 10px',
+        marginBottom: '1em'
+      })),
+      transition('open => closed', [
+        animate('1s ease-in')
+      ]),
+      transition('closed => open', [
+        animate('0.5s ease-out')
+      ])
+    ]),
+    trigger('openCloseContent',[
+      state('openContent', style({
+        maxHeight: '2000px',
+        opacity: 1,
+        marginBottom: '1em'
+      })),
+      state('closedContent', style({
+        height: '0px',
+        opacity: 0,
+        display: 'none',
+        marginBottom: '0em'
+      })),
+      transition('openContent => closedContent', [
+        animate('1s ease-in')
+      ]),
+      transition('closedContent => openContent', [
+        animate('0.5s')
+      ])
+    ]),
+    trigger('openCloseDescription',[
+      state('openDescription', style({
+        borderRadius: '10px 10px 0px 0px'
+      })),
+      state('closedDescription', style({
+        borderRadius: '10px 10px 10px 10px'
+      })),
+      transition('openDescription => closedDescription', [
+        animate('1s ease-in')
+      ]),
+      transition('closedDescription => openDescription', [
+        animate('0.5s ease-out')
+      ])
+    ])
+  ]
 })
 export class SecurityInspectionsComponent implements OnInit {
 
@@ -33,6 +90,9 @@ export class SecurityInspectionsComponent implements OnInit {
   @ViewChildren(MatSort) sort: MatSort;
 
   filteredInspections: Array<any> = [];
+  isOpenInspection: Array<any> = [];
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     private dialog: MatDialog,
@@ -40,31 +100,44 @@ export class SecurityInspectionsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.monthIndex = this.monthFormControl.value.getMonth();
     this.currentMonth = this.monthsKey[this.monthIndex];
     this.currentYear = this.monthFormControl.value.getFullYear();
 
-    this.dbs.currentDataSecurityInspections
-      .pipe(
-        map(res => {
-          res.forEach(element => {
-            this.panelOpenState.push(false);
-          });
+    let inspectionsSubs = this.dbs.currentDataSecurityInspections
+                            .pipe(
+                              map(res => {
+                                res.forEach(element => {
+                                  this.panelOpenState.push(false);
+                                });
+                                return res
+                              })
+                            )
+                            .subscribe(res => {
+                              this.filteredInspections = res;
+                              this.dataSource.data = res;
+                              this.filteredInspections.forEach(element => {
+                                this.isOpenInspection.push(false);
+                              })
+                            });
 
-          return res
-        })
-      )
-      .subscribe(res => {
-        this.filteredInspections = res;
-        this.dataSource.data = res;
-      });
+    this.subscriptions.push(inspectionsSubs);
 
-    this.dbs.currentDataSecurityInspectionObservations.subscribe(res => {
-      this.dataSourceInspectionObservations.data = res;
-    })
+    let inspectionObservations =  this.dbs.currentDataSecurityInspectionObservations
+                                    .subscribe(res => {
+                                      this.dataSourceInspectionObservations.data = res;
+                                    })
+
+    this.subscriptions.push(inspectionObservations);
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach( sub => sub.unsubscribe());
   }
 
   setMonthOfView(event, datepicker): void {
@@ -88,6 +161,10 @@ export class SecurityInspectionsComponent implements OnInit {
     datepicker.close();
   }
 
+  toggleCardInspection(index) {
+    this.isOpenInspection[index] = !this.isOpenInspection[index];
+  }
+
   addInspection(): void{
     this.dialog.open(AddInspectionComponent);
   }
@@ -102,12 +179,17 @@ export class SecurityInspectionsComponent implements OnInit {
     });
   }
 
-  editInspection(inspectionData): void{
+  // editInspection(id1,id2,id3,id4): void{
 
-  }
+  // }
 
-  deleteInspection(inspectionId): void{
-
+  deleteInspection(id_inspection): void{
+    console.log(id_inspection);
+    this.dialog.open(SecurityInspectionConfirmDeleteComponent, {
+      data: {
+        id_inspection: id_inspection
+      }
+    });
   }
 
 }

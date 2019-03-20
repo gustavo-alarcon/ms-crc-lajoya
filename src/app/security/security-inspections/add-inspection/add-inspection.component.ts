@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { startWith, map, debounceTime } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-inspection',
@@ -12,6 +14,11 @@ export class AddInspectionComponent implements OnInit {
 
   newInspectionFormGroup: FormGroup;
   loading: boolean = false;
+
+  filteredUsers: Observable<any>;
+  filteredAreas: Observable<any>;
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     private fb: FormBuilder,
@@ -24,8 +31,41 @@ export class AddInspectionComponent implements OnInit {
     this.newInspectionFormGroup = this.fb.group({
       estimatedTerminationDate: ['', Validators.required],
       inspector: ['', Validators.required],
-      area: [{supervisor:{displayName:''}}, Validators.required]
-    })
+      area: ['', Validators.required],
+      areaSupervisor: [{value:'', disabled:false}]
+    });
+
+    this.filteredUsers =  this.newInspectionFormGroup.get('inspector').valueChanges
+                            .pipe(
+                              startWith<any>(''),
+                              map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
+                              map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
+                            );
+
+    this.filteredAreas = this.newInspectionFormGroup.get('area').valueChanges
+                          .pipe(
+                            startWith<any>(''),
+                            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+                            map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+                          );
+
+    let areaSubs =  this.newInspectionFormGroup.get('area').valueChanges
+                      .pipe(
+                        debounceTime(1000)
+                      )
+                      .subscribe(area => {
+                        if(area){
+                          console.log(area['supervisor']['displayName']);
+                          this.newInspectionFormGroup.get('areaSupervisor').setValue(area['supervisor']['displayName']);
+                          console.log(this.newInspectionFormGroup.value['areaSupervisor']);
+                        }
+                      });
+
+    this.subscriptions.push(areaSubs);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   showSelectedInspector(inspector): string | undefined{
@@ -46,6 +86,8 @@ export class AddInspectionComponent implements OnInit {
 
   create(): void{
     this.loading = true;
+
+    // Configuring object inspectionData
     let inspectionData = {
       regDate: Date.now(),
       inspector: this.newInspectionFormGroup.value['inspector'],
@@ -54,10 +96,12 @@ export class AddInspectionComponent implements OnInit {
       realTerminationDate: 0,
       environmentalObservation: false,
       status: 'Por confirmar',
-      percent: 0,
+      uidStaff: this.newInspectionFormGroup.value['inspector']['uid'],
+      uidAreaSupervisor: this.newInspectionFormGroup.value['area']['supervisor']['uid'],
       id: ''
     }
 
+    // ADDING INSPECTION TO DB
     this.dbs.addInspection(inspectionData)
       .then(ref => {
         ref.update({id: ref.id})
