@@ -9,10 +9,22 @@
         <h2 class="ms-font-rubik ms-color-bt" style="font-size:1em">Historial de notificaciones</h2>
         <div *ngFor="let note of auth.currentDataNotificationsComplete | async"
           class="mat-elevation-z4 w3-round-large ms-notification-card">
+          
           <div style="display:flex; justify-content: space-between" class="ms-font-raleway">
-            <p style="margin: 0em 1em 1em 1em; max-width:92%"><strong>{{note['senderName']}}</strong>
-              <span *ngIf="note['type'] === 'task'"> ha generado una <strong>tarea</strong>: <i>{{note['subject']}}</i></span>
-            </p>
+            <div>
+              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'task'" disabled="true">
+                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Tarea" >assignment</mat-icon> Tarea
+              </button>
+              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'task confirmation'" disabled="true">
+                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Confirmar Tarea" *ngIf="note['type'] === 'task confirmation'">offline_pin</mat-icon> Confirmar tarea
+              </button>
+              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'confirmation'" disabled="true">
+                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Confirmación" *ngIf="note['type'] === 'confirmation'">compare_arrows</mat-icon> Confirmar
+              </button>
+              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'" disabled="true">
+                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Inspección" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'">assignment_turned_in</mat-icon> Inspección
+              </button>
+            </div>
             <span class="ms-fill"></span>
             <div class="w3-hide-small">
               <button mat-icon-button class="w3-text-gray" (click)="unseen(note['id'])" *ngIf="note['status'] === 'seen'" matTooltip="Marcar como no leido">
@@ -28,7 +40,8 @@
           </div>
 
           <div>
-            <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b">
+            <!-- TASK STAFF -->
+            <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b" style="padding:0em 1em">
               <span>{{note['subject']}}</span><br>
               <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
                 realización:
@@ -50,31 +63,19 @@
                   (click)="confirm(note['fredId'], note['areaSupervisorId'], note['id'])"
                   *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
               </div>
-
+            </div>
+            <!-- INSPECTION SUPERVISOR -->
+            <div *ngIf="note['type'] === 'inspection supervisor'" class="ms-color-2b" style="padding:0em 1em">
+              <span><strong>{{note['senderName']}} </strong> programo a <strong>{{note['inspectorName']}}</strong> para inspeccionar su área el <strong>{{note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
+            </div>
+            <!-- INSPECTION STAFF -->
+            <div *ngIf="note['type'] === 'inspection staff'" class="ms-color-2b" style="padding:0em 1em">
+              <span><strong>{{note['senderName']}} </strong> lo programo para inspeccionar el área: <strong>{{note['areaName']}}</strong>, supervisada por: <strong>{{note['areaSupervisorName']}}</strong>. Debe realizar la inspección el <strong>{{ note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
             </div>
           </div>
-          <div style="display:flex; justify-content: space-between">
-            <div>
-              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'task'" disabled="true">
-                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Tarea">
-                  assignment</mat-icon> Tarea
-              </button>
-              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'task confirmation'"
-                disabled="true">
-                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle"
-                  matTooltip="Confirmar Tarea" *ngIf="note['type'] === 'task confirmation'">offline_pin</mat-icon>
-                Confirmar tarea
-              </button>
-              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'confirmation'" disabled="true">
-                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle"
-                  matTooltip="Confirmación" *ngIf="note['type'] === 'confirmation'">compare_arrows</mat-icon> Confirmar
-              </button>
-              <button mat-button class="w3-small ms-color-2b" *ngIf="note['type'] === 'inspection'" disabled="true">
-                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle"
-                  matTooltip="Inspección" *ngIf="note['type'] === 'inspection'">search</mat-icon> Inspección
-              </button>
-            </div>
+          <div style="display:flex; justify-content: space-between" style="padding:0em 1em">
             <p class="w3-small w3-text-gray">{{note['regDate'] | timeAgo}}</p>
+            <span class="ms-fill"></span>
             <div class="w3-hide-large w3-hide-medium w3-small">
               <button mat-icon-button class="w3-text-gray" (click)="unseen(note['id'])" *ngIf="note['status'] === 'seen'" matTooltip="Marcar como no leido">
                 <mat-icon>radio_button_checked</mat-icon>
