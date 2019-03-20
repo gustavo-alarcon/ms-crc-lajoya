@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AddInspectionComponent } from './add-inspection/add-inspection.component';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
 import { map } from 'rxjs/operators';
 import { AddObservationToInspectionComponent } from './add-observation-to-inspection/add-observation-to-inspection.component';
@@ -86,8 +86,8 @@ export class SecurityInspectionsComponent implements OnInit {
   displayedColumnsInspectionObservations: string[] = ['index', 'kindOfDanger', 'kindOfObservation', 'observationDescription', 'initialPicture', 'cause', 'recommendationDescription', 'area', 'terminationDate', 'percent', 'status', 'finalPicture', 'edit'];
   dataSourceInspectionObservations = new MatTableDataSource();
 
-  @ViewChildren(MatPaginator) paginator: MatPaginator;
-  @ViewChildren(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   filteredInspections: Array<any> = [];
   isOpenInspection: Array<any> = [];

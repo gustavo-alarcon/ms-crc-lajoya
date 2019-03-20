@@ -23,10 +23,14 @@
 
         </div>
         <div class="w3-padding">
-          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentMonth}}</h2>
+          <div style="display:flex">
+              <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">{{currentMonth}}</h2>
+              <button mat-button disabled="true" class="ms-color-2b"><mat-icon>assignment_turned_in</mat-icon> {{dbs.securityInspections.length | number: '2.0'}} Inspecciones</button>
+          </div>
+          
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
-            <div class="w3-amber w3-round-large" style="max-height:57vh; overflow:auto">
-              <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+            <div class="w3-amber w3-round-large">
+              <table mat-table [dataSource]="dataSource" matSort style="width:100%; border-radius: 10px 10px">
 
                 <ng-container matColumnDef="index">
                   <th mat-header-cell *matHeaderCellDef
@@ -128,7 +132,6 @@
 
               </table>
             </div>
-            <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
           </div>
 
           <!-- MOBIL VERSION CRONO INSPECTIONS-->
