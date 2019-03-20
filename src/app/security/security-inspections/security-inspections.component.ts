@@ -8,6 +8,7 @@ import { AddObservationToInspectionComponent } from './add-observation-to-inspec
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-confirm-delete/security-inspection-confirm-delete.component';
+import { SecurityInspectionObservationConfirmDeleteComponent } from './security-inspection-observation-confirm-delete/security-inspection-observation-confirm-delete.component';
 
 @Component({
   selector: 'app-security-inspections',
@@ -199,12 +200,20 @@ export class SecurityInspectionsComponent implements OnInit {
   // }
 
   deleteInspection(id_inspection): void{
-    console.log(id_inspection);
     this.dialog.open(SecurityInspectionConfirmDeleteComponent, {
       data: {
         id_inspection: id_inspection
       }
     });
+  }
+
+  deleteObservation(id_inspection, id_observation): void{
+    this.dialog.open(SecurityInspectionObservationConfirmDeleteComponent,{
+      data:{
+        id_inspection: id_inspection,
+        id_observation: id_observation
+      }
+    })
   }
 
 }
