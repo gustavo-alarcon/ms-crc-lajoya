@@ -4,6 +4,7 @@ import { DatabaseService } from 'src/app/core/database.service';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { startWith, map, debounceTime } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-add-inspection',
@@ -23,8 +24,10 @@ export class AddInspectionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dbs: DatabaseService,
+    public auth: AuthService,
     private dialogRef: MatDialogRef<AddInspectionComponent>,
     private snackbar: MatSnackBar
+
   ) { }
 
   ngOnInit() {
@@ -105,18 +108,12 @@ export class AddInspectionComponent implements OnInit {
     this.dbs.addInspection(inspectionData)
       .then(ref => {
         ref.update({id: ref.id})
+
         this.dbs.addInspectionLog(ref.id, {
           action: 'Inspection creation!',
           description: '',
           regDate: Date.now()
         })
-          .then(() => {
-            this.loading = false;
-            this.dialogRef.close();
-            this.snackbar.open("Listo!","Cerrar",{
-              duration:6000
-            });
-          })
           .catch(error => {
             this.loading = false;
             console.log(error);
@@ -124,6 +121,64 @@ export class AddInspectionComponent implements OnInit {
               duration:6000
             });
           });
+        
+        // Configuring notification for area supervisor
+        let notificationObject = {
+          regDate: Date.now(),
+          senderId: this.auth.userCRC.uid,
+          senderName: this.auth.userCRC.displayName,
+          areaId: this.newInspectionFormGroup.value['area']['id'],
+          areaName: this.newInspectionFormGroup.value['area']['name'],
+          areaSupervisorId: this.newInspectionFormGroup.value['area']['supervisor']['uid'],
+          areaSupervisorName: this.newInspectionFormGroup.value['area']['supervisor']['displayName'],
+          inspectorId: this.newInspectionFormGroup.value['inspector']['uid'],
+          inspectorName: this.newInspectionFormGroup.value['inspector']['displayName'],
+          inspectionDate: this.newInspectionFormGroup.value['estimatedTerminationDate'].valueOf(),
+          inspectionId: ref.id,
+          status: 'unseen',
+          type: 'inspection supervisor'
+        }
+
+        console.log(notificationObject);
+
+        // Sending notification to area supervisor
+        this.dbs.usersCollection
+          .doc(this.newInspectionFormGroup.value['area']['supervisor']['uid'])
+          .collection('/notifications')
+          .add(notificationObject)
+            .catch(error => {
+              this.loading = false;
+              console.log(error);
+              this.snackbar.open("Ups!, parece que hubo un error (SI001) ...","Cerrar",{
+                duration:6000
+              });
+            });
+        
+        // Configuring notification for staff
+        notificationObject['type'] = 'inspection staff'
+
+        // Sending notification to staff
+        this.dbs.usersCollection
+          .doc(this.newInspectionFormGroup.value['inspector']['uid'])
+          .collection('/notifications')
+          .add(notificationObject)
+            .then(() => {
+              this.loading = false;
+              this.dialogRef.close();
+              this.snackbar.open("Listo!","Cerrar",{
+                duration:6000
+              });
+            })
+            .catch(error => {
+              this.loading = false;
+              console.log(error);
+              this.snackbar.open("Ups!, parece que hubo un error (SI001) ...","Cerrar",{
+                duration:6000
+              });
+            });
+
+
+        
       })
       .catch(error => {
         this.loading = false;
@@ -131,7 +186,7 @@ export class AddInspectionComponent implements OnInit {
         this.snackbar.open("Ups!, parece que hubo un error ...","Cerrar",{
           duration:6000
         });
-      })
+      });
   }
 
 }
