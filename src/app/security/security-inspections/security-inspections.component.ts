@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { AddObservationToInspectionComponent } from './add-observation-to-inspection/add-observation-to-inspection.component';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Subscription } from 'rxjs';
+import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-confirm-delete/security-inspection-confirm-delete.component';
 
 @Component({
   selector: 'app-security-inspections',
@@ -182,8 +183,13 @@ export class SecurityInspectionsComponent implements OnInit {
 
   // }
 
-  deleteInspection(id1,id2,id3,id4): void{
-
+  deleteInspection(id_inspection): void{
+    console.log(id_inspection);
+    this.dialog.open(SecurityInspectionConfirmDeleteComponent, {
+      data: {
+        id_inspection: id_inspection
+      }
+    });
   }
 
 }

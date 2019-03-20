@@ -98,6 +98,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { FredConfirmDeleteComponent } from './security/security-fred/fred-confirm-delete/fred-confirm-delete.component';
 import { FredEditDialogComponent } from './security/security-fred/fred-edit-dialog/fred-edit-dialog.component';
 import { FredConfirmEditComponent } from './security/security-fred/fred-confirm-edit/fred-confirm-edit.component';
+import { SecurityInspectionConfirmDeleteComponent } from './security/security-inspections/security-inspection-confirm-delete/security-inspection-confirm-delete.component';
 
 
 
@@ -144,7 +145,8 @@ import { FredConfirmEditComponent } from './security/security-fred/fred-confirm-
     NotificationsComponent,
     FredConfirmDeleteComponent,
     FredEditDialogComponent,
-    FredConfirmEditComponent
+    FredConfirmEditComponent,
+    SecurityInspectionConfirmDeleteComponent
     
   ],
   imports: [
@@ -212,7 +214,8 @@ import { FredConfirmEditComponent } from './security/security-fred/fred-confirm-
     InspectionObservationConfirmSaveComponent,
     FredConfirmDeleteComponent,
     FredEditDialogComponent,
-    FredConfirmEditComponent
+    FredConfirmEditComponent,
+    SecurityInspectionConfirmDeleteComponent
   ],
   bootstrap: [AppComponent]
 })
