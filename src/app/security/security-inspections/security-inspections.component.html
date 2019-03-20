@@ -7,98 +7,19 @@
     <mat-tab label="Cronograma">
       <ng-template matTabContent>
         <div class="w3-padding ms-color-2b">
-        <h2 class="ms-font-rubik" style="font-size:1.3em;">Cronograma - {{currentYear}}</h2>
-        <mat-form-field class="w3-margin-left">
-          <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
-          <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
-          <mat-datepicker #dateFilter
-                          startView='year'
-                          (monthSelected)="setMonthOfView($event, dateFilter)"
-                          disabled="false"></mat-datepicker>
-          <mat-hint>
-            <strong>Filtrar contenido por mes y año</strong>
-          </mat-hint>
-        </mat-form-field>
-        
-      </div>
-      <div class="w3-padding">
-        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentMonth}}</h2>
-        <div class="mat-elevation-z8 w3-margin-top w3-round">
-          <div class="w3-amber w3-round-large" style="max-height:57vh; overflow:auto">
-            <table mat-table [dataSource]="dataSource" matSort style="width:100%">
+          <h2 class="ms-font-rubik" style="font-size:1.3em;">Cronograma - {{currentYear}}</h2>
 
-              <ng-container matColumnDef="index">
-                <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
-                <td mat-cell *matCellDef="let inspection; let i = index"style="color:#2b2b2b;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                  {{i+1}}
-                </td>
-              </ng-container>
+          <button mat-stroked-button class="w3-margin-left" color="primary" (click)="addInspection()"><mat-icon>add_circle</mat-icon> Programar inspección</button>
 
-              <ng-container matColumnDef="terminationDate">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha Límite / Fecha Realizada</th>
-                <td mat-cell *matCellDef="let inspection" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                  <p class="w3-small" matTooltip="Fecha límite" *ngIf="inspection['estimatedTerminationDate'] === 0">**/**/****</p>
-                  <p class="w3-small" matTooltip="Fecha límite" *ngIf="inspection['estimatedTerminationDate'] > 0">{{(inspection['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-                  <p class="w3-small" matTooltip="Fecha realiza" *ngIf="inspection['realTerminationDate'] === 0">**/**/****</p>
-                  <p class="w3-small" matTooltip="Fecha realiza" *ngIf="inspection['realTerminationDate'] > 0">{{(inspection['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-                </td>
-              </ng-container>
-              
-              <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de creación</th>
-                <td mat-cell *matCellDef="let inspection" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                  {{inspection['regDate'] | date : 'dd/MM/yyyy'}}
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="inspector">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Inspector</th>
-                <td mat-cell *matCellDef="let inspection" class="w3-small" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                  <span style="font-weight:500">{{inspection['inspector']['displayName']}}</span>
-                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:32px;">
-                    <li matTooltip="Correo">{{inspection['inspector']['email']}}</li>
-                    <li matTooltip="Puesto">{{inspection['inspector']['jobTitle']}}</li>
-                    <li matTooltip="Área">{{inspection['inspector']['area']['name']}}</li>
-                  </ul>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="area">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Área a Inspeccionar</th>
-                <td mat-cell *matCellDef="let inspection" class="w3-small" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                  <span style="font-weight:500">{{inspection['area']['name']}}</span>
-                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:32px;">
-                    <li matTooltip="Supervisor de Área">{{inspection['area']['supervisor']['displayName']}}</li>
-                  </ul>
-                </td>
-              </ng-container>
-
-              
-
-              <ng-container matColumnDef="environmentalObservation">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">¿Realizó observación ambiental?</th>
-                <td mat-cell *matCellDef="let inspection" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                  {{inspection['environmentalObservation']?'SI':'NO'}}
-                </td>
-              </ng-container>
-
-              
-
-              <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="edit">
-                <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Editar</th>
-                <td mat-cell *matCellDef="let user" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                  <button mat-icon-button color="primary"><mat-icon>edit</mat-icon></button>
-                  <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
-                </td>
-              </ng-container>
-      
-              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      
-            </table>
-          </div>
-          <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-        </div>
+          <mat-form-field class="w3-margin-left">
+            <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
+            <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
+            <mat-datepicker #dateFilter startView='year' (monthSelected)="setMonthOfView($event, dateFilter)"
+              disabled="false"></mat-datepicker>
+            <mat-hint>
+              <strong>Filtrar contenido por mes y año</strong>
+            </mat-hint>
+          </mat-form-field>
 
         </div>
         <div class="w3-padding">
@@ -109,7 +30,8 @@
 
                 <ng-container matColumnDef="index">
                   <th mat-header-cell *matHeaderCellDef
-                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey; border-radius:10px 0px 0px 0px">N°</th>
+                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey; border-radius:10px 0px 0px 0px">
+                    N°</th>
                   <td mat-cell *matCellDef="let inspection; let i = index"
                     style="color:#2b2b2b;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
                     {{i+1}}
@@ -135,11 +57,13 @@
 
                 <ng-container matColumnDef="date">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de creación
+                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
+                    creación
                   </th>
-                  <td mat-cell *matCellDef="let inspection"
-                    class="w3-center" style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                    <span class="w3-small" style="font-weight:500">{{inspection['regDate'] | date : 'dd/MM/yyyy'}}</span><br>
+                  <td mat-cell *matCellDef="let inspection" class="w3-center"
+                    style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
+                    <span class="w3-small"
+                      style="font-weight:500">{{inspection['regDate'] | date : 'dd/MM/yyyy'}}</span><br>
                     <span class="w3-small">({{inspection['regDate'] | date : 'hh:mm:ss'}})</span>
                   </td>
                 </ng-container>
@@ -213,12 +137,14 @@
               <div [@openCloseCard]="isOpenInspection[i] ? 'open': 'closed'"
                 class="mat-elevation-z8 ms-hero-image-inspection w3-display-container w3-round-large"
                 [ngStyle]="{'background-image': 'url(../../../assets/images/no-image-inspections-2.jpg)'}">
-                
+
                 <div [@openCloseDescription]="isOpenInspection[i] ? 'openDescription': 'closedDescription'"
                   class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.2); width:100%; height:100%">
                   <div style="display:flex">
                     <p style="font-weight:600; color:white; margin: 0.5em 0.1em">
-                      <span class="w3-round-large" style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{i+1}}</span> {{inspection['inspector']['displayName']}}
+                      <span class="w3-round-large"
+                        style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{i+1}}</span>
+                      {{inspection['inspector']['displayName']}}
                     </p>
                     <span class="ms-fill"></span>
                     <button mat-icon-button color="warn" matTooltip="Borrar Inspección"
@@ -226,20 +152,25 @@
                       <mat-icon>delete</mat-icon>
                     </button>
                   </div>
-                  
+
                   <mat-divider class="w3-white" style="margin:0.5em 0em"></mat-divider>
                   <p style="font-weight:400; color:white; margin: 0px 0.1em">
                     {{inspection['area']['name']}}
                   </p>
                   <div style="display:flex">
-                    <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite" *ngIf="inspection['estimatedTerminationDate'] === 0">
-                    **/**/****</span>
-                    <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite" *ngIf="inspection['estimatedTerminationDate'] > 0">
+                    <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite"
+                      *ngIf="inspection['estimatedTerminationDate'] === 0">
+                      **/**/****</span>
+                    <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite"
+                      *ngIf="inspection['estimatedTerminationDate'] > 0">
                       {{(inspection['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
                     <span class="ms-fill"></span>
-                    <span class="w3-amber w3-padding w3-round-large" style="font-size:0.9em" matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] === 0">
+                    <span class="w3-amber w3-padding w3-round-large" style="font-size:0.9em"
+                      matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] === 0">
                       **/**/****</span>
-                    <span class="w3-padding w3-round-large" style="font-size:0.9em" [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7, 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7}" matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] > 0">
+                    <span class="w3-padding w3-round-large" style="font-size:0.9em"
+                      [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7, 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7}"
+                      matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] > 0">
                       {{(inspection['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
                   </div>
                 </div>
@@ -329,7 +260,8 @@
                       </td>
                     </ng-container>
 
-                    <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="kindOfDanger">
+                    <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                      matColumnDef="kindOfDanger">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header
                         style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Clase de
                         Peligro</th>
@@ -444,7 +376,8 @@
                       </td>
                     </ng-container>
 
-                    <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="finalPicture">
+                    <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                      matColumnDef="finalPicture">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header
                         style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto
                         Levantamiento</th>
@@ -462,7 +395,8 @@
 
                     <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="edit">
                       <th mat-header-cell *matHeaderCellDef
-                        style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
+                        style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones
+                      </th>
                       <td mat-cell *matCellDef="let user"
                         style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                         <button mat-icon-button color="primary" matTooltip="Editar configuración de permisos">
