@@ -15,10 +15,12 @@ import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-
   animations: [
     trigger('openCloseCard',[
       state('openCard', style({
-        borderRadius: '8px 8px 0px 0px'
+        borderRadius: '8px 8px 0px 0px',
+        marginBottom: '0px'
       })),
       state('closedCard', style({
-        borderRadius: '8px'
+        borderRadius: '8px',
+        marginBottom: '1em'
       })),
       transition('openCard => closedCard', [
         animate('1s ease-in')
@@ -56,6 +58,25 @@ import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-
         animate('1s ease-in')
       ]),
       transition('closedTable => openTable', [
+        animate('0.5s ease-in')
+      ])
+    ]),
+    trigger('openCloseTableMobile',[
+      state('openTableMobile', style({
+        maxHeight: '10000px',
+        opacity: 1,
+        marginBottom: '1em'
+      })),
+      state('closedTableMobile', style({
+        height: '0px',
+        opacity: 0,
+        marginBottom: '0em',
+        display: 'none'
+      })),
+      transition('openTableMobile => closedTableMobile', [
+        animate('1s ease-in')
+      ]),
+      transition('closedTableMobile => openTableMobile', [
         animate('0.5s ease-in')
       ])
     ])
