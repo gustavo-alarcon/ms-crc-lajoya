@@ -208,7 +208,10 @@
         <div style="display:flex" class="ms-font-raleway">
           <div>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task'" disabled="true">
-              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Tarea" >assignment</mat-icon> Tarea
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Tarea" >assignment</mat-icon> Tarea - Seguridad FRED
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection observation supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Tarea" >assignment</mat-icon> Tarea - Seguridad Inspección
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task confirmation'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Confirmar Tarea" *ngIf="note['type'] === 'task confirmation'">offline_pin</mat-icon> Confirmar tarea
@@ -217,7 +220,7 @@
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Confirmación" *ngIf="note['type'] === 'confirmation'">compare_arrows</mat-icon> Confirmar
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'" disabled="true">
-              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Inspección" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'">assignment_turned_in</mat-icon> Inspección
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Inspección" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'">assignment_turned_in</mat-icon> Inspección - Seguridad
             </button>
           </div>
           <span class="ms-fill"></span>
@@ -227,16 +230,13 @@
         </div>
         <div>
           <!-- TASK CONFIRMATION -->
-          <div *ngIf="note['type'] != 'task confirmation'" class="ms-color-2b">
-            <span>{{note['subject']}}</span><br>
-          </div>
-          <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b">
-            <span>{{note['subject']}}</span><br>
+          <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b" style="padding-left:0.5em">
+              <span><strong>{{note['senderName']}}</strong>, le asigno el siguiente FRED: <strong>{{note['subject']}}</strong>.</span><br>
             <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
                 realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
             <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
-              <input matInput [matDatepicker]="datePicker" [formControl]="dateFormControl"
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateSecurityFredFormControl"
                 [value]="note['estimatedTerminationDate']">
               <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
               <mat-datepicker #datePicker></mat-datepicker>
@@ -252,7 +252,30 @@
                 (click)="confirm(note['fredId'], note['areaSupervisorId'], note['id'])"
                 *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
             </div>
-
+          </div>
+          <!-- TASK BY INSPECTION OBSERVATION -->
+          <div *ngIf="note['type'] === 'inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}}</strong>, tuvo la siguiente observación: <strong>{{note['subject']}}</strong>.</span><br>
+            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+                realización: 
+              {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateSecurityInspectionObservationFormControl"
+                [value]="note['estimatedTerminationDate']">
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              <mat-hint>
+                <strong>Asigne una fecha de cumplimiento para la tarea</strong> mm/dd/yyyy*
+              </mat-hint>
+            </mat-form-field>
+            <div style="margin: 1em 0em 0.5em 0em">
+              <button mat-raised-button class="w3-margin-right" color="warn"
+                (click)="rejectSecurityInspectionObservation(note['inspectionId'], note['observationId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+              <button mat-raised-button class="w3-margin-right" color="primary"
+                (click)="confirmSecurityInspectionObservation(note['inspectionId'], note['observationId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+            </div>
           </div>
           <!-- INSPECTION SUPERVISOR -->
           <div *ngIf="note['type'] === 'inspection supervisor'" class="ms-color-2b" style="padding-left:0.5em">

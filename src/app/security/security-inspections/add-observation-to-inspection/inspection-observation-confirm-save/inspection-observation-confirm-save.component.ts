@@ -27,10 +27,6 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data[0]);
-    console.log(this.data[1]);
-    console.log(this.data[2]);
-    console.log(this.data[3]);
     this.mergedForms = Object.assign(this.data[0],this.data[1]);
   }
 
@@ -56,12 +52,6 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
             let status = 'Por confirmar';
             let estimatedDate = 0;
 
-            // if(this.data[2]['solved']){
-            //   percentNumber = 100;
-            //   status = 'Finalizado';
-            //   estimatedDate = Date.now();
-            // }
-
             let lastObject = {
               initialPicture: res,
               finalPicture: '',
@@ -78,7 +68,7 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
             
             // REGISTERING OBSERVATION IN SECURITY INSPECTIONS ***
             // Adding the observation to the corresponding inspection
-            this.dbs.securityInspectionsCollection.doc(this.data[3]).collection(`/observations`).add(finalObject)
+            this.dbs.securityInspectionsCollection.doc(this.data[3]).collection(`observations`).add(finalObject)
             .then(refObservation => {
               // Updating the id of the document using the reference
               refObservation.update({id: refObservation.id})
@@ -92,14 +82,6 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                   }
                   // Adding the log to the coresponding inspection
                   this.dbs.addInspectionLog(this.data[3], log)
-                    .then(() => {
-                      // Closing the dialog and setting the uploading flag to false
-                      this.dialogRef.close();
-                      this.uploading = false;
-                      this.snackbar.open("Listo!","Cerrar",{
-                        duration:6000
-                      });
-                    })
                     .catch(error => {
                       console.log(error);
                       this.uploading = false;
@@ -115,35 +97,50 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
               this.dbs.usersCollection
                 .doc(this.data[0]['uidSupervisor'])
                 .collection(`tasks`)
-                .add(finalObject)
-                  .then(refTask => {
-                    // Updating the id of document using the reference
-                    refTask.update({taskId: refTask.id, });
+                .doc(refObservation.id)
+                .set(finalObject)
+                  .then(() => {
                     
-                    // Adding the observation task as notification in the supervisor inbox
-                    let notification = {
+                    // Configuring notification for area supervisor
+                    let notificationObject = {
                       regDate: Date.now(),
+                      id:'',
                       senderId: this.auth.userCRC.uid,
                       senderName: this.auth.userCRC.displayName,
-                      status: 'unseen',
-                      subject: this.data[1]['recommendationDescription'],
-                      type: 'observation',
+                      areaId: this.data[0]['area']['id'],
+                      areaName: this.data[0]['area']['name'],
                       areaSupervisorId: this.data[0]['area']['supervisor']['uid'],
                       areaSupervisorName: this.data[0]['area']['supervisor']['displayName'],
+                      inspectionId: this.data[0]['inspectionId'],
                       observationId: refObservation.id,
-                      inspectionId: this.data[3]
-                    };
-                    console.log(notification);
+                      subject: this.data[1]['recommendationDescription'],
+                      estimatedTerminationDate: 0,
+                      status: 'unseen',
+                      type: 'inspection observation supervisor'
+                    }
+
+                    // Sending notification to area supervisor
                     this.dbs.usersCollection
-                    .doc(this.data[0]['uidSupervisor'])
-                    .collection(`notifications`)
-                    .add(notification)
+                    .doc(this.data[0]['area']['supervisor']['uid'])
+                    .collection('/notifications')
+                    .add(notificationObject)
                       .then(ref => {
-                        ref.update({id: ref.id})
+                        ref.update({id: ref.id});
+                        // Closing the dialog and setting the uploading flag to false
+                        this.dialogRef.close();
+                        this.uploading = false;
                         this.snackbar.open("Listo!","Cerrar",{
-                          duration: 10000
+                          duration:6000
+                        });
+                      })
+                      .catch(error => {
+                        this.uploading = false;
+                        console.log(error);
+                        this.snackbar.open("Ups!, parece que hubo un error (SI001) ...","Cerrar",{
+                          duration:6000
                         });
                       });
+
                   });
 
               

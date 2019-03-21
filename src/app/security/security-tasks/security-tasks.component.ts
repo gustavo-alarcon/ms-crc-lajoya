@@ -31,39 +31,39 @@ export class SecurityTasksComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    let fredTasksSub = this.dbs.currentDataSecurityTasks
-      .pipe(
-        map(res => {
-          let tasksByFred = [];
-          res.forEach(element => {
-            if(element['source'] === 'fred'){
-              tasksByFred.push(element);
-            }
-          });
-          return tasksByFred;
-        })
-      )
-      .subscribe(res => {
-        this.dataSourceFredTasks.data = res;
-      });
+    let fredTasksSub =  this.dbs.currentDataSecurityTasks
+                          .pipe(
+                            map(res => {
+                              let tasksByFred = [];
+                              res.forEach(element => {
+                                if(element['source'] === 'fred'){
+                                  tasksByFred.push(element);
+                                }
+                              });
+                              return tasksByFred;
+                            })
+                          )
+                          .subscribe(res => {
+                            this.dataSourceFredTasks.data = res;
+                          });
 
     this.subscriptions.push(fredTasksSub);
 
-    let inspectionTasksSub = this.dbs.currentDataSecurityTasks
-      .pipe(
-        map(res => {
-          let tasksByInspection = [];
-          res.forEach(element => {
-            if(element['source'] === 'inspection'){
-              tasksByInspection.push(element);
-            }
-          });
-          return tasksByInspection;
-        })
-      )
-      .subscribe(res => {
-        this.dataSourceInspectionTasks.data = res;
-      });
+    let inspectionTasksSub =  this.dbs.currentDataSecurityTasks
+                                .pipe(
+                                  map(res => {
+                                    let tasksByInspection = [];
+                                    res.forEach(element => {
+                                      if(element['source'] === 'inspection'){
+                                        tasksByInspection.push(element);
+                                      }
+                                    });
+                                    return tasksByInspection;
+                                  })
+                                )
+                                .subscribe(res => {
+                                  this.dataSourceInspectionTasks.data = res;
+                                });
 
     this.subscriptions.push(inspectionTasksSub);
   }

@@ -448,6 +448,7 @@ export class DatabaseService {
       })
   }
 
+  // NOT IN USE
   getFredTasks(from?,to?): void{
     if(this.auth.permits['securityTasksGeneralList']){
       this.securityFredTasksCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
@@ -475,6 +476,7 @@ export class DatabaseService {
       })
   }
 
+  // NOT IN USE
   getInspectionTasks(from?,to?): void{
     if(this.auth.permits['securityTasksGeneralList']){
       this.securityInspectionTasksCollection = this.afs.collection(`db/crcLaJoya/securityInspections`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
