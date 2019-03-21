@@ -240,13 +240,14 @@
             <mat-toolbar [@openCloseToolbar]="isOpenInspection[i] ? 'openToolbar': 'closedToolbar'"
               style="background:#a6a6a6; transform:translateY(-10%)" class="ms-color-2b">
               <button mat-raised-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Agregar observación"
-                (click)="addObservation(inspection)" [disabled]="inspection['status'] === 'Finalizado'">
+                (click)="addObservation(inspection)" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                 <mat-icon class="example-icon">add_circle</mat-icon> Observación
               </button>
               <button mat-stroked-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Finalizar Inspección"
-                (click)="terminateInspection(inspection['id'])" [disabled]="inspection['status'] === 'Finalizado'">
+                (click)="terminateInspection(inspection['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                 <mat-icon class="example-icon">check</mat-icon> Finalizar
               </button>
+              <button mat-button *ngIf="inspection['inspector']['uid'] != auth.userCRC.uid" disabled>Solo el inspector puede actualizar información</button>
             </mat-toolbar>
 
             <div [@openCloseTable]="isOpenInspection[i] ? 'openTable': 'closedTable'" class="w3-amber w3-round-large" style="overflow:auto">
@@ -403,7 +404,7 @@
                     <!-- <button mat-icon-button color="primary" matTooltip="Editar configuración de permisos">
                       <mat-icon>edit</mat-icon>
                     </button> -->
-                    <button mat-icon-button color="warn" matTooltip="Borrar nivel de usuario" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado'">
+                    <button mat-icon-button color="warn" matTooltip="Borrar nivel de usuario" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
@@ -432,11 +433,11 @@
                     </p>
                     <span class="ms-fill"></span>
                     <button mat-icon-button class="w3-text-white" matTooltip="Agregar observación"
-                      (click)="addObservation(inspection)" [disabled]="inspection['status'] === 'Finalizado'">
+                      (click)="addObservation(inspection)" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                       <mat-icon>add_circle</mat-icon>
                     </button>
                     <button mat-icon-button class="w3-text-white" matTooltip="Finalizar inspección"
-                      (click)="terminateInspection(inspection['id'])" [disabled]="inspection['status'] === 'Finalizado'">
+                      (click)="terminateInspection(inspection['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                       <mat-icon>check_circle</mat-icon>
                     </button>
                   </div>
@@ -471,7 +472,7 @@
                     <span class="ms-font-roboto" style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
                     <span class="ms-fill"></span>
                     <!-- <button mat-icon-button style="color:white" matTooltip="Editar observación"><mat-icon>edit</mat-icon></button> -->
-                    <button mat-icon-button style="color:white" matTooltip="Borrar observación" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado'"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button style="color:white" matTooltip="Borrar observación" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid"><mat-icon>delete</mat-icon></button>
                   </mat-toolbar> 
                   
                   

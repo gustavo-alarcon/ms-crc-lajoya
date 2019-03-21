@@ -91,11 +91,13 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                     });
                   
                 });
-              
+
+              finalObject['id'] = refObservation.id;
+
               // REGISTERING OBSERVATION IN SUPERVISOR TASKS DB
               // Adding the observation as task in the tasks collection of correspoding supervisor
               this.dbs.usersCollection
-                .doc(this.data[0]['uidSupervisor'])
+                .doc(this.data[0]['area']['supervisor']['uid'])
                 .collection(`tasks`)
                 .doc(refObservation.id)
                 .set(finalObject)
