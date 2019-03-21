@@ -220,7 +220,7 @@
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Confirmación" *ngIf="note['type'] === 'confirmation'">compare_arrows</mat-icon> Confirmar
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'" disabled="true">
-              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Inspección" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'">assignment_turned_in</mat-icon> Inspección
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Inspección" *ngIf="note['type'] === 'inspection supervisor' || note['type'] === 'inspection staff'">assignment_turned_in</mat-icon> Inspección - Seguridad
             </button>
           </div>
           <span class="ms-fill"></span>
@@ -230,7 +230,7 @@
         </div>
         <div>
           <!-- TASK CONFIRMATION -->
-          <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b">
+          <div *ngIf="note['type'] === 'task confirmation'" class="ms-color-2b" style="padding-left:0.5em">
               <span><strong>{{note['senderName']}}</strong>, le asigno el siguiente FRED: <strong>{{note['subject']}}</strong>.</span><br>
             <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
                 realización: 
@@ -254,7 +254,7 @@
             </div>
           </div>
           <!-- TASK BY INSPECTION OBSERVATION -->
-          <div *ngIf="note['type'] === 'inspection observation supervisor'" class="ms-color-2b">
+          <div *ngIf="note['type'] === 'inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}}</strong>, tuvo la siguiente observación: <strong>{{note['subject']}}</strong>.</span><br>
             <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
                 realización: 

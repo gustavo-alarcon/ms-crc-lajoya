@@ -11,7 +11,8 @@ import { MatSnackBar } from '@angular/material';
 })
 export class NotificationsComponent implements OnInit {
 
-  dateFormControl = new FormControl();
+  dateSecurityFredFormControl = new FormControl();
+  dateSecurityInspectionObservationFormControl = new FormControl();
 
   constructor(
     public auth: AuthService,
@@ -34,6 +35,7 @@ export class NotificationsComponent implements OnInit {
     this.auth.notificationsCompleteCollection.doc(id).delete();
   }
 
+  // REJECT AND CONFIRMATION FOR TASKs CREATED BY FRED
   reject(fredId, supervisorId, notificationId): void{
     this.dbs.securityFredsCollection.doc(fredId).update({status: 'Rechazado'});
     this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({status: 'Rechazado'});
@@ -42,11 +44,32 @@ export class NotificationsComponent implements OnInit {
   }
 
   confirm(fredId, supervisorId, notificationId): void{
-    if(this.dateFormControl.value){
-      this.dbs.securityFredsCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateFormControl.value.valueOf()});
-      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateFormControl.value.valueOf()});
-      this.dbs.securityTasksCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateFormControl.value.valueOf()});
+    if(this.dateSecurityFredFormControl.value){
+      this.dbs.securityFredsCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
+      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
+      this.dbs.securityTasksCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
+      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
+    }else{
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
+        duration: 6000
+      });
+    }
+  }
+
+  // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON INSPECTIONS
+  rejectSecurityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
+    this.dbs.securityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Rechazado'});
+    this.dbs.securityTasksCollection.doc(observationId).update({status: 'Rechazado'});
+    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  }
+
+  confirmSecurityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
+    if(this.dateSecurityInspectionObservationFormControl.value){
+      this.dbs.securityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
+      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
+      this.dbs.securityTasksCollection.doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
+      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
     }else{
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
         duration: 6000
