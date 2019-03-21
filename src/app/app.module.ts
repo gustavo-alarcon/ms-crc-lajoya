@@ -101,6 +101,8 @@ import { FredConfirmEditComponent } from './security/security-fred/fred-confirm-
 import { SecurityInspectionConfirmDeleteComponent } from './security/security-inspections/security-inspection-confirm-delete/security-inspection-confirm-delete.component';
 import { SecurityInspectionObservationConfirmDeleteComponent } from './security/security-inspections/security-inspection-observation-confirm-delete/security-inspection-observation-confirm-delete.component';
 import { SecurityInspectionConfirmTerminationComponent } from './security/security-inspections/security-inspection-confirm-termination/security-inspection-confirm-termination.component';
+import { SecurityTasksDialogProgressComponent } from './security/security-tasks/security-tasks-dialog-progress/security-tasks-dialog-progress.component';
+import { SecurityTasksConfirmSaveComponent } from './security/security-tasks/security-tasks-confirm-save/security-tasks-confirm-save.component';
 
 
 
@@ -150,7 +152,9 @@ import { SecurityInspectionConfirmTerminationComponent } from './security/securi
     FredConfirmEditComponent,
     SecurityInspectionConfirmDeleteComponent,
     SecurityInspectionObservationConfirmDeleteComponent,
-    SecurityInspectionConfirmTerminationComponent
+    SecurityInspectionConfirmTerminationComponent,
+    SecurityTasksDialogProgressComponent,
+    SecurityTasksConfirmSaveComponent
     
   ],
   imports: [
@@ -221,7 +225,9 @@ import { SecurityInspectionConfirmTerminationComponent } from './security/securi
     FredConfirmEditComponent,
     SecurityInspectionConfirmDeleteComponent,
     SecurityInspectionObservationConfirmDeleteComponent,
-    SecurityInspectionConfirmTerminationComponent
+    SecurityInspectionConfirmTerminationComponent,
+    SecurityTasksDialogProgressComponent,
+    SecurityTasksConfirmSaveComponent
   ],
   bootstrap: [AppComponent]
 })

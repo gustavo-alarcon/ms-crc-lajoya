@@ -17,6 +17,7 @@ export class FredConfirmSaveComponent implements OnInit {
   mergedForms: any;
   uploading: boolean = false;
   observations: Array<any> = [];
+
   constructor(
     public dialogRef: MatDialogRef<FredConfirmSaveComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -79,6 +80,7 @@ export class FredConfirmSaveComponent implements OnInit {
 
 
               let lastObject = {
+                id:'',
                 initialPicture: res,
                 finalPicture: '',
                 regDate: Date.now(),
@@ -99,7 +101,7 @@ export class FredConfirmSaveComponent implements OnInit {
               this.dbs.securityFredsCollection.add(finalObject).then(refFred => {
 
                 // REGISTRY IN FRED DB
-                refFred.update({fredId: refFred.id}).then(() => {
+                refFred.update({id: refFred.id}).then(() => {
                   let log = {
                     action: 'Fred created!',
                     description: this.data[2]['upgradeOpportunity'],
@@ -120,6 +122,8 @@ export class FredConfirmSaveComponent implements OnInit {
                       });
                     });
                 });
+
+                finalObject['id'] = refFred.id;
 
                 // REGISTRY IN OBSERVED TASKS DB AND NOTIFICATIONS DB
                 this.dbs.usersCollection
@@ -205,6 +209,7 @@ export class FredConfirmSaveComponent implements OnInit {
 
 
       let lastObject = {
+        id:'',
         initialPicture: '',
         finalPicture: '',
         regDate: Date.now(),
@@ -246,6 +251,8 @@ export class FredConfirmSaveComponent implements OnInit {
               });
             });
         });
+
+        finalObject['id'] = refFred.id;
 
         // REGISTRY IN OBSERVED TASKS DB AND NOTIFICATIONS DB
         this.dbs.usersCollection
@@ -294,7 +301,7 @@ export class FredConfirmSaveComponent implements OnInit {
             fredId: refFred.id,
             status: 'unseen',
             subject: this.data[2]['upgradeOpportunity'],
-            type: 'task'
+            type: 'task supervisor'
           })
             .then(ref => {
               ref.update({id: ref.id})

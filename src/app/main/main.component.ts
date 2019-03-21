@@ -91,7 +91,7 @@ export class MainComponent implements OnInit {
     this.auth.notificationSeen(id);
   }
 
-  // REJECT AND CONFIRMATION FOR TASKs CREATED BY FRED
+  // REJECT AND CONFIRMATION FOR TASK CREATED BY FRED
 
   reject(fredId, supervisorId, notificationId): void{
     this.dbs.securityFredsCollection.doc(fredId).update({status: 'Rechazado'});
@@ -101,7 +101,7 @@ export class MainComponent implements OnInit {
   }
 
   confirm(fredId, supervisorId, notificationId): void{
-    if(this.dateSecurityFredFormControl.value){
+    if(this.dateSecurityInspectionObservationFormControl.value){
       this.dbs.securityFredsCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
       this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
       this.dbs.securityTasksCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});

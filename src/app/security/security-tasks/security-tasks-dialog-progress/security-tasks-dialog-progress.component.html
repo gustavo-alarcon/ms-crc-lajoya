@@ -1,0 +1,46 @@
+<div class="w3-container">
+    <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
+      <mat-icon style="vertical-align:middle">assistant</mat-icon> Editar FRED
+    </h2>
+    <mat-divider></mat-divider>
+    <mat-dialog-content>
+  
+      <form [formGroup]="progressFormGroup">
+        <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Progreso</h2>
+        
+        <ul style="padding-left:16px; margin:0px opx">
+          <li>
+            <p class="ms-font-raleway w3-text-gray" style="font-size:1em; margin: 0px 0px 0.5em 0px">Porcentaje de avance: {{progressFormGroup.value['percent']}} %</p>
+          </li>
+        </ul>
+        
+        <div class="w3-block w3-border w3-round-large" style="max-width: 250px; padding: 0em 0.5em; margin-bottom:1.5em">
+          <mat-slider class="w3-block" thumbLabel [displayWith]="formatLabel" step="10" tickInterval="1" min="0"
+            max="100" formControlName="percent"></mat-slider>
+        </div>
+
+        <mat-form-field class="w3-block" appearance="outline" style="max-width:250px">
+          <mat-label>Observaciones</mat-label>
+          <textarea matInput rows="5" placeholder="Describa el trabajo realizado ..." formNameControl="description"></textarea>
+        </mat-form-field>
+  
+  
+        <br>
+        <div class="w3-padding">
+          <button mat-raised-button color="primary" matTooltip="Agregar imagen final"
+            class="w3-margin-right w3-margin-bottom" style="width:128px" (click)="fileInput_final.click()">
+            <mat-icon>add_photo_alternate</mat-icon> Foto final
+          </button>
+          <input #fileInput_final style="display: none" type="file" (change)="onFileSelected_final($event)">
+          <img [src]="imageSrc_final || '../../../assets/images/no-image.png'" class="mat-elevation-z4" style="width:150px">
+        </div>
+  
+        <p class="w3-margin-bottom"></p>
+      </form>
+  
+    </mat-dialog-content>
+    <mat-dialog-actions class="w3-margin-bottom">
+      <button mat-raised-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+      <button mat-stroked-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
+    </mat-dialog-actions>
+  </div>

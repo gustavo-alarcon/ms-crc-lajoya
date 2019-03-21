@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-confirm-delete/security-inspection-confirm-delete.component';
 import { SecurityInspectionObservationConfirmDeleteComponent } from './security-inspection-observation-confirm-delete/security-inspection-observation-confirm-delete.component';
 import { SecurityInspectionConfirmTerminationComponent } from './security-inspection-confirm-termination/security-inspection-confirm-termination.component';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-security-inspections',
@@ -113,6 +114,7 @@ export class SecurityInspectionsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     public dbs: DatabaseService,
+    public auth: AuthService,
     private snackbar: MatSnackBar
   ) { }
 

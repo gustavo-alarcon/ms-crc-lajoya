@@ -207,7 +207,7 @@
         class="mat-elevation-z4 w3-round-large ms-notification-card">
         <div style="display:flex" class="ms-font-raleway">
           <div>
-            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task'" disabled="true">
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task' || note['type'] === 'task supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" matTooltip="Tarea" >assignment</mat-icon> Tarea - Seguridad FRED
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection observation supervisor'" disabled="true">
@@ -236,7 +236,7 @@
                 realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
             <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
-              <input matInput [matDatepicker]="datePicker" [formControl]="dateSecurityFredFormControl"
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateSecurityInspectionObservationFormControl"
                 [value]="note['estimatedTerminationDate']">
               <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
               <mat-datepicker #datePicker></mat-datepicker>
@@ -252,6 +252,10 @@
                 (click)="confirm(note['fredId'], note['areaSupervisorId'], note['id'])"
                 *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
             </div>
+          </div>
+          <!-- TASK SUPERVISOR -->
+          <div *ngIf="note['type'] === 'task supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> asigno el siguiente FRED: <strong>{{note['subject']}}</strong> a <strong>{{note['staffName']}}</strong></span><br>
           </div>
           <!-- TASK BY INSPECTION OBSERVATION -->
           <div *ngIf="note['type'] === 'inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
