@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { AddInspectionComponent } from './add-inspection/add-inspection.component';
 import { FormControl } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
@@ -9,6 +9,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { Subscription } from 'rxjs';
 import { SecurityInspectionConfirmDeleteComponent } from './security-inspection-confirm-delete/security-inspection-confirm-delete.component';
 import { SecurityInspectionObservationConfirmDeleteComponent } from './security-inspection-observation-confirm-delete/security-inspection-observation-confirm-delete.component';
+import { SecurityInspectionConfirmTerminationComponent } from './security-inspection-confirm-termination/security-inspection-confirm-termination.component';
 
 @Component({
   selector: 'app-security-inspections',
@@ -95,7 +96,7 @@ export class SecurityInspectionsComponent implements OnInit {
 
   monthFormControl = new FormControl({value:new Date(), disabled: true});
 
-  displayedColumns: string[] = ['index', 'terminationDate', 'date', 'inspector', 'area', 'environmentalObservation', 'edit'];
+  displayedColumns: string[] = ['index', 'terminationDate', 'date', 'inspector', 'area', 'edit'];
   dataSource = new MatTableDataSource();
 
   displayedColumnsInspectionObservations: string[] = ['index', 'kindOfDanger', 'kindOfObservation', 'observationDescription', 'initialPicture', 'cause', 'recommendationDescription', 'area', 'terminationDate', 'percent', 'status', 'finalPicture', 'edit'];
@@ -111,7 +112,8 @@ export class SecurityInspectionsComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -195,9 +197,15 @@ export class SecurityInspectionsComponent implements OnInit {
     });
   }
 
-  // editInspection(id1,id2,id3,id4): void{
+  terminateInspection(id_inspection): void{
+    console.log(id_inspection);
+    this.dialog.open(SecurityInspectionConfirmTerminationComponent,{
+      data: {
+        id_inspection: id_inspection
+      }
+    })
 
-  // }
+  }
 
   deleteInspection(id_inspection): void{
     this.dialog.open(SecurityInspectionConfirmDeleteComponent, {

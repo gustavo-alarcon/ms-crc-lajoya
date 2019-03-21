@@ -100,6 +100,7 @@ import { FredEditDialogComponent } from './security/security-fred/fred-edit-dial
 import { FredConfirmEditComponent } from './security/security-fred/fred-confirm-edit/fred-confirm-edit.component';
 import { SecurityInspectionConfirmDeleteComponent } from './security/security-inspections/security-inspection-confirm-delete/security-inspection-confirm-delete.component';
 import { SecurityInspectionObservationConfirmDeleteComponent } from './security/security-inspections/security-inspection-observation-confirm-delete/security-inspection-observation-confirm-delete.component';
+import { SecurityInspectionConfirmTerminationComponent } from './security/security-inspections/security-inspection-confirm-termination/security-inspection-confirm-termination.component';
 
 
 
@@ -148,7 +149,8 @@ import { SecurityInspectionObservationConfirmDeleteComponent } from './security/
     FredEditDialogComponent,
     FredConfirmEditComponent,
     SecurityInspectionConfirmDeleteComponent,
-    SecurityInspectionObservationConfirmDeleteComponent
+    SecurityInspectionObservationConfirmDeleteComponent,
+    SecurityInspectionConfirmTerminationComponent
     
   ],
   imports: [
@@ -218,7 +220,8 @@ import { SecurityInspectionObservationConfirmDeleteComponent } from './security/
     FredEditDialogComponent,
     FredConfirmEditComponent,
     SecurityInspectionConfirmDeleteComponent,
-    SecurityInspectionObservationConfirmDeleteComponent
+    SecurityInspectionObservationConfirmDeleteComponent,
+    SecurityInspectionConfirmTerminationComponent
   ],
   bootstrap: [AppComponent]
 })

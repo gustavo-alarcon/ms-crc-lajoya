@@ -46,7 +46,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha Límite /
                     Fecha Realizada</th>
-                  <td mat-cell *matCellDef="let inspection"
+                  <td mat-cell class="w3-center" *matCellDef="let inspection"
                     style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
                     <p class="w3-small" matTooltip="Fecha límite" *ngIf="inspection['estimatedTerminationDate'] === 0">
                       **/**/****</p>
@@ -54,7 +54,8 @@
                       {{(inspection['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
                     <p class="w3-small" matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] === 0">
                       **/**/****</p>
-                    <p class="w3-small" matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] > 0">
+                    <p class="w3-small" matTooltip="Fecha realizada" style="padding:4px 4px; border-radius:4px 4px" *ngIf="inspection['realTerminationDate'] > 0"
+                        [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7 && inspection['realTerminationDate'], 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7  && inspection['realTerminationDate']}">
                       {{(inspection['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
                   </td>
                 </ng-container>
@@ -101,7 +102,7 @@
 
 
 
-                <ng-container matColumnDef="environmentalObservation">
+                <!-- <ng-container matColumnDef="environmentalObservation">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">¿Realizó
                     observación ambiental?</th>
@@ -109,7 +110,7 @@
                     style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
                     {{inspection['environmentalObservation']?'SI':'NO'}}
                   </td>
-                </ng-container>
+                </ng-container> -->
 
 
 
@@ -118,10 +119,10 @@
                     style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Editar</th>
                   <td mat-cell *matCellDef="let user"
                     style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                    <button mat-icon-button color="primary">
+                    <!-- <button mat-icon-button color="primary">
                       <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button color="warn" (click)="deleteInspection(inspection['id'])">
+                    </button> -->
+                    <button mat-icon-button color="warn" (click)="deleteInspection(inspection['id'])" matTooltip="Borrar Inspección">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
@@ -149,7 +150,7 @@
                       {{inspection['inspector']['displayName']}}
                     </p>
                     <span class="ms-fill"></span>
-                    <button mat-icon-button color="warn" matTooltip="Borrar Inspección"
+                    <button mat-icon-button style="color:white" matTooltip="Borrar Inspección"
                       (click)="deleteInspection(inspection['id'])">
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -170,7 +171,7 @@
                     <span class="w3-amber w3-padding w3-round-large" style="font-size:0.9em"
                       matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] === 0">
                       **/**/****</span>
-                    <span class="w3-padding w3-round-large" style="font-size:0.9em"
+                    <span class="w3-padding w3-round-large" style="font-size:0.9em; font-weight:600"
                       [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7, 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7}"
                       matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] > 0">
                       {{(inspection['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
@@ -205,7 +206,7 @@
               <div class="w3-row ms-color-bt">
                 <div class="w3-quarter">
                   <ul style="list-style-type: none;">
-                    <li style="font-weight:500">Fecha</li>
+                    <li style="font-weight:500">Fecha límite</li>
                     <li style="padding-top:5px 0px 5px 0px">
                       {{inspection['estimatedTerminationDate'] | date: 'dd/MM/yyyy'}}</li>
                   </ul>
@@ -223,10 +224,15 @@
                   </ul>
                 </div>
                 <div class="w3-quarter">
-                  <ul style="list-style-type: none;">
-                    <li style="font-weight:500">Estado</li>
-                    <li style="padding-top:5px 0px 5px 0px">{{inspection['status']}}</li>
-                  </ul>
+                  <div>
+                    <ul style="list-style-type: none;">
+                      <li style="font-weight:500">Estado</li>
+                      <li style="padding-top:5px 0px 5px 0px">
+                        <span style="padding:4px 4px; border-radius:4px 4px"
+                          [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7 && inspection['realTerminationDate'], 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7  && inspection['realTerminationDate']}">
+                          {{inspection['status']}} <span *ngIf="inspection['realTerminationDate']"> - {{inspection['realTerminationDate'] | date : 'dd/MM/yyyy'}}</span></span></li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -234,11 +240,11 @@
             <mat-toolbar [@openCloseToolbar]="isOpenInspection[i] ? 'openToolbar': 'closedToolbar'"
               style="background:#a6a6a6; transform:translateY(-10%)" class="ms-color-2b">
               <button mat-raised-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Agregar observación"
-                (click)="addObservation(inspection)">
+                (click)="addObservation(inspection)" [disabled]="inspection['status'] === 'Finalizado'">
                 <mat-icon class="example-icon">add_circle</mat-icon> Observación
               </button>
               <button mat-stroked-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Finalizar Inspección"
-                (click)="editInspection(inspection)">
+                (click)="terminateInspection(inspection['id'])" [disabled]="inspection['status'] === 'Finalizado'">
                 <mat-icon class="example-icon">check</mat-icon> Finalizar
               </button>
             </mat-toolbar>
@@ -397,7 +403,7 @@
                     <!-- <button mat-icon-button color="primary" matTooltip="Editar configuración de permisos">
                       <mat-icon>edit</mat-icon>
                     </button> -->
-                    <button mat-icon-button color="warn" matTooltip="Borrar nivel de usuario" (click)="deleteObservation(inspection['id'],observation['id'])">
+                    <button mat-icon-button color="warn" matTooltip="Borrar nivel de usuario" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado'">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
@@ -426,11 +432,11 @@
                     </p>
                     <span class="ms-fill"></span>
                     <button mat-icon-button class="w3-text-white" matTooltip="Agregar observación"
-                      (click)="addObservation(inspection)">
+                      (click)="addObservation(inspection)" [disabled]="inspection['status'] === 'Finalizado'">
                       <mat-icon>add_circle</mat-icon>
                     </button>
                     <button mat-icon-button class="w3-text-white" matTooltip="Finalizar inspección"
-                      (click)="terminateInspection(inspection['id'])">
+                      (click)="terminateInspection(inspection['id'])" [disabled]="inspection['status'] === 'Finalizado'">
                       <mat-icon>check_circle</mat-icon>
                     </button>
                   </div>
@@ -451,7 +457,7 @@
                     <span class="w3-amber w3-padding w3-round-large" style="font-size:0.9em"
                       matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] === 0">
                       **/**/****</span>
-                    <span class="w3-padding w3-round-large" style="font-size:0.9em"
+                    <span class="w3-padding w3-round-large" style="font-size:0.9em; font-weight:600"
                       [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7, 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7}"
                       matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] > 0">
                       {{(inspection['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
@@ -465,7 +471,7 @@
                     <span class="ms-font-roboto" style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
                     <span class="ms-fill"></span>
                     <!-- <button mat-icon-button style="color:white" matTooltip="Editar observación"><mat-icon>edit</mat-icon></button> -->
-                    <button mat-icon-button style="color:white" matTooltip="Borrar observación" (click)="deleteObservation(inspection['id'],observation['id'])"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button style="color:white" matTooltip="Borrar observación" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado'"><mat-icon>delete</mat-icon></button>
                   </mat-toolbar> 
                   
                   
