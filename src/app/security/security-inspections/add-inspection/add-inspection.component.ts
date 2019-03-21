@@ -96,7 +96,7 @@ export class AddInspectionComponent implements OnInit {
       estimatedTerminationDate: this.newInspectionFormGroup.value['estimatedTerminationDate'].valueOf(),
       realTerminationDate: 0,
       environmentalObservation: false,
-      status: 'Por confirmar',
+      status: 'En espera',
       uidStaff: this.newInspectionFormGroup.value['inspector']['uid'],
       uidAreaSupervisor: this.newInspectionFormGroup.value['area']['supervisor']['uid'],
       id: ''

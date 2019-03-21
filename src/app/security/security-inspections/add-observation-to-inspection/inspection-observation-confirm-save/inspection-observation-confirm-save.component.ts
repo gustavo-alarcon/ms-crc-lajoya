@@ -136,15 +136,24 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                       .catch(error => {
                         this.uploading = false;
                         console.log(error);
-                        this.snackbar.open("Ups!, parece que hubo un error (SI001) ...","Cerrar",{
+                        this.snackbar.open("Ups!, parece que hubo un error (SI003) ...","Cerrar",{
                           duration:6000
                         });
                       });
 
                   });
 
-              
-
+              // UPDATING INSPECTION TO - IN PROGRESS
+              this.dbs.securityInspectionsCollection
+                .doc(this.data[0]['inspectionId'])
+                .update({status: 'En progreso'})
+                  .catch(error => {
+                    this.uploading = false;
+                    console.log(error);
+                    this.snackbar.open("Ups!, parece que hubo un error (SI004) ...","Cerrar",{
+                      duration:6000
+                    });
+                  });
               
 
             }).catch(err => {
