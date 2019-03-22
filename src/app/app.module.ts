@@ -103,6 +103,15 @@ import { SecurityInspectionObservationConfirmDeleteComponent } from './security/
 import { SecurityInspectionConfirmTerminationComponent } from './security/security-inspections/security-inspection-confirm-termination/security-inspection-confirm-termination.component';
 import { SecurityTasksDialogProgressComponent } from './security/security-tasks/security-tasks-dialog-progress/security-tasks-dialog-progress.component';
 import { SecurityTasksConfirmSaveComponent } from './security/security-tasks/security-tasks-confirm-save/security-tasks-confirm-save.component';
+import { QualityAddInspectionComponent } from './quality/quality-inspections/quality-add-inspection/quality-add-inspection.component';
+import { QualityAddObservationToInspectionComponent } from './quality/quality-inspections/quality-add-observation-to-inspection/quality-add-observation-to-inspection.component';
+import { QualityInspectionConfirmTerminationComponent } from './quality/quality-inspections/quality-inspection-confirm-termination/quality-inspection-confirm-termination.component';
+import { QualityInspectionConfirmDeleteComponent } from './quality/quality-inspections/quality-inspection-confirm-delete/quality-inspection-confirm-delete.component';
+import { QualityInspectionObservationConfirmDeleteComponent } from './quality/quality-inspections/quality-inspection-observation-confirm-delete/quality-inspection-observation-confirm-delete.component';
+import { MaintenanceRequestsConfirmSaveComponent } from './maintenance/maintenance-requests/maintenance-requests-confirm-save/maintenance-requests-confirm-save.component';
+import { MaintenanceRequestsConfirmDeleteComponent } from './maintenance/maintenance-requests/maintenance-requests-confirm-delete/maintenance-requests-confirm-delete.component';
+import { MaintenanceRequestsDialogEditComponent } from './maintenance/maintenance-requests/maintenance-requests-dialog-edit/maintenance-requests-dialog-edit.component';
+import { MaintenanceRequestsConfirmEditComponent } from './maintenance/maintenance-requests/maintenance-requests-confirm-edit/maintenance-requests-confirm-edit.component';
 
 
 
@@ -154,7 +163,16 @@ import { SecurityTasksConfirmSaveComponent } from './security/security-tasks/sec
     SecurityInspectionObservationConfirmDeleteComponent,
     SecurityInspectionConfirmTerminationComponent,
     SecurityTasksDialogProgressComponent,
-    SecurityTasksConfirmSaveComponent
+    SecurityTasksConfirmSaveComponent,
+    QualityAddInspectionComponent,
+    QualityAddObservationToInspectionComponent,
+    QualityInspectionConfirmTerminationComponent,
+    QualityInspectionConfirmDeleteComponent,
+    QualityInspectionObservationConfirmDeleteComponent,
+    MaintenanceRequestsConfirmSaveComponent,
+    MaintenanceRequestsConfirmDeleteComponent,
+    MaintenanceRequestsDialogEditComponent,
+    MaintenanceRequestsConfirmEditComponent
     
   ],
   imports: [
@@ -227,7 +245,16 @@ import { SecurityTasksConfirmSaveComponent } from './security/security-tasks/sec
     SecurityInspectionObservationConfirmDeleteComponent,
     SecurityInspectionConfirmTerminationComponent,
     SecurityTasksDialogProgressComponent,
-    SecurityTasksConfirmSaveComponent
+    SecurityTasksConfirmSaveComponent,
+    QualityAddInspectionComponent,
+    QualityAddObservationToInspectionComponent,
+    QualityInspectionConfirmTerminationComponent,
+    QualityInspectionConfirmDeleteComponent,
+    QualityInspectionObservationConfirmDeleteComponent,
+    MaintenanceRequestsConfirmSaveComponent,
+    MaintenanceRequestsConfirmDeleteComponent,
+    MaintenanceRequestsDialogEditComponent,
+    MaintenanceRequestsConfirmEditComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -14,7 +14,7 @@ import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 })
 export class SecurityTasksConfirmSaveComponent implements OnInit {
 
-  
+
   uploadPercent_final: Observable<number>;
   uploading_final: boolean = false;
   mergedForms: any;
@@ -31,8 +31,8 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
   ngOnInit() {
   }
 
-  save(): void{
-    if(this.data['image']){
+  save(): void {
+    if (this.data['image']) {
       this.uploading_final = true;
 
       const filePath = `/securityFredsPictures/${this.data['image'].name}`;
@@ -43,8 +43,8 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
 
       task.snapshotChanges().pipe(
         finalize(() => {
-          fileRef.getDownloadURL().subscribe( res => {
-            if(res){
+          fileRef.getDownloadURL().subscribe(res => {
+            if (res) {
               let finalPicture = res;
               let percentNumber = this.data['form']['percent'];
               let status = ''
@@ -52,12 +52,12 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
               let realDate = 0;
               let solved = false;
 
-              if(this.data['form']['percent'] === 100){
+              if (this.data['form']['percent'] === 100) {
                 solved = true;
                 status = 'Finalizado'
                 realDate = Date.now();
               }
-              
+
               let finalObject = {
                 finalPicture: finalPicture,
                 realTerminationDate: realDate,
@@ -66,10 +66,10 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
                 solved: solved,
                 description: description
               };
-      
-              if(this.data['type'] === 'fred'){
+
+              if (this.data['type'] === 'fred') {
                 // UPDATING FRED WITH NEW INFO
-                this.dbs.securityFredsCollection.doc(this.data['task']['id']).set(finalObject, {merge: true}).then(() => {
+                this.dbs.securityFredsCollection.doc(this.data['task']['id']).set(finalObject, { merge: true }).then(() => {
 
                   // Creating log object
                   let log = {
@@ -86,8 +86,8 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
                     .catch(error => {
                       console.log(error);
                       this.uploading_final = false;
-                      this.snackbar.open("Ups!, parece que hubo un error (SF002) ...","Cerrar",{
-                        duration:6000
+                      this.snackbar.open("Ups!, parece que hubo un error (SF002) ...", "Cerrar", {
+                        duration: 6000
                       });
                     });
 
@@ -96,23 +96,23 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
                     .doc(this.data['task']['observedStaff']['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
-                    .set(finalObject, {merge: true})
+                    .set(finalObject, { merge: true })
 
                   // REGISTRY IN SUPERVISOR TASKS DB AND NOTIFICATIONS DB
                   this.dbs.usersCollection
                     .doc(this.data['task']['observedArea']['supervisor']['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
-                    .set(finalObject, {merge: true})
+                    .set(finalObject, { merge: true })
 
                 }).catch(err => {
-                  this.snackbar.open(err,"Cerrar",{
+                  this.snackbar.open(err, "Cerrar", {
                     duration: 10000
                   });
                 });
-              }else if(this.data['type'] === 'observation'){
+              } else if (this.data['type'] === 'observation') {
                 // UPDATING OBSERVATION WITH NEW INFO
-                this.dbs.securityInspectionsCollection.doc(this.data['task']['inspectionId']).collection('observations').doc(this.data['task']['id']).set(finalObject, {merge: true}).then(() => {
+                this.dbs.securityInspectionsCollection.doc(this.data['task']['inspectionId']).collection('observations').doc(this.data['task']['id']).set(finalObject, { merge: true }).then(() => {
 
                   // Creating log object for inspection
                   let log = {
@@ -131,8 +131,8 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
                     .catch(error => {
                       console.log(error);
                       this.uploading_final = false;
-                      this.snackbar.open("Ups!, parece que hubo un error (SF002) ...","Cerrar",{
-                        duration:6000
+                      this.snackbar.open("Ups!, parece que hubo un error (SF002) ...", "Cerrar", {
+                        duration: 6000
                       });
                     });
 
@@ -141,35 +141,35 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
                     .doc(this.data['task']['area']['supervisor']['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
-                    .set(finalObject, {merge: true})
+                    .set(finalObject, { merge: true })
 
                 }).catch(err => {
-                  this.snackbar.open(err,"Cerrar",{
+                  this.snackbar.open(err, "Cerrar", {
                     duration: 10000
                   });
                 });
               }
-              
+
             }
           })
         })
       )
-      .subscribe()
+        .subscribe()
 
-    }else{
+    } else {
       this.uploading_final = true;
 
       let percentNumber = this.data['form']['percent'];
       let description = this.data['form']['description'];
-      
+
       let finalObject = {
         percent: percentNumber,
         description: description
       };
 
-      if(this.data['type'] === 'fred'){
+      if (this.data['type'] === 'fred') {
         // UPDATING FRED WITH NEW INFO
-        this.dbs.securityFredsCollection.doc(this.data['task']['id']).set(finalObject, {merge: true}).then(() => {
+        this.dbs.securityFredsCollection.doc(this.data['task']['id']).set(finalObject, { merge: true }).then(() => {
 
           // Creating log object
           let log = {
@@ -186,8 +186,8 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
             .catch(error => {
               console.log(error);
               this.uploading_final = false;
-              this.snackbar.open("Ups!, parece que hubo un error (SF002) ...","Cerrar",{
-                duration:6000
+              this.snackbar.open("Ups!, parece que hubo un error (SF002) ...", "Cerrar", {
+                duration: 6000
               });
             });
 
@@ -196,23 +196,23 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
             .doc(this.data['task']['observedStaff']['uid'])
             .collection(`tasks`)
             .doc(this.data['task']['id'])
-            .set(finalObject, {merge: true})
+            .set(finalObject, { merge: true })
 
           // REGISTRY IN SUPERVISOR TASKS DB AND NOTIFICATIONS DB
           this.dbs.usersCollection
             .doc(this.data['task']['observedArea']['supervisor']['uid'])
             .collection(`tasks`)
             .doc(this.data['task']['id'])
-            .set(finalObject, {merge: true})
+            .set(finalObject, { merge: true })
 
         }).catch(err => {
-          this.snackbar.open(err,"Cerrar",{
+          this.snackbar.open(err, "Cerrar", {
             duration: 10000
           });
         });
-      }else if(this.data['type'] === 'observation'){
+      } else if (this.data['type'] === 'observation') {
         // UPDATING OBSERVATION WITH NEW INFO
-        this.dbs.securityInspectionsCollection.doc(this.data['task']['inspectionId']).collection('observations').doc(this.data['task']['id']).set(finalObject, {merge: true}).then(() => {
+        this.dbs.securityInspectionsCollection.doc(this.data['task']['inspectionId']).collection('observations').doc(this.data['task']['id']).set(finalObject, { merge: true }).then(() => {
 
           // Creating log object for inspection
           let log = {
@@ -231,8 +231,8 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
             .catch(error => {
               console.log(error);
               this.uploading_final = false;
-              this.snackbar.open("Ups!, parece que hubo un error (SF002) ...","Cerrar",{
-                duration:6000
+              this.snackbar.open("Ups!, parece que hubo un error (SF002) ...", "Cerrar", {
+                duration: 6000
               });
             });
 
@@ -241,10 +241,10 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
             .doc(this.data['task']['area']['supervisor']['uid'])
             .collection(`tasks`)
             .doc(this.data['task']['id'])
-            .set(finalObject, {merge: true})
+            .set(finalObject, { merge: true })
 
         }).catch(err => {
-          this.snackbar.open(err,"Cerrar",{
+          this.snackbar.open(err, "Cerrar", {
             duration: 10000
           });
         });

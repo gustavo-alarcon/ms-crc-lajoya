@@ -175,7 +175,7 @@ export class SecurityInspectionsComponent implements OnInit {
 
     let toDate: Date = new Date(toYear, toMonth, 1);
 
-    this.dbs.getInspections(false, fromDate.valueOf(), toDate.valueOf());
+    this.dbs.getSecurityInspections(false, fromDate.valueOf(), toDate.valueOf());
 
     datepicker.close();
   }
