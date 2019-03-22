@@ -12,7 +12,7 @@ export class DatabaseService {
 
   // *********** DATA BASE COLLECTIONS - (START) ***************************
 
-  // *********USERS
+  // ************************** USERS **************************************
   // -------------------------- USERS --------------------------------------
   public usersCollection: AngularFirestoreCollection<any>;
   public users: Array<any> = [];
@@ -27,7 +27,7 @@ export class DatabaseService {
   public dataPermits = new BehaviorSubject<any[]>([]);
   public currentDataPermits = this.dataPermits.asObservable();
 
-  // *********SECURITY
+  // ************************** SECURITY ***********************************
   // -------------------------- FREDS --------------------------------------
   public securityFredsCollection: AngularFirestoreCollection<any>;
   public securityFreds: Array<any> = [];
@@ -92,13 +92,50 @@ export class DatabaseService {
   public currentDataSecurityTasks = this.dataSecurityTasks.asObservable();
 
 
-  // *********QUALITY
+  // ************************** QUALITY *****************************
   // -------------------------- REDOS -------------------------------
   public qualityRedosCollection: AngularFirestoreCollection<any>;
   public qualityRedos: Array<any> = [];
 
   public dataQualityRedos = new BehaviorSubject<any[]>([]);
   public currentDataQualityRedos = this.dataQualityRedos.asObservable();
+
+  // -------------------------- INSPECTIONS -------------------------------
+  public qualityInspectionsCollection: AngularFirestoreCollection<any>;
+  public qualityInspections: Array<any> = [];
+
+  public dataQualityInspections = new BehaviorSubject<any[]>([]);
+  public currentDataQualityInspections = this.dataQualityInspections.asObservable();
+
+  // -------------------------- OBSERVATIONS -------------------------------
+  public qualityInspectionObservationsCollection: AngularFirestoreCollection<any>;
+  public qualityInspectionObservations: Array<any> = [];
+
+  public dataQualityInspectionObservations = new BehaviorSubject<any[]>([]);
+  public currentDataQualityInspectionObservations = this.dataQualityInspectionObservations.asObservable();
+
+  // ************************* MAINTENANCE ***************************
+  // ------------------------- EQUIPMENTS ----------------------------
+  public maintenanceEquipmentsCollection: AngularFirestoreCollection<any>;
+  public maintenanceEquipments: Array<any> = [];
+
+  public dataMaintenanceEquipments = new BehaviorSubject<any[]>([]);
+  public currentDataMaintenanceEquipments = this.dataMaintenanceEquipments.asObservable();
+
+  // ------------------------- PRIORITIES ----------------------------
+  public maintenancePrioritiesCollection: AngularFirestoreCollection<any>;
+  public maintenancePriorities: Array<any> = [];
+
+  public dataMaintenancePriorities = new BehaviorSubject<any[]>([]);
+  public currentDataMaintenancePriorities = this.dataMaintenancePriorities.asObservable();
+
+  // ------------------------- REQUESTS ----------------------------
+  public maintenanceRequestsCollection: AngularFirestoreCollection<any>;
+  public maintenanceRequests: Array<any> = [];
+
+  public dataMaintenanceRequests = new BehaviorSubject<any[]>([]);
+  public currentDataMaintenanceRequests = this.dataMaintenanceRequests.asObservable();
+
 
   // *********** SYSTEM CONFIGURATION COLLECTIONS - (START) ***************************
 
@@ -222,7 +259,7 @@ export class DatabaseService {
 
       // INSPECTIONS
       if(permits['securitySection'] && permits['securityInspections']){
-        this.getInspections(false, actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
         this.getKindOfDanger();
         this.getKindOfObsevation();
         this.getCauses();
@@ -231,6 +268,14 @@ export class DatabaseService {
       // QUALITY
       if(permits['qualitySection'] && permits['qualityRedos']){
         this.getQualityRedos();
+        this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
+      }
+
+      // MAINTENANCE
+      if(permits['maintenanceSection'] && permits['maintenanceRequests']){
+        this.getMaintenanceEquipments();
+        this.getMaintenancePriorities();
+        this.getMaintenanceRequests(false, actualFromDate.valueOf(), toDate.valueOf());
       }
 
     });
@@ -506,7 +551,7 @@ export class DatabaseService {
       })
   }
 
-  getInspections(justActualMonth?,from?,to?): void{
+  getSecurityInspections(justActualMonth?,from?,to?): void{
     if(this.auth.permits['securityInspectionsGeneralList']){
       if(justActualMonth){
         this.securityInspectionsCollection = this.afs.collection(`db/crcLaJoya/securityInspections`, ref => ref.where('estimatedTerminationDate','>=',from));
@@ -560,6 +605,85 @@ export class DatabaseService {
       this.qualityRedos = res;
       this.dataQualityRedos.next(res); 
     })
+  }
+
+  getQualityInspections(justActualMonth?,from?,to?): void{
+    if(this.auth.permits['qualityInspectionsGeneralList']){
+      if(justActualMonth){
+        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('estimatedTerminationDate','>=',from));
+      }else{
+        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
+      }
+    }else{
+      if(justActualMonth){
+        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('uidStaff','==', this.auth.userCRC.uid).where('estimatedTerminationDate','>=',from));
+      }else{
+        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('uidStaff','==', this.auth.userCRC.uid).where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
+      }
+    }
+
+    this.qualityInspectionsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          return res.sort((a,b)=>b['regDate']-a['regDate']);
+        })
+      )
+      .subscribe(res => {
+        this.qualityInspections = res;
+        this.dataQualityInspections.next(res);
+      })
+  }
+
+  // ********************** MAINTENANCE METHODS
+  getMaintenanceEquipments(): void{
+    this.maintenanceEquipmentsCollection = this.afs.collection(`db/systemConfigurations/maintenanceEquipments`, ref => ref.orderBy('regDate','asc'));
+    this.maintenanceEquipmentsCollection.valueChanges().subscribe(res => {
+      this.maintenanceEquipments = res;
+      this.dataMaintenanceEquipments.next(res);
+    });
+  }
+
+  getMaintenancePriorities(): void{
+    this.maintenancePrioritiesCollection = this.afs.collection(`db/systemConfigurations/maintenancePriorities`, ref => ref.orderBy('regDate','asc'));
+    this.maintenancePrioritiesCollection.valueChanges().subscribe(res => {
+      console.log(res);
+      this.maintenancePriorities = res;
+      this.dataMaintenancePriorities.next(res);
+    });
+  }
+
+  getMaintenanceRequests(justActualMonth?,from?,to?): void{
+    
+    if(justActualMonth){
+      this.maintenanceRequestsCollection = this.afs.collection(`db/crcLaJoya/maintenanceRequests`, ref => ref.where('regDate','>=',from));
+    }else{
+      this.maintenanceRequestsCollection = this.afs.collection(`db/crcLaJoya/maintenanceRequests`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
+    }
+
+    this.maintenanceRequestsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          if(this.auth.permits['maintenanceRequestsPersonalList']){
+            let filteredResults = [];
+            res.forEach(element => {
+              if(element['uid'] === this.auth.userCRC.uid || element['uidSupervisor'] === this.auth.userCRC.uid){
+                filteredResults.push(element);
+              }
+            });
+
+            return filteredResults;
+          }else{
+            return res;
+          }
+        }),
+        map(res => {
+          return res.sort((a,b)=>b['regDate']-a['regDate']);
+        })
+      )
+      .subscribe(res => {
+        this.maintenanceRequests = res;
+        this.dataMaintenanceRequests.next(res);
+      })
   }
 
 }
