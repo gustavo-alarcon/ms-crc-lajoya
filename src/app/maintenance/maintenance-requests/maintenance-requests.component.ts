@@ -85,7 +85,7 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
 
   monthFormControl = new FormControl({value:new Date(), disabled: true});
 
-  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'area', 'equipment', 'priority', 'observation', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
+  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'createdBy', 'area', 'equipment', 'priority', 'observation', 'status', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
   dataSourceRequests = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
