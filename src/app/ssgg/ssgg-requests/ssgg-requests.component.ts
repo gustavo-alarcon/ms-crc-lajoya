@@ -7,6 +7,8 @@ import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { SsggRequestsConfirmSaveComponent } from './ssgg-requests-confirm-save/ssgg-requests-confirm-save.component';
+import { SsggRequestsConfirmDeleteComponent } from './ssgg-requests-confirm-delete/ssgg-requests-confirm-delete.component';
+import { SsggRequestsDialogEditComponent } from './ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
 
 @Component({
   selector: 'app-ssgg-requests',
@@ -223,19 +225,20 @@ export class SsggRequestsComponent implements OnInit {
 
   // MAT CHIPS WITH AUTOCOMPLETE
   add(event: MatChipInputEvent): void {
+
     if (!this.matAutocomplete.isOpen) {
       const input = event.input;
       const value = event.value;
 
-      if ((value || '').trim()) {
-        this.involvedAreasArray.push(value.trim());
+      if(typeof value === 'object'){
+        this.involvedAreasArray.push(value);
       }
 
       if (input) {
         input.value = '';
       }
 
-      this.additionalsFormGroup.get('involvedAreas').setValue(' ');
+      this.additionalsFormGroup.get('involvedAreas').setValue('');
     }
   }
 
@@ -278,12 +281,11 @@ export class SsggRequestsComponent implements OnInit {
 
     if(this.requestFormGroup.valid){
       
-      this.additionalsFormGroup.get('involvedAreas').setValue(this.involvedAreasArray);
-      
       let dialogRef = this.dialog.open(SsggRequestsConfirmSaveComponent,{
         data: {
           form: Object.assign(this.requestFormGroup.value, this.additionalsFormGroup.value),
-          image: this.selectedFile
+          image: this.selectedFile,
+          involvedAreas: this.involvedAreasArray
         }
       });
 
@@ -299,6 +301,22 @@ export class SsggRequestsComponent implements OnInit {
       });
     }
 
+  }
+
+  delete(id_request, involvedAreas): void{
+    this.dialog.open(SsggRequestsConfirmDeleteComponent, {
+      data: {
+        id_request: id_request,
+        involvedAreas: involvedAreas
+      }
+    });
+  }
+
+  edit(request): void{
+    this.dialog.open(SsggRequestsDialogEditComponent,{
+      data: request,
+      autoFocus: false
+    })
   }
 
 }
