@@ -135,13 +135,13 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
                           );
 
     // ************** TAB - REQUEST LIST
-    let dataMaintenanceRequestsSubs =  this.dbs.currentDataMaintenanceRequests.subscribe(res => {
-                                                this.filteredMaintenanceRequests = res;
-                                                this.dataSourceRequests.data = res;
-                                                this.filteredMaintenanceRequests.forEach(element => {
-                                                  this.isOpenRequest.push(false);
-                                                })
-                                              });
+    let dataMaintenanceRequestsSubs = this.dbs.currentDataMaintenanceRequests.subscribe(res => {
+                                        this.filteredMaintenanceRequests = res;
+                                        this.dataSourceRequests.data = res;
+                                        this.filteredMaintenanceRequests.forEach(element => {
+                                          this.isOpenRequest.push(false);
+                                        })
+                                      });
 
     this.subscriptions.push(dataMaintenanceRequestsSubs);
   }
@@ -160,14 +160,14 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
     let toMonth = (fromDate.getMonth()+ 1) % 12;
     let toYear = this.currentYear;
 
-    if(toMonth + 1 >= 13){
+    if(fromDate.getMonth() + 1 >= 13){
       toYear ++;
     }
 
     let toDate: Date = new Date(toYear, toMonth, 1);
 
     this.dbs.getMaintenanceRequests(fromDate.valueOf(), toDate.valueOf());
-
+    
     datepicker.close();
   }
 
@@ -237,12 +237,11 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
     }
   }
 
-  delete(id_request, id_creator, id_supervisor): void{
+  delete(id_request, id_supervisor): void{
 
     this.dialog.open(MaintenanceRequestsConfirmDeleteComponent, {
       data: {
-        id_fred: id_request,
-        id_creator: id_creator,
+        id_request: id_request,
         id_supervisor: id_supervisor
       }
     });

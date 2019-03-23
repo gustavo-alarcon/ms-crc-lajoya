@@ -55,6 +55,7 @@ import { MatNativeDateModule } from '@angular/material';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 // ANGULAR COMPONENTS
@@ -112,6 +113,14 @@ import { MaintenanceRequestsConfirmSaveComponent } from './maintenance/maintenan
 import { MaintenanceRequestsConfirmDeleteComponent } from './maintenance/maintenance-requests/maintenance-requests-confirm-delete/maintenance-requests-confirm-delete.component';
 import { MaintenanceRequestsDialogEditComponent } from './maintenance/maintenance-requests/maintenance-requests-dialog-edit/maintenance-requests-dialog-edit.component';
 import { MaintenanceRequestsConfirmEditComponent } from './maintenance/maintenance-requests/maintenance-requests-confirm-edit/maintenance-requests-confirm-edit.component';
+import { MaintenanceRequestsDialogTaskComponent } from './maintenance/maintenance-requests/maintenance-requests-dialog-task/maintenance-requests-dialog-task.component';
+import { MaintenanceRequestsConfirmTaskComponent } from './maintenance/maintenance-requests/maintenance-requests-confirm-task/maintenance-requests-confirm-task.component';
+import { SsggRequestsConfirmSaveComponent } from './ssgg/ssgg-requests/ssgg-requests-confirm-save/ssgg-requests-confirm-save.component';
+import { SsggRequestsConfirmDeleteComponent } from './ssgg/ssgg-requests/ssgg-requests-confirm-delete/ssgg-requests-confirm-delete.component';
+import { SsggRequestsConfirmEditComponent } from './ssgg/ssgg-requests/ssgg-requests-confirm-edit/ssgg-requests-confirm-edit.component';
+import { SsggRequestsConfirmTaskComponent } from './ssgg/ssgg-requests/ssgg-requests-confirm-task/ssgg-requests-confirm-task.component';
+import { SsggRequestsDialogEditComponent } from './ssgg/ssgg-requests/ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
+import { SsggRequestsDialogTaskComponent } from './ssgg/ssgg-requests/ssgg-requests-dialog-task/ssgg-requests-dialog-task.component';
 
 
 
@@ -172,7 +181,15 @@ import { MaintenanceRequestsConfirmEditComponent } from './maintenance/maintenan
     MaintenanceRequestsConfirmSaveComponent,
     MaintenanceRequestsConfirmDeleteComponent,
     MaintenanceRequestsDialogEditComponent,
-    MaintenanceRequestsConfirmEditComponent
+    MaintenanceRequestsConfirmEditComponent,
+    MaintenanceRequestsDialogTaskComponent,
+    MaintenanceRequestsConfirmTaskComponent,
+    SsggRequestsConfirmSaveComponent,
+    SsggRequestsConfirmDeleteComponent,
+    SsggRequestsConfirmEditComponent,
+    SsggRequestsConfirmTaskComponent,
+    SsggRequestsDialogEditComponent,
+    SsggRequestsDialogTaskComponent
     
   ],
   imports: [
@@ -216,7 +233,8 @@ import { MaintenanceRequestsConfirmEditComponent } from './maintenance/maintenan
     MatNativeDateModule,
     MatSelectModule,
     MatCardModule,
-    MatSliderModule
+    MatSliderModule,
+    MatChipsModule
   ],
   providers: [
     AuthService,
@@ -254,7 +272,15 @@ import { MaintenanceRequestsConfirmEditComponent } from './maintenance/maintenan
     MaintenanceRequestsConfirmSaveComponent,
     MaintenanceRequestsConfirmDeleteComponent,
     MaintenanceRequestsDialogEditComponent,
-    MaintenanceRequestsConfirmEditComponent
+    MaintenanceRequestsConfirmEditComponent,
+    MaintenanceRequestsDialogTaskComponent,
+    MaintenanceRequestsConfirmTaskComponent,
+    SsggRequestsConfirmSaveComponent,
+    SsggRequestsConfirmDeleteComponent,
+    SsggRequestsConfirmEditComponent,
+    SsggRequestsConfirmTaskComponent,
+    SsggRequestsDialogEditComponent,
+    SsggRequestsDialogTaskComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -136,6 +136,28 @@ export class DatabaseService {
   public dataMaintenanceRequests = new BehaviorSubject<any[]>([]);
   public currentDataMaintenanceRequests = this.dataMaintenanceRequests.asObservable();
 
+  // ************************* MAINTENANCE ***************************
+  // ------------------------- EQUIPMENTS ----------------------------
+  public ssggTypesCollection: AngularFirestoreCollection<any>;
+  public ssggTypes: Array<any> = [];
+
+  public dataSsggTypes = new BehaviorSubject<any[]>([]);
+  public currentDataSsggTypes = this.dataSsggTypes.asObservable();
+
+  // ------------------------- PRIORITIES ----------------------------
+  public ssggPrioritiesCollection: AngularFirestoreCollection<any>;
+  public ssggPriorities: Array<any> = [];
+
+  public dataSsggPriorities = new BehaviorSubject<any[]>([]);
+  public currentDataSsggPriorities = this.dataSsggPriorities.asObservable();
+
+  // ------------------------- REQUESTS ----------------------------
+  public ssggRequestsCollection: AngularFirestoreCollection<any>;
+  public ssggRequests: Array<any> = [];
+
+  public dataSsggRequests = new BehaviorSubject<any[]>([]);
+  public currentDataSsggRequests = this.dataSsggRequests.asObservable();
+
 
   // *********** SYSTEM CONFIGURATION COLLECTIONS - (START) ***************************
 
@@ -276,6 +298,13 @@ export class DatabaseService {
         this.getMaintenanceEquipments();
         this.getMaintenancePriorities();
         this.getMaintenanceRequests(false, actualFromDate.valueOf(), toDate.valueOf());
+      }
+
+      // MAINTENANCE
+      if(permits['ssggSection'] && permits['ssggRequests']){
+        this.getSsggTypes();
+        this.getSsggPriorities();
+        this.getSsggRequests(false, actualFromDate.valueOf(), toDate.valueOf());
       }
 
     });
@@ -646,7 +675,6 @@ export class DatabaseService {
   getMaintenancePriorities(): void{
     this.maintenancePrioritiesCollection = this.afs.collection(`db/systemConfigurations/maintenancePriorities`, ref => ref.orderBy('regDate','asc'));
     this.maintenancePrioritiesCollection.valueChanges().subscribe(res => {
-      console.log(res);
       this.maintenancePriorities = res;
       this.dataMaintenancePriorities.next(res);
     });
@@ -684,6 +712,73 @@ export class DatabaseService {
         this.maintenanceRequests = res;
         this.dataMaintenanceRequests.next(res);
       })
+  }
+
+  addMaintenanceRequestLog(id, data): Promise<any>{
+    return this.maintenanceRequestsCollection.doc(id).collection(`log`).add(data);
+  }
+
+  // ********************** MAINTENANCE METHODS
+  getSsggTypes(): void{
+    this.ssggTypesCollection = this.afs.collection(`db/systemConfigurations/ssggTypes`, ref => ref.orderBy('regDate','asc'));
+    this.ssggTypesCollection.valueChanges().subscribe(res => {
+      this.ssggTypes = res;
+      this.dataSsggTypes.next(res);
+    });
+  }
+
+  getSsggPriorities(): void{
+    this.ssggPrioritiesCollection = this.afs.collection(`db/systemConfigurations/ssggPriorities`, ref => ref.orderBy('regDate','asc'));
+    this.ssggPrioritiesCollection.valueChanges().subscribe(res => {
+      this.ssggPriorities = res;
+      this.dataSsggPriorities.next(res);
+    });
+  }
+
+  getSsggRequests(justActualMonth?,from?,to?): void{
+    
+    if(justActualMonth){
+      this.ssggRequestsCollection = this.afs.collection(`db/crcLaJoya/ssggRequests`, ref => ref.where('regDate','>=',from));
+    }else{
+      this.ssggRequestsCollection = this.afs.collection(`db/crcLaJoya/ssggRequests`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
+    }
+
+    this.ssggRequestsCollection.valueChanges()
+      .pipe(
+        map(res => {
+          if(this.auth.permits['ssggRequestsPersonalList']){
+            let filteredResults = [];
+            res.forEach(element => {
+
+              if(element['uid'] === this.auth.userCRC.uid){
+                filteredResults.push(element);
+              }
+
+              element['involvedAreas'].forEach(area => {
+                if(area['supervisor']['uid'] === this.auth.userCRC.uid){
+                  filteredResults.push(area);
+                }
+              });
+
+            });
+
+            return filteredResults;
+          }else{
+            return res;
+          }
+        }),
+        map(res => {
+          return res.sort((a,b)=>b['regDate']-a['regDate']);
+        })
+      )
+      .subscribe(res => {
+        this.ssggRequests = res;
+        this.dataSsggRequests.next(res);
+      })
+  }
+
+  addSsggRequestLog(id, data): Promise<any>{
+    return this.maintenanceRequestsCollection.doc(id).collection(`log`).add(data);
   }
 
 }
