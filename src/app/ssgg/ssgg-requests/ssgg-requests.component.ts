@@ -85,7 +85,7 @@ export class SsggRequestsComponent implements OnInit {
 
   monthFormControl = new FormControl({value:new Date(), disabled: true});
 
-  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'area', 'equipment', 'priority', 'observation', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
+  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'mainArea', 'createdBy', 'type', 'priority', 'resumen', 'involvedAreas', 'coordinations', 'moreDetails', 'status', 'finalPicture', 'realTerminationDate', 'comments', 'edit'];
   dataSourceRequests = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -95,7 +95,7 @@ export class SsggRequestsComponent implements OnInit {
   filteredSsggPriorities: Observable<any>;
   filteredAreas: Observable<any>;
   filteredInvolvedAreas: Observable<any>;
-  filteredMaintenanceRequests: Array<any>;
+  filteredSsggRequests: Array<any>;
 
   subscriptions: Array<Subscription> = [];
 
@@ -133,7 +133,6 @@ export class SsggRequestsComponent implements OnInit {
                                   map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
                                   map(name => name ? this.dbs.ssggTypes.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.ssggTypes)
                                 ); 
-                                this.requestFormGroup.get('type').setValue(' ');
 
     this.filteredSsggPriorities = this.requestFormGroup.get('priority').valueChanges
                                     .pipe(
@@ -157,10 +156,10 @@ export class SsggRequestsComponent implements OnInit {
                                   );
 
     // ************** TAB - REQUEST LIST
-    let dataSsggRequestsSubs = this.dbs.currentDataMaintenanceRequests.subscribe(res => {
-                                        this.filteredMaintenanceRequests = res;
+    let dataSsggRequestsSubs = this.dbs.currentDataSsggRequests.subscribe(res => {
+                                        this.filteredSsggRequests = res;
                                         this.dataSourceRequests.data = res;
-                                        this.filteredMaintenanceRequests.forEach(element => {
+                                        this.filteredSsggRequests.forEach(element => {
                                           this.isOpenRequest.push(false);
                                         })
                                       });
