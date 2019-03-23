@@ -1,3 +1,113 @@
-<p>
-  maintenance-requests-dialog-edit works!
-</p>
+<div class="w3-container">
+  <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
+    <mat-icon style="vertical-align:middle">assistant</mat-icon> Editar FRED
+  </h2>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+    <form [formGroup]="requestFormGroup">
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Cabecera</h2>
+
+      <mat-form-field class="w3-margin-right w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
+        <mat-label>Equipo</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="equipment"
+          [matAutocomplete]="autoEquipment" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoEquipment="matAutocomplete">
+        <mat-option *ngFor="let equipment of filteredMaintenanceEquipments | async" [value]="equipment['name']" style="font-size:14px">
+          {{equipment['name']}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
+        <mat-label>Área</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="area"
+          [matAutocomplete]="autoArea" readonly>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
+        [displayWith]="showSelectedArea">
+        <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
+          <strong>{{option['name']}}</strong> | <span
+            class="w3-small">{{option['supervisor']['displayName']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+      <br>
+
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:575px" appearance="outline">
+        <mat-label>Observaciones</mat-label>
+        <textarea matInput placeholder="Describa..." rows="4" formControlName="observation"></textarea>
+      </mat-form-field>
+      <br>
+
+      <div style="display:flex; flex-wrap: wrap">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+          <mat-label>Prioridad</mat-label>
+          <input type="text" matInput placeholder="Escriba y seleccione" formControlName="priority"
+            [matAutocomplete]="autoPriority" required>
+          <mat-hint>
+            <strong>requerido *</strong>
+          </mat-hint>
+        </mat-form-field>
+        <mat-autocomplete #autoPriority="matAutocomplete">
+          <mat-option *ngFor="let priority of filteredMaintenancePriorities | async" [value]="priority['name']" style="font-size:14px">
+            {{priority['name']}}
+          </mat-option>
+        </mat-autocomplete>
+
+        <!-- <button mat-raised-button color="primary" matTooltip="Agregar imagen"
+          class="w3-margin-right w3-margin-bottom" (click)="fileInput.click()">
+          <mat-icon>add_photo_alternate</mat-icon>
+        </button> -->
+        <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
+        <img  [src]="imageSrc_initial || '../../../assets/images/no-image.png'"
+              style="width:200px; height:150px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow"
+              (click)="fileInput.click()">
+      </div>
+      <br>
+
+      <form [formGroup]="taskFormGroup">
+        <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Mantenimiento</h2>
+
+        <mat-form-field class="w3-margin-right w3-block" style="max-width:575px" appearance="outline">
+          <mat-label>Detalles de mantenimiento</mat-label>
+          <textarea matInput placeholder="Describa..." rows="4" formControlName="maintenanceDetails"></textarea>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+          <mat-label>Estado</mat-label>
+          <input type="text" matInput placeholder="Escriba y seleccione" formControlName="status"
+            [matAutocomplete]="autoStatus" required>
+          <mat-hint>
+            <strong>requerido *</strong>
+          </mat-hint>
+        </mat-form-field>
+        <mat-autocomplete #autoStatus="matAutocomplete">
+          <mat-option *ngFor="let status of statusList" [value]="status" style="font-size:14px">
+            {{status}}
+          </mat-option>
+        </mat-autocomplete>
+
+        <input #fileInput_final style="display: none" type="file" (change)="onFileSelected_final($event)">
+        <img  [src]="imageSrc_final || '../../../assets/images/no-image.png'"
+              style="width:200px; height:150px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow"
+              (click)="fileInput_final.click()">
+
+      </form> 
+      
+    </form>
+
+  </mat-dialog-content>
+  <mat-dialog-actions class="w3-margin-bottom">
+    <button mat-raised-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-stroked-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
+  </mat-dialog-actions>
+</div>

@@ -64,7 +64,6 @@ export class FredEditDialogComponent implements OnInit, OnDestroy {
     this.createForms();
 
     // ------------ FIRST FORM - AUTCOMPLETE DEFINITIONS
-
     this.filteredTypes = this.firstFormGroup.get('type').valueChanges
                           .pipe(
                             startWith<any>(''),
@@ -221,25 +220,25 @@ export class FredEditDialogComponent implements OnInit, OnDestroy {
                         }
                       });
 
-    let statusSubs = this.fourthFormGroup.get('status').valueChanges
-                      .pipe(
-                        distinctUntilChanged()
-                      )
-                      .subscribe(res => {
-                        if(res === 'Finalizado'){
-                          this.fourthFormGroup.get('percent').setValue(100);
-                        }
-                      });
+    let statusSubs =  this.fourthFormGroup.get('status').valueChanges
+                        .pipe(
+                          distinctUntilChanged()
+                        )
+                        .subscribe(res => {
+                          if(res === 'Finalizado'){
+                            this.fourthFormGroup.get('percent').setValue(100);
+                          }
+                        });
 
     let percentSubs = this.fourthFormGroup.get('percent').valueChanges
-                      .pipe(
-                        distinctUntilChanged()
-                      )
-                      .subscribe(res => {
-                        if(res === 100){
-                          this.fourthFormGroup.get('status').setValue("Finalizado");
-                        }
-                      });
+                        .pipe(
+                          distinctUntilChanged()
+                        )
+                        .subscribe(res => {
+                          if(res === 100){
+                            this.fourthFormGroup.get('status').setValue("Finalizado");
+                          }
+                        });
 
     
     this.subscriptions.push(typeSubs);
@@ -281,7 +280,7 @@ export class FredEditDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if(!this.imageSrc_final && (this.fourthFormGroup.value['status'] === "finalizado") && (this.firstFormGroup.value['type'] === "Condición sub-estandar")){
+    if(!this.imageSrc_final && (this.fourthFormGroup.value['status'] === "Finalizado") && (this.firstFormGroup.value['type'] === "Condición sub-estandar")){
       this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento","Cerrar", {
         duration: 6000
       });
