@@ -58,7 +58,7 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                 priority: this.data['form']['priority'],
                 resumen: this.data['form']['resumen'],
                 estimatedTerminationDate: this.data['form']['estimatedTerminationDate'].valueOf(),
-                involvedAreas: this.data['form']['involvedAreas'],
+                involvedAreas: this.data['involvedAreas'],
                 coordinations: this.data['form']['coordinations'],
                 moreDetails: this.data['form']['moreDetails'],
                 source: 'ssgg',
@@ -91,7 +91,7 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
 
                 requestObject['id'] = refRequest.id;
 
-                this.data['form']['involvedAreas'].forEach(area => {
+                this.data['involvedAreas'].forEach(area => {
                   // Adding the request to task and notifications of every supervisor
                   this.dbs.usersCollection
                     .doc(area['supervisor']['uid'])
