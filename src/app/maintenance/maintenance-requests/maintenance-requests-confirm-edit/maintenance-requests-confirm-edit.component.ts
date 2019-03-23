@@ -28,7 +28,6 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   save(): void{
@@ -220,6 +219,7 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
       )
       .subscribe()
     }
+    
   }
 
 }

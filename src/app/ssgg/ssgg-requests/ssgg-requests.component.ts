@@ -110,9 +110,7 @@ export class SsggRequestsComponent implements OnInit {
   addOnBlur = true;
 
   involvedAreasArray: Array<any> = [];
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-
-  mainAreaHint: string;
+  separatorKeysCodes: number[] = [ENTER, COMMA];  
 
   constructor(
     private fb: FormBuilder,
@@ -292,6 +290,7 @@ export class SsggRequestsComponent implements OnInit {
       dialogRef.afterClosed().subscribe(res => {
         if(res){
           this.createForms();
+          this.involvedAreasArray = [];
         }
       });
 

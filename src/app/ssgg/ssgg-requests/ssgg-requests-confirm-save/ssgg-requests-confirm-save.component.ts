@@ -61,6 +61,7 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                 involvedAreas: this.data['involvedAreas'],
                 coordinations: this.data['form']['coordinations'],
                 moreDetails: this.data['form']['moreDetails'],
+                comments: '',
                 source: 'ssgg',
                 uid: this.auth.userCRC.uid
               };
