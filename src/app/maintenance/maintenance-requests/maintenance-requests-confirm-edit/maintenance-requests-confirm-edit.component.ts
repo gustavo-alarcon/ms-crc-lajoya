@@ -17,6 +17,7 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
   uploading_initial: boolean = false;
   uploadPercent_final: Observable<number>;
   uploading_final: boolean = false;
+  uploading: boolean = false;
 
   constructor(
     public dbs: DatabaseService,
@@ -35,7 +36,7 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
     if(this.data['initialImage']){
       this.uploading_initial = true;
 
-      const filePath = `/securityFredsPictures/${this.data['initialImage'].name}`;
+      const filePath = `/maintenanceRequestsPictures/${this.data['initialImage'].name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, this.data['initialImage']);
 
@@ -104,6 +105,8 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
       )
       .subscribe()
     }else{
+      this.uploading = true;
+      
       let realDate = 0;
 
       if(this.data['form']['status'] === 'Finalizado'){
@@ -160,7 +163,7 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
     if(this.data['finalImage']){
       this.uploading_final = true;
 
-      const filePath = `/securityFredsPictures/${this.data['finalImage'].name}`;
+      const filePath = `/maintenanceRequestsPictures/${this.data['finalImage'].name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, this.data['finalImage']);
 

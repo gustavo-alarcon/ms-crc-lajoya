@@ -133,7 +133,7 @@
         </mat-form-field>
         <br>
 
-        <input #fileInput_initial style="display: none" type="file" (change)="onFileSelected_initial($event)">
+        <input #fileInput_initial style="display: none" type="file" (change)="onFileSelected($event)">
         <img  [src]="imageSrc_initial || '../../../assets/images/no-image.png'"
               style="width:200px; height:150px; cursor:pointer"
               class="mat-elevation-z4 w3-hover-shadow"

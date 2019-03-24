@@ -17,6 +17,7 @@ export class SsggRequestsConfirmEditComponent implements OnInit {
   uploading_initial: boolean = false;
   uploadPercent_final: Observable<number>;
   uploading_final: boolean = false;
+  uploading: boolean = false;
 
   constructor(
     public dbs: DatabaseService,
@@ -28,7 +29,6 @@ export class SsggRequestsConfirmEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   save(): void{
@@ -63,7 +63,7 @@ export class SsggRequestsConfirmEditComponent implements OnInit {
                 involvedAreas: this.data['involvedAreas'],
                 coordinations: this.data['form']['coordinations'],
                 moreDetails: this.data['form']['moreDetails'],
-                comments: '',
+                comments: this.data['form']['comments'],
                 source: 'maintenance',
                 modifiedBy: this.auth.userCRC,
                 uidEditor: this.auth.userCRC.uid
@@ -113,6 +113,8 @@ export class SsggRequestsConfirmEditComponent implements OnInit {
       )
       .subscribe()
     }else{
+      this.uploading = true;
+      
       let realDate = 0;
 
       if(this.data['form']['status'] === 'Finalizado'){
@@ -129,7 +131,7 @@ export class SsggRequestsConfirmEditComponent implements OnInit {
         involvedAreas: this.data['involvedAreas'],
         coordinations: this.data['form']['coordinations'],
         moreDetails: this.data['form']['moreDetails'],
-        comments: '',
+        comments: this.data['form']['comments'],
         source: 'maintenance',
         modifiedBy: this.auth.userCRC,
         uidEditor: this.auth.userCRC.uid

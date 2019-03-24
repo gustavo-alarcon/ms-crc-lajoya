@@ -75,7 +75,7 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
       this.filteredMaintenanceRequests = res;
     });
 
-this.subscriptions.push(dataMaintenanceRequestsSubs);
+    this.subscriptions.push(dataMaintenanceRequestsSubs);
   }
 
   ngOnDestroy() {

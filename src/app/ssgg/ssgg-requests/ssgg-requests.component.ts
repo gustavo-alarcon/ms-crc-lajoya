@@ -9,6 +9,7 @@ import { DatabaseService } from 'src/app/core/database.service';
 import { SsggRequestsConfirmSaveComponent } from './ssgg-requests-confirm-save/ssgg-requests-confirm-save.component';
 import { SsggRequestsConfirmDeleteComponent } from './ssgg-requests-confirm-delete/ssgg-requests-confirm-delete.component';
 import { SsggRequestsDialogEditComponent } from './ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
+import { SsggRequestsDialogTaskComponent } from './ssgg-requests-dialog-task/ssgg-requests-dialog-task.component';
 
 @Component({
   selector: 'app-ssgg-requests',
@@ -313,6 +314,13 @@ export class SsggRequestsComponent implements OnInit {
 
   edit(request): void{
     this.dialog.open(SsggRequestsDialogEditComponent,{
+      data: request,
+      autoFocus: false
+    })
+  }
+
+  task(request): void{
+    this.dialog.open(SsggRequestsDialogTaskComponent,{
       data: request,
       autoFocus: false
     })
