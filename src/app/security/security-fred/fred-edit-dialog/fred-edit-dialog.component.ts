@@ -319,14 +319,11 @@ export class FredEditDialogComponent implements OnInit, OnDestroy {
       }
 
       let dialogRef = this.dialog.open(FredConfirmEditComponent,{
-        data: [
-          this.firstFormGroup.value,
-          this.secondFormGroup.value,
-          this.thirdFormGroup.value,
-          this.fourthFormGroup.value,
-          this.selectedFile_initial,
-          this.selectedFile_final
-        ]
+        data: {
+          form: Object.assign(this.firstFormGroup.value,this.secondFormGroup.value,this.thirdFormGroup.value,this.fourthFormGroup.value),
+          initialImage: this.selectedFile_initial,
+          finalImage: this.selectedFile_final
+        }
       });
 
       dialogRef.afterClosed().subscribe(res => {

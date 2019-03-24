@@ -4,14 +4,10 @@
   </h2>
   <mat-divider></mat-divider>
   <mat-dialog-content>
-    <!-- <mat-vertical-stepper #stepperFRED class="w3-margin-top w3-round-large">
-      <mat-step [stepControl]="firstFormGroup" errorMessage="Complete todos los campos requeridos" state="done"> -->
     <form [formGroup]="firstFormGroup">
-      <!-- <ng-template matStepLabel>Cabecera</ng-template> -->
-      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Cabecera</h2>
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Cabecera</h2>
 
-
-      <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>Tipo de observación</mat-label>
         <input type="text" matInput placeholder="Escriba y seleccione" formControlName="type"
           [matAutocomplete]="autoType" required>
@@ -25,7 +21,7 @@
         </mat-option>
       </mat-autocomplete>
 
-      <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>Área Observada</mat-label>
         <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedArea"
           [matAutocomplete]="autoArea" required readonly>
@@ -40,7 +36,7 @@
         </mat-option>
       </mat-autocomplete>
 
-      <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>Persona observada</mat-label>
         <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedStaff"
           [matAutocomplete]="autoStaff" required readonly>
@@ -67,7 +63,7 @@
         <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Observaciones</h2>
 
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Orden y Limpeza</mat-label>
           <input type="text" matInput placeholder="Seleccione..." formControlName="list1" [matAutocomplete]="autoList1"
             required>
@@ -81,7 +77,7 @@
           </mat-option>
         </mat-autocomplete>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Equipos de Protección Personal</mat-label>
           <input type="text" matInput placeholder="Seleccione..." formControlName="list2" [matAutocomplete]="autoList2"
             required>
@@ -95,7 +91,7 @@
           </mat-option>
         </mat-autocomplete>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Control de Riesgos Operacionales</mat-label>
           <input type="text" matInput placeholder="Seleccione..." formControlName="list3" [matAutocomplete]="autoList3"
             required>
@@ -109,7 +105,7 @@
           </mat-option>
         </mat-autocomplete>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Herramientas y Equipos</mat-label>
           <input type="text" matInput placeholder="Seleccione..." formControlName="list4" [matAutocomplete]="autoList4"
             required>
@@ -120,7 +116,7 @@
           </mat-option>
         </mat-autocomplete>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Riesgos Críticos</mat-label>
           <input type="text" matInput placeholder="Seleccione..." formControlName="list5" [matAutocomplete]="autoList5"
             required>
@@ -139,7 +135,7 @@
     <form [formGroup]="thirdFormGroup">
       <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Reseñas</h2>
 
-      <mat-form-field class="w3-margin-right" appearance="outline">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>¿Incidente solucionado?</mat-label>
         <mat-select formControlName="solved">
           <mat-option value="true">Si</mat-option>
@@ -147,25 +143,25 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="w3-margin-right" appearance="outline"
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline"
         *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
         <mat-label>Acto sub-estandar</mat-label>
         <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardAct"></textarea>
       </mat-form-field>
 
-      <mat-form-field class="w3-margin-right" appearance="outline"
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline"
         *ngIf="firstFormGroup.value['type'] === 'Condición sub-estandar'">
         <mat-label>Condición sub-estandar</mat-label>
         <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardCondition"></textarea>
       </mat-form-field>
 
-      <mat-form-field class="w3-margin-right" appearance="outline"
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline"
         *ngIf="firstFormGroup.value['type'] === 'Acto destacable'">
         <mat-label>Acto destacable</mat-label>
         <textarea matInput placeholder="Describa..." rows="4" formControlName="remarkableAct"></textarea>
       </mat-form-field>
 
-      <mat-form-field class="w3-margin-right" appearance="outline">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>Oportunidad de Mejora</mat-label>
         <textarea matInput placeholder="Describa..." rows="4" formControlName="upgradeOpportunity"></textarea>
       </mat-form-field>
@@ -175,21 +171,21 @@
     <form [formGroup]="fourthFormGroup">
       <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Progreso</h2>
 
-      <mat-form-field class="w3-block w3-margin-right"  style="max-width:250px" appearance="outline">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>Fecha propuesta</mat-label>
         <input matInput [matDatepicker]="estimatedDate" placeholder="Escoja una fecha" formControlName="estimatedTerminationDate" readonly>
         <mat-datepicker-toggle matSuffix [for]="estimatedDate"></mat-datepicker-toggle>
         <mat-datepicker #estimatedDate></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="w3-block w3-margin-right"  style="max-width:250px" appearance="outline">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>Fecha finalizado</mat-label>
         <input matInput [matDatepicker]="realDate" [min]="fourthFormGroup.value['estimatedTerminationDate']" placeholder="Escoja una fecha" formControlName="realTerminationDate" readonly>
         <mat-datepicker-toggle matSuffix [for]="realDate"></mat-datepicker-toggle>
         <mat-datepicker #realDate></mat-datepicker>
       </mat-form-field>
       
-      <mat-form-field class="w3-block" appearance="outline" style="max-width:250px">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
         <mat-label>Estado</mat-label>
         <mat-select formControlName="status" placeholder="Escoger">
           <mat-option *ngFor="let status of statusList" [value]="status">
@@ -213,22 +209,22 @@
 
       <br>
       <div class="w3-padding">
-        <button mat-raised-button color="primary" matTooltip="Agregar imagen inicial"
-          class="w3-margin-right w3-margin-bottom" (click)="fileInput_initial.click()">
-          <mat-icon>add_photo_alternate</mat-icon> Foto inicial
-        </button>
+        <span class="ms-font-raleway ms-color-bt" style="margin-bottom:0.2em">Imagen inicial</span><br>
         <input #fileInput_initial style="display: none" type="file" (change)="onFileSelected_initial($event)">
-        <img [src]="imageSrc_initial || '../../../assets/images/no-image.png'" class="mat-elevation-z4" style="width:150px">
+        <img  [src]="imageSrc_initial || '../../../assets/images/no-image.png'"
+              style="width:200px; height:150px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow"
+              (click)="fileInput_initial.click()">
       </div>
 
       <br>
       <div class="w3-padding">
-        <button mat-raised-button color="primary" matTooltip="Agregar imagen final"
-          class="w3-margin-right w3-margin-bottom" style="width:128px" (click)="fileInput_final.click()">
-          <mat-icon>add_photo_alternate</mat-icon> Foto final
-        </button>
+        <span class="ms-font-raleway ms-color-bt" style="margin-bottom:0.2em">Imagen final</span><br>
         <input #fileInput_final style="display: none" type="file" (change)="onFileSelected_final($event)">
-        <img [src]="imageSrc_final || '../../../assets/images/no-image.png'" class="mat-elevation-z4" style="width:150px">
+        <img  [src]="imageSrc_final || '../../../assets/images/no-image.png'"
+              style="width:200px; height:150px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow"
+              (click)="fileInput_final.click()">
       </div>
 
       <p class="w3-margin-bottom"></p>
