@@ -1,3 +1,14 @@
-<p>
-  ssgg-requests-confirm-task works!
-</p>
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">extension</mat-icon> Guardar cierre de solicitud SSGG</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <p class="ms-font-roboto">¿Está seguro de querer cerrar el documento?</p>
+  <br>
+  
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_final | async" *ngIf="uploading_final"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading_final && data[4]">{{uploadPercent_final | async | number: '.2'}}/100 % ... Subiendo imagen final</p>
+  
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-raised-button mat-dialog-close color="warn">No</button>
+  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+</mat-dialog-actions>

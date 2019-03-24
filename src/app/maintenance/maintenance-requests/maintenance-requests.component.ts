@@ -8,6 +8,7 @@ import { startWith, map } from 'rxjs/operators';
 import { MaintenanceRequestsConfirmSaveComponent } from './maintenance-requests-confirm-save/maintenance-requests-confirm-save.component';
 import { MaintenanceRequestsConfirmDeleteComponent } from './maintenance-requests-confirm-delete/maintenance-requests-confirm-delete.component';
 import { MaintenanceRequestsDialogEditComponent } from './maintenance-requests-dialog-edit/maintenance-requests-dialog-edit.component';
+import { MaintenanceRequestsDialogTaskComponent } from './maintenance-requests-dialog-task/maintenance-requests-dialog-task.component';
 
 @Component({
   selector: 'app-maintenance-requests',
@@ -249,6 +250,13 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
 
   edit(request): void{
     this.dialog.open(MaintenanceRequestsDialogEditComponent,{
+      data: request,
+      autoFocus: false
+    })
+  }
+
+  task(request): void{
+    this.dialog.open(MaintenanceRequestsDialogTaskComponent,{
       data: request,
       autoFocus: false
     })
