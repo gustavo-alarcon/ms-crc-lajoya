@@ -31,23 +31,24 @@ export class FredConfirmEditComponent implements OnInit {
 
   ngOnInit() {
 
-    if(this.data[1]['list1'] != 'No observado'){
-      this.observations.push({group: 'Orden y Limpieza', observations: [this.data[1]['list1']]});
+    if(this.data['form']['list1'] != 'No observado'){
+      this.observations.push({group: 'Orden y Limpieza', observations: [this.data['form']['list1']]});
     }
-    if(this.data[1]['list2'] != 'No observado'){
-      this.observations.push({group: 'Equipos de Protección Personal', observations: [this.data[1]['list2']]});
+    if(this.data['form']['list2'] != 'No observado'){
+      this.observations.push({group: 'Equipos de Protección Personal', observations: [this.data['form']['list2']]});
     }
-    if(this.data[1]['list3'] != 'No observado'){
-      this.observations.push({group: 'Control de Riesgos Operacionales', observations: [this.data[1]['list3']]});
+    if(this.data['form']['list3'] != 'No observado'){
+      this.observations.push({group: 'Control de Riesgos Operacionales', observations: [this.data['form']['list3']]});
     }
-    if(this.data[1]['list4'] != 'No observado'){
-      this.observations.push({group: 'Herramientas y equipos', observations: [this.data[1]['list4']]});
+    if(this.data['form']['list4'] != 'No observado'){
+      this.observations.push({group: 'Herramientas y equipos', observations: [this.data['form']['list4']]});
     }
-    if(this.data[1]['list5'] != 'No observado'){
-      this.observations.push({group: 'Riesgos Críticos', observations: [this.data[1]['list5']]});
+    if(this.data['form']['list5'] != 'No observado'){
+      this.observations.push({group: 'Riesgos Críticos', observations: [this.data['form']['list5']]});
     }
 
-    this.mergedForms = Object.assign(this.data[0],this.data[2]);
+    console.log(this.data['form']);
+
   }
 
   save(): void{
@@ -56,12 +57,12 @@ export class FredConfirmEditComponent implements OnInit {
 
   uploadFile(): void{
 
-    if(this.data[4]){
+    if(this.data['initialImage']){
       this.uploading_initial = true;
 
-      const filePath = `/securityFredsPictures/${this.data[4].name}`;
+      const filePath = `/securityFredsPictures/${this.data['initialImage'].name}`;
       const fileRef = this.storage.ref(filePath);
-      const task = this.storage.upload(filePath, this.data[4]);
+      const task = this.storage.upload(filePath, this.data['initialImage']);
 
       this.uploadPercent_initial = task.percentageChanges();
 
@@ -69,13 +70,13 @@ export class FredConfirmEditComponent implements OnInit {
         finalize(() => {
           fileRef.getDownloadURL().subscribe( res => {
             if(res){
-              let percentNumber = this.data[3]['percent'];
-              let status = this.data[3]['status'];
-              let estimatedDate = this.data[3]['estimatedTerminationDate']?this.data[3]['estimatedTerminationDate'].valueOf():0;
-              let realDate = this.data[3]['realTerminationDate']?this.data[3]['realTerminationDate'].valueOf():0;
+              let percentNumber = this.data['form']['percent'];
+              let status = this.data['form']['status'];
+              let estimatedDate = this.data['form']['estimatedTerminationDate']?this.data['form']['estimatedTerminationDate'].valueOf():0;
+              let realDate = this.data['form']['realTerminationDate']?this.data['form']['realTerminationDate'].valueOf():0;
               let solved = false;
 
-              if(this.data[3]['status'] === 'Finalizado' || this.data[3]['percent'] === 100){
+              if(this.data['form']['status'] === 'Finalizado' || this.data['form']['percent'] === 100){
                 solved = true;
               }
 
@@ -101,19 +102,19 @@ export class FredConfirmEditComponent implements OnInit {
                 uidEditor: this.auth.userCRC.uid
               };
       
-              let finalObject = Object.assign(this.mergedForms,lastObject);
+              let finalObject = Object.assign(this.data['form'],lastObject);
               
               // UPDATING FRED WITH NEW INFO
-              this.dbs.securityFredsCollection.doc(this.data[0]['id']).set(finalObject, {merge: true}).then(refFred => {
+              this.dbs.securityFredsCollection.doc(this.data['form']['id']).set(finalObject, {merge: true}).then(() => {
 
                 // Creating log object
                 let log = {
                   action: 'Fred edited!',
-                  description: lastObject,
+                  description: finalObject,
                   regdate: Date.now()
                 }
                 // Adding log to respective FRED
-                this.dbs.addFredLog(this.data[0]['id'], log)
+                this.dbs.addFredLog(this.data['form']['id'], log)
                   .then(() => {
                     this.dialogRef.close(true);
                     this.uploading_initial = false;
@@ -128,16 +129,16 @@ export class FredConfirmEditComponent implements OnInit {
 
                 // UPDATING IN OBSERVED'S TASKS
                 this.dbs.usersCollection
-                  .doc(this.data[0]['observedStaff']['uid'])
+                  .doc(this.data['form']['observedStaff']['uid'])
                   .collection(`tasks`)
-                  .doc(this.data[0]['id'])
+                  .doc(this.data['form']['id'])
                   .set(finalObject, {merge: true})
 
                 // REGISTRY IN SUPERVISOR TASKS DB AND NOTIFICATIONS DB
                 this.dbs.usersCollection
-                  .doc(this.data[0]['observedArea']['supervisor']['uid'])
+                  .doc(this.data['form']['observedArea']['supervisor']['uid'])
                   .collection(`tasks`)
-                  .doc(this.data[0]['id'])
+                  .doc(this.data['form']['id'])
                   .set(finalObject, {merge: true})
 
               }).catch(err => {
@@ -156,13 +157,13 @@ export class FredConfirmEditComponent implements OnInit {
     }else{
       this.uploading_initial = true;
 
-      let percentNumber = this.data[3]['percent'];
-      let status = this.data[3]['status'];
-      let estimatedDate = this.data[3]['estimatedTerminationDate']?this.data[3]['estimatedTerminationDate'].valueOf():0;
-      let realDate = this.data[3]['realTerminationDate']?this.data[3]['realTerminationDate'].valueOf():0;
+      let percentNumber = this.data['form']['percent'];
+      let status = this.data['form']['status'];
+      let estimatedDate = this.data['form']['estimatedTerminationDate']?this.data['form']['estimatedTerminationDate'].valueOf():0;
+      let realDate = this.data['form']['realTerminationDate']?this.data['form']['realTerminationDate'].valueOf():0;
       let solved = false;
 
-      if(this.data[3]['status'] === 'Finalizado' || this.data[3]['percent'] === 100){
+      if(this.data['form']['status'] === 'Finalizado' || this.data['form']['percent'] === 100){
         solved = true;
       }
 
@@ -186,10 +187,10 @@ export class FredConfirmEditComponent implements OnInit {
         uidEditor: this.auth.userCRC.uid
       };
 
-      let finalObject = Object.assign(this.mergedForms,lastObject);
+      let finalObject = Object.assign(this.data['form'],lastObject);
 
       // UPDATING FRED WITH NEW INFO
-      this.dbs.securityFredsCollection.doc(this.data[0]['id']).set(finalObject, {merge: true}).then(() => {
+      this.dbs.securityFredsCollection.doc(this.data['form']['id']).set(finalObject, {merge: true}).then(() => {
 
         // Creating log object
         let log = {
@@ -198,7 +199,7 @@ export class FredConfirmEditComponent implements OnInit {
           regdate: Date.now()
         }
 
-        this.dbs.addFredLog(this.data[0]['id'], log)
+        this.dbs.addFredLog(this.data['form']['id'], log)
           .then(() => {
             this.dialogRef.close(true);
             this.uploading_initial = false;
@@ -213,16 +214,16 @@ export class FredConfirmEditComponent implements OnInit {
 
         // UPDATING IN OBSERVED TASKS DB AND NOTIFICATIONS DB
         this.dbs.usersCollection
-          .doc(this.data[0]['observedStaff']['uid'])
+          .doc(this.data['form']['observedStaff']['uid'])
           .collection(`tasks`)
-          .doc(this.data[0]['id'])
+          .doc(this.data['form']['id'])
           .set(finalObject, {merge: true})
 
         // UPDATING IN SUPERVISOR TASKS DB AND NOTIFICATIONS DB
         this.dbs.usersCollection
-          .doc(this.data[0]['observedArea']['supervisor']['uid'])
+          .doc(this.data['form']['observedArea']['supervisor']['uid'])
           .collection(`tasks`)
-          .doc(this.data[0]['id'])
+          .doc(this.data['form']['id'])
           .set(finalObject, {merge: true})
 
       }).catch(err => {
@@ -233,12 +234,12 @@ export class FredConfirmEditComponent implements OnInit {
       });
     }
 
-    if(this.data[5]){
+    if(this.data['finalImage']){
       this.uploading_final = true;
 
-      const filePath = `/securityFredsPictures/${this.data[5].name}`;
+      const filePath = `/securityFredsPictures/${this.data['finalImage'].name}`;
       const fileRef = this.storage.ref(filePath);
-      const task = this.storage.upload(filePath, this.data[5]);
+      const task = this.storage.upload(filePath, this.data['finalImage']);
 
       this.uploadPercent_final = task.percentageChanges();
 
@@ -252,7 +253,7 @@ export class FredConfirmEditComponent implements OnInit {
               };
               
               // UPDATING FRED WITH NEW INFO
-              this.dbs.securityFredsCollection.doc(this.data[0]['id']).set(lastObject, {merge: true}).then(refFred => {
+              this.dbs.securityFredsCollection.doc(this.data['form']['id']).set(lastObject, {merge: true}).then(refFred => {
 
                 // Creating log object
                 let log = {
@@ -261,7 +262,7 @@ export class FredConfirmEditComponent implements OnInit {
                   regdate: Date.now()
                 }
                 // Adding log to respective FRED
-                this.dbs.addFredLog(this.data[0]['id'], log)
+                this.dbs.addFredLog(this.data['form']['id'], log)
                   .then(() => {
                     this.dialogRef.close(true);
                     this.uploading_final = false;
@@ -276,16 +277,16 @@ export class FredConfirmEditComponent implements OnInit {
 
                 // UPDATING IN OBSERVED'S TASKS
                 this.dbs.usersCollection
-                  .doc(this.data[0]['observedStaff']['uid'])
+                  .doc(this.data['form']['observedStaff']['uid'])
                   .collection(`tasks`)
-                  .doc(this.data[0]['id'])
+                  .doc(this.data['form']['id'])
                   .set(lastObject, {merge: true})
 
                 // REGISTRY IN SUPERVISOR TASKS DB AND NOTIFICATIONS DB
                 this.dbs.usersCollection
-                  .doc(this.data[0]['observedArea']['supervisor']['uid'])
+                  .doc(this.data['form']['observedArea']['supervisor']['uid'])
                   .collection(`tasks`)
-                  .doc(this.data[0]['id'])
+                  .doc(this.data['form']['id'])
                   .set(lastObject, {merge: true})
 
               }).catch(err => {
