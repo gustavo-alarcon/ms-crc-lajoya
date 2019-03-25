@@ -25,7 +25,10 @@
           </div>
 
           <div>
-            <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.3em;">{{currentMonth}}</h2>
+            <div style="display:flex">
+              <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.3em;">{{currentMonth}}</h2>
+              <button mat-button disabled="true" class="ms-color-2b"><mat-icon>assignment_turned_in</mat-icon> {{dbs.qualityRedosReports.length | number: '2.0'}} Reportes</button>
+            </div>
             <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
               <div class="w3-amber w3-round-large" style="overflow:auto">
                 <table mat-table [dataSource]="dataSourceRedosReports" matSort style="width:100%">
@@ -146,10 +149,10 @@
                         [disabled]="report['stage'] != 'Reporte' || report['status'] === 'Por confirmar'">
                         <mat-icon>next_week</mat-icon>
                       </button><br>
-                      <button mat-icon-button color="primary" matTooltip="Editar solicitud" (click)="editReport(report)">
+                      <button mat-icon-button color="primary" matTooltip="Editar reporte" (click)="editReport(report)">
                         <mat-icon>edit</mat-icon>
                       </button><br>
-                      <button mat-icon-button color="warn" matTooltip="Borrar solicitud"
+                      <button mat-icon-button color="warn" matTooltip="Borrar reporte"
                         (click)="deleteReport(report['id'],report['uidSupervisor'])">
                         <mat-icon>delete</mat-icon>
                       </button><br>
@@ -170,20 +173,52 @@
                 <div [@openCloseCard]="isOpenReport[i] ? 'open': 'closed'" (click)="toggleCardReport(i)"
                   class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
                   [ngStyle]="{'background-image': report['initialPicture'] ? ('url(' + report['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
-                  <div class="w3-display-topright"
-                    style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
-                    <p style="font-size:1em; color:white"><strong>{{report['status']}}</strong></p>
-                  </div>
-                  <div [@openCloseDescription]="isOpenReport[i] ? 'openDescription': 'closedDescription'"
-                    class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
-                    <p style="font-weight:400; color:white; margin: 0px 0.1em">
-                      {{(report['component'].length>25 ? (report['component'] | slice:0:25)+'...':(report['component']))}}
-                    </p>
-                    <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
-                      *ngIf="report['regDate'] != 0">
-                      {{report['regDate'] | date : 'dd-MM-yy'}} - {{report['regDate'] | date : 'hh:mm:ss'}}</p>
-                  </div>
+                  
+                    <div class="w3-display-bottomleft w3-padding w3-round-large" style="background:rgba(0,0,0,0.2); width:100%; height:100%">
+                      <div style="display:flex">
+                        <p style="font-weight:600; color:white; margin: 0.5em 0.1em">
+                          <span class="w3-round-large"
+                            style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{i +1}}</span>
+                          {{report['OT']}}
+                        </p>
+                        <span class="ms-fill"></span>
+                        <button mat-icon-button class="w3-text-white" matTooltip="Analizar"
+                          (click)="nextStageAnalyze(report)"
+                          [disabled]="report['stage'] != 'Reporte' || report['status'] === 'Por confirmar'">
+                          <mat-icon>next_week</mat-icon>
+                        </button>
+                        <button mat-icon-button class="w3-text-white" matTooltip="Editar reporte"
+                          (click)="editReport(report)">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button class="w3-text-white" matTooltip="Borrar reporte"
+                          (click)="deleteReport(report['id'], report['uidSupervisor'])">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+    
+                      <mat-divider class="w3-white" style="margin:0.5em 0em"></mat-divider>
+                      <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                        {{report['area']['name']}}
+                      </p>
+                      <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                        {{report['component']}}
+                      </p>
+                      
+                      <div style="display:flex; justify-content: space-between">
+                        <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha de reporte"
+                          *ngIf="report['regDate'] > 0">
+                          {{(report['regDate']) | date: 'dd/MM/yyyy'}}</span>
+                        <span class="ms-fill"></span>
+                        <span class="w3-padding w3-round-large" style="font-size:0.9em; font-weight:600"
+                          [ngClass]="{'w3-red':report['status'] === 'Rechazado', 'w3-green':report['status'] === 'Confirmado', 'w3-amber':report['status'] === 'Por confirmar'}"
+                          matTooltip="Estado">
+                          {{report['status']}}</span>
+                      </div>
+                    </div>
+                  
                 </div>
+
                 <div [@openCloseContent]="isOpenReport[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8">
                   <mat-toolbar style="background:#333333">
                     <span class="ms-fill"></span>

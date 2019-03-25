@@ -17,13 +17,13 @@ import { QualityRedoReportConfirmDeleteComponent } from './quality-redo-report-c
   animations: [
     trigger('openCloseCard',[
       state('open', style({
-        height: '120px',
+        height: '156px',
         opacity: 0.8,
         borderRadius: '10px 10px 0px 0px',
         marginBottom: '0em'
       })),
       state('closed', style({
-        height: '200px',
+        height: '156px',
         opacity: 1,
         borderRadius: '10px 10px 10px 10px',
         marginBottom: '1em'
