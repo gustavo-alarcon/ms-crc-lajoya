@@ -1,3 +1,263 @@
-<p>
-  quality-redo-report-dialog-analyze works!
-</p>
+<div class="w3-container">
+  <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
+    <mat-icon style="vertical-align:middle">add_circle</mat-icon> Análisis
+  </h2>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+
+    <form [formGroup]="analyzeFormGroup">
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Cabecera</h2>
+
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
+        <mat-label>Tipo de Rehacer</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="redoType"
+          [matAutocomplete]="autoRedoTypes" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoRedoTypes="matAutocomplete">
+        <mat-option *ngFor="let type of filteredQualityRedoTypes | async" [value]="type['name']" style="font-size:14px">
+          <strong>{{type['name']}}</strong>
+        </mat-option>
+      </mat-autocomplete>
+      <br>
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Componente</h2>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Componente</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="component"
+          [matAutocomplete]="autoComponent" required readonly>
+        <mat-hint>
+          <strong>Solo lectura</strong>, no puede ser modificado
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoComponent="matAutocomplete">
+        <mat-option *ngFor="let component of filteredQualityComponents | async" [value]="component['name']"
+          style="font-size:14px">
+          {{component['name']}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Modelo</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="componentModel"
+          [matAutocomplete]="autoModel" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoModel="matAutocomplete">
+        <mat-option *ngFor="let model of filteredQualityComponentModels | async" [value]="model['name']" style="font-size:14px">
+          {{model['name']}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Número de parte</mat-label>
+        <input type="text" matInput placeholder="Escriba" formControlName="componentPartNumber" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Cliente</h2>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>OT / Segmento Rehacer</mat-label>
+        <input type="text" matInput placeholder="Escriba" formControlName="OTSegment" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Cliente</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="customer"
+          [matAutocomplete]="autoCustomer" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="showSelectedCustomer">
+        <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer"
+          style="font-size:14px">
+          {{customer['alias']}}
+        </mat-option>
+      </mat-autocomplete>
+      <br>
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Análisis</h2>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Tipo de reparación</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="repairType"
+          [matAutocomplete]="autoRepairType" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoRepairType="matAutocomplete">
+        <mat-option *ngFor="let type of filteredQualityRepairTypes | async" [value]="type['name']"
+          style="font-size:14px">
+          {{type['name']}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Horas</mat-label>
+        <input type="number" min="0" matInput placeholder="Escriba" formControlName="hours" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Modo de falla</mat-label>
+        <textarea type="text" matInput placeholder="Describa el modo de falla del equipo ..." rows="4"
+          formControlName="failureMode" required></textarea>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Causa raíz</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="rootCause"
+          [matAutocomplete]="autoRootCause" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoRootCause="matAutocomplete">
+        <mat-option *ngFor="let root of filteredQualityRootCauses | async" [value]="root['name']"
+          style="font-size:14px">
+          {{root['name']}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline"
+        *ngIf="analyzeFormGroup.value['rootCause'] === 'Procedimientos'">
+        <mat-label>Clasificación de la causa</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="causeClassification"
+          [matAutocomplete]="autoCauseClassification">
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoCauseClassification="matAutocomplete">
+        <mat-option *ngFor="let cause of filteredQualityCauseClassifications | async" [value]="cause['name']"
+          style="font-size:14px">
+          {{cause['name']}}
+        </mat-option>
+      </mat-autocomplete>
+      <br>
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Responsables</h2>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Areas responsables</mat-label>
+        <mat-chip-list #chipListInvolvedAreas>
+          <mat-chip *ngFor="let involved of involvedAreasArray"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="removeInvolvedArea(involved)"
+            color="primary">
+              {{involved['name']}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="Escriba y seleccione"
+            #involvedAreasInput
+            formControlName="involvedAreas"
+            [matAutocomplete]="autoInvolvedAreas"
+            [matChipInputFor]="chipListInvolvedAreas"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addInvolvedArea($event)">
+          
+        </mat-chip-list>
+        <mat-autocomplete #autoInvolvedAreas="matAutocomplete" (optionSelected)="selectedInvolvedArea($event)">
+          <mat-option *ngFor="let area of filteredInvolvedAreas | async" [value]="area">
+            <strong>{{area['name']}}</strong> | <span class="w3-small">{{area['supervisor']['displayName']}}</span>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint>
+          requerido *
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Personal responsable</mat-label>
+        <mat-chip-list #chipListResponsibleStaff>
+          <mat-chip *ngFor="let staff of responsibleStaffArray"
+            [selectable]="selectable"
+            removable="removable"
+            (removed)="removeResponsibleStaff(staff)"
+            color="primary">
+              {{staff['displayName']}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="Escriba y seleccione"
+            #responsibleStaffInput
+            formControlName="responsibleStaff"
+            [matAutocomplete]="autoResponsibleStaff"
+            [matChipInputFor]="chipListResponsibleStaff"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addResponsibleStaff($event)">
+        </mat-chip-list>
+        <mat-autocomplete #autoResponsibleStaff="matAutocomplete" (optionSelected)="selectedResponsibleStaff($event)">
+          <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+            <strong>{{user['displayName']}}</strong> | <span class="w3-small">{{user['jobTitle']}}</span>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint>
+          requerido *
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Imágenes</h2>
+
+      <div style="display:flex; flex-wrap: wrap">
+        <input #fileInput_1 style="display: none" type="file" (change)="onFileSelected_1($event)">
+        <img [src]="imageSrc_1 || '../../../assets/images/no-image.png'"
+          style="width:100px; height:70px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+          (click)="fileInput_1.click()">
+
+        <input #fileInput_2 style="display: none" type="file" (change)="onFileSelected_2($event)">
+        <img [src]="imageSrc_2 || '../../../assets/images/no-image.png'"
+          style="width:100px; height:70px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+          (click)="fileInput_2.click()">
+        
+        <input #fileInput_3 style="display: none" type="file" (change)="onFileSelected_3($event)">
+        <img [src]="imageSrc_3 || '../../../assets/images/no-image.png'"
+          style="width:100px; height:70px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+          (click)="fileInput_3.click()">
+
+        <input #fileInput_4 style="display: none" type="file" (change)="onFileSelected_4($event)">
+        <img [src]="imageSrc_4 || '../../../assets/images/no-image.png'"
+          style="width:100px; height:70px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+          (click)="fileInput_4.click()">
+
+        <input #fileInput_5 style="display: none" type="file" (change)="onFileSelected_5($event)">
+        <img [src]="imageSrc_5 || '../../../assets/images/no-image.png'"
+          style="width:100px; height:70px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+          (click)="fileInput_5.click()">
+      </div>
+
+    </form>
+
+  </mat-dialog-content>
+  <mat-dialog-actions class="w3-margin-bottom">
+    <button mat-raised-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-stroked-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
+  </mat-dialog-actions>
+</div>

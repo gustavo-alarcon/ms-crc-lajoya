@@ -55,6 +55,21 @@
             </mat-option>
           </mat-autocomplete>
 
+          <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+            <mat-label>Estado</mat-label>
+            <input type="text" matInput placeholder="Escriba y seleccione" formControlName="status"
+              [matAutocomplete]="autoStatus" required>
+            <mat-hint>
+              <strong>requerido *</strong>
+            </mat-hint>
+          </mat-form-field>
+          <mat-autocomplete #autoStatus="matAutocomplete">
+            <mat-option *ngFor="let status of filteredStatusList | async" [value]="status" style="font-size:14px">
+              {{status}}
+            </mat-option>
+          </mat-autocomplete>
+          <br>
+
           <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
           <img  [src]="imageSrc_initial || '../../../assets/images/no-image.png'"
                 style="width:200px; height:150px; cursor:pointer"

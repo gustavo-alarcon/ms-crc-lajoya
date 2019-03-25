@@ -20,8 +20,15 @@ export class QualityRedoReportDialogEditComponent implements OnInit {
 
   filteredQualityComponents: Observable<any>;
   filteredAreas: Observable<any>;
+  filteredStatusList: Observable<any>;
 
   subscriptions: Array<Subscription> = [];
+
+  statusList: Array<string> = [
+    'Por confirmar',
+    'Confirmado',
+    'Rechazado'
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -49,6 +56,13 @@ export class QualityRedoReportDialogEditComponent implements OnInit {
                               map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
                               map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
                             );
+
+    this.filteredStatusList =  this.reportFormGroup.get('status').valueChanges
+                                .pipe(
+                                  startWith<any>(''),
+                                  map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+                                  map(name => name ? this.statusList.filter(option => option.toLowerCase().includes(name)) : this.statusList)
+                                );
   }
 
   createForms(): void{
@@ -56,7 +70,8 @@ export class QualityRedoReportDialogEditComponent implements OnInit {
       OT: [this.data['report']['OT'], [Validators.required]],
       component: [this.data['report']['component'], [Validators.required]],
       description: [this.data['report']['description'], [Validators.required]],
-      area: [this.data['report']['area'], [Validators.required]]
+      area: [this.data['report']['area'], [Validators.required]],
+      status: [this.data['report']['status'], [Validators.required]]
     });
 
     this.imageSrc_initial = this.data['report']['initialPicture'];
