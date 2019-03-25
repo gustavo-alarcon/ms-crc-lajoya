@@ -79,7 +79,7 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
   reportFormGroup: FormGroup;
 
-  currentTab = new FormControl('Reporte');
+  currentTab = new FormControl(0);
 
   monthsKey: Array<string> = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   monthIndex: number;
@@ -200,7 +200,7 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(res => {
       if(res){
-        dialogRef.close();
+        this.currentTab.setValue(res);
       }
     })
   }
@@ -245,8 +245,8 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     })
 
     dialogRef.afterClosed().subscribe(res => {
-      if(res){
-        dialogRef.close();
+      if(res === 'Analizar'){
+        this.currentTab.setValue(1);
       }
     })
   }

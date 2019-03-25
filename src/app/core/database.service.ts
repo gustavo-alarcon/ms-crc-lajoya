@@ -106,11 +106,11 @@ export class DatabaseService {
   public dataQualityRedosReports = new BehaviorSubject<any[]>([]);
   public currentDataQualityRedosReports = this.dataQualityRedosReports.asObservable();
 
-  // -------------------------- REDOS - ANALISYS -------------------------------
-  public qualityRedosAnalisys: Array<any> = [];
+  // -------------------------- REDOS - ANALYZE -------------------------------
+  public qualityRedosAnalyze: Array<any> = [];
 
-  public dataQualityRedosAnalisys = new BehaviorSubject<any[]>([]);
-  public currentDataQualityRedosAnalisys = this.dataQualityRedosAnalisys.asObservable();
+  public dataQualityRedosAnalyze = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedosAnalyze = this.dataQualityRedosAnalyze.asObservable();
 
   // -------------------------- REDOS - ACTIONS -------------------------------
   public qualityRedosActions: Array<any> = [];
@@ -130,6 +130,41 @@ export class DatabaseService {
 
   public dataQualityComponents = new BehaviorSubject<any[]>([]);
   public currentDataQualityComponents = this.dataQualityComponents.asObservable();
+
+  // -------------------------- REDO TYPES------------------------------
+  public qualityRedoTypesCollection: AngularFirestoreCollection<any>;
+  public qualityRedoTypes: Array<any> = [];
+
+  public dataQualityRedoTypes = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedoTypes = this.dataQualityRedoTypes.asObservable();
+
+  // -------------------------- COMPONENT MODELS------------------------------
+  public qualityComponentModelsCollection: AngularFirestoreCollection<any>;
+  public qualityComponentModels: Array<any> = [];
+
+  public dataQualityComponentModels = new BehaviorSubject<any[]>([]);
+  public currentDataQualityComponentModels = this.dataQualityComponentModels.asObservable();
+
+  // -------------------------- REPAIR TYPES------------------------------
+  public qualityRepairTypesCollection: AngularFirestoreCollection<any>;
+  public qualityRepairTypes: Array<any> = [];
+
+  public dataQualityRepairTypes = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRepairTypes = this.dataQualityRepairTypes.asObservable();
+
+  // -------------------------- ROOT CAUSES------------------------------
+  public qualityRootCausesCollection: AngularFirestoreCollection<any>;
+  public qualityRootCauses: Array<any> = [];
+
+  public dataQualityRootCauses = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRootCauses = this.dataQualityRootCauses.asObservable();
+
+  // -------------------------- CAUSE CLASSIFICATIONS------------------------------
+  public qualityCauseClassificationsCollection: AngularFirestoreCollection<any>;
+  public qualityCauseClassifications: Array<any> = [];
+
+  public dataQualityCauseClassifications = new BehaviorSubject<any[]>([]);
+  public currentDataQualityCauseClassifications = this.dataQualityCauseClassifications.asObservable();
 
 
   // -------------------------- INSPECTIONS -------------------------------
@@ -265,6 +300,13 @@ export class DatabaseService {
   public dataSubstandard5 = new BehaviorSubject<any[]>([]);
   public currentDataSubstandard5 = this.dataSubstandard5.asObservable();
 
+  // -------------------------- CUSTOMERS------------------------------
+  public customersCollection: AngularFirestoreCollection<any>;
+  public customers: Array<any> = [];
+
+  public dataCustomers = new BehaviorSubject<any[]>([]);
+  public currentDataCustomers = this.dataCustomers.asObservable();
+
 
   constructor(
     private afs: AngularFirestore,
@@ -287,8 +329,9 @@ export class DatabaseService {
 
     let toDate = new Date(toYear,toMonth,1);
 
-    // ********* SECURITY
+    // ************ PERMITS
     this.auth.currentDataPermits.subscribe( permits => {
+      // SECURITY - FRED
       if(permits['securitySection'] && permits['securityFred']){
         this.getAreas();
         this.getSubActs1();
@@ -303,7 +346,7 @@ export class DatabaseService {
         this.getSecurityRemarkableActFreds(actualFromDate.valueOf(), toDate.valueOf());
       }
 
-      // TASKS
+      // SECURITY - TASKS
       if(permits['securitySection'] && permits['securityTasks']){
         this.getTasks(actualFromDate.valueOf(), toDate.valueOf());
         this.getFredTasks(actualFromDate.valueOf(), toDate.valueOf());
@@ -311,7 +354,7 @@ export class DatabaseService {
       }
     
 
-      // INSPECTIONS
+      // SECURITY - INSPECTIONS
       if(permits['securitySection'] && permits['securityInspections']){
         this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
         this.getKindOfDanger();
@@ -319,21 +362,26 @@ export class DatabaseService {
         this.getCauses();
       }
 
-      // QUALITY
+      // QUALITY - REDOS
       if(permits['qualitySection'] && permits['qualityRedos']){
+        this.getQualityRedoTypes();
         this.getQualityComponents();
+        this.getQualityComponentModels();
+        this.getQualityRepairTypes();
+        this.getQualityRootCauses();
+        this.getQualityCauseClassifications();
         this.getQualityRedos();
         this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
       }
 
-      // MAINTENANCE
+      // MAINTENANCE - REQUESTS
       if(permits['maintenanceSection'] && permits['maintenanceRequests']){
         this.getMaintenanceEquipments();
         this.getMaintenancePriorities();
         this.getMaintenanceRequests(false, actualFromDate.valueOf(), toDate.valueOf());
       }
 
-      // MAINTENANCE
+      // SSGG - REQUESTS
       if(permits['ssggSection'] && permits['ssggRequests']){
         this.getSsggTypes();
         this.getSsggPriorities();
@@ -344,7 +392,8 @@ export class DatabaseService {
 
     // SYSTEM
     this.getPermits();
-    this.getUsers()
+    this.getUsers();
+    this.getCustomers();
   }
 
   // *************** USERS
@@ -439,6 +488,14 @@ export class DatabaseService {
       this.substandard5 = res;
       this.dataSubstandard5.next(res);
     })
+  }
+
+  getCustomers(): void{
+    this.customersCollection = this.afs.collection(`db/systemConfigurations/customers`, ref => ref.orderBy('regDate','asc'));
+    this.customersCollection.valueChanges().subscribe(res => {
+      this.customers = res;
+      this.dataCustomers.next(res);
+    });
   }
 
   // *************** SECURITY METHODS
@@ -669,19 +726,81 @@ export class DatabaseService {
     });
   }
 
+  getQualityRedoTypes(): void{
+    this.qualityRedoTypesCollection = this.afs.collection(`db/systemConfigurations/qualityRedoTypes`, ref => ref.orderBy('regDate','asc'));
+    this.qualityRedoTypesCollection.valueChanges().subscribe(res => {
+      this.qualityRedoTypes = res;
+      this.dataQualityRedoTypes.next(res);
+    });
+  }
+
+  getQualityComponentModels(): void{
+    this.qualityComponentModelsCollection = this.afs.collection(`db/systemConfigurations/qualityComponentModels`, ref => ref.orderBy('regDate','asc'));
+    this.qualityComponentModelsCollection.valueChanges().subscribe(res => {
+      this.qualityComponentModels = res;
+      this.dataQualityComponentModels.next(res);
+    });
+  }
+
+  getQualityRepairTypes(): void{
+    this.qualityRepairTypesCollection = this.afs.collection(`db/systemConfigurations/qualityRepairTypes`, ref => ref.orderBy('regDate','asc'));
+    this.qualityRepairTypesCollection.valueChanges().subscribe(res => {
+      this.qualityRepairTypes = res;
+      this.dataQualityRepairTypes.next(res);
+    });
+  }
+
+  getQualityRootCauses(): void{
+    this.qualityRootCausesCollection = this.afs.collection(`db/systemConfigurations/qualityRootCauses`, ref => ref.orderBy('regDate','asc'));
+    this.qualityRootCausesCollection.valueChanges().subscribe(res => {
+      this.qualityRootCauses = res;
+      this.dataQualityRootCauses.next(res);
+    });
+  }
+
+  getQualityCauseClassifications(): void{
+    this.qualityCauseClassificationsCollection = this.afs.collection(`db/systemConfigurations/qualityCauseClassifications`, ref => ref.orderBy('regDate','asc'));
+    this.qualityCauseClassificationsCollection.valueChanges().subscribe(res => {
+      this.qualityCauseClassifications = res;
+      this.dataQualityCauseClassifications.next(res);
+    });
+  }
+
   getQualityRedos(): void{
-    this.qualityRedosCollection = this.afs.collection(`db/crcLaJoya/qualityRedos`);
+    this.qualityRedosCollection = this.afs.collection(`db/crcLaJoya/qualityRedos`, ref => ref.orderBy('regDate', 'desc'));
     this.qualityRedosCollection.valueChanges()
     .pipe(
       tap(res => {
-        let reportList = []
+        let reportList = [];
+        let analyzeList = [];
+
         res.forEach(element => {
-          if(element['stage'] === 'Reporte'){
-            reportList.push(element)
+
+          if(element['stage'] === 'Reporte' && (element['uidSupervisor'] === this.auth.userCRC.uid || element['uidCreator'] === this.auth.userCRC.uid)){
+            reportList.push(element);
           }
+
+          if(element['stage'] === 'Análisis'){
+            element['involvedAreas'].forEach(area => {
+              if(area['supervisor']['uid'] === this.auth.userCRC.uid){
+                analyzeList.push(element);
+              }
+            })
+
+            element['responsibleStaff'].forEach(staff => {
+              if(staff['uid'] === this.auth.userCRC.uid){
+                analyzeList.push(element);
+              }
+            })
+          }
+
         });
+        
         this.qualityRedosReports = reportList;
         this.dataQualityRedosReports.next(reportList);
+
+        this.qualityRedosAnalyze = analyzeList;
+        this.dataQualityRedosAnalyze.next(analyzeList);
       }),
     )
     .subscribe(res => {
