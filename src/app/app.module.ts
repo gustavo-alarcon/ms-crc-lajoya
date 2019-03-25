@@ -121,6 +121,17 @@ import { SsggRequestsConfirmEditComponent } from './ssgg/ssgg-requests/ssgg-requ
 import { SsggRequestsConfirmTaskComponent } from './ssgg/ssgg-requests/ssgg-requests-confirm-task/ssgg-requests-confirm-task.component';
 import { SsggRequestsDialogEditComponent } from './ssgg/ssgg-requests/ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
 import { SsggRequestsDialogTaskComponent } from './ssgg/ssgg-requests/ssgg-requests-dialog-task/ssgg-requests-dialog-task.component';
+import { QualityRedoReportDialogCreateComponent } from './quality/quality-restorations/quality-redo-report-dialog-create/quality-redo-report-dialog-create.component';
+import { QualityRedoReportConfirmCreateComponent } from './quality/quality-restorations/quality-redo-report-confirm-create/quality-redo-report-confirm-create.component';
+import { QualityRedoReportDialogEditComponent } from './quality/quality-restorations/quality-redo-report-dialog-edit/quality-redo-report-dialog-edit.component';
+import { QualityRedoReportConfirmEditComponent } from './quality/quality-restorations/quality-redo-report-confirm-edit/quality-redo-report-confirm-edit.component';
+import { QualityRedoReportConfirmDeleteComponent } from './quality/quality-restorations/quality-redo-report-confirm-delete/quality-redo-report-confirm-delete.component';
+import { QualityRedoReportDialogAnalyzeComponent } from './quality/quality-restorations/quality-redo-report-dialog-analyze/quality-redo-report-dialog-analyze.component';
+import { QualityRedoReportConfirmAnalyzeComponent } from './quality/quality-restorations/quality-redo-report-confirm-analyze/quality-redo-report-confirm-analyze.component';
+import { QualityRedoReportDialogActionsComponent } from './quality/quality-restorations/quality-redo-report-dialog-actions/quality-redo-report-dialog-actions.component';
+import { QualityRedoReportConfirmActionsComponent } from './quality/quality-restorations/quality-redo-report-confirm-actions/quality-redo-report-confirm-actions.component';
+import { QualityRedoReportConfirmClosedComponent } from './quality/quality-restorations/quality-redo-report-confirm-closed/quality-redo-report-confirm-closed.component';
+import { QualityRedoReportDialogClosedComponent } from './quality/quality-restorations/quality-redo-report-dialog-closed/quality-redo-report-dialog-closed.component';
 
 
 
@@ -189,7 +200,18 @@ import { SsggRequestsDialogTaskComponent } from './ssgg/ssgg-requests/ssgg-reque
     SsggRequestsConfirmEditComponent,
     SsggRequestsConfirmTaskComponent,
     SsggRequestsDialogEditComponent,
-    SsggRequestsDialogTaskComponent
+    SsggRequestsDialogTaskComponent,
+    QualityRedoReportDialogCreateComponent,
+    QualityRedoReportConfirmCreateComponent,
+    QualityRedoReportDialogEditComponent,
+    QualityRedoReportConfirmEditComponent,
+    QualityRedoReportConfirmDeleteComponent,
+    QualityRedoReportDialogAnalyzeComponent,
+    QualityRedoReportConfirmAnalyzeComponent,
+    QualityRedoReportDialogActionsComponent,
+    QualityRedoReportConfirmActionsComponent,
+    QualityRedoReportConfirmClosedComponent,
+    QualityRedoReportDialogClosedComponent
     
   ],
   imports: [
@@ -280,7 +302,18 @@ import { SsggRequestsDialogTaskComponent } from './ssgg/ssgg-requests/ssgg-reque
     SsggRequestsConfirmEditComponent,
     SsggRequestsConfirmTaskComponent,
     SsggRequestsDialogEditComponent,
-    SsggRequestsDialogTaskComponent
+    SsggRequestsDialogTaskComponent,
+    QualityRedoReportDialogCreateComponent,
+    QualityRedoReportConfirmCreateComponent,
+    QualityRedoReportDialogEditComponent,
+    QualityRedoReportConfirmEditComponent,
+    QualityRedoReportConfirmDeleteComponent,
+    QualityRedoReportDialogAnalyzeComponent,
+    QualityRedoReportConfirmAnalyzeComponent,
+    QualityRedoReportDialogActionsComponent,
+    QualityRedoReportConfirmActionsComponent,
+    QualityRedoReportConfirmClosedComponent,
+    QualityRedoReportDialogClosedComponent
   ],
   bootstrap: [AppComponent]
 })

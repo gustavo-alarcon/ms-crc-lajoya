@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from "@angular/fire/firestore";
 import { Observable, BehaviorSubject} from "rxjs";
 import { AuthService } from "./auth.service";
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 
 @Injectable({
@@ -100,6 +100,38 @@ export class DatabaseService {
   public dataQualityRedos = new BehaviorSubject<any[]>([]);
   public currentDataQualityRedos = this.dataQualityRedos.asObservable();
 
+  // -------------------------- REDOS - REPORTS -------------------------------
+  public qualityRedosReports: Array<any> = [];
+
+  public dataQualityRedosReports = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedosReports = this.dataQualityRedosReports.asObservable();
+
+  // -------------------------- REDOS - ANALISYS -------------------------------
+  public qualityRedosAnalisys: Array<any> = [];
+
+  public dataQualityRedosAnalisys = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedosAnalisys = this.dataQualityRedosAnalisys.asObservable();
+
+  // -------------------------- REDOS - ACTIONS -------------------------------
+  public qualityRedosActions: Array<any> = [];
+
+  public dataQualityRedosActions = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedosActions = this.dataQualityRedosActions.asObservable();
+
+  // -------------------------- REDOS - CLOSED -------------------------------
+  public qualityRedosClosed: Array<any> = [];
+
+  public dataQualityRedosClosed = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedosClosed = this.dataQualityRedosClosed.asObservable();
+
+  // -------------------------- COMPONENTS------------------------------
+  public qualityComponentsCollection: AngularFirestoreCollection<any>;
+  public qualityComponents: Array<any> = [];
+
+  public dataQualityComponents = new BehaviorSubject<any[]>([]);
+  public currentDataQualityComponents = this.dataQualityComponents.asObservable();
+
+
   // -------------------------- INSPECTIONS -------------------------------
   public qualityInspectionsCollection: AngularFirestoreCollection<any>;
   public qualityInspections: Array<any> = [];
@@ -136,8 +168,8 @@ export class DatabaseService {
   public dataMaintenanceRequests = new BehaviorSubject<any[]>([]);
   public currentDataMaintenanceRequests = this.dataMaintenanceRequests.asObservable();
 
-  // ************************* MAINTENANCE ***************************
-  // ------------------------- EQUIPMENTS ----------------------------
+  // ************************* SSGG ***************************
+  // ------------------------- TYPES ----------------------------
   public ssggTypesCollection: AngularFirestoreCollection<any>;
   public ssggTypes: Array<any> = [];
 
@@ -289,6 +321,7 @@ export class DatabaseService {
 
       // QUALITY
       if(permits['qualitySection'] && permits['qualityRedos']){
+        this.getQualityComponents();
         this.getQualityRedos();
         this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
       }
@@ -628,12 +661,37 @@ export class DatabaseService {
   }
 
   // *************** QUALITY METHODS
+  getQualityComponents(): void{
+    this.qualityComponentsCollection = this.afs.collection(`db/systemConfigurations/qualityComponents`, ref => ref.orderBy('regDate','asc'));
+    this.qualityComponentsCollection.valueChanges().subscribe(res => {
+      this.qualityComponents = res;
+      this.dataQualityComponents.next(res);
+    });
+  }
+
   getQualityRedos(): void{
     this.qualityRedosCollection = this.afs.collection(`db/crcLaJoya/qualityRedos`);
-    this.qualityRedosCollection.valueChanges().subscribe(res => {
+    this.qualityRedosCollection.valueChanges()
+    .pipe(
+      tap(res => {
+        let reportList = []
+        res.forEach(element => {
+          if(element['stage'] === 'Reporte'){
+            reportList.push(element)
+          }
+        });
+        this.qualityRedosReports = reportList;
+        this.dataQualityRedosReports.next(reportList);
+      }),
+    )
+    .subscribe(res => {
       this.qualityRedos = res;
       this.dataQualityRedos.next(res); 
     })
+  }
+
+  addQualityRedoLog(id, data): Promise<any>{
+    return this.qualityRedosCollection.doc(id).collection(`log`).add(data);
   }
 
   getQualityInspections(justActualMonth?,from?,to?): void{
@@ -755,7 +813,7 @@ export class DatabaseService {
               }
 
               element['involvedAreas'].forEach(area => {
-                if(area['supervisor']['uid'] === this.auth.userCRC.uid){
+                if(area['supervisor']['uid'] === this.auth.userCRC.uid && area['supervisor']['uid'] != element['uid']){
                   filteredResults.push(area);
                 }
               });

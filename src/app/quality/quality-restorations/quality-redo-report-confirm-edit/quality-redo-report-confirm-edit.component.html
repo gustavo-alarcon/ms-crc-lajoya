@@ -1,0 +1,14 @@
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">edit</mat-icon> Guardar reporte</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <p class="ms-font-roboto">¿Está seguro de editar el reporte?</p>
+  <br>
+
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_initial | async" *ngIf="uploading_initial"></mat-progress-bar>
+  <p style="font-size:0.8em;margin-bottom:1em" *ngIf="uploading_initial && data['initialImage']">{{uploadPercent_initial | async | number: '.2'}}/100 % ... Subiendo imagen inicial</p>
+  
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-raised-button mat-dialog-close color="warn">No</button>
+  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+</mat-dialog-actions>
