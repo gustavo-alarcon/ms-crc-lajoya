@@ -7,11 +7,11 @@ import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-quality-redo-report-confirm-analyze',
-  templateUrl: './quality-redo-report-confirm-analyze.component.html',
+  selector: 'app-quality-redo-analyze-confirm-edit',
+  templateUrl: './quality-redo-analyze-confirm-edit.component.html',
   styles: []
 })
-export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
+export class QualityRedoAnalyzeConfirmEditComponent implements OnInit {
 
   uploading: boolean = false;
 
@@ -36,7 +36,7 @@ export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
     public dbs: DatabaseService,
     public auth: AuthService,
     private storage: AngularFireStorage,
-    private dialogRef: MatDialogRef<QualityRedoReportConfirmAnalyzeComponent>,
+    private dialogRef: MatDialogRef<QualityRedoAnalyzeConfirmEditComponent>,
     private snackbar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
@@ -48,13 +48,10 @@ export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
     this.uploading =  true;
 
     let metaObject = {
-      status: this.data['redo']['status'],
-      stage: 'Análisis',
       involvedAreas: this.data['involvedAreas'],
       responsibleStaff: this.data['responsibleStaff'],
-      analyzeDate: Date.now(),
-      upgradedBy: this.auth.userCRC,
-      uidUpgrader: this.auth.userCRC.uid
+      modifiedBy: this.auth.userCRC,
+      uidEditor: this.auth.userCRC.uid
     };
 
     let reportObject = Object.assign(this.data['form'], metaObject);
@@ -63,7 +60,7 @@ export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
 
       // Creating log object
       let log = {
-        action: 'Report upgraded to analyze!',
+        action: 'Modified analysis!',
         data: reportObject,
         regdate: Date.now()
       }
@@ -594,5 +591,6 @@ export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
       .subscribe()
     }
   }
+
 
 }

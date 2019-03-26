@@ -29,6 +29,7 @@
               <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.3em;">{{currentMonth}}</h2>
               <button mat-button disabled="true" class="ms-color-2b"><mat-icon>assignment_turned_in</mat-icon> {{dbs.qualityRedosReports.length | number: '2.0'}} Reportes</button>
             </div>
+
             <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
               <div class="w3-amber w3-round-large" style="overflow:auto">
                 <table mat-table [dataSource]="dataSourceRedosReports" matSort style="width:100%">
@@ -187,10 +188,7 @@
                           [disabled]="report['stage'] != 'Reporte' || report['status'] === 'Por confirmar'">
                           <mat-icon>next_week</mat-icon>
                         </button>
-                        <button mat-icon-button class="w3-text-white" matTooltip="Editar reporte"
-                          (click)="editReport(report)">
-                          <mat-icon>edit</mat-icon>
-                        </button>
+                        
                         <button mat-icon-button class="w3-text-white" matTooltip="Borrar reporte"
                           (click)="deleteReport(report['id'], report['uidSupervisor'])">
                           <mat-icon>delete</mat-icon>
@@ -221,17 +219,11 @@
 
                 <div [@openCloseContent]="isOpenReport[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8">
                   <mat-toolbar style="background:#333333">
-                    <span class="ms-fill"></span>
-                    <button mat-icon-button class="w3-text-white" matTooltip="Iniciar análisis" (click)="nextStageAnalyze(report)"
-                      [disabled]="report['status'] === 'Finalizado' && report['status'] === 'Por confirmar'">
-                      <mat-icon>next_week</mat-icon>
-                    </button>
-                    <button mat-icon-button class="w3-text-white" matTooltip="Editar solicitud" (click)="editReport(report)">
+                    <span class="ms-font-raleway ms-color-wt" style="font-weight:500"  >Detalles</span>
+                    <span class="ms'fill"></span>
+                    <button mat-icon-button class="w3-text-white" matTooltip="Editar reporte"
+                      (click)="editReport(report)">
                       <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button class="w3-text-white" matTooltip="Borrar solicitud"
-                      (click)="deleteReport(report['id'],report['uidSupervisor'])">
-                      <mat-icon>delete</mat-icon>
                     </button>
                   </mat-toolbar>
                   <div class="w3-row">
@@ -241,7 +233,7 @@
                       <span class="w3-small">{{report['regDate'] | date : 'hh:mm:ss'}}</span>
                     </div>
                   </div>
-                  <div class="w3-row">
+                  <div class="w3-row w3-margin-top">
                     <div class="w3-col s6 ms-header-mobile">Creado por</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small" style="font-weight:500">{{report['createdBy']['displayName']}}</span>
@@ -313,6 +305,455 @@
       <ng-template matTabContent>
         <div class="w3-padding">
           <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Análisis</h2>
+
+          <mat-form-field class="w3-margin-right">
+            <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
+            <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
+            <mat-datepicker #dateFilter startView='year' (monthSelected)="setMonthOfView($event, dateFilter)"
+              disabled="false"></mat-datepicker>
+            <mat-hint>
+              <strong>Filtrar contenido por mes y año</strong>
+            </mat-hint>
+          </mat-form-field>
+
+          <div style="display:flex">
+            <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.3em;">{{currentMonth}}</h2>
+            <button mat-button disabled="true" class="ms-color-2b"><mat-icon>assignment_turned_in</mat-icon> {{dbs.qualityRedosAnalyze.length | number: '2.0'}} Análisis</button>
+          </div>
+          
+          <div *ngFor="let analyze of dbs.currentDataQualityRedosAnalyze | async; let i = index"
+                class="w3-hide-small">
+            <div  [@openClosePanel]="isOpenAnalyze[i] ? 'openPanel': 'closedPanel'"
+                  class="w3-block w3-round-large mat-elevation-z4 w3-margin-top w3-white w3-hover-shadow w3-hover-lightgray"
+                  style="z-index:1; position:relative"
+                  (click)="togglePanelAnalyze(i, analyze)">
+
+              <div class="w3-row ms-font-roboto ms-color-bt">
+                <div class="w3-col m2 w3-padding-large">
+                  <span style="font-weight:600">N°</span><br>
+                  <span>{{i+1 | number : '2.'}}</span>
+                </div>
+                <div class="w3-col m2 w3-padding-large">
+                  <span style="font-weight:600">Fecha</span><br>
+                  <span>{{analyze['regDate'] | date: 'dd/MM/yyyy'}}</span>
+                </div>
+                <div class="w3-col m2 w3-padding-large">
+                  <span style="font-weight:600">OT</span><br>
+                  <span>{{analyze['OT']}}</span>
+                </div>
+                <div class="w3-col m2 w3-padding-large">
+                  <span style="font-weight:600">Área</span><br>
+                  <span>{{analyze['OT']}}</span>
+                </div>
+                <div class="w3-col m4 w3-padding-large">
+                  <span style="font-weight:600">Descripción</span><br>
+                  <span style="font-size:14px">{{analyze['description']}}</span>
+                </div>
+              </div>
+            </div>
+
+            <mat-toolbar [@openCloseToolbar]="isOpenAnalyze[i] ? 'openToolbar': 'closedToolbar'"
+              style="background:#a6a6a6; transform:translateY(-10%)" class="ms-color-2b">
+              <button mat-raised-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Agregar acciones"
+                (click)="nextStageActions(analyze)">
+                <mat-icon class="example-icon">next_week</mat-icon> Acciones
+              </button>
+              <button mat-stroked-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Editar análisis"
+                (click)="editAnalyze(analyze)">
+                <mat-icon class="example-icon">edit</mat-icon> Editar
+              </button>
+              <button mat-stroked-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Borrar análisis"
+                (click)="deleteAnalyze(analyze)">
+                <mat-icon class="example-icon">delete</mat-icon> Borrar
+              </button>
+            </mat-toolbar>
+
+            <div [@openCloseTable]="isOpenAnalyze[i] ? 'openTable': 'closedTable'" class="w3-amber w3-round-large" style="overflow:auto">
+              <table mat-table [dataSource]="dataSourceRedosAnalyze" matSort style="width:100%">
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="redoType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Tipo de Rehacer</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['redoType']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="component">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Componente</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['component']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="OTSegment">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">OT / Segmento Rehacer</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['OTSegment']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="customer">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Cliente</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['customer']['fullName']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="repairType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Tipo de reparación</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['repairType']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="hours">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Horas</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['hours']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="failureMode">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Modo de Falla</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['failureMode']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="rootCause">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Causa raíz</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    {{row['rootCause']}}
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="involvedAreas">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Áreas responsables</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    <ng-container *ngFor="let area of row['involvedAreas']">
+                      <span class="w3-small" style="font-weight:500">{{area['name']}}</span>
+                      <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                        <li class="w3-small">Sup.: {{area['supervisor']['displayName']}}</li>
+                      </ul>
+                    </ng-container>
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="responsibleStaff">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Personal responsable</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    <ng-container *ngFor="let staff of row['responsibleStaff']">
+                      <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
+                      <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                        <li class="w3-small">Sup.: {{staff['jobTitle']}}</li>
+                      </ul>
+                    </ng-container>
+                  </td>
+                </ng-container>
+                
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                  matColumnDef="pictures">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fotos</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    <a  target="_blank"
+                        (click)="openPictures(row)"
+                        *ngIf="row['initialPicture']; else defaultPictureTable1">
+                      <div class="w3-display-container" style="width:200px;height:120px;padding:6px 6px">
+                        <img src="{{row['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <div class="w3-display-middle w3-round-large" style="background: rgba(0,0,0,0.7);padding:0.5em 0.5em;">
+                          <span style="color:white; font-size:2em; font-weight:600"><mat-icon style="vertical-align:middle">add</mat-icon> {{row['pictureCounter']}}</span>
+                        </div>
+                      </div>
+                    </a>
+                    <ng-template #defaultPictureTable1>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsAnalyze; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsAnalyze;"></tr>
+
+              </table>
+            </div>
+          </div>
+
+          <!-- MOBIL VERSION ANALYZE-->
+          <div class="w3-hide-large w3-hide-medium w3-margin-top">
+            <ng-container *ngFor="let analyze of dbs.currentDataQualityRedosAnalyze | async; let i = index">
+              <div [@openClosePanelMobile]="isOpenAnalyze[i] ? 'openPanelMobile': 'closedPanelMobile'" (click)="togglePanelAnalyze(i, analyze)"
+                class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+                [ngStyle]="{'background-image': analyze['initialPicture'] ? ('url(' + analyze['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+                
+                  <div class="w3-display-bottomleft w3-padding w3-round-large" style="background:rgba(0,0,0,0.2); width:100%; height:100%">
+                    <div style="display:flex">
+                      <p style="font-weight:600; color:white; margin: 0.5em 0.1em">
+                        <span class="w3-round-large"
+                          style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{i +1}}</span>
+                        {{analyze['OT']}}
+                      </p>
+                      <span class="ms-fill"></span>
+                      <button mat-icon-button class="w3-text-white" matTooltip="Proponer acciones"
+                        (click)="nextStageActions(analyze)"
+                        [disabled]="analyze['stage'] != 'Analizar' || analyze['status'] === 'Por confirmar'">
+                        <mat-icon>next_week</mat-icon>
+                      </button>
+                      <button mat-icon-button class="w3-text-white" matTooltip="Borrar análisis"
+                        (click)="deleteAlyze(analyze)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+  
+                    <mat-divider class="w3-white" style="margin:0.5em 0em"></mat-divider>
+                    <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                      {{analyze['area']['name']}}
+                    </p>
+                    <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                      {{analyze['component']}}
+                    </p>
+                    
+                    <div style="display:flex; justify-content: space-between">
+                      <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha de reporte"
+                        *ngIf="analyze['regDate'] > 0">
+                        {{(analyze['regDate']) | date: 'dd/MM/yyyy'}}</span>
+                      <span class="ms-fill"></span>
+                      <span class="w3-padding w3-round-large w3-center" style="font-size:0.9em; font-weight:500"
+                        [ngClass]="{'w3-red':analyze['status'] === 'Rechazado', 'w3-green':analyze['status'] === 'Confirmado', 'w3-amber':analyze['status'] === 'Por confirmar'}"
+                        matTooltip="Fecha de análisis">
+                        <span>Análisis</span><br>
+                        <span>{{analyze['analyzeDate'] | date: 'dd/MM/yyyy' }}</span>
+                        
+                      </span>
+                    </div>
+                  </div>
+                
+              </div>
+
+              <div [@openCloseContent]="isOpenAnalyze[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8" style="min-height:560px">
+                <mat-tab-group animation="500ms" [selectedIndex]="currentAnalyzeTab.value" (selectedIndexChange)="currentAnalyzeTab.setValue($event)">
+                  <mat-tab label="Reporte">
+                    <mat-toolbar style="background: #333333">
+                      <span class="ms-font-raleway ms-color-wt" style="font-weight:500">Detalles</span>
+                      <span class="ms-fill"></span>
+                      <button mat-icon-button class="w3-text-white" matTooltip="Editar reporte"
+                        (click)="editReport(analyze)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </mat-toolbar>
+
+                    <div class="w3-row w3-margin-top">
+                      <div class="w3-col s6 ms-header-mobile">Fecha</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span>{{analyze['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                        <span class="w3-small">{{analyze['regDate'] | date : 'hh:mm:ss'}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Creado por</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small" style="font-weight:500">{{analyze['createdBy']['displayName']}}</span>
+                        <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                          <li class="w3-small">Area: {{analyze['createdBy']['area']['name']}}</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">OT</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['OT']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Área</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small" style="font-weight:500">{{analyze['area']['name']}}</span>
+                        <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                          <li class="w3-small">Sup.: {{analyze['area']['supervisor']['displayName']}}</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Descripción</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['description']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Componente</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['component']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Estado</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['status']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <a class="w3-medium" target="_blank" [href]="analyze['initialPicture']"
+                          *ngIf="analyze['initialPicture']; else noImageLink">Ver imagen</a>
+                        <ng-template #noImageLink>
+                          <span class="w3-small w3-text-gray">No disponible</span>
+                        </ng-template>
+                      </div>
+                    </div>
+                  </mat-tab>
+
+                  <mat-tab label="Análisis">
+                    <mat-toolbar style="background: #333333">
+                      <span class="ms-font-raleway ms-color-wt" style="font-weight:500">Detalles</span>
+                      <span class="ms-fill"></span>
+                      <button mat-icon-button class="w3-text-white" matTooltip="Editar análisis"
+                        (click)="editAnalyze(analyze)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </mat-toolbar>
+
+                    <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                      <div class="w3-col s6 ms-header-mobile">Tipo de rehacer</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span>{{analyze['redoType']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                      <div class="w3-col s6 ms-header-mobile">Componente</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <span class="w3-small">{{analyze['component']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">OT / Segmento de rehacer</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['OTSegment']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">Cliente</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['customer']['fullName']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">Tipo de reparación</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['repairType']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">Horas</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['rootCause']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">OT</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['OTSegment']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">Causa raíz</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{analyze['OTSegment']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">Áreas responsables</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <ng-container *ngFor="let area of analyze['involvedAreas']">
+                          <span class="w3-small" style="font-weight:500">{{area['name']}}</span>
+                          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                            <li class="w3-small">Sup.: {{area['supervisor']['displayName']}}</li>
+                          </ul>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">Personal responsable</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <ng-container *ngFor="let staff of analyze['responsibleStaff']">
+                          <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
+                          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                            <li class="w3-small">Sup.: {{staff['jobTitle']}}</li>
+                          </ul>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
+                      <div class="w3-col s6 ms-header-mobile">Fotos</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <a  target="_blank"
+                          (click)="openPictures(analyze)"
+                          *ngIf="analyze['initialPicture']; else defaultPictureTable1">
+                        <div class="w3-display-container" style="width:150px;height:90px;padding:6px 6px">
+                          <img src="{{analyze['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                          <div class="w3-display-middle w3-round-large" style="background: rgba(0,0,0,0.7);padding:0.5em 0.5em;">
+                            <span style="color:white; font-size:2em; font-weight:600"><mat-icon style="vertical-align:middle">add</mat-icon> {{analyze['pictureCounter']}}</span>
+                          </div>
+                        </div>
+                      </a>
+                      <ng-template #defaultPictureTable1>
+                        <div style="width:150px;height:90px;padding:6px 6px">
+                          <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                            class="w3-card-4">
+                        </div>
+                      </ng-template>
+                      </div>
+                    </div>
+                      
+                  </mat-tab>
+                </mat-tab-group>
+                <mat-toolbar>
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardAnalyze(i)">
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                  </button>
+                </mat-toolbar>
+              </div> 
+
+
+            </ng-container>
+          </div>
+
         </div>
       </ng-template>
     </mat-tab>

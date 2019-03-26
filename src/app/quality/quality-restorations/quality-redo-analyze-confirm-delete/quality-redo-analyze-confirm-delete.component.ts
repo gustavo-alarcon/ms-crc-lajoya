@@ -1,19 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
-import { MAT_DIALOG_DATA, MatSnackBar, MatDialogRef } from '@angular/material';
+import { MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
-  selector: 'app-quality-redo-report-confirm-delete',
-  templateUrl: './quality-redo-report-confirm-delete.component.html',
+  selector: 'app-quality-redo-analyze-confirm-delete',
+  templateUrl: './quality-redo-analyze-confirm-delete.component.html',
   styles: []
 })
-export class QualityRedoReportConfirmDeleteComponent implements OnInit {
+export class QualityRedoAnalyzeConfirmDeleteComponent implements OnInit {
 
   constructor(
     public dbs: DatabaseService,
     private snackbar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef : MatDialogRef<QualityRedoReportConfirmDeleteComponent>
+    private dialogRef : MatDialogRef<QualityRedoAnalyzeConfirmDeleteComponent>
   ) { }
 
   ngOnInit() {
@@ -44,6 +44,5 @@ export class QualityRedoReportConfirmDeleteComponent implements OnInit {
     this.dialogRef.close();
 
   }
-
 
 }

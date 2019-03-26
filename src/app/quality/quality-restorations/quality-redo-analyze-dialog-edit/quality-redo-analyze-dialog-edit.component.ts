@@ -4,15 +4,15 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { MatAutocomplete, MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 import { DatabaseService } from 'src/app/core/database.service';
+import { map, startWith } from 'rxjs/operators';
 import { QualityRedoReportConfirmAnalyzeComponent } from '../quality-redo-report-confirm-analyze/quality-redo-report-confirm-analyze.component';
-import { startWith, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-quality-redo-report-dialog-analyze',
-  templateUrl: './quality-redo-report-dialog-analyze.component.html',
+  selector: 'app-quality-redo-analyze-dialog-edit',
+  templateUrl: './quality-redo-analyze-dialog-edit.component.html',
   styles: []
 })
-export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
+export class QualityRedoAnalyzeDialogEditComponent implements OnInit {
 
   analyzeFormGroup: FormGroup;
 
@@ -64,7 +64,7 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
     private snackbar: MatSnackBar,
     public dbs: DatabaseService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<QualityRedoReportDialogAnalyzeComponent>
+    private dialogRef: MatDialogRef<QualityRedoAnalyzeDialogEditComponent>
   ) { }
 
   ngOnInit() {
@@ -133,27 +133,33 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
                               map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
                               map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
                             );
-
   }
 
   createForms(): void{
     this.analyzeFormGroup = this.fb.group({
-      redoType: ['', [Validators.required]],
-      component: this.data['report']['component'],
-      componentModel: ['', [Validators.required]],
-      componentPartNumber: ['', [Validators.required]],
-      OTSegment: ['', [Validators.required]],
-      customer: ['', [Validators.required]],
-      repairType: ['', [Validators.required]],
-      hours: ['', [Validators.required]],
-      failureMode: ['', [Validators.required]],
-      rootCause: ['', [Validators.required]],
-      causeClassification: '',
+      redoType: [this.data['redoType'], [Validators.required]],
+      component: this.data['component'],
+      componentModel: [this.data['componentModel'], [Validators.required]],
+      componentPartNumber: [this.data['componentPartNumber'], [Validators.required]],
+      OTSegment: [this.data['OTSegment'], [Validators.required]],
+      customer: [this.data['customer'], [Validators.required]],
+      repairType: [this.data['repairType'], [Validators.required]],
+      hours: [this.data['hours'], [Validators.required]],
+      failureMode: [this.data['failureMode'], [Validators.required]],
+      rootCause: [this.data['rootCause'], [Validators.required]],
+      causeClassification: this.data['causeClassification'],
       involvedAreas: '',
-      responsibleStaff: '',
+      responsibleStaff: ''
     })
+
+    this.involvedAreasArray = this.data['involvedAreas'].slice();
+    this.responsibleStaffArray = this.data['responsibleStaff'].slice();
     
-    this.imageSrc_1 = this.data['report']['initialPicture'];
+    this.imageSrc_1 = this.data['initialPicture'];
+    this.imageSrc_2 = this.data['image_2'];
+    this.imageSrc_3 = this.data['image_3'];
+    this.imageSrc_4 = this.data['image_4'];
+    this.imageSrc_5 = this.data['image_5'];
   }
 
   // CHIPS INVOLVED AREAS
@@ -164,7 +170,17 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
       const value = event.value;
 
       if(typeof value === 'object'){
-        this.involvedAreasArray.push(value);
+        console.log(value);
+        let alreadyExists = this.data['involvedAreas'].filter(option => option['name'].includes(value['name']));
+        console.log(alreadyExists);
+        if(alreadyExists.length === 0){
+          this.involvedAreasArray.push(value);
+        }else{
+          this.snackbar.open("Ya selecciono esta área","Cerrar", {
+            duration: 6000
+          })
+        }
+        
       }
 
       if (input) {
@@ -178,27 +194,55 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
   removeInvolvedArea(area: any): void {
     const index = this.involvedAreasArray.indexOf(area);
 
+    const _index = this.data['involvedAreas'].indexOf(area);
+    
+    // if(index === _index){
+    //   this.snackbar.open("No puede borrar esta área, solo puede agregar nuevas areas.","Cerrar", {
+    //     duration: 6000
+    //   })
+    // }
+
     if (index >= 0) {
       this.involvedAreasArray.splice(index, 1);
     }
   }
 
   selectedInvolvedArea(event: MatAutocompleteSelectedEvent): void {
-    this.involvedAreasArray.push(event.option.value);
+    
+    let alreadyExists = this.data['involvedAreas'].filter(option => option['name'].includes(event.option.value['name']));
+    
+    if(alreadyExists.length === 0){
+      this.involvedAreasArray.push(event.option.value);
+    }else{
+      this.snackbar.open("Ya selecciono esta área","Cerrar", {
+        duration: 6000
+      });
+      return;
+    }
+    
     this.involvedAreasInput.nativeElement.value = '';
     this.analyzeFormGroup.get('involvedAreas').setValue(' ');
   }
   //  *********************************************************
 
-  // CHIPS RESPONSIBLE STAFF
-  addResponsibleStaff(event: MatChipInputEvent): void {
+   // CHIPS RESPONSIBLE STAFF
+   addResponsibleStaff(event: MatChipInputEvent): void {
 
     if (!this.matAutocompleteStaff.isOpen) {
       const input = event.input;
       const value = event.value;
 
       if(typeof value === 'object'){
-        this.responsibleStaffArray.push(value);
+        console.log(value);
+        let alreadyExists = this.data['responsibleStaff'].filter(option => option['uid'].includes(value['uid']));
+        console.log(alreadyExists);
+        if(alreadyExists.length === 0){
+          this.responsibleStaffArray.push(value);
+        }else{
+          this.snackbar.open("Ya selecciono a este usuario","Cerrar", {
+            duration: 6000
+          })
+        }
       }
 
       if (input) {
@@ -218,7 +262,18 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
   }
 
   selectedResponsibleStaff(event: MatAutocompleteSelectedEvent): void {
-    this.responsibleStaffArray.push(event.option.value);
+    
+    let alreadyExists = this.data['responsibleStaff'].filter(option => option['uid'].includes(event.option.value['uid']));
+    
+    if(alreadyExists.length === 0){
+      this.responsibleStaffArray.push(event.option.value);
+    }else{
+      this.snackbar.open("Ya selecciono a este usuario","Cerrar", {
+        duration: 6000
+      });
+      return;
+    }
+
     this.responsibleStaffInput.nativeElement.value = '';
     this.analyzeFormGroup.get('responsibleStaff').setValue(' ');
   }
@@ -298,7 +353,6 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
   }
 
   save(): void{
-    console.log(this.analyzeFormGroup);
 
     if(this.analyzeFormGroup.valid){
 
@@ -326,7 +380,7 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
       let dialogRef = this.dialog.open(QualityRedoReportConfirmAnalyzeComponent,{
         data: {
           form: this.analyzeFormGroup.value,
-          redo: this.data['report'],
+          redo: this.data,
           involvedAreas: this.involvedAreasArray,
           responsibleStaff: this.responsibleStaffArray,
           initialImage: this.selectedFile_1,

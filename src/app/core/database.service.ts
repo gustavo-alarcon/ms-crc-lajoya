@@ -789,7 +789,10 @@ export class DatabaseService {
 
             element['responsibleStaff'].forEach(staff => {
               if(staff['uid'] === this.auth.userCRC.uid){
-                analyzeList.push(element);
+                let _index = analyzeList.indexOf(element);
+                if(_index === -1){
+                  analyzeList.push(element);
+                }
               }
             })
           }

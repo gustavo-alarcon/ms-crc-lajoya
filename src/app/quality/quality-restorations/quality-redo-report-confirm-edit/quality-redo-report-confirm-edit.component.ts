@@ -15,6 +15,8 @@ export class QualityRedoReportConfirmEditComponent implements OnInit {
 
   uploadPercent_initial: Observable<number>;
   uploading_initial: boolean = false;
+
+  uploading: boolean = false;
   
   reportObject: object;
 
@@ -28,7 +30,6 @@ export class QualityRedoReportConfirmEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   save(): void{
@@ -100,6 +101,8 @@ export class QualityRedoReportConfirmEditComponent implements OnInit {
       .subscribe()
     }else{
 
+      this.uploading = true;
+
       let metaObject = {
         editedBy: this.auth.userCRC,
         uidModifier: this.auth.userCRC.uid,
@@ -121,11 +124,11 @@ export class QualityRedoReportConfirmEditComponent implements OnInit {
         this.dbs.addQualityRedoLog(this.data['reportId'], log)
           .then(() => {
             this.dialogRef.close(true);
-            this.uploading_initial = false;
+            this.uploading = false;
           })
           .catch(error => {
             console.log(error);
-            this.uploading_initial = false;
+            this.uploading = false;
             this.snackbar.open("Ups!, parece que hubo un error (MR001) ...","Cerrar",{
               duration:6000
             });
