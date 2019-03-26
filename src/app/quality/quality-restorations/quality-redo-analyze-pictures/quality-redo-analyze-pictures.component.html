@@ -1,0 +1,42 @@
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">image</mat-icon> Imágenes</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+
+  <a href="{{data['initialPicture']}}" target="_blank" class="w3-margin-bottom " style="cursor:pointer"
+    *ngIf="data['initialPicture']">
+    <div style="max-width:450px;padding:6px 6px">
+      <img src="{{data['initialPicture']}}" style="max-width:100%" class="w3-card-4 w3-hover-shadow">
+    </div>
+  </a>
+
+  <a href="{{data['image_2']}}" target="_blank" class="w3-margin-bottom " style="cursor:pointer"
+    *ngIf="data['image_2']">
+    <div style="max-width:450px;padding:6px 6px">
+      <img src="{{data['image_2']}}" style="max-width:100%" class="w3-card-4 w3-hover-shadow">
+    </div>
+  </a>
+
+  <a href="{{data['image_3']}}" target="_blank" class="w3-margin-bottom " style="cursor:pointer"
+    *ngIf="data['image_3']">
+    <div style="max-width:450px;padding:6px 6px">
+      <img src="{{data['image_3']}}" style="max-width:100%" class="w3-card-4 w3-hover-shadow">
+    </div>
+  </a>
+
+  <a href="{{data['image_4']}}" target="_blank" class="w3-margin-bottom " style="cursor:pointer"
+    *ngIf="data['image_4']">
+    <div style="max-width:450px;padding:6px 6px">
+      <img src="{{data['image_4']}}" style="max-width:100%" class="w3-card-4 w3-hover-shadow">
+    </div>
+  </a>
+
+  <a href="{{data['image_5']}}" target="_blank" class="w3-margin-bottom " style="cursor:pointer"
+    *ngIf="data['image_5']">
+    <div style="max-width:450px;padding:6px 6px">
+      <img src="{{data['image_5']}}" style="max-width:100%" class="w3-card-4 w3-hover-shadow">
+    </div>
+  </a>
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-raised-button mat-dialog-close color="warn">Cerrar</button>
+</mat-dialog-actions>

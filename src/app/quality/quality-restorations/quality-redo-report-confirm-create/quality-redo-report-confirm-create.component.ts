@@ -62,8 +62,6 @@ export class QualityRedoReportConfirmCreateComponent implements OnInit {
               };
 
               this.reportObject = Object.assign(this.data['form'], metaObject);
-
-              console.log(this.reportObject);
       
               this.dbs.qualityRedosCollection.add(this.reportObject).then(reportRef => {
 

@@ -132,6 +132,13 @@ import { QualityRedoReportDialogActionsComponent } from './quality/quality-resto
 import { QualityRedoReportConfirmActionsComponent } from './quality/quality-restorations/quality-redo-report-confirm-actions/quality-redo-report-confirm-actions.component';
 import { QualityRedoReportConfirmClosedComponent } from './quality/quality-restorations/quality-redo-report-confirm-closed/quality-redo-report-confirm-closed.component';
 import { QualityRedoReportDialogClosedComponent } from './quality/quality-restorations/quality-redo-report-dialog-closed/quality-redo-report-dialog-closed.component';
+import { QualityRedoAnalyzePicturesComponent } from './quality/quality-restorations/quality-redo-analyze-pictures/quality-redo-analyze-pictures.component';
+import { QualityRedoAnalyzeDialogEditComponent } from './quality/quality-restorations/quality-redo-analyze-dialog-edit/quality-redo-analyze-dialog-edit.component';
+import { QualityRedoAnalyzeConfirmEditComponent } from './quality/quality-restorations/quality-redo-analyze-confirm-edit/quality-redo-analyze-confirm-edit.component';
+import { QualityRedoAnalyzeConfirmDeleteComponent } from './quality/quality-restorations/quality-redo-analyze-confirm-delete/quality-redo-analyze-confirm-delete.component';
+import { QualityRedoAnalyzeDialogDeleteComponent } from './quality/quality-restorations/quality-redo-analyze-dialog-delete/quality-redo-analyze-dialog-delete.component';
+import { QualityRedoAnalyzeDialogActionsComponent } from './quality/quality-restorations/quality-redo-analyze-dialog-actions/quality-redo-analyze-dialog-actions.component';
+import { QualityRedoAnalyzeConfirmActionsComponent } from './quality/quality-restorations/quality-redo-analyze-confirm-actions/quality-redo-analyze-confirm-actions.component';
 
 
 
@@ -211,7 +218,14 @@ import { QualityRedoReportDialogClosedComponent } from './quality/quality-restor
     QualityRedoReportDialogActionsComponent,
     QualityRedoReportConfirmActionsComponent,
     QualityRedoReportConfirmClosedComponent,
-    QualityRedoReportDialogClosedComponent
+    QualityRedoReportDialogClosedComponent,
+    QualityRedoAnalyzePicturesComponent,
+    QualityRedoAnalyzeDialogEditComponent,
+    QualityRedoAnalyzeConfirmEditComponent,
+    QualityRedoAnalyzeConfirmDeleteComponent,
+    QualityRedoAnalyzeDialogDeleteComponent,
+    QualityRedoAnalyzeDialogActionsComponent,
+    QualityRedoAnalyzeConfirmActionsComponent
     
   ],
   imports: [
@@ -313,7 +327,13 @@ import { QualityRedoReportDialogClosedComponent } from './quality/quality-restor
     QualityRedoReportDialogActionsComponent,
     QualityRedoReportConfirmActionsComponent,
     QualityRedoReportConfirmClosedComponent,
-    QualityRedoReportDialogClosedComponent
+    QualityRedoReportDialogClosedComponent,
+    QualityRedoAnalyzePicturesComponent,
+    QualityRedoAnalyzeDialogEditComponent,
+    QualityRedoAnalyzeConfirmDeleteComponent,
+    QualityRedoAnalyzeDialogDeleteComponent,
+    QualityRedoAnalyzeDialogActionsComponent,
+    QualityRedoAnalyzeConfirmActionsComponent
   ],
   bootstrap: [AppComponent]
 })
