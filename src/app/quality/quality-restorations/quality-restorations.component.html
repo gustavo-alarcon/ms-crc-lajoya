@@ -226,14 +226,14 @@
                       <mat-icon>edit</mat-icon>
                     </button>
                   </mat-toolbar>
-                  <div class="w3-row">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray">
                     <div class="w3-col s6 ms-header-mobile">Fecha</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span>{{report['regDate'] | date : 'dd/MM/yyy'}}</span><br>
                       <span class="w3-small">{{report['regDate'] | date : 'hh:mm:ss'}}</span>
                     </div>
                   </div>
-                  <div class="w3-row w3-margin-top">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
                     <div class="w3-col s6 ms-header-mobile">Creado por</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small" style="font-weight:500">{{report['createdBy']['displayName']}}</span>
@@ -242,13 +242,13 @@
                       </ul>
                     </div>
                   </div>
-                  <div class="w3-row">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray">
                     <div class="w3-col s6 ms-header-mobile">OT</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small">{{report['OT']}}</span>
                     </div>
                   </div>
-                  <div class="w3-row">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray">
                     <div class="w3-col s6 ms-header-mobile">Área</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small" style="font-weight:500">{{report['area']['name']}}</span>
@@ -257,25 +257,25 @@
                       </ul>
                     </div>
                   </div>
-                  <div class="w3-row">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray">
                     <div class="w3-col s6 ms-header-mobile">Descripción</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small">{{report['description']}}</span>
                     </div>
                   </div>
-                  <div class="w3-row">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray">
                     <div class="w3-col s6 ms-header-mobile">Componente</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small">{{report['component']}}</span>
                     </div>
                   </div>
-                  <div class="w3-row">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray">
                     <div class="w3-col s6 ms-header-mobile">Estado</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small">{{report['status']}}</span>
                     </div>
                   </div>
-                  <div class="w3-row">
+                  <div class="w3-row w3-border-bottom w3-border-lightgray">
                     <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <a class="w3-medium" target="_blank" [href]="report['initialPicture']"
@@ -328,7 +328,7 @@
                   style="z-index:1; position:relative"
                   (click)="togglePanelAnalyze(i, analyze)">
 
-              <div class="w3-row ms-font-roboto ms-color-bt">
+              <div class="w3-row w3-border-bottom w3-border-lightgray ms-font-roboto ms-color-bt">
                 <div class="w3-col m2 w3-padding-large">
                   <span style="font-weight:600">N°</span><br>
                   <span>{{i+1 | number : '2.'}}</span>
@@ -577,14 +577,14 @@
                       </button>
                     </mat-toolbar>
 
-                    <div class="w3-row w3-margin-top">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
                       <div class="w3-col s6 ms-header-mobile">Fecha</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span>{{analyze['regDate'] | date : 'dd/MM/yyy'}}</span><br>
                         <span class="w3-small">{{analyze['regDate'] | date : 'hh:mm:ss'}}</span>
                       </div>
                     </div>
-                    <div class="w3-row">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Creado por</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small" style="font-weight:500">{{analyze['createdBy']['displayName']}}</span>
@@ -593,13 +593,13 @@
                         </ul>
                       </div>
                     </div>
-                    <div class="w3-row">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">OT</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small">{{analyze['OT']}}</span>
                       </div>
                     </div>
-                    <div class="w3-row">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Área</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small" style="font-weight:500">{{analyze['area']['name']}}</span>
@@ -608,25 +608,25 @@
                         </ul>
                       </div>
                     </div>
-                    <div class="w3-row">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Descripción</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small">{{analyze['description']}}</span>
                       </div>
                     </div>
-                    <div class="w3-row">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Componente</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small">{{analyze['component']}}</span>
                       </div>
                     </div>
-                    <div class="w3-row">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Estado</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small">{{analyze['status']}}</span>
                       </div>
                     </div>
-                    <div class="w3-row">
+                    <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <a class="w3-medium" target="_blank" [href]="analyze['initialPicture']"
