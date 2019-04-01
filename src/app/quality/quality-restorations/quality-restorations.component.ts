@@ -13,6 +13,11 @@ import { QualityRedoReportConfirmDeleteComponent } from './quality-redo-report-c
 import { QualityRedoAnalyzePicturesComponent } from './quality-redo-analyze-pictures/quality-redo-analyze-pictures.component';
 import { QualityRedoAnalyzeDialogEditComponent } from './quality-redo-analyze-dialog-edit/quality-redo-analyze-dialog-edit.component';
 import { QualityRedoAnalyzeConfirmDeleteComponent } from './quality-redo-analyze-confirm-delete/quality-redo-analyze-confirm-delete.component';
+import { QualityRedoAnalyzeDialogActionsComponent } from './quality-redo-analyze-dialog-actions/quality-redo-analyze-dialog-actions.component';
+import { SelectionModel } from '@angular/cdk/collections';
+import { QualityRedoActionsConfirmDeleteActionComponent } from './quality-redo-actions-confirm-delete-action/quality-redo-actions-confirm-delete-action.component';
+import { QualityRedoActionsDialogAddActionsComponent } from './quality-redo-actions-dialog-add-actions/quality-redo-actions-dialog-add-actions.component';
+import { QualityRedoActionsConfirmApproveActionsComponent } from './quality-redo-actions-confirm-approve-actions/quality-redo-actions-confirm-approve-actions.component';
 
 @Component({
   selector: 'app-quality-restorations',
@@ -73,12 +78,10 @@ import { QualityRedoAnalyzeConfirmDeleteComponent } from './quality-redo-analyze
     ]),
     trigger('openClosePanel',[
       state('openPanel', style({
-        borderRadius: '8px 8px 0px 0px',
-        marginBottom: '0px'
+        borderRadius: '8px 8px 0px 0px'
       })),
       state('closedPanel', style({
-        borderRadius: '8px',
-        marginBottom: '1em'
+        borderRadius: '8px'
       })),
       transition('openPanel => closedPanel', [
         animate('1s ease-in')
@@ -109,7 +112,7 @@ import { QualityRedoAnalyzeConfirmDeleteComponent } from './quality-redo-analyze
     ]),
     trigger('openCloseToolbar',[
       state('openToolbar', style({
-        height: '60px',
+        maxHeight: '300px',
         opacity: 1
       })),
       state('closedToolbar', style({
@@ -188,12 +191,18 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
   displayedColumnsAnalyze: string[] = ['redoType', 'component', 'OTSegment', 'customer', 'repairType', 'hours', 'failureMode', 'rootCause', 'involvedAreas', 'responsibleStaff', 'pictures'];
   dataSourceRedosAnalyze = new MatTableDataSource();
+  dataSourceRedosAnalyzePanel = new MatTableDataSource();
 
   displayedColumnsActions: string[] = ['index', 'date', 'initialPicture', 'createdBy', 'area', 'equipment', 'priority', 'observation', 'status', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
   dataSourceRedosActions = new MatTableDataSource();
+  dataSourceRedosActionsPanel = new MatTableDataSource();
+
+  displayedColumnsActionsList: string[] = ['select', 'index', 'action', 'valid', 'responsible', 'additionalStaff', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'edit'];
+  dataSourceRedosActionsList = new MatTableDataSource();
 
   displayedColumnsClosed: string[] = ['index', 'date', 'initialPicture', 'createdBy', 'area', 'equipment', 'priority', 'observation', 'status', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
   dataSourceRedosClosed = new MatTableDataSource();
+
 
   selectedFile = null;
   imageSrc: string | ArrayBuffer;
@@ -201,6 +210,8 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   filteredAreas: Observable<any>;
 
   filteredQualityRedosReports: Array<any> = [];
+
+  selection = new SelectionModel(true, []);
 
   subscriptions: Array<Subscription> = [];
 
@@ -238,12 +249,20 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     let dataQualityAnalyzeSubs =  this.dbs.currentDataQualityRedosAnalyze.subscribe(res => {
                                     this.dataSourceRedosAnalyze.data = res;
                                     res.forEach(element => {
-                                      this.isOpenReport.push(false);
+                                      this.isOpenAnalyze.push(false);
+                                    })
+                                  });
+
+    let dataQualityActionsSubs =  this.dbs.currentDataQualityRedosActions.subscribe(res => {
+                                    this.dataSourceRedosActions.data = res;
+                                    res.forEach(element => {
+                                      this.isOpenActions.push(false);
                                     })
                                   });
 
     this.subscriptions.push(dataQualityReportsSubs);
     this.subscriptions.push(dataQualityAnalyzeSubs);
+    this.subscriptions.push(dataQualityActionsSubs);
   }
 
   ngOnDestroy() {
@@ -273,7 +292,15 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   }
 
   togglePanelAnalyze(index, data) {
-    this.isOpenAnalyze[index] = !this.isOpenAnalyze[index];
+
+    if(this.isOpenAnalyze[index]){
+      this.isOpenAnalyze[index] = false;
+    }else{
+      for (let i = 0; i < this.isOpenAnalyze.length; i++) {
+        this.isOpenAnalyze[i] = false;
+      }
+      this.isOpenAnalyze[index] = true;
+    }
 
     let pictureCounter = 0;
 
@@ -295,13 +322,62 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
     data['pictureCounter'] = pictureCounter;
 
-    this.dataSourceRedosAnalyze.data = [data];
+    this.dataSourceRedosAnalyzePanel.data = [data];
 
 
   }
 
   toggleCardActions(index) {
     this.isOpenActions[index] = !this.isOpenActions[index];
+  }
+
+  togglePanelActions(index, data, redoId) {
+
+    if(this.isOpenActions[index]){
+      this.isOpenActions[index] = false;
+    }else{
+      for (let i = 0; i < this.isOpenActions.length; i++) {
+        this.isOpenActions[i] = false;
+      }
+      this.isOpenActions[index] = true;
+    }
+
+    let pictureCounter = 0;
+
+    if(data['initialPicture']){
+      pictureCounter++;
+    }
+    if(data['image_2']){
+      pictureCounter++;
+    }
+    if(data['image_3']){
+      pictureCounter++;
+    }
+    if(data['image_4']){
+      pictureCounter++;
+    }
+    if(data['image_5']){
+      pictureCounter++;
+    }
+
+    data['pictureCounter'] = pictureCounter;
+
+    this.dataSourceRedosActionsPanel.data = [data];
+
+    let actionsSubs= this.dbs.qualityRedosCollection.doc(data['id']).collection('actions').valueChanges()
+                        .pipe(
+                          map(res => {
+                            return res.sort((b,a)=>b['regDate']-a['regDate']);
+                          })
+                        )
+                        .subscribe(res => {
+                          this.dataSourceRedosActionsList.data = res;
+                        })
+    
+    this.subscriptions.push(actionsSubs);
+    // this.dataSourceRedosActionsList.data = data['actions'];
+
+
   }
 
   toggleCardClosed(index) {
@@ -376,7 +452,6 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   /*********************** ANALYZE ****************************/
 
   openPictures(data): void{
-    console.log(data);
     this.dialog.open(QualityRedoAnalyzePicturesComponent, {
       data: data
     })
@@ -408,9 +483,68 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     })
   }
 
-  
+  nextStageActions(redo): void{
+    let dialogRef = this.dialog.open(QualityRedoAnalyzeDialogActionsComponent, {
+      data: redo,
+      autoFocus: false
+    })
 
+    dialogRef.afterClosed().subscribe(res => {
+      if(res === 'Acciones'){
+        this.currentTab.setValue(2);
+      }
+    })
+  }
 
+  /*********************** ACTIONS ****************************/
 
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSourceRedosActionsList.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSourceRedosActionsList.data.forEach(row => this.selection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+
+  deleteAction(index, redo): void{
+    this.dataSourceRedosActionsList.data.splice(index,1);
+    this.dialog.open(QualityRedoActionsConfirmDeleteActionComponent,{
+      data: {
+        redo: redo,
+        actions: this.dataSourceRedosActionsList.data
+      }
+    })
+  }
+
+  addActions(redo): void{
+    this.dialog.open(QualityRedoActionsDialogAddActionsComponent, {
+      data: redo,
+      autoFocus: false
+    })
+  }
+
+  approveActions(redo): void{
+    this.dialog.open(QualityRedoActionsConfirmApproveActionsComponent, {
+      data: {
+        redo: redo,
+        selection: this.selection.selected
+      },
+      autoFocus: false
+    })
+  }
 
 }

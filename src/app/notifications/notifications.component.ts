@@ -76,5 +76,31 @@ export class NotificationsComponent implements OnInit {
       });
     }
   }
+  
+  // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON INSPECTIONS
+  rejectQualityRedo(redoId, supervisorId, noteId): void{
+    this.dbs.qualityRedosCollection.doc(redoId).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(supervisorId).collection('notifications').doc(noteId).update({redoStatus: 'Rechazado'});
+  }
+
+  confirmQualityRedo(redoId, supervisorId, noteId): void{
+    this.dbs.qualityRedosCollection.doc(redoId).update({status: 'Confirmado'});
+    this.dbs.usersCollection.doc(supervisorId).collection('notifications').doc(noteId).update({redoStatus: 'Confirmado'});
+  }
+
+  // REJECT AND CONFIRMATION FOR TASKs CREATED BY REDOs ACTIONS
+  rejectQualityRedoAction(redoId, responsibleId, noteId, actionIndex, actions): void{
+    actions[actionIndex]['status'] = 'Rechazado';
+    this.dbs.qualityRedosCollection.doc(redoId).set({actions:actions}, {merge: true});
+    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(redoId + `${actionIndex}`).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).set({actionStatus: 'Rechazado', actionsList: actions}, {merge: true});
+  }
+
+  confirmQualityRedoAction(redoId, responsibleId, noteId, taskId): void{
+
+    this.dbs.qualityRedosCollection.doc(redoId).collection('actions').doc(taskId).update({status: 'Confirmado'});
+    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(taskId).update({status: 'Confirmado'});
+    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).update({actionStatus: 'Confirmado'});
+  }
 
 }

@@ -1,13 +1,13 @@
-<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">save</mat-icon> Guardar acciones propuestas</h2>
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">delete</mat-icon> Borrar acción propuesta</h2>
 <mat-divider></mat-divider>
 <mat-dialog-content>
   
-  <p class="ms-font-roboto">¿Está seguro de guardar las acciones propuestas</p>
+  <p class="ms-font-roboto">¿Está seguro de borrar la acción propuesta</p>
   <br>
   
   <mat-progress-bar class="w3-margin-bottom" mode="indeterminate" *ngIf="uploading"></mat-progress-bar>
 </mat-dialog-content>
 <mat-dialog-actions class="w3-margin-top w3-margin-bottom">
   <button mat-raised-button mat-dialog-close color="warn">No</button>
-  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+  <button mat-raised-button color="primary" (click)="save()">Si, borrar</button>
 </mat-dialog-actions>
