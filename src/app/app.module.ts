@@ -139,6 +139,10 @@ import { QualityRedoAnalyzeConfirmDeleteComponent } from './quality/quality-rest
 import { QualityRedoAnalyzeDialogDeleteComponent } from './quality/quality-restorations/quality-redo-analyze-dialog-delete/quality-redo-analyze-dialog-delete.component';
 import { QualityRedoAnalyzeDialogActionsComponent } from './quality/quality-restorations/quality-redo-analyze-dialog-actions/quality-redo-analyze-dialog-actions.component';
 import { QualityRedoAnalyzeConfirmActionsComponent } from './quality/quality-restorations/quality-redo-analyze-confirm-actions/quality-redo-analyze-confirm-actions.component';
+import { QualityRedoActionsConfirmDeleteActionComponent } from './quality/quality-restorations/quality-redo-actions-confirm-delete-action/quality-redo-actions-confirm-delete-action.component';
+import { QualityRedoActionsDialogAddActionsComponent } from './quality/quality-restorations/quality-redo-actions-dialog-add-actions/quality-redo-actions-dialog-add-actions.component';
+import { QualityRedoActionsConfirmAddActionsComponent } from './quality/quality-restorations/quality-redo-actions-confirm-add-actions/quality-redo-actions-confirm-add-actions.component';
+import { QualityRedoActionsConfirmApproveActionsComponent } from './quality/quality-restorations/quality-redo-actions-confirm-approve-actions/quality-redo-actions-confirm-approve-actions.component';
 
 
 
@@ -225,7 +229,11 @@ import { QualityRedoAnalyzeConfirmActionsComponent } from './quality/quality-res
     QualityRedoAnalyzeConfirmDeleteComponent,
     QualityRedoAnalyzeDialogDeleteComponent,
     QualityRedoAnalyzeDialogActionsComponent,
-    QualityRedoAnalyzeConfirmActionsComponent
+    QualityRedoAnalyzeConfirmActionsComponent,
+    QualityRedoActionsConfirmDeleteActionComponent,
+    QualityRedoActionsDialogAddActionsComponent,
+    QualityRedoActionsConfirmAddActionsComponent,
+    QualityRedoActionsConfirmApproveActionsComponent
     
   ],
   imports: [
@@ -333,7 +341,11 @@ import { QualityRedoAnalyzeConfirmActionsComponent } from './quality/quality-res
     QualityRedoAnalyzeConfirmDeleteComponent,
     QualityRedoAnalyzeDialogDeleteComponent,
     QualityRedoAnalyzeDialogActionsComponent,
-    QualityRedoAnalyzeConfirmActionsComponent
+    QualityRedoAnalyzeConfirmActionsComponent,
+    QualityRedoActionsConfirmDeleteActionComponent,
+    QualityRedoActionsDialogAddActionsComponent,
+    QualityRedoActionsConfirmAddActionsComponent,
+    QualityRedoActionsConfirmApproveActionsComponent
   ],
   bootstrap: [AppComponent]
 })

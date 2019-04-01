@@ -49,12 +49,12 @@ export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
 
     let metaObject = {
       status: this.data['redo']['status'],
-      stage: 'Análisis',
+      stage: 'Analizar',
       involvedAreas: this.data['involvedAreas'],
       responsibleStaff: this.data['responsibleStaff'],
       analyzeDate: Date.now(),
-      upgradedBy: this.auth.userCRC,
-      uidUpgrader: this.auth.userCRC.uid
+      upgradedToAnalyzeBy: this.auth.userCRC,
+      uidAnalyzeUpgrader: this.auth.userCRC.uid
     };
 
     let reportObject = Object.assign(this.data['form'], metaObject);
@@ -139,6 +139,7 @@ export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
           });
       });
 
+      // sending notification to responsible staff
       this.data['responsibleStaff'].forEach(element => {
         this.dbs.usersCollection
         .doc(element['uid'])

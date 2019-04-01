@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { MatAutocomplete, MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, MatChipInputEvent, MatAutocompleteSelectedEvent, MatTableDataSource } from '@angular/material';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatAutocomplete, MatTableDataSource, MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
 import { DatabaseService } from 'src/app/core/database.service';
 import { startWith, map } from 'rxjs/operators';
-import { QualityRedoAnalyzeConfirmActionsComponent } from '../quality-redo-analyze-confirm-actions/quality-redo-analyze-confirm-actions.component';
+import { QualityRedoActionsConfirmAddActionsComponent } from '../quality-redo-actions-confirm-add-actions/quality-redo-actions-confirm-add-actions.component';
 
 @Component({
-  selector: 'app-quality-redo-analyze-dialog-actions',
-  templateUrl: './quality-redo-analyze-dialog-actions.component.html',
+  selector: 'app-quality-redo-actions-dialog-add-actions',
+  templateUrl: './quality-redo-actions-dialog-add-actions.component.html',
   styles: []
 })
-export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
+export class QualityRedoActionsDialogAddActionsComponent implements OnInit {
 
   actionsFormGroup: FormGroup;
 
@@ -45,7 +45,7 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
     private snackbar: MatSnackBar,
     public dbs: DatabaseService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<QualityRedoAnalyzeDialogActionsComponent>
+    private dialogRef: MatDialogRef<QualityRedoActionsDialogAddActionsComponent>
   ) { }
 
   ngOnInit() {
@@ -132,7 +132,7 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
 
     if(this.actionsFormGroup.valid){
 
-      let dialogRef = this.dialog.open(QualityRedoAnalyzeConfirmActionsComponent,{
+      let dialogRef = this.dialog.open(QualityRedoActionsConfirmAddActionsComponent,{
         data: {
           redo: this.data,
           actions: this.actionsArray,

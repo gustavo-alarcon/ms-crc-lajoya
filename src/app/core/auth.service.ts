@@ -44,7 +44,8 @@ export class AuthService {
   authLoader: boolean = false;
   now = new Date();
 
-  audio = new Audio();
+  audio_android = new Audio();
+  audio_ios = new Audio();
   
 
   constructor(
@@ -54,8 +55,10 @@ export class AuthService {
     public snackbar: MatSnackBar
   ) { 
     // AUDIO SETTINGS
-    this.audio.src = "../../../assets/audio/to-the-point.mp3";
-    this.audio.load();
+    this.audio_android.src = "../../../assets/audio/quite-impressed.mp3";
+    this.audio_ios.src = "../../../assets/audio/quite-impressed.m4r";
+    this.audio_android.load();
+    this.audio_ios.load();
 
     // NOTIFICATION COUNTER DECLARATION
     let notificationsCounter = 0;
@@ -100,7 +103,8 @@ export class AuthService {
   // ************* NOTIFICATIONS
   // Play notification Sound
   playNotification(): void{
-    this.audio.play();
+    this.audio_android.play();
+    this.audio_ios.play();
   }
 
   // Change status of notification to seen

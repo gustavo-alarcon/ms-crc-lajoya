@@ -3,6 +3,12 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+th.mat-header-cell{
+    border: 1px solid lightgray !important;
+    border-style: solid none solid solid !important;
+    background: #dcdcdc !important;
+}
+
 .ms-login-bg{
     background-image: linear-gradient(to right, #0F2027, #203A43, #2C5364)
 }

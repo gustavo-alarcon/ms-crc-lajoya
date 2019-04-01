@@ -773,6 +773,7 @@ export class DatabaseService {
       tap(res => {
         let reportList = [];
         let analyzeList = [];
+        let actionsList = [];
 
         res.forEach(element => {
 
@@ -780,7 +781,7 @@ export class DatabaseService {
             reportList.push(element);
           }
 
-          if(element['stage'] === 'Análisis'){
+          if(element['stage'] === 'Analizar'){
             element['involvedAreas'].forEach(area => {
               if(area['supervisor']['uid'] === this.auth.userCRC.uid){
                 analyzeList.push(element);
@@ -797,6 +798,23 @@ export class DatabaseService {
             })
           }
 
+          if(element['stage'] === 'Acciones'){
+            element['involvedAreas'].forEach(area => {
+              if(area['supervisor']['uid'] === this.auth.userCRC.uid){
+                actionsList.push(element);
+              }
+            })
+
+            element['responsibleStaff'].forEach(staff => {
+              if(staff['uid'] === this.auth.userCRC.uid){
+                let _index = actionsList.indexOf(element);
+                if(_index === -1){
+                  actionsList.push(element);
+                }
+              }
+            })
+          }
+
         });
         
         this.qualityRedosReports = reportList;
@@ -804,6 +822,9 @@ export class DatabaseService {
 
         this.qualityRedosAnalyze = analyzeList;
         this.dataQualityRedosAnalyze.next(analyzeList);
+
+        this.qualityRedosActions = actionsList;
+        this.dataQualityRedosActions.next(actionsList);
       }),
     )
     .subscribe(res => {

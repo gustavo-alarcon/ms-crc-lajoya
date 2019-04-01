@@ -35,7 +35,7 @@ export class QualityRedoReportConfirmCreateComponent implements OnInit {
     if(this.data['initialImage']){
       this.uploading_initial = true;
 
-      const filePath = `/qualityReportsPictures/${this.data['initialImage'].name}`;
+      const filePath = `/qualityReportsPictures/${this.data['initialImage'].name}_${Date.now()}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, this.data['initialImage']);
 
@@ -111,6 +111,7 @@ export class QualityRedoReportConfirmCreateComponent implements OnInit {
                     component: this.data['form']['component'],
                     OT: this.data['form']['OT'],
                     description: this.data['form']['description'],
+                    redoStatus: 'Por confirmar',
                     status: 'unseen',
                     type: 'quality redo report supervisor'
                   })
