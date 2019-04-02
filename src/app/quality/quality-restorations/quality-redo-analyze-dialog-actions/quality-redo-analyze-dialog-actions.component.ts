@@ -119,7 +119,7 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
   }
 
   addAction(): void{
-    this.actionsArray.push(Object.assign(this.actionsFormGroup.value, {additionalStaff:this.actionsAdditionalStaffArray, valid: false, finalPicture:'', finalArchive:'', status:'Por confirmar', realTerminationDate: 0}));
+    this.actionsArray.push(Object.assign(this.actionsFormGroup.value, {additionalStaff:this.actionsAdditionalStaffArray, approved:false, valid: false, finalPicture:'', finalArchive:'', status:'Por confirmar', realTerminationDate: 0}));
     this.dataSourceActions.data = this.actionsArray;
   }
 

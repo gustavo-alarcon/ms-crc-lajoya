@@ -143,6 +143,11 @@ import { QualityRedoActionsConfirmDeleteActionComponent } from './quality/qualit
 import { QualityRedoActionsDialogAddActionsComponent } from './quality/quality-restorations/quality-redo-actions-dialog-add-actions/quality-redo-actions-dialog-add-actions.component';
 import { QualityRedoActionsConfirmAddActionsComponent } from './quality/quality-restorations/quality-redo-actions-confirm-add-actions/quality-redo-actions-confirm-add-actions.component';
 import { QualityRedoActionsConfirmApproveActionsComponent } from './quality/quality-restorations/quality-redo-actions-confirm-approve-actions/quality-redo-actions-confirm-approve-actions.component';
+import { QualityTasksDialogFinalizeComponent } from './quality/quality-tasks/quality-tasks-dialog-finalize/quality-tasks-dialog-finalize.component';
+import { QualityTasksConfirmFinalizeComponent } from './quality/quality-tasks/quality-tasks-confirm-finalize/quality-tasks-confirm-finalize.component';
+import { QualityRedoActionsConfirmValidateComponent } from './quality/quality-restorations/quality-redo-actions-confirm-validate/quality-redo-actions-confirm-validate.component';
+import { QualityRedoActionsConfirmResetComponent } from './quality/quality-restorations/quality-redo-actions-confirm-reset/quality-redo-actions-confirm-reset.component';
+import { QualityRedoActionsDialogRequestClosingComponent } from './quality/quality-restorations/quality-redo-actions-dialog-request-closing/quality-redo-actions-dialog-request-closing.component';
 
 
 
@@ -233,7 +238,12 @@ import { QualityRedoActionsConfirmApproveActionsComponent } from './quality/qual
     QualityRedoActionsConfirmDeleteActionComponent,
     QualityRedoActionsDialogAddActionsComponent,
     QualityRedoActionsConfirmAddActionsComponent,
-    QualityRedoActionsConfirmApproveActionsComponent
+    QualityRedoActionsConfirmApproveActionsComponent,
+    QualityTasksDialogFinalizeComponent,
+    QualityTasksConfirmFinalizeComponent,
+    QualityRedoActionsConfirmValidateComponent,
+    QualityRedoActionsConfirmResetComponent,
+    QualityRedoActionsDialogRequestClosingComponent
     
   ],
   imports: [
@@ -345,7 +355,12 @@ import { QualityRedoActionsConfirmApproveActionsComponent } from './quality/qual
     QualityRedoActionsConfirmDeleteActionComponent,
     QualityRedoActionsDialogAddActionsComponent,
     QualityRedoActionsConfirmAddActionsComponent,
-    QualityRedoActionsConfirmApproveActionsComponent
+    QualityRedoActionsConfirmApproveActionsComponent,
+    QualityTasksDialogFinalizeComponent,
+    QualityTasksConfirmFinalizeComponent,
+    QualityRedoActionsConfirmValidateComponent,
+    QualityRedoActionsConfirmResetComponent,
+    QualityRedoActionsDialogRequestClosingComponent
   ],
   bootstrap: [AppComponent]
 })

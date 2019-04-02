@@ -1,0 +1,63 @@
+<div class="w3-container">
+  <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
+    <mat-icon style="vertical-align:middle">forward</mat-icon> Solicitar cierre de Rehacer
+  </h2>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+    <h1 class="ms-font-raleway ms-color-2b" style="font-size:1.2em; font-weight:600">Se solicitará la confirmación de las siguientes personas, para cerrar el documento</h1>
+    <div class="ms-gallery-container">
+      <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
+        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+          Área principal - Reporte
+        </p>
+        <span style="font-weight:500">{{data['redo']['area']['name']}}</span>
+        <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+          <li>Sup.: {{data['redo']['area']['supervisor']['displayName']}}</li>
+        </ul>
+      </div>
+      <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
+        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+          Áreas involucradas - Análisis
+        </p>
+        <ng-container *ngFor="let area of data['redo']['involvedAreas']">
+          <span style="font-weight:500">{{area['name']}}</span>
+          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+            <li>Sup.: {{area['supervisor']['displayName']}}</li>
+          </ul>
+        </ng-container>
+      </div>
+      <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
+        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+          Personal responsable - Análisis
+        </p>
+        <ng-container *ngFor="let staff of data['redo']['responsibleStaff']">
+          <span style="font-weight:500">{{staff['displayName']}}</span>
+          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+            <li>Puesto: {{staff['jobTitle']}}</li>
+            <li>Sup.: {{staff['supervisor']['displayName']}}</li>
+          </ul>
+        </ng-container>
+      </div>
+      <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
+        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+          Personal responsable - Acciones propuestas
+        </p>
+        <ng-container *ngFor="let staff of actionsArray">
+          <span style="font-weight:500">{{staff['actionResponsible']['displayName']}}</span>
+          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+            <li>Puesto: {{staff['actionResponsible']['jobTitle']}}</li>
+            <li>Sup.: {{staff['actionResponsible']['supervisor']['displayName']}}</li>
+            <li>Tarea: {{staff['action']}}</li>
+          </ul>
+        </ng-container>
+        
+      </div>
+      
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="w3-margin-bottom">
+    <button mat-raised-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-stroked-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="request()">Solicitar</button>
+  </mat-dialog-actions>
+</div>

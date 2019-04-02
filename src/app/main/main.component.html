@@ -249,6 +249,16 @@
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo actions task staff'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Observador de tarea
             </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo actions task validated'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle</mat-icon> Rehacer - Tarea validada
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo actions task restaured'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">settings_backup_restore</mat-icon> Rehacer - Tarea restaurada
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo actions request closing'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle</mat-icon> Rehacer - Conformidad de cierre
+            </button>
+            
           </div>
           <span class="ms-fill"></span>
           <button mat-icon-button (click)="seen(note['id'])" >
@@ -384,9 +394,36 @@
             </div>
           </div>
 
-          <!-- REDO ACTIONS TASK RESPONSIBLE -->
+          <!-- REDO ACTIONS TASK STAFF -->
           <div *ngIf="note['type'] === 'quality redo actions task staff'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> lo asigno como observador de la tarea: <strong>{{note['task']}}</strong> en el componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong></span>
+          </div>
+
+          <!-- REDO ACTIONS TASK VALIDATED -->
+          <div *ngIf="note['type'] === 'quality redo actions task validated'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> valido la tarea: <strong>{{note['task']}}</strong> en el componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong></span>
+          </div>
+
+          <!-- REDO ACTIONS TASK RESTAURED -->
+          <div *ngIf="note['type'] === 'quality redo actions task restaured'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> restauro la tarea: <strong>{{note['task']}}</strong> en el componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>. Ahora puede finalizar nuevamente la tarea</span>
+          </div>
+
+          <!-- REDO ACTIONS CLOSING REQUEST -->
+          <div *ngIf="note['type'] === 'quality redo actions request closing'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> solicito su confirmación para el cierre del rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>. Bajo el concepto de: <strong>{{note['kind']}}</strong></span>
+            <p  [ngClass]="{'w3-border-green w3-text-green': note['actionStatus']==='Confirmado', 'w3-border-red w3-text-red': note['actionStatus']==='Rechazado'}"
+                *ngIf="note['requestStatus'] != 'Por confirmar'"
+                class="w3-border"
+                style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['requestStatus']}}</p>
+            <div style="margin: 1em 0em 0.5em 0em">
+              <button mat-raised-button class="w3-margin-right" color="warn"
+                (click)="rejectRequestClosing(note['redoId'], note['id'], note['signId'])"
+                *ngIf="note['requestStatus'] === 'Por confirmar'">Rechazar</button>
+              <button mat-raised-button class="w3-margin-right" color="primary"
+                (click)="confirmRequestClosing(note['redoId'], note['id'], note['signId'])"
+                *ngIf="note['requestStatus'] === 'Por confirmar'">Confirmar</button>
+            </div>
           </div>
           
         </div>

@@ -978,7 +978,7 @@
                   (click)="addActions(document)">
                   <mat-icon class="example-icon">add_circle</mat-icon> Proponer acciones
                 </button>
-                <button mat-raised-button color="primary" class="w3-margin-right" matTooltip=""
+                <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip=""
                   (click)="approveActions(document)" [disabled]="this.selection.selected.length === 0">
                   <mat-icon>check_circle</mat-icon> Aprobar acciones
                 </button>
@@ -1003,14 +1003,14 @@
                 <ng-container matColumnDef="select">
                   <th mat-header-cell *matHeaderCellDef
                       style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                    <mat-checkbox *ngIf="actionsNotApproved" (change)="$event ? masterToggle() : null"
                       [checked]="selection.hasValue() && isAllSelected()"
                       [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                     </mat-checkbox>
                   </th>
                   <td mat-cell *matCellDef="let row"
                       style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    <mat-checkbox *ngIf="!row['valid']" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    <mat-checkbox *ngIf="!row['approved']" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                       [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
                     </mat-checkbox>
                   </td>
@@ -1035,12 +1035,12 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="valid">
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="approved">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado (Acción)</th>
                   <td mat-cell *matCellDef="let row" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    {{row['valid']?'Acción aprobada':'Por aprobar'}}
+                    {{row['approved']?'Acción aprobada':'Por aprobar'}}
                   </td>
                 </ng-container>
 
@@ -1076,18 +1076,32 @@
                     style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto final</th>
                   <td mat-cell *matCellDef="let row" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    <a href="{{row['finalPicture']}}" target="_blank"
+                    <div class="ms-gallery-container">
+                      <a href="{{row['finalPicture']}}" target="_blank"
                       *ngIf="row['finalPicture']; else defaultPictureAction">
-                      <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="{{row['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
-                      </div>
-                    </a>
-                    <ng-template #defaultPictureAction>
-                      <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
-                          class="w3-card-4">
-                      </div>
-                    </ng-template>
+                        <div style="width:200px;height:120px;padding:6px 6px">
+                          <img src="{{row['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        </div>
+                      </a>
+                      <ng-template #defaultPictureAction>
+                        <div style="width:200px;height:120px;padding:6px 6px">
+                          <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                            class="w3-card-4">
+                        </div>
+                      </ng-template>
+                      <a href="{{row['finalPicture2']}}" target="_blank"
+                      *ngIf="row['finalPicture2']">
+                        <div style="width:200px;height:120px;padding:6px 6px">
+                          <img src="{{row['finalPicture2']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        </div>
+                      </a>
+                      <a href="{{row['finalPicture3']}}" target="_blank"
+                      *ngIf="row['finalPictur3']">
+                        <div style="width:200px;height:120px;padding:6px 6px">
+                          <img src="{{row['finalPictur3']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        </div>
+                      </a>
+                    </div>
                   </td>
                 </ng-container>
 
@@ -1096,7 +1110,7 @@
                     style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado (Tarea)</th>
                   <td mat-cell *matCellDef="let row" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    {{row['valid']?row['status']:'***'}}
+                    {{row['approved']?row['status']:'***'}}
                   </td>
                 </ng-container>
 
@@ -1122,23 +1136,51 @@
                   <td mat-cell *matCellDef="let row" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                     <a href="{{row['finalArchive']}}" target="_blank"
-                      *ngIf="row['finalArchive']; else defaultPictureAction">
+                    *ngIf="row['finalArchive']; else defaultPictureAction">
                       PDF
                     </a>
                     <ng-template #defaultPictureAction>
                       ***
                     </ng-template>
+                    <a href="{{row['finalArchive2']}}" target="_blank"
+                      *ngIf="row['finalArchive2']">
+                      PDF
+                    </a>
+                    <a href="{{row['finalArchive3']}}" target="_blank"
+                      *ngIf="row['finalArchive3']">
+                      PDF
+                    </a>
+                  </td>
+                </ng-container>
+
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="valid">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Validar tarea</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                    <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
+                      (click)="validateAction(row, document)"
+                      [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                      *ngIf="!row['valid']">
+                      <mat-icon>check_circle</mat-icon> Validar
+                    </button><br>
+                    <button mat-raised-button color="warn" matTooltip="Validar el cumplimiento de la tarea"
+                      (click)="resetAction(row, document)"
+                      [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                      *ngIf="row['valid']">
+                      <mat-icon>settings_backup_restore</mat-icon> Restaurar tarea
+                    </button><br>
                   </td>
                 </ng-container>
                 
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="edit">
+                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="delete">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Editar</th>
-                  <td mat-cell *matCellDef="let row; let i = index" class="w3-small"
+                    style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Borrar</th>
+                  <td mat-cell *matCellDef="let row" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                     <button mat-icon-button color="warn" matTooltip="Borrar acción propuesta"
-                      (click)="deleteAction(i,document)">
+                      (click)="deleteAction(row, document)">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -1151,14 +1193,40 @@
               </table>
             </div>
 
+            <div [@openCloseTable]="isOpenActions[i] ? 'openTable': 'closedTable'" style="background:#191919">
+              <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em">
+                <p class="w3-margin-bottom"> </p>
+                <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" [matTooltip]="allValidated?'Solicitar cierre de documento':'Necesita que todas las tareas esten validadas para poder hacer una solicitud de cierre'"
+                  (click)="requestClosing(document)" [disabled]="!allValidated">
+                  <mat-icon class="example-icon">forward</mat-icon> Solicitar cierre
+                </button>
+                <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" [matTooltip]="allSigned?'Cerrar documento':'Necesita que todos los involucrados hayan confirmado el cierre'"
+                  (click)="closeRedo(document)" [disabled]="!allSigned">
+                  <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
+                </button>
+                <div>
+                  <ul style="margin-top:0.5em">
+                    <li class="ms-color-wt w3-small">
+                      Se enviarán notificaciones a todos los responsables para que confirmen el cierre del rehacer
+                    </li>
+                    <li class="ms-color-wt w3-small">
+                      Después de que todos los responsables hayan confirmado, se habilitará el botón de cierre y pasará a la lista de cerrados
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+
+
 
           </div>
 
-          <!-- MOBIL VERSION ANALYZE-->
-          <!-- <div class="w3-hide-large w3-hide-medium w3-margin-top">
+          <!-- MOBIL VERSION ACTIONS-->
+          <div class="w3-hide-large w3-hide-medium w3-margin-top">
             <ng-container *ngFor="let analyze of dbs.currentDataQualityRedosActions | async; let i = index">
-              <div [@openClosePanelMobile]="isOpenAnalyze[i] ? 'openPanelMobile': 'closedPanelMobile'"
-                (click)="togglePanelAnalyze(i, analyze)"
+              <div [@openClosePanelMobile]="isOpenActions[i] ? 'openPanelMobile': 'closedPanelMobile'"
+                (click)="togglePanelActions(i, analyze)"
                 class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
                 [ngStyle]="{'background-image': analyze['initialPicture'] ? ('url(' + analyze['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
 
@@ -1172,12 +1240,12 @@
                     </p>
                     <span class="ms-fill"></span>
                     <button mat-icon-button class="w3-text-white" matTooltip="Proponer acciones"
-                      (click)="nextStageActions(analyze)"
-                      [disabled]="analyze['stage'] != 'Analizar' || analyze['status'] === 'Por confirmar'">
+                      (click)="nextStageClose(analyze)"
+                      [disabled]="analyze['stage'] != 'Acciones' || analyze['status'] === 'Por confirmar'">
                       <mat-icon>next_week</mat-icon>
                     </button>
-                    <button mat-icon-button class="w3-text-white" matTooltip="Borrar análisis"
-                      (click)="deleteAlyze(analyze)">
+                    <button mat-icon-button class="w3-text-white" matTooltip="Borrar rehacer"
+                      (click)="deleteActions(analyze)">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </div>
@@ -1198,8 +1266,8 @@
                     <span class="w3-padding w3-round-large w3-center" style="font-size:0.9em; font-weight:500"
                       [ngClass]="{'w3-red':analyze['status'] === 'Rechazado', 'w3-green':analyze['status'] === 'Confirmado', 'w3-amber':analyze['status'] === 'Por confirmar'}"
                       matTooltip="Fecha de análisis">
-                      <span>Análisis</span><br>
-                      <span>{{analyze['analyzeDate'] | date: 'dd/MM/yyyy' }}</span>
+                      <span>Acciones</span><br>
+                      <span>{{analyze['actionsDate'] | date: 'dd/MM/yyyy' }}</span>
 
                     </span>
                   </div>
@@ -1211,14 +1279,15 @@
                 style="min-height:560px">
                 <mat-tab-group animation="500ms" [selectedIndex]="currentActionsTab.value"
                   (selectedIndexChange)="currentActionsTab.setValue($event)">
+
                   <mat-tab label="Reporte">
                     <mat-toolbar style="background: #333333">
-                      <span class="ms-font-raleway ms-color-wt" style="font-weight:500">Detalles</span>
+                      <span class="ms-font-raleway ms-color-wt" style="font-weight:500; margin-bottom:0.5em; font-size:1.5em; width:100%">Reporte</span>
                       <span class="ms-fill"></span>
-                      <button mat-icon-button class="w3-text-white" matTooltip="Editar reporte"
+                      <!-- <button mat-icon-button class="w3-text-white" matTooltip="Editar reporte"
                         (click)="editReport(analyze)">
                         <mat-icon>edit</mat-icon>
-                      </button>
+                      </button> -->
                     </mat-toolbar>
 
                     <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
@@ -1284,12 +1353,12 @@
 
                   <mat-tab label="Análisis">
                     <mat-toolbar style="background: #333333">
-                      <span class="ms-font-raleway ms-color-wt" style="font-weight:500">Detalles</span>
+                      <span class="ms-font-raleway ms-color-wt" style="font-weight:500; margin-bottom:0.5em; font-size:1.5em; width:100%">Análisis</span>
                       <span class="ms-fill"></span>
-                      <button mat-icon-button class="w3-text-white" matTooltip="Editar análisis"
+                      <!-- <button mat-icon-button class="w3-text-white" matTooltip="Editar análisis"
                         (click)="editAnalyze(analyze)">
                         <mat-icon>edit</mat-icon>
-                      </button>
+                      </button> -->
                     </mat-toolbar>
 
                     <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
@@ -1325,19 +1394,19 @@
                     <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Horas</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                        <span class="w3-small">{{analyze['rootCause']}}</span>
+                        <span class="w3-small">{{analyze['hours']}}</span>
                       </div>
                     </div>
                     <div class="w3-row w3-border-bottom w3-border-lightgray">
-                      <div class="w3-col s6 ms-header-mobile">OT</div>
+                      <div class="w3-col s6 ms-header-mobile">Modo de falla</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                        <span class="w3-small">{{analyze['OTSegment']}}</span>
+                        <span class="w3-small">{{analyze['failureMode']}}</span>
                       </div>
                     </div>
                     <div class="w3-row w3-border-bottom w3-border-lightgray">
                       <div class="w3-col s6 ms-header-mobile">Causa raíz</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                        <span class="w3-small">{{analyze['OTSegment']}}</span>
+                        <span class="w3-small">{{analyze['rootCause']}}</span>
                       </div>
                     </div>
                     <div class="w3-row w3-border-bottom w3-border-lightgray">
@@ -1390,12 +1459,198 @@
                   </mat-tab>
 
                   <mat-tab label="Acciones">
+                    <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em; background:#191919">
+                      <span class="ms-font-raleway ms-color-wt w3-margin-bottom" style="font-weight:500; margin-bottom:0.5em; font-size:1.5em; width:100%">Acciones</span><br>  
+                      <button mat-raised-button color="primary" class="w3-margin-right; w3-margin-bottom" matTooltip="Agregar acciones"
+                        (click)="addActions(analyze)">
+                        <mat-icon class="example-icon">add_circle</mat-icon> Proponer acciones
+                      </button>
+                      <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip="Aprovar acciones seleccionadas"
+                        (click)="approveActions(analyze)" [ngStyle]="{'color:lightslategray':this.selection.selected.length === 0}" [disabled]="this.selection.selected.length === 0">
+                        <mat-icon>check_circle</mat-icon> Aprobar acciones
+                      </button>
+                      <div>
+                        <ul style="margin-top:0.5em">
+                          <li class="ms-color-wt w3-small">
+                            Solo serán aprobadas las acciones seleccionadas (Este proceso no puede ser revertido)
+                          </li>
+                          <li class="ms-color-wt w3-small">
+                            Al aprobar una acción, se enviarán notificaciones al responsable y personal adicional
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <mat-checkbox *ngIf="actionsNotApproved" (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                        <span [ngStyle]="{'color':actionsNotApproved ? 'lightslategray' : 'white'}">
+                          Seleccionar todo
+                        </span>
+                      </mat-checkbox>
+                      </div>
+                    </div>
+                    <ng-container *ngFor="let row of dataSourceRedosActionsList.data; let i = index">
+                      <mat-toolbar style="background: #333333">
+                        <span class="ms-font-roboto w3-margin-right" style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
+                        <div>
+                          <mat-checkbox *ngIf="!row['approved']" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                            <span [ngStyle]="{'color':!row['approved'] ? 'lightslategray' : 'white'}" style="font-size:0.7em">
+                              Seleccionar para aprobar
+                            </span>
+                          </mat-checkbox>
+                        </div>
+                        <span class="ms-fill"></span>
+                        <button mat-icon-button matTooltip="Borrar acción propuesta"
+                          (click)="deleteAction(row, document)" style="color:white">
+                          <mat-icon>delete</mat-icon>
+                        </button><br>
+                      </mat-toolbar>
+                      
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Acción</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <span class="w3-small">{{row['action']}}</span>
+                        </div>
+                      </div>
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">estado (Acción)</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <span class="w3-small">{{row['approved']?'Acción aprobada':'Por aprobar'}}</span>
+                        </div>
+                      </div>
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Responsable</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <span class="w3-small" style="font-weight:500">{{row['actionResponsible']['displayName']}}</span>
+                          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                            <li class="w3-small">{{row['actionResponsible']['jobTitle']}}</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Personal adicional</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <ng-container *ngFor="let staff of row['additionalStaff']">
+                            <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
+                            <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                              <li class="w3-small">{{staff['jobTitle']}}</li>
+                            </ul>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Estado (Tarea)</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <span class="w3-small">{{row['approved']?row['status']:'***'}}</span>
+                        </div>
+                      </div>
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Fecha de finalización</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <div *ngIf="row['realTerminationDate'] != 0">
+                            <span>{{row['realTerminationDate'] | date : 'dd/MM/yyy'}}</span><br>
+                            <span class="w3-small">{{row['realTerminationDate'] | date : 'hh:mm:ss'}}</span>
+                          </div>
+                          <div *ngIf="row['realTerminationDate'] === 0">
+                            <span>{{'**/**/**'}}</span><br>
+                            <span class="w3-small">{{'**:**:**'}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Validar tarea</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
+                          (click)="validateAction(row, document)" [disabled]="row['status'] != 'Finalizado' || !row['approved']">
+                            <mat-icon>check_circle</mat-icon>
+                          </button><br>
+                        </div>
+                      </div>
 
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Archivo</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <div class="ms-gallery-container">
+                            <a href="{{row['finalPicture']}}" target="_blank"
+                            *ngIf="row['finalPicture']; else defaultPictureAction">
+                              <div style="width:200px;height:120px;padding:6px 6px">
+                                <img src="{{row['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                              </div>
+                            </a>
+                            <ng-template #defaultPictureAction>
+                              <div style="width:200px;height:120px;padding:6px 6px">
+                                <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                                  class="w3-card-4">
+                              </div>
+                            </ng-template>
+                            <a href="{{row['finalPicture2']}}" target="_blank"
+                            *ngIf="row['finalPicture2']">
+                              <div style="width:200px;height:120px;padding:6px 6px">
+                                <img src="{{row['finalPicture2']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                              </div>
+                            </a>
+                            <a href="{{row['finalPicture3']}}" target="_blank"
+                            *ngIf="row['finalPictur3']">
+                              <div style="width:200px;height:120px;padding:6px 6px">
+                                <img src="{{row['finalPictur3']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                              </div>
+                            </a>
+                          </div>
+                          
+                        </div>
+                      </div>
+
+                      <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
+                        <div class="w3-col s6 ms-header-mobile">Archivo</div>
+                        <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                          <a href="{{row['finalArchive']}}" target="_blank"
+                            *ngIf="row['finalArchive']; else defaultPictureAction">
+                            PDF
+                          </a>
+                          <ng-template #defaultPictureAction>
+                            ***
+                          </ng-template>
+                          <a href="{{row['finalArchive2']}}" target="_blank"
+                            *ngIf="row['finalArchive2']">
+                            PDF
+                          </a>
+                          <a href="{{row['finalArchive3']}}" target="_blank"
+                            *ngIf="row['finalArchive3']">
+                            PDF
+                          </a>
+                        </div>
+                      </div>
+
+                    </ng-container>
+                    <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em; background: #191919">
+                      <p class="w3-margin-bottom"> </p>
+                      <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" [matTooltip]="allValidated?'Solicitar cierre de documento':'Necesita que todas las tareas esten validadas para poder hacer una solicitud de cierre'"
+                        (click)="requestClosing(analyze)" [disabled]="!allValidated">
+                        <mat-icon class="example-icon">forward</mat-icon> Solicitar cierre
+                      </button>
+                      <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" [matTooltip]="allSigned?'Cerrar documento':'Necesita que todos los involucrados hayan confirmado el cierre'"
+                        (click)="closeRedo(analyze)" [disabled]="!allSigned">
+                        <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
+                      </button>
+                      <div>
+                        <ul style="margin-top:0.5em">
+                          <li class="ms-color-wt w3-small">
+                            Se enviarán notificaciones a todos los responsables para que confirmen el cierre del rehacer
+                          </li>
+                          <li class="ms-color-wt w3-small">
+                            Después de que todos los responsables hayan confirmado, se habilitará el botón de cierre y pasará a la lista de cerrados
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </mat-tab>
+
                 </mat-tab-group>
                 <mat-toolbar>
                   <span class="ms-fill"></span>
-                  <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardAnalyze(i)">
+                  <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardActions(i)">
                     <mat-icon>keyboard_arrow_up</mat-icon>
                   </button>
                 </mat-toolbar>
@@ -1403,7 +1658,7 @@
 
 
             </ng-container>
-          </div> -->
+          </div>
         </div>
       </ng-template>
     </mat-tab>
