@@ -146,18 +146,27 @@ export class MainComponent implements OnInit {
   }
 
   // REJECT AND CONFIRMATION FOR TASKs CREATED BY REDOs ACTIONS
-  rejectQualityRedoAction(redoId, responsibleId, noteId, actionIndex, actions): void{
-    actions[actionIndex]['status'] = 'Rechazado';
-    this.dbs.qualityRedosCollection.doc(redoId).set({actions:actions}, {merge: true});
-    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(redoId + `${actionIndex}`).update({status: 'Rechazado'});
-    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).set({actionStatus: 'Rechazado', actionsList: actions}, {merge: true});
+  rejectQualityRedoAction(redoId, responsibleId, noteId, taskId): void{
+    this.dbs.qualityRedosCollection.doc(redoId).collection('actions').doc(taskId).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(taskId).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).update({actionStatus: 'Rechazado'});
   }
 
   confirmQualityRedoAction(redoId, responsibleId, noteId, taskId): void{
-
     this.dbs.qualityRedosCollection.doc(redoId).collection('actions').doc(taskId).update({status: 'Confirmado'});
     this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(taskId).update({status: 'Confirmado'});
     this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).update({actionStatus: 'Confirmado'});
+  }
+
+  // REJECT AND CONFIRMATION CLOSING REQUEST
+  rejectRequestClosing(redoId , noteId, signId): void{
+    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({signed: true});
+    this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Rechazado'});
+  }
+
+  confirmRequestClosing(redoId , noteId, signId): void{
+    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({signed: true});
+    this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Confirmado'});
   }
 
 }

@@ -23,26 +23,19 @@ export class QualityRedoActionsConfirmApproveActionsComponent implements OnInit 
   ) { }
 
   ngOnInit() {
-    this.data['selection'].forEach(element => {
-      let index = this.data['redo']['actions'].indexOf(element);
-      if(index > -1){
-        this.data['redo']['actions'][index]['valid'] = true;
-      }
-      
-    });
   }
 
   save(): void{
 
     this.uploading = true;
 
-    this.reportObject = {
-      actions: this.data['redo']['actions']
-    };
-
     this.data['selection'].forEach(element => {
-      this.dbs.qualityRedosCollection.doc(this.data['redo']['id']).collection('actions').doc(element['id']).update({valid: true})
+      this.dbs.qualityRedosCollection.doc(this.data['redo']['id']).collection('actions').doc(element['id']).update({approved: true})
         .then(() => {
+          element['approved'] = true;
+          element['redoId'] = this.data['redo']['id'];
+          element['source'] = 'redo actions';
+          
           // adding task to action responsible
           this.dbs.usersCollection
             .doc(element['actionResponsible']['uid'])
@@ -119,8 +112,8 @@ export class QualityRedoActionsConfirmApproveActionsComponent implements OnInit 
 
     // Creating log object
     let log = {
-      action: 'Adding actions!',
-      data: this.reportObject,
+      action: 'approving actions!',
+      data: this.data['selection'],
       user: this.auth.userCRC,
       regdate: Date.now()
     }

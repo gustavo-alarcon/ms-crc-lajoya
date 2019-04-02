@@ -1,0 +1,29 @@
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">save</mat-icon> Finalizar tarea</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <p class="ms-font-roboto">¿Está seguro de querer finalizar la tarea?</p>
+  <br>
+
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_1 | async" *ngIf="uploading_1"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading_1 && data['img1']">{{uploadPercent_1 | async | number: '.2'}}/100 % ... Subiendo imagen 1</p>
+
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_2 | async" *ngIf="uploading_2"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading_2 && data['img2']">{{uploadPercent_2 | async | number: '.2'}}/100 % ... Subiendo imagen 2</p>
+  
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_3 | async" *ngIf="uploading_3"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading_3 && data['img3']">{{uploadPercent_3 | async | number: '.2'}}/100 % ... Subiendo imagen 3</p>
+
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_4 | async" *ngIf="uploading_4"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading_4 && data['arch1']">{{uploadPercent_4 | async | number: '.2'}}/100 % ... Subiendo archivo 1</p>
+
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_5 | async" *ngIf="uploading_5"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading_5 && data['arch2']">{{uploadPercent_5 | async | number: '.2'}}/100 % ... Subiendo archivo 2</p>
+
+  <mat-progress-bar mode="buffer" [value]="uploadPercent_6 | async" *ngIf="uploading_6"></mat-progress-bar>
+  <p style="font-size:0.8em" *ngIf="uploading_6 && data['arch3']">{{uploadPercent_6 | async | number: '.2'}}/100 % ... Subiendo archivo 3</p>
+
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-raised-button mat-dialog-close color="warn">No</button>
+  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+</mat-dialog-actions>

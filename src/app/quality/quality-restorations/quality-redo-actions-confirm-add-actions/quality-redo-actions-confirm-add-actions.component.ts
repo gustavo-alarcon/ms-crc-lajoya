@@ -40,7 +40,7 @@ export class QualityRedoActionsConfirmAddActionsComponent implements OnInit {
     // Creating log object
     let log = {
       action: 'Adding actions!',
-      data: this.reportObject,
+      data: this.data['actions'],
       user: this.auth.userCRC,
       regdate: Date.now()
     }

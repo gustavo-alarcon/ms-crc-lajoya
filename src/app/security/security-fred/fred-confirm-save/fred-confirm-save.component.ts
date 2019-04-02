@@ -111,7 +111,7 @@ export class FredConfirmSaveComponent implements OnInit {
 
                   this.dbs.addFredLog(refFred.id, log)
                     .then(() => {
-                      this.dialogRef.close();
+                      this.dialogRef.close(true);
                       this.uploading = false;
                     })
                     .catch(error => {

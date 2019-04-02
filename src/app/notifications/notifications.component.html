@@ -84,6 +84,16 @@
                 <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon>
                 Rehacer - Observador de tarea
               </button>
+              <button mat-button class="w3-small ms-color-2b"
+                *ngIf="note['type'] === 'quality redo actions task validated'" disabled="true">
+                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle
+                </mat-icon> Rehacer - Tarea validada
+              </button>
+              <button mat-button class="w3-small ms-color-2b"
+                *ngIf="note['type'] === 'quality redo actions task restaured'" disabled="true">
+                <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">
+                  settings_backup_restore</mat-icon> Rehacer - Tarea restaurada
+              </button>
             </div>
             <span class="ms-fill"></span>
             <div class="w3-hide-small">
@@ -253,6 +263,21 @@
               <span><strong>{{note['senderName']}} </strong> lo asigno como observador de la tarea:
                 <strong>{{note['task']}}</strong> en el componente: <strong>{{note['component']}}</strong>, OT:
                 <strong>{{note['OT']}}</strong></span>
+            </div>
+
+            <!-- REDO ACTIONS TASK STAFF -->
+            <div *ngIf="note['type'] === 'quality redo actions task staff'" class="ms-color-2b" style="padding-left:0.5em">
+              <span><strong>{{note['senderName']}} </strong> lo asigno como observador de la tarea: <strong>{{note['task']}}</strong> en el componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong></span>
+            </div>
+
+              <!-- REDO ACTIONS TASK VALIDATED -->
+            <div *ngIf="note['type'] === 'quality redo actions task validated'" class="ms-color-2b" style="padding-left:0.5em">
+              <span><strong>{{note['senderName']}} </strong> valido la tarea: <strong>{{note['task']}}</strong> en el componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong></span>
+            </div>
+
+            <!-- REDO ACTIONS TASK RESTAURED -->
+            <div *ngIf="note['type'] === 'quality redo actions task restaured'" class="ms-color-2b" style="padding-left:0.5em">
+              <span><strong>{{note['senderName']}} </strong> restauro la tarea: <strong>{{note['task']}}</strong> en el componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>. Ahora puede finalizar nuevamente la tarea</span>
             </div>
 
           </div>

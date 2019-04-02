@@ -1,0 +1,69 @@
+<div class="w3-container">
+  <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
+    <mat-icon style="vertical-align:middle">check_circle</mat-icon> Finalizar tarea
+  </h2>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+
+    <form [formGroup]="taskFormGroup">
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Fotos</h2>
+      
+      <div class="ms-gallery-container w3-margin-bottom">
+        <input #fileInput_1 style="display: none" type="file" (change)="onFileSelected_1($event)">
+        <img  [src]="imageSrc_1 || '../../../assets/images/no-image.png'"
+              style="width:100px; height:75px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+              (click)="fileInput_1.click()">
+
+        <input #fileInput_2 style="display: none" type="file" (change)="onFileSelected_2($event)">
+        <img  [src]="imageSrc_2 || '../../../assets/images/no-image.png'"
+              style="width:100px; height:75px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+              (click)="fileInput_2.click()">
+
+        <input #fileInput_3 style="display: none" type="file" (change)="onFileSelected_3($event)">
+        <img  [src]="imageSrc_3 || '../../../assets/images/no-image.png'"
+              style="width:100px; height:75px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+              (click)="fileInput_3.click()">
+      </div>
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Archivos</h2>
+
+      <div class="ms-gallery-container w3-margin-bottom">
+        <input #fileInput_4 style="display: none" type="file" (change)="onFileSelected_4($event)">
+        <button mat-raised-button color="primary" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+                (click)="fileInput_4.click()"><mat-icon>picture_as_pdf</mat-icon> Subir archivo 1</button>
+        <button mat-stroked-button class="ms-color-bt" *ngIf="selectedFile_4" disabled>{{selectedFile_4? selectedFile_4['name']:''}}</button>
+      </div>
+      <div class="ms-gallery-container w3-margin-bottom">
+        <input #fileInput_5 style="display: none" type="file" (change)="onFileSelected_5($event)">
+        <button mat-raised-button color="primary" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+                (click)="fileInput_5.click()"><mat-icon>picture_as_pdf</mat-icon> Subir archivo 2</button>
+        <button mat-stroked-button class="ms-color-bt" *ngIf="selectedFile_5" disabled>{{selectedFile_5? selectedFile_5['name']:''}}</button>
+      </div>
+      <div class="ms-gallery-container w3-margin-bottom">
+        <input #fileInput_6 style="display: none" type="file" (change)="onFileSelected_6($event)">
+        <button mat-raised-button color="primary" class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+                (click)="fileInput_6.click()"><mat-icon>picture_as_pdf</mat-icon> Subir archivo 3</button>
+        <button mat-stroked-button class="ms-color-bt" *ngIf="selectedFile_6" disabled>{{selectedFile_6? selectedFile_6['name']:''}}</button>
+      </div>
+      <br>
+  
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:575px" appearance="outline">
+        <mat-label>Detalles adicionales</mat-label>
+        <textarea matInput placeholder="Describa ... " rows="4" formControlName="details"></textarea>
+      </mat-form-field>
+      <br>
+
+    </form>
+
+    <p class="w3-margin-bottom"> </p>
+
+  </mat-dialog-content>
+  <mat-dialog-actions class="w3-margin-bottom">
+    <button mat-raised-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-stroked-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
+  </mat-dialog-actions>
+</div>

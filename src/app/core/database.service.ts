@@ -181,6 +181,27 @@ export class DatabaseService {
   public dataQualityInspectionObservations = new BehaviorSubject<any[]>([]);
   public currentDataQualityInspectionObservations = this.dataQualityInspectionObservations.asObservable();
 
+  // -------------------------- TASKS BY REDOS -------------------------------
+  public qualityRedoTasksCollection: AngularFirestoreCollection<any>;
+  public qualityRedoTasks: Array<any> = [];
+
+  public dataQualityRedoTasks = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedoTasks = this.dataQualityRedoTasks.asObservable();
+
+  // -------------------------- TASKS BY INSPECTIONS -------------------------------
+  public qualityInspectionTasksCollection: AngularFirestoreCollection<any>;
+  public qualityInspectionTasks: Array<any> = [];
+
+  public dataQualityInspectionTasks = new BehaviorSubject<any[]>([]);
+  public currentDataQualityInspectionTasks = this.dataQualityInspectionTasks.asObservable();
+
+  // -------------------------- TASKS -------------------------------
+  public qualityTasksCollection: AngularFirestoreCollection<any>;
+  public qualityTasks: Array<any> = [];
+
+  public dataQualityTasks = new BehaviorSubject<any[]>([]);
+  public currentDataQualityTasks = this.dataQualityTasks.asObservable();
+
   // ************************* MAINTENANCE ***************************
   // ------------------------- EQUIPMENTS ----------------------------
   public maintenanceEquipmentsCollection: AngularFirestoreCollection<any>;
@@ -372,6 +393,11 @@ export class DatabaseService {
         this.getQualityCauseClassifications();
         this.getQualityRedos();
         this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
+      }
+
+      // QUALITY - TASKS
+      if(permits['qualitySection'] && permits['qualityTasks']){
+        this.getQualityTasks(actualFromDate.valueOf(), toDate.valueOf());
       }
 
       // MAINTENANCE - REQUESTS
@@ -861,6 +887,22 @@ export class DatabaseService {
       .subscribe(res => {
         this.qualityInspections = res;
         this.dataQualityInspections.next(res);
+      })
+  }
+
+  getQualityTasks(from,to): void{
+    
+    this.qualityTasksCollection = this.afs.collection(`users/${this.auth.userCRC.uid}/tasks`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
+
+    this.qualityTasksCollection.valueChanges()
+      .pipe(
+        map(res => {
+          return res.sort((a,b)=>b['regDate']-a['regDate']);
+        })
+      )
+      .subscribe(res => {
+        this.qualityTasks = res;
+        this.dataQualityTasks.next(res);
       })
   }
 

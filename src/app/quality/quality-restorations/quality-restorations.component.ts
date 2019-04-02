@@ -4,7 +4,7 @@ import { MatSnackBar, MatDialog, MatTableDataSource, MatPaginator, MatSort } fro
 import { RestorationConfirmSaveComponent } from './restoration-confirm-save/restoration-confirm-save.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Observable, Subscription } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, tap } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { QualityRedoReportDialogCreateComponent } from './quality-redo-report-dialog-create/quality-redo-report-dialog-create.component';
 import { QualityRedoReportDialogAnalyzeComponent } from './quality-redo-report-dialog-analyze/quality-redo-report-dialog-analyze.component';
@@ -18,6 +18,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { QualityRedoActionsConfirmDeleteActionComponent } from './quality-redo-actions-confirm-delete-action/quality-redo-actions-confirm-delete-action.component';
 import { QualityRedoActionsDialogAddActionsComponent } from './quality-redo-actions-dialog-add-actions/quality-redo-actions-dialog-add-actions.component';
 import { QualityRedoActionsConfirmApproveActionsComponent } from './quality-redo-actions-confirm-approve-actions/quality-redo-actions-confirm-approve-actions.component';
+import { QualityRedoActionsConfirmValidateComponent } from './quality-redo-actions-confirm-validate/quality-redo-actions-confirm-validate.component';
+import { QualityRedoActionsConfirmResetComponent } from './quality-redo-actions-confirm-reset/quality-redo-actions-confirm-reset.component';
+import { QualityRedoActionsDialogRequestClosingComponent } from './quality-redo-actions-dialog-request-closing/quality-redo-actions-dialog-request-closing.component';
 
 @Component({
   selector: 'app-quality-restorations',
@@ -45,7 +48,7 @@ import { QualityRedoActionsConfirmApproveActionsComponent } from './quality-redo
     ]),
     trigger('openCloseContent',[
       state('openContent', style({
-        maxHeight: '2000px',
+        maxHeight: '20000px',
         opacity: 1,
         marginBottom: '1em'
       })),
@@ -174,6 +177,7 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
   currentTab = new FormControl(0);
   currentAnalyzeTab = new FormControl(1);
+  currentActionsTab = new FormControl(2);
 
   monthsKey: Array<string> = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   monthIndex: number;
@@ -197,7 +201,7 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   dataSourceRedosActions = new MatTableDataSource();
   dataSourceRedosActionsPanel = new MatTableDataSource();
 
-  displayedColumnsActionsList: string[] = ['select', 'index', 'action', 'valid', 'responsible', 'additionalStaff', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'edit'];
+  displayedColumnsActionsList: string[] = ['select', 'index', 'action', 'approved', 'responsible', 'additionalStaff', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'valid', 'delete'];
   dataSourceRedosActionsList = new MatTableDataSource();
 
   displayedColumnsClosed: string[] = ['index', 'date', 'initialPicture', 'createdBy', 'area', 'equipment', 'priority', 'observation', 'status', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
@@ -211,7 +215,14 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
   filteredQualityRedosReports: Array<any> = [];
 
+  mobileActionsList: Array<any> = [];
+
   selection = new SelectionModel(true, []);
+  actionsNotApproved: number = 0;
+  validatedActions: number = 0;
+
+  allValidated: boolean = false;
+  allSigned: boolean = false;
 
   subscriptions: Array<Subscription> = [];
 
@@ -259,6 +270,8 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
                                       this.isOpenActions.push(false);
                                     })
                                   });
+
+    
 
     this.subscriptions.push(dataQualityReportsSubs);
     this.subscriptions.push(dataQualityAnalyzeSubs);
@@ -366,16 +379,37 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
     let actionsSubs= this.dbs.qualityRedosCollection.doc(data['id']).collection('actions').valueChanges()
                         .pipe(
+                          tap(res => {
+                            this.actionsNotApproved = 0;
+                            this.validatedActions = 0;
+                            this.selection.clear()
+                            this.allValidated = false;
+                            this.allSigned = false;
+                            res.forEach(element => {
+                              if(!element['approved']){
+                                this.actionsNotApproved++
+                              }
+                              if(element['valid']){
+                                this.validatedActions++;
+                              }
+                            })
+
+                            if(this.validatedActions === res.length){
+                              this.allValidated = true;
+                            }
+                          }),
                           map(res => {
                             return res.sort((b,a)=>b['regDate']-a['regDate']);
                           })
                         )
                         .subscribe(res => {
+                          this.mobileActionsList = res;
                           this.dataSourceRedosActionsList.data = res;
                         })
     
     this.subscriptions.push(actionsSubs);
     // this.dataSourceRedosActionsList.data = data['actions'];
+    this.checkSign(data);
 
 
   }
@@ -501,15 +535,19 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSourceRedosActionsList.data.length;
-    return numSelected === numRows;
+    //const numRows = this.dataSourceRedosActionsList.data.length;
+    return numSelected === this.actionsNotApproved;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.dataSourceRedosActionsList.data.forEach(row => this.selection.select(row));
+        this.dataSourceRedosActionsList.data.forEach(row => {
+          if(!row['approved']){
+            this.selection.select(row)
+          }
+        });
   }
 
   /** The label for the checkbox on the passed row */
@@ -520,12 +558,11 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  deleteAction(index, redo): void{
-    this.dataSourceRedosActionsList.data.splice(index,1);
+  deleteAction(action, redo): void{
     this.dialog.open(QualityRedoActionsConfirmDeleteActionComponent,{
       data: {
         redo: redo,
-        actions: this.dataSourceRedosActionsList.data
+        action: action
       }
     })
   }
@@ -545,6 +582,60 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
       },
       autoFocus: false
     })
+  }
+
+  validateAction(task, redo): void{
+    this.dialog.open(QualityRedoActionsConfirmValidateComponent, {
+      data:{
+        task: task,
+        redo: redo
+      }
+    })
+  }
+
+  resetAction(task, redo): void{
+    this.dialog.open(QualityRedoActionsConfirmResetComponent, {
+      data:{
+        task: task,
+        redo: redo
+      }
+    })
+  }
+
+  requestClosing(redo): void{
+    let dialogRef =this.dialog.open(QualityRedoActionsDialogRequestClosingComponent, {
+      data: {
+        redo: redo
+      }
+    })
+
+    dialogRef.afterClosed().subscribe( res => {
+      if(res){
+        dialogRef.close();
+      }
+    })
+  }
+
+  checkSign(redo): void{
+    let signingListSubs = this.dbs.qualityRedosCollection.doc(redo['id']).collection('signing').valueChanges().subscribe( res => {
+      if(res.length){
+        let counter = 0;
+        this.allSigned = false;
+        res.forEach(element => {
+          if(element['signed']){
+            counter++;
+          }
+        })
+
+        if(counter === res.length){
+          this.allSigned = true;
+        }
+      }
+    })
+  }
+
+  closeRedo(redo): void {
+    
   }
 
 }
