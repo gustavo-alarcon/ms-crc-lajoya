@@ -9,6 +9,8 @@ export class SystemComponent implements OnInit {
 
   generalOpenedFlag: boolean;
   securityOpenedFlag: boolean;
+  qualityOpenedFlag: boolean;
+  
 
   constructor() { }
 
@@ -29,6 +31,14 @@ export class SystemComponent implements OnInit {
 
   securityClosed(): void{
     this.securityOpenedFlag = false;
+  }
+
+  qualityOpened(): void{
+    this.qualityOpenedFlag = true;
+  }
+
+  qualityClosed(): void{
+    this.qualityOpenedFlag = false;
   }
 
 }

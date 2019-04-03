@@ -1,0 +1,83 @@
+<div class="w3-section">
+  <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED</h2>
+  <div class="ms-config-wraper">
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Orden y limpieza</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="subAct1FormControl" placeholder="Escriba..." (keyup.enter)="addSubAct1()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataSubstandard1 | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteSubAct1(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Equipos de protección personal</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="subAct2FormControl" placeholder="Escriba..." (keyup.enter)="addSubAct2()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataSubstandard2 | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteSubAct2(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Control de riesgos operacionales</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="subAct3FormControl" placeholder="Escriba..." (keyup.enter)="addSubAct3()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataSubstandard3 | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteSubAct3(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Herramientas y equipos</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="subAct4FormControl" placeholder="Escriba..." (keyup.enter)="addSubAct4()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataSubstandard4 | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteSubAct4(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Riesgos críticos</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="subAct5FormControl" placeholder="Escriba..." (keyup.enter)="addSubAct5()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataSubstandard5 | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteSubAct4(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+  
+  
+</div>    

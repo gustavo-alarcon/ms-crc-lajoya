@@ -25,6 +25,8 @@ import { UsersComponent } from './configuration/users/users.component';
 import { SystemComponent } from './configuration/system/system.component';
 import { UsersPermitListComponent } from './configuration/users/users-permit-list/users-permit-list.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { ConfigSecurityFredComponent } from './configuration/system/config-security-fred/config-security-fred.component';
+import { ConfigQualityRedosComponent } from './configuration/system/config-quality-redos/config-quality-redos.component';
 
 const routes: Routes = [
   
@@ -104,6 +106,12 @@ const routes: Routes = [
               {
                 path: 'areas', component: SystemGeneralAreaComponent
               },
+              {
+                path: 'config-security-fred', component: ConfigSecurityFredComponent,
+              },
+              {
+                path: 'config-quality-redos', component: ConfigQualityRedosComponent,
+              }
             ]
           }
         ]

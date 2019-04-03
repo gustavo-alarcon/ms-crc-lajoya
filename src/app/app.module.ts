@@ -148,6 +148,8 @@ import { QualityTasksConfirmFinalizeComponent } from './quality/quality-tasks/qu
 import { QualityRedoActionsConfirmValidateComponent } from './quality/quality-restorations/quality-redo-actions-confirm-validate/quality-redo-actions-confirm-validate.component';
 import { QualityRedoActionsConfirmResetComponent } from './quality/quality-restorations/quality-redo-actions-confirm-reset/quality-redo-actions-confirm-reset.component';
 import { QualityRedoActionsDialogRequestClosingComponent } from './quality/quality-restorations/quality-redo-actions-dialog-request-closing/quality-redo-actions-dialog-request-closing.component';
+import { ConfigSecurityFredComponent } from './configuration/system/config-security-fred/config-security-fred.component';
+import { ConfigQualityRedosComponent } from './configuration/system/config-quality-redos/config-quality-redos.component';
 
 
 
@@ -243,7 +245,9 @@ import { QualityRedoActionsDialogRequestClosingComponent } from './quality/quali
     QualityTasksConfirmFinalizeComponent,
     QualityRedoActionsConfirmValidateComponent,
     QualityRedoActionsConfirmResetComponent,
-    QualityRedoActionsDialogRequestClosingComponent
+    QualityRedoActionsDialogRequestClosingComponent,
+    ConfigSecurityFredComponent,
+    ConfigQualityRedosComponent
     
   ],
   imports: [

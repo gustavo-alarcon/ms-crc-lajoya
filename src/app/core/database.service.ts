@@ -385,14 +385,15 @@ export class DatabaseService {
 
       // QUALITY - REDOS
       if(permits['qualitySection'] && permits['qualityRedos']){
-        this.getQualityRedoTypes();
+        // getting configuration values
         this.getQualityComponents();
+        this.getQualityRedoTypes();
         this.getQualityComponentModels();
         this.getQualityRepairTypes();
         this.getQualityRootCauses();
         this.getQualityCauseClassifications();
-        this.getQualityRedos();
-        this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
+        // getting collections
+        this.getQualityRedos(actualFromDate.valueOf(), toDate.valueOf());
       }
 
       // QUALITY - TASKS
@@ -745,7 +746,7 @@ export class DatabaseService {
 
   // *************** QUALITY METHODS
   getQualityComponents(): void{
-    this.qualityComponentsCollection = this.afs.collection(`db/systemConfigurations/qualityComponents`, ref => ref.orderBy('regDate','asc'));
+    this.qualityComponentsCollection = this.afs.collection(`db/systemConfigurations/qualityComponents`, ref => ref.orderBy('regDate','desc'));
     this.qualityComponentsCollection.valueChanges().subscribe(res => {
       this.qualityComponents = res;
       this.dataQualityComponents.next(res);
@@ -753,7 +754,7 @@ export class DatabaseService {
   }
 
   getQualityRedoTypes(): void{
-    this.qualityRedoTypesCollection = this.afs.collection(`db/systemConfigurations/qualityRedoTypes`, ref => ref.orderBy('regDate','asc'));
+    this.qualityRedoTypesCollection = this.afs.collection(`db/systemConfigurations/qualityRedoTypes`, ref => ref.orderBy('regDate','desc'));
     this.qualityRedoTypesCollection.valueChanges().subscribe(res => {
       this.qualityRedoTypes = res;
       this.dataQualityRedoTypes.next(res);
@@ -761,7 +762,7 @@ export class DatabaseService {
   }
 
   getQualityComponentModels(): void{
-    this.qualityComponentModelsCollection = this.afs.collection(`db/systemConfigurations/qualityComponentModels`, ref => ref.orderBy('regDate','asc'));
+    this.qualityComponentModelsCollection = this.afs.collection(`db/systemConfigurations/qualityComponentModels`, ref => ref.orderBy('regDate','desc'));
     this.qualityComponentModelsCollection.valueChanges().subscribe(res => {
       this.qualityComponentModels = res;
       this.dataQualityComponentModels.next(res);
@@ -769,7 +770,7 @@ export class DatabaseService {
   }
 
   getQualityRepairTypes(): void{
-    this.qualityRepairTypesCollection = this.afs.collection(`db/systemConfigurations/qualityRepairTypes`, ref => ref.orderBy('regDate','asc'));
+    this.qualityRepairTypesCollection = this.afs.collection(`db/systemConfigurations/qualityRepairTypes`, ref => ref.orderBy('regDate','desc'));
     this.qualityRepairTypesCollection.valueChanges().subscribe(res => {
       this.qualityRepairTypes = res;
       this.dataQualityRepairTypes.next(res);
@@ -777,7 +778,7 @@ export class DatabaseService {
   }
 
   getQualityRootCauses(): void{
-    this.qualityRootCausesCollection = this.afs.collection(`db/systemConfigurations/qualityRootCauses`, ref => ref.orderBy('regDate','asc'));
+    this.qualityRootCausesCollection = this.afs.collection(`db/systemConfigurations/qualityRootCauses`, ref => ref.orderBy('regDate','desc'));
     this.qualityRootCausesCollection.valueChanges().subscribe(res => {
       this.qualityRootCauses = res;
       this.dataQualityRootCauses.next(res);
@@ -785,15 +786,15 @@ export class DatabaseService {
   }
 
   getQualityCauseClassifications(): void{
-    this.qualityCauseClassificationsCollection = this.afs.collection(`db/systemConfigurations/qualityCauseClassifications`, ref => ref.orderBy('regDate','asc'));
+    this.qualityCauseClassificationsCollection = this.afs.collection(`db/systemConfigurations/qualityCauseClassifications`, ref => ref.orderBy('regDate','desc'));
     this.qualityCauseClassificationsCollection.valueChanges().subscribe(res => {
       this.qualityCauseClassifications = res;
       this.dataQualityCauseClassifications.next(res);
     });
   }
 
-  getQualityRedos(): void{
-    this.qualityRedosCollection = this.afs.collection(`db/crcLaJoya/qualityRedos`, ref => ref.orderBy('regDate', 'desc'));
+  getQualityRedos(from?,to?): void{
+    this.qualityRedosCollection = this.afs.collection(`db/crcLaJoya/qualityRedos`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
     this.qualityRedosCollection.valueChanges()
     .pipe(
       tap(res => {
@@ -803,8 +804,11 @@ export class DatabaseService {
 
         res.forEach(element => {
 
-          if(element['stage'] === 'Reporte' && (element['uidSupervisor'] === this.auth.userCRC.uid || element['uidCreator'] === this.auth.userCRC.uid)){
-            reportList.push(element);
+          // check if redo is on report stage
+          if(element['stage'] === 'Reporte'){
+            if(element['uidSupervisor'] === this.auth.userCRC.uid || element['uidCreator'] === this.auth.userCRC.uid){
+              reportList.push(element);
+            }
           }
 
           if(element['stage'] === 'Analizar'){
@@ -852,6 +856,9 @@ export class DatabaseService {
         this.qualityRedosActions = actionsList;
         this.dataQualityRedosActions.next(actionsList);
       }),
+      map(res => {
+        return res.sort((a,b)=>b['regDate']-a['regDate']);
+      })
     )
     .subscribe(res => {
       this.qualityRedos = res;
