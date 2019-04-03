@@ -1563,37 +1563,45 @@
                         <div class="w3-col s6 ms-header-mobile">Validar tarea</div>
                         <div class="w3-col s6" style="padding: 0.5em 0.5em">
                           <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
-                          (click)="validateAction(row, document)" [disabled]="row['status'] != 'Finalizado' || !row['approved']">
-                            <mat-icon>check_circle</mat-icon>
+                            (click)="validateAction(row, analyze)"
+                            [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                            *ngIf="!row['valid']">
+                            <mat-icon>check_circle</mat-icon> Validar
+                          </button><br>
+                          <button mat-raised-button color="warn" matTooltip="Validar el cumplimiento de la tarea"
+                            (click)="resetAction(row, analyze)"
+                            [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                            *ngIf="row['valid']">
+                            <mat-icon>settings_backup_restore</mat-icon> Restaurar
                           </button><br>
                         </div>
                       </div>
 
                       <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                        <div class="w3-col s6 ms-header-mobile">Archivo</div>
+                        <div class="w3-col s6 ms-header-mobile">Fotos</div>
                         <div class="w3-col s6" style="padding: 0.5em 0.5em">
                           <div class="ms-gallery-container">
                             <a href="{{row['finalPicture']}}" target="_blank"
                             *ngIf="row['finalPicture']; else defaultPictureAction">
-                              <div style="width:200px;height:120px;padding:6px 6px">
+                              <div style="width:150px;height:90px;padding:6px 6px">
                                 <img src="{{row['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
                               </div>
                             </a>
                             <ng-template #defaultPictureAction>
-                              <div style="width:200px;height:120px;padding:6px 6px">
+                              <div style="width:150px;height:90px;;padding:6px 6px">
                                 <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
                                   class="w3-card-4">
                               </div>
                             </ng-template>
                             <a href="{{row['finalPicture2']}}" target="_blank"
                             *ngIf="row['finalPicture2']">
-                              <div style="width:200px;height:120px;padding:6px 6px">
+                              <div style="width:150px;height:90px;;padding:6px 6px">
                                 <img src="{{row['finalPicture2']}}" style="max-width:100%;height:100%" class="w3-card-4">
                               </div>
                             </a>
                             <a href="{{row['finalPicture3']}}" target="_blank"
                             *ngIf="row['finalPictur3']">
-                              <div style="width:200px;height:120px;padding:6px 6px">
+                              <div style="width:150px;height:90px;;padding:6px 6px">
                                 <img src="{{row['finalPictur3']}}" style="max-width:100%;height:100%" class="w3-card-4">
                               </div>
                             </a>

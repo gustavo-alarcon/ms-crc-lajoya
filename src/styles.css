@@ -164,4 +164,14 @@ th.mat-header-cell{
     align-items: center;
 }
 
+.ms-config-wraper{
+    display: flex;
+    justify-content: stretch;
+    flex-wrap: wrap;
+}
+
+.ms-config-wraper div{
+    flex: 1 1 auto;
+}
+
 

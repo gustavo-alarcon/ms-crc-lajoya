@@ -1,0 +1,104 @@
+<div class="w3-section">
+    <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">repeat</mat-icon> Rehaceres</h2>
+    <div class="ms-config-wraper">
+  
+      <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+        <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Reporte - Componentes</h2>
+        <mat-form-field color="primary" class="w3-block">
+          <mat-label>Agregar</mat-label>
+          <input matInput type="text" [formControl]="qualityComponentsFormControl" placeholder="Escriba..." (keyup.enter)="addQualityComponent()">
+        </mat-form-field>
+        <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityComponents"></mat-progress-bar>
+        <ng-container *ngFor="let item of dbs.currentDataQualityComponents | async">
+          <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+            <p class="w3-margin-left">{{item['name']}}</p>
+            <span class="ms-fill"></span>
+            <button mat-icon-button color="warn" (click)="deleteQualityComponent(item['id'])"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-container>
+      </div>
+  
+      <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+        <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Analizar - Tipo de Rehacer</h2>
+        <mat-form-field color="primary" class="w3-block">
+          <mat-label>Agregar</mat-label>
+          <input matInput type="text" [formControl]="qualityRedoTypesFormControl" placeholder="Escriba..." (keyup.enter)="addQualityRedoType()">
+        </mat-form-field>
+        <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityRedoTypes"></mat-progress-bar>
+        <ng-container *ngFor="let item of dbs.currentDataQualityRedoTypes | async">
+          <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+            <p class="w3-margin-left">{{item['name']}}</p>
+            <span class="ms-fill"></span>
+            <button mat-icon-button color="warn" (click)="deleteQualityRedoType(item['id'])"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+        <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Analizar - Modelos de componente</h2>
+        <mat-form-field color="primary" class="w3-block">
+          <mat-label>Agregar</mat-label>
+          <input matInput type="text" [formControl]="qualityComponentModelsFormControl" placeholder="Escriba..." (keyup.enter)="addQualityComponentModel()">
+        </mat-form-field>
+        <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityComponentModels"></mat-progress-bar>
+        <ng-container *ngFor="let item of dbs.currentDataQualityComponentModels | async">
+          <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+            <p class="w3-margin-left">{{item['name']}}</p>
+            <span class="ms-fill"></span>
+            <button mat-icon-button color="warn" (click)="deleteQualityComponentModel(item['id'])"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+        <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Analizar - Tipos de reparación</h2>
+        <mat-form-field color="primary" class="w3-block">
+          <mat-label>Agregar</mat-label>
+          <input matInput type="text" [formControl]="qualityRepairTypesFormControl" placeholder="Escriba..." (keyup.enter)="addQualityRepairType()">
+        </mat-form-field>
+        <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityRepairTypes"></mat-progress-bar>
+        <ng-container *ngFor="let item of dbs.currentDataQualityRepairTypes | async">
+          <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+            <p class="w3-margin-left">{{item['name']}}</p>
+            <span class="ms-fill"></span>
+            <button mat-icon-button color="warn" (click)="deleteQualityRepairType(item['id'])"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+        <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Analizar - Causas raíz</h2>
+        <mat-form-field color="primary" class="w3-block">
+          <mat-label>Agregar</mat-label>
+          <input matInput type="text" [formControl]="qualityRootCausesFormControl" placeholder="Escriba..." (keyup.enter)="addQualityRootCause()">
+        </mat-form-field>
+        <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityRootCauses"></mat-progress-bar>
+        <ng-container *ngFor="let item of dbs.currentDataQualityRootCauses | async">
+          <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+            <p class="w3-margin-left">{{item['name']}}</p>
+            <span class="ms-fill"></span>
+            <button mat-icon-button color="warn" (click)="deleteQualityRootCause(item['id'])"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+        <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Analizar - Clasificación de causas</h2>
+        <mat-form-field color="primary" class="w3-block">
+          <mat-label>Agregar</mat-label>
+          <input matInput type="text" [formControl]="qualityCauseClassificationsFormControl" placeholder="Escriba..." (keyup.enter)="addQualityCauseClassification()">
+        </mat-form-field>
+        <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityCauseClassifications"></mat-progress-bar>
+        <ng-container *ngFor="let item of dbs.currentDataQualityCauseClassifications | async">
+          <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+            <p class="w3-margin-left">{{item['name']}}</p>
+            <span class="ms-fill"></span>
+            <button mat-icon-button color="warn" (click)="deleteQualityCauseClassification(item['id'])"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-container>
+      </div>
+  
+    </div>
+    
+    
+  </div>    

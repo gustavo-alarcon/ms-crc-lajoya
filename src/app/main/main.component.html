@@ -77,28 +77,29 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <button mat-button *ngIf="auth.permits['securityDashboard']"
+          <!-- <button mat-button *ngIf="auth.permits['securityDashboard']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/dashboard"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
             Dashboard
-          </button><br>
+          </button> -->
           <button mat-button *ngIf="auth.permits['securityFred']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/fred"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assistant</mat-icon> FRED
-          </button><br>
+          </button>
           <button mat-button *ngIf="auth.permits['securityInspections']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/inspections"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment_turned_in
             </mat-icon> Inspecciones
-          </button><br>
+          </button>
           <button mat-button *ngIf="auth.permits['securityTasks']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/tasks"
             style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment</mat-icon> Tareas
-          </button><br>
+          </button>
+          <p class="w3-margin-bottom"></p>
 
         </mat-expansion-panel>
 
@@ -113,34 +114,29 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <button mat-button *ngIf="auth.permits['qualityDashboard']"
+          <!-- <button mat-button *ngIf="auth.permits['qualityDashboard']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/dashboard"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
             Dashboard
-          </button><br>
+          </button> -->
           <button mat-button *ngIf="auth.permits['qualityRedos']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/restorations"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">repeat</mat-icon> Rehaceres
-          </button><br>
-          <button mat-button *ngIf="auth.permits['qualityUpgrades']"
-            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/upgrades"
-            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
-            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">grade</mat-icon> Op. de
-            Mejora
-          </button><br>
+          </button>
           <button mat-button *ngIf="auth.permits['qualityInspections']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/inspections"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment_turned_in
             </mat-icon> Inspecciones
-          </button><br>
+          </button>
           <button mat-button *ngIf="auth.permits['qualityTasks']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/tasks"
-            style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
+            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">assignment</mat-icon> Tareas
-          </button><br>
+          </button>
+          <p class="w3-margin-bottom"></p>
 
         </mat-expansion-panel>
         <mat-expansion-panel *ngIf="auth.permits['maintenanceSection']"
@@ -153,17 +149,18 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <button mat-button *ngIf="auth.permits['maintenanceDashboard']"
+          <!-- <button mat-button *ngIf="auth.permits['maintenanceDashboard']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber"
             routerLink="maintenance/dashboard" style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
             Dashboard
-          </button><br>
+          </button><br> -->
           <button mat-button *ngIf="auth.permits['maintenanceRequests']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="maintenance/requests"
             style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">inbox</mat-icon> Solicitudes
-          </button><br>
+          </button>
+          <p class="w3-margin-bottom"></p>
 
         </mat-expansion-panel>
         <mat-expansion-panel *ngIf="auth.permits['ssggSection']"
@@ -175,17 +172,18 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <button mat-button *ngIf="auth.permits['ssggDashboard']"
+          <!-- <button mat-button *ngIf="auth.permits['ssggDashboard']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="ssgg/dashboard"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
             Dashboard
-          </button><br>
+          </button><br> -->
           <button mat-button *ngIf="auth.permits['ssggRequests']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="ssgg/requests"
             style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
             <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">inbox</mat-icon> Solicitudes
-          </button><br>
+          </button>
+          <p class="w3-margin-bottom"></p>
 
         </mat-expansion-panel>
       </div>
@@ -411,8 +409,8 @@
 
           <!-- REDO ACTIONS CLOSING REQUEST -->
           <div *ngIf="note['type'] === 'quality redo actions request closing'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}} </strong> solicito su confirmación para el cierre del rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>. Bajo el concepto de: <strong>{{note['kind']}}</strong></span>
-            <p  [ngClass]="{'w3-border-green w3-text-green': note['actionStatus']==='Confirmado', 'w3-border-red w3-text-red': note['actionStatus']==='Rechazado'}"
+            <span><strong>{{note['senderName']}} </strong> solicito su confirmación para el cierre del rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>. Bajo el concepto de: <strong>{{note['kind']}}</strong></span><br>
+            <p  [ngClass]="{'w3-border-green w3-text-green': note['requestStatus']==='Confirmado', 'w3-border-red w3-text-red': note['requestStatus']==='Rechazado'}"
                 *ngIf="note['requestStatus'] != 'Por confirmar'"
                 class="w3-border"
                 style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['requestStatus']}}</p>

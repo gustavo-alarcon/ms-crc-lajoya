@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/core/database.service';
 import { AuthService } from 'src/app/core/auth.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-quality-redo-actions-dialog-request-closing',
@@ -17,11 +18,15 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit {
   
   subcription: Array<Subscription> = [];
 
+  signingArray: Array<any> = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dbs: DatabaseService,
     public auth: AuthService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    public dialog: MatDialogRef<QualityRedoActionsDialogRequestClosingComponent>,
+    public af: AngularFirestore
 
   ) { }
 
@@ -35,7 +40,23 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit {
                             })
   }
 
+  prepareCollection(): void{
+    this.dbs.qualityRedosCollection
+    .doc(this.data['redo']['id'])
+    .collection('signing')
+    .get().forEach(snap => {
+      this.signingArray = snap.docs;
+    })
+
+    this.signingArray.forEach(doc => {
+      this.af.doc(doc.ref.path).delete();
+      this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(doc.ref.id).delete();
+    })
+  }
+
   request(): void{
+
+    
 
     this.dbs.qualityRedosCollection
       .doc(this.data['redo']['id'])
@@ -63,6 +84,10 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit {
           })
             .then(ref => {
               ref.update({id: ref.id})
+              this.dialog.close(true);
+              this.snackbar.open("Listo!","Cerrar", {
+                duration: 6000
+              })
             })
             .catch(error => {
               console.log(error);
