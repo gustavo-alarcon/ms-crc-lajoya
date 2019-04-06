@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 // CRC SERVICES
 import { AuthService } from './core/auth.service';
 import { DatabaseService } from './core/database.service';
+import { SidenavService } from './core/sidenav.service';
 
 // THIRD PARTY PACKAGES
 import { TimeAgoPipe } from 'time-ago-pipe';
@@ -150,6 +151,19 @@ import { QualityRedoActionsConfirmResetComponent } from './quality/quality-resto
 import { QualityRedoActionsDialogRequestClosingComponent } from './quality/quality-restorations/quality-redo-actions-dialog-request-closing/quality-redo-actions-dialog-request-closing.component';
 import { ConfigSecurityFredComponent } from './configuration/system/config-security-fred/config-security-fred.component';
 import { ConfigQualityRedosComponent } from './configuration/system/config-quality-redos/config-quality-redos.component';
+import { QualityRedosActionsConfirmRequestClosingComponent } from './quality/quality-restorations/quality-redos-actions-confirm-request-closing/quality-redos-actions-confirm-request-closing.component';
+import { QualityRedosActionsConfirmResendComponent } from './quality/quality-restorations/quality-redos-actions-confirm-resend/quality-redos-actions-confirm-resend.component';
+import { ConfigurationNotificationsComponent } from './configuration/configuration-notifications/configuration-notifications.component';
+import { ConfigNotificationsSecurityComponent } from './configuration/configuration-notifications/config-notifications-security/config-notifications-security.component';
+import { ConfigNotificationsQualityComponent } from './configuration/configuration-notifications/config-notifications-quality/config-notifications-quality.component';
+import { ConfigNotificationsMaintenanceComponent } from './configuration/configuration-notifications/config-notifications-maintenance/config-notifications-maintenance.component';
+import { ConfigNotificationsSsggComponent } from './configuration/configuration-notifications/config-notifications-ssgg/config-notifications-ssgg.component';
+import { SystemaGeneralAreaConfirmDeleteComponent } from './configuration/system/system-general-area/systema-general-area-confirm-delete/systema-general-area-confirm-delete.component';
+import { QualityRedosClosingConfirmClosingComponent } from './quality/quality-restorations/quality-redos-closing-confirm-closing/quality-redos-closing-confirm-closing.component';
+import { UsersDialogAssignAreaComponent } from './configuration/users/users-dialog-assign-area/users-dialog-assign-area.component';
+import { UsersPermitConfirmDeleteComponent } from './configuration/users-permit-list/users-permit-confirm-delete/users-permit-confirm-delete.component';
+import { UsersPermitDialogEditComponent } from './configuration/users-permit-list/users-permit-dialog-edit/users-permit-dialog-edit.component';
+import { UsersPermitConfirmEditComponent } from './configuration/users-permit-list/users-permit-confirm-edit/users-permit-confirm-edit.component';
 
 
 
@@ -247,7 +261,20 @@ import { ConfigQualityRedosComponent } from './configuration/system/config-quali
     QualityRedoActionsConfirmResetComponent,
     QualityRedoActionsDialogRequestClosingComponent,
     ConfigSecurityFredComponent,
-    ConfigQualityRedosComponent
+    ConfigQualityRedosComponent,
+    QualityRedosActionsConfirmRequestClosingComponent,
+    QualityRedosActionsConfirmResendComponent,
+    ConfigurationNotificationsComponent,
+    ConfigNotificationsSecurityComponent,
+    ConfigNotificationsQualityComponent,
+    ConfigNotificationsMaintenanceComponent,
+    ConfigNotificationsSsggComponent,
+    SystemaGeneralAreaConfirmDeleteComponent,
+    QualityRedosClosingConfirmClosingComponent,
+    UsersDialogAssignAreaComponent,
+    UsersPermitConfirmDeleteComponent,
+    UsersPermitDialogEditComponent,
+    UsersPermitConfirmEditComponent
     
   ],
   imports: [
@@ -297,6 +324,7 @@ import { ConfigQualityRedosComponent } from './configuration/system/config-quali
   providers: [
     AuthService,
     DatabaseService,
+    SidenavService,
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { showError: true }
@@ -364,7 +392,15 @@ import { ConfigQualityRedosComponent } from './configuration/system/config-quali
     QualityTasksConfirmFinalizeComponent,
     QualityRedoActionsConfirmValidateComponent,
     QualityRedoActionsConfirmResetComponent,
-    QualityRedoActionsDialogRequestClosingComponent
+    QualityRedoActionsDialogRequestClosingComponent,
+    QualityRedosActionsConfirmRequestClosingComponent,
+    QualityRedosActionsConfirmResendComponent,
+    SystemaGeneralAreaConfirmDeleteComponent,
+    QualityRedosClosingConfirmClosingComponent,
+    UsersDialogAssignAreaComponent,
+    UsersPermitConfirmDeleteComponent,
+    UsersPermitDialogEditComponent,
+    UsersPermitConfirmEditComponent
   ],
   bootstrap: [AppComponent]
 })

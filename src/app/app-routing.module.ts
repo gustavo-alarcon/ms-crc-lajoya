@@ -27,6 +27,11 @@ import { UsersPermitListComponent } from './configuration/users/users-permit-lis
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ConfigSecurityFredComponent } from './configuration/system/config-security-fred/config-security-fred.component';
 import { ConfigQualityRedosComponent } from './configuration/system/config-quality-redos/config-quality-redos.component';
+import { ConfigurationNotificationsComponent } from './configuration/configuration-notifications/configuration-notifications.component';
+import { ConfigNotificationsSecurityComponent } from './configuration/configuration-notifications/config-notifications-security/config-notifications-security.component';
+import { ConfigNotificationsQualityComponent } from './configuration/configuration-notifications/config-notifications-quality/config-notifications-quality.component';
+import { ConfigNotificationsMaintenanceComponent } from './configuration/configuration-notifications/config-notifications-maintenance/config-notifications-maintenance.component';
+import { ConfigNotificationsSsggComponent } from './configuration/configuration-notifications/config-notifications-ssgg/config-notifications-ssgg.component';
 
 const routes: Routes = [
   
@@ -111,6 +116,26 @@ const routes: Routes = [
               },
               {
                 path: 'config-quality-redos', component: ConfigQualityRedosComponent,
+              }
+            ]
+          },
+          {
+            path: 'notifications', component: ConfigurationNotificationsComponent,
+            children:[
+              {
+                path: '', component: ConfigNotificationsSecurityComponent
+              },
+              {
+                path: 'config-notifications-security', component: ConfigNotificationsSecurityComponent,
+              },
+              {
+                path: 'config-notifications-quality', component: ConfigNotificationsQualityComponent,
+              },
+              {
+                path: 'config-notifications-maintenance', component: ConfigNotificationsMaintenanceComponent,
+              },
+              {
+                path: 'config-notifications-ssgg', component: ConfigNotificationsSsggComponent,
               }
             ]
           }

@@ -223,6 +223,12 @@
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo report supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Reporte
             </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo report technician'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Reporte
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo report quality supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Reporte
+            </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo analyze supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Análisis
             </button>
@@ -230,6 +236,12 @@
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Análisis
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo analyze responsible staff'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Análisis
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo analyze technician'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Análisis
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo analyze quality supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">repeat</mat-icon> Rehacer - Análisis
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo actions supervisor'" disabled="true">
@@ -324,6 +336,7 @@
           <div *ngIf="note['type'] === 'inspection staff'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> lo programo para inspeccionar el área: <strong>{{note['areaName']}}</strong>, supervisada por: <strong>{{note['areaSupervisorName']}}</strong>. Debe realizar la inspección el <strong>{{ note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
           </div>
+
           <!-- REDO REPORT CONFIRMATION SUPERVISOR -->
           <div *ngIf="note['type'] === 'quality redo report supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}}</strong>, abrio el siguiente rehacer en su área:</span><br>
@@ -348,6 +361,33 @@
                 *ngIf="note['redoStatus'] === 'Por confirmar'">Confirmar</button>
             </div>
           </div>
+          <!-- REDO REPORT TECHNICIANS -->
+          <div *ngIf="note['type'] === 'quality redo report technician'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> abrio el siguiente rehacer:</span>
+            
+            <ul class="w3-margin-top">
+              <li>
+                <span>OT:<strong> {{note['OT']}}</strong></span>
+              </li>
+              <li>
+                <span>Componente:<strong> {{note['component']}}</strong></span>
+              </li>
+            </ul>
+            <span class="w3-margin-top">Luego de que el área observada confirme el redo, podrás comenzar con el análisis</span>
+          </div>
+          <!-- REDO REPORT QUALITY SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality redo report quality supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> abrio el siguiente rehacer:</span>
+            
+            <ul class="w3-margin-top">
+              <li>
+                <span>OT:<strong> {{note['OT']}}</strong></span>
+              </li>
+              <li>
+                <span>Componente:<strong> {{note['component']}}</strong></span>
+              </li>
+            </ul>
+          </div>
 
           <!-- REDO REPORT TO ANALYZE SUPERVISOR -->
           <div *ngIf="note['type'] === 'quality redo analyze supervisor'" class="ms-color-2b" style="padding-left:0.5em">
@@ -360,6 +400,16 @@
           <!-- REDO REPORT TO ANALYZE RESPONSIBLE STAFF -->
           <div *ngIf="note['type'] === 'quality redo analyze responsible staff'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> analizó el reahacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong> y lo asigno como parte del personal responsable</span>
+          </div>
+          <!-- REDO REPORT TO ANALYZE TECHNICIAN -->
+          <div *ngIf="note['type'] === 'quality redo analyze technician'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> analizó el rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>.</span><br>
+            <span class="w3-margin-top">Ahora ya puedes proponer acciones.</span>
+          </div>
+          <!-- REDO REPORT TO ANALYZE QUALITY SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality redo analyze quality supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> analizó el rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>.</span><br>
+            <span class="w3-margin-top">Ahora ya puedes proponer acciones.</span>
           </div>
 
           <!-- REDO ANALYZE TO ACTIONS SUPERVISOR -->
@@ -409,7 +459,7 @@
 
           <!-- REDO ACTIONS CLOSING REQUEST -->
           <div *ngIf="note['type'] === 'quality redo actions request closing'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}} </strong> solicito su confirmación para el cierre del rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>. Bajo el concepto de: <strong>{{note['kind']}}</strong></span><br>
+            <span><strong>{{note['senderName']}} </strong> solicitó su confirmación para el cierre del rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong></span><br>
             <p  [ngClass]="{'w3-border-green w3-text-green': note['requestStatus']==='Confirmado', 'w3-border-red w3-text-red': note['requestStatus']==='Rechazado'}"
                 *ngIf="note['requestStatus'] != 'Por confirmar'"
                 class="w3-border"

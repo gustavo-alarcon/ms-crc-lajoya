@@ -4,10 +4,10 @@
   </h2>
   <mat-divider></mat-divider>
   <mat-dialog-content>
-    <h1 class="ms-font-raleway ms-color-2b" style="font-size:1.2em; font-weight:600">Se solicitará la confirmación de las siguientes personas, para cerrar el documento</h1>
-    <div class="ms-gallery-container">
+    <h1 class="ms-font-poppins ms-color-2b" style="font-size:1.2em; font-weight:600">Se solicitará la confirmación de las siguientes personas, para cerrar el documento</h1>
+    <div class="ms-config-wraper">
       <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
-        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+        <p class="ms-font-poppins ms-color-bt" style="font-weight:600; font-size:1em">
           Área principal - Reporte
         </p>
         <span style="font-weight:500">{{data['redo']['area']['name']}}</span>
@@ -16,7 +16,7 @@
         </ul>
       </div>
       <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
-        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+        <p class="ms-font-poppins ms-color-bt" style="font-weight:600; font-size:1em">
           Áreas involucradas - Análisis
         </p>
         <ng-container *ngFor="let area of data['redo']['involvedAreas']">
@@ -27,7 +27,7 @@
         </ng-container>
       </div>
       <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
-        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+        <p class="ms-font-poppins ms-color-bt" style="font-weight:600; font-size:1em">
           Personal responsable - Análisis
         </p>
         <ng-container *ngFor="let staff of data['redo']['responsibleStaff']">
@@ -39,15 +39,54 @@
         </ng-container>
       </div>
       <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
-        <p class="ms-font-rubik ms-color-bt" style="font-weight:600; font-size:1em">
+        <p class="ms-font-poppins ms-color-bt" style="font-weight:600; font-size:1em">
           Personal responsable - Acciones propuestas
         </p>
-        <ng-container *ngFor="let staff of actionsArray">
-          <span style="font-weight:500">{{staff['actionResponsible']['displayName']}}</span>
-          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-            <li>Puesto: {{staff['actionResponsible']['jobTitle']}}</li>
-            <li>Sup.: {{staff['actionResponsible']['supervisor']['displayName']}}</li>
-            <li>Tarea: {{staff['action']}}</li>
+        <ng-container *ngFor="let action of actionsArray">
+          <span class="ms-font-poppins" style="font-weight:bold">{{action['action']}}</span><br>
+          <ng-container *ngFor="let staff of action['actionResponsibles']">
+            <span style="font-weight:500; font-size:0.9em">{{staff['displayName']}}</span>
+            <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;font-size:0.9em">
+              <li>Puesto: {{staff['jobTitle']}}</li>
+              <li>Sup.: {{staff['supervisor']['displayName']}}</li>
+            </ul>
+          </ng-container>
+          
+        </ng-container>
+        
+      </div>
+      <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
+        <p class="ms-font-poppins ms-color-bt" style="font-weight:600; font-size:1em">
+          Analístas técnicos
+        </p>
+        <ng-container *ngFor="let user of dbs.qualityRedoTechnicians">
+          <span style="font-weight:500; font-size:0.9em">{{user['displayName']}}</span>
+          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;font-size:0.9em">
+            <li>Puesto: {{user['jobTitle']}}</li>
+          </ul>
+        </ng-container>
+        
+      </div>
+      <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
+        <p class="ms-font-poppins ms-color-bt" style="font-weight:600; font-size:1em">
+          Supervisores de calidad
+        </p>
+        <ng-container *ngFor="let user of dbs.qualityRedoQualityAnalysts">
+          <span style="font-weight:500; font-size:0.9em">{{user['displayName']}}</span>
+          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;font-size:0.9em">
+            <li>Puesto: {{user['jobTitle']}}</li>
+          </ul>
+        </ng-container>
+        
+      </div>
+      <div class="w3-padding mat-elevation-z8 w3-round-large w3-margin">
+        <p class="ms-font-poppins ms-color-bt" style="font-weight:600; font-size:1em">
+          Lista de confirmación
+        </p>
+        <ng-container *ngFor="let user of dbs.qualityRedoConfirmationList">
+          <span style="font-weight:500; font-size:0.9em">{{user['displayName']}}</span>
+          <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;font-size:0.9em">
+            <li>Puesto: {{user['jobTitle']}}</li>
           </ul>
         </ng-container>
         
@@ -57,7 +96,7 @@
   </mat-dialog-content>
 
   <mat-dialog-actions class="w3-margin-bottom">
-    <button mat-raised-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
-    <button mat-stroked-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="request()">Solicitar</button>
+    <button mat-stroked-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="request()">Solicitar</button>
   </mat-dialog-actions>
 </div>

@@ -91,6 +91,13 @@ export class DatabaseService {
   public dataSecurityTasks = new BehaviorSubject<any[]>([]);
   public currentDataSecurityTasks = this.dataSecurityTasks.asObservable();
 
+  // -------------------------- NOTIFICATION SECURITY SUPERVISORS------------------------------
+  public securitySupervisorsCollection: AngularFirestoreCollection<any>;
+  public securitySupervisors: Array<any> = [];
+
+  public dataSecuritySupervisors = new BehaviorSubject<any[]>([]);
+  public currentDataSecuritySupervisors = this.dataSecuritySupervisors.asObservable();
+
 
   // ************************** QUALITY *****************************
   // -------------------------- REDOS -------------------------------
@@ -117,6 +124,12 @@ export class DatabaseService {
 
   public dataQualityRedosActions = new BehaviorSubject<any[]>([]);
   public currentDataQualityRedosActions = this.dataQualityRedosActions.asObservable();
+
+  // -------------------------- REDOS - CLOSING -------------------------------
+  public qualityRedosClosing: Array<any> = [];
+
+  public dataQualityRedosClosing = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedosClosing = this.dataQualityRedosClosing.asObservable();
 
   // -------------------------- REDOS - CLOSED -------------------------------
   public qualityRedosClosed: Array<any> = [];
@@ -165,6 +178,27 @@ export class DatabaseService {
 
   public dataQualityCauseClassifications = new BehaviorSubject<any[]>([]);
   public currentDataQualityCauseClassifications = this.dataQualityCauseClassifications.asObservable();
+
+  // -------------------------- REDO TECHNICIANS LIST ------------------------------
+  public qualityRedoTechniciansCollection: AngularFirestoreCollection<any>;
+  public qualityRedoTechnicians: Array<any> = [];
+
+  public dataQualityRedoTechnicians = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedoTechnicians = this.dataQualityRedoTechnicians.asObservable();
+
+  // -------------------------- REDO CONFIRMATION LIST ------------------------------
+  public qualityRedoConfirmationListCollection: AngularFirestoreCollection<any>;
+  public qualityRedoConfirmationList: Array<any> = [];
+
+  public dataQualityRedoConfirmationList = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedoConfirmationList = this.dataQualityRedoConfirmationList.asObservable();
+
+  // -------------------------- REDO QUALITY ANALYSTS LIST ------------------------------
+  public qualityRedoQualityAnalystsCollection: AngularFirestoreCollection<any>;
+  public qualityRedoQualityAnalysts: Array<any> = [];
+
+  public dataQualityRedoQualityAnalysts = new BehaviorSubject<any[]>([]);
+  public currentDataQualityRedoQualityAnalysts = this.dataQualityRedoQualityAnalysts.asObservable();
 
 
   // -------------------------- INSPECTIONS -------------------------------
@@ -224,6 +258,13 @@ export class DatabaseService {
   public dataMaintenanceRequests = new BehaviorSubject<any[]>([]);
   public currentDataMaintenanceRequests = this.dataMaintenanceRequests.asObservable();
 
+  // -------------------------- NOTIFICATIONS MAINTENANCE SUPERVISORS ------------------------------
+  public maintenanceSupervisorsCollection: AngularFirestoreCollection<any>;
+  public maintenanceSupervisors: Array<any> = [];
+
+  public dataMaintenanceSupervisors = new BehaviorSubject<any[]>([]);
+  public currentDataMaintenanceSupervisors = this.dataMaintenanceSupervisors.asObservable();
+
   // ************************* SSGG ***************************
   // ------------------------- TYPES ----------------------------
   public ssggTypesCollection: AngularFirestoreCollection<any>;
@@ -245,6 +286,13 @@ export class DatabaseService {
 
   public dataSsggRequests = new BehaviorSubject<any[]>([]);
   public currentDataSsggRequests = this.dataSsggRequests.asObservable();
+
+  // -------------------------- NOTIFICATIONS SSGG SUPERVISORS ------------------------------
+  public ssggSupervisorsCollection: AngularFirestoreCollection<any>;
+  public ssggSupervisors: Array<any> = [];
+
+  public dataSsggSupervisors = new BehaviorSubject<any[]>([]);
+  public currentDataSsggSupervisors = this.dataSsggSupervisors.asObservable();
 
 
   // *********** SYSTEM CONFIGURATION COLLECTIONS - (START) ***************************
@@ -361,6 +409,8 @@ export class DatabaseService {
         this.getSubActs4();
         this.getSubActs5();
 
+        this.getSecuritySupervisors();
+
         this.getFredReference();
         this.getSecuritySubstandardActFreds(actualFromDate.valueOf(), toDate.valueOf());
         this.getSecuritySubstandardConditionFreds(actualFromDate.valueOf(), toDate.valueOf());
@@ -392,6 +442,10 @@ export class DatabaseService {
         this.getQualityRepairTypes();
         this.getQualityRootCauses();
         this.getQualityCauseClassifications();
+        // getting notifications list
+        this.getQualityRedoTechnicians();
+        this.getQualityRedoConfirmationList();
+        this.getQualityRedoQualityAnalysts();
         // getting collections
         this.getQualityRedos(actualFromDate.valueOf(), toDate.valueOf());
       }
@@ -405,6 +459,9 @@ export class DatabaseService {
       if(permits['maintenanceSection'] && permits['maintenanceRequests']){
         this.getMaintenanceEquipments();
         this.getMaintenancePriorities();
+
+        this.getMaintenanceSupervisors();
+
         this.getMaintenanceRequests(false, actualFromDate.valueOf(), toDate.valueOf());
       }
 
@@ -412,6 +469,9 @@ export class DatabaseService {
       if(permits['ssggSection'] && permits['ssggRequests']){
         this.getSsggTypes();
         this.getSsggPriorities();
+
+        this.getSsggSupervisors();
+
         this.getSsggRequests(false, actualFromDate.valueOf(), toDate.valueOf());
       }
 
@@ -526,6 +586,14 @@ export class DatabaseService {
   }
 
   // *************** SECURITY METHODS
+  getSecuritySupervisors(): void{
+    this.securitySupervisorsCollection = this.afs.collection(`db/systemConfigurations/securitySupervisors`, ref => ref.orderBy('regDate','desc'));
+    this.securitySupervisorsCollection.valueChanges().subscribe(res => {
+      this.securitySupervisors = res;
+      this.dataSecuritySupervisors.next(res);
+    });
+  }
+
   getFredReference(): void{
     this.securityFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`);
   }
@@ -785,6 +853,30 @@ export class DatabaseService {
     });
   }
 
+  getQualityRedoTechnicians(): void{
+    this.qualityRedoTechniciansCollection = this.afs.collection(`db/systemConfigurations/qualityRedoTechnicians`, ref => ref.orderBy('regDate','desc'));
+    this.qualityRedoTechniciansCollection.valueChanges().subscribe(res => {
+      this.qualityRedoTechnicians = res;
+      this.dataQualityRedoTechnicians.next(res);
+    });
+  }
+
+  getQualityRedoConfirmationList(): void{
+    this.qualityRedoConfirmationListCollection = this.afs.collection(`db/systemConfigurations/qualityRedoConfirmationList`, ref => ref.orderBy('regDate','desc'));
+    this.qualityRedoConfirmationListCollection.valueChanges().subscribe(res => {
+      this.qualityRedoConfirmationList = res;
+      this.dataQualityRedoConfirmationList.next(res);
+    });
+  }
+
+  getQualityRedoQualityAnalysts(): void{
+    this.qualityRedoQualityAnalystsCollection = this.afs.collection(`db/systemConfigurations/qualityRedoQualityAnalysts`, ref => ref.orderBy('regDate','desc'));
+    this.qualityRedoQualityAnalystsCollection.valueChanges().subscribe(res => {
+      this.qualityRedoQualityAnalysts = res;
+      this.dataQualityRedoQualityAnalysts.next(res);
+    });
+  }
+
   getQualityCauseClassifications(): void{
     this.qualityCauseClassificationsCollection = this.afs.collection(`db/systemConfigurations/qualityCauseClassifications`, ref => ref.orderBy('regDate','desc'));
     this.qualityCauseClassificationsCollection.valueChanges().subscribe(res => {
@@ -801,48 +893,118 @@ export class DatabaseService {
         let reportList = [];
         let analyzeList = [];
         let actionsList = [];
+        let closingList = [];
 
-        res.forEach(element => {
+        res.forEach(redo => {
 
-          // check if redo is on report stage
-          if(element['stage'] === 'Reporte'){
-            if(element['uidSupervisor'] === this.auth.userCRC.uid || element['uidCreator'] === this.auth.userCRC.uid){
-              reportList.push(element);
+          // checking if redo is on report stage and if you are redo admin
+          if(redo['stage'] === 'Reporte' && !this.permits['qualityRedosGeneralList']){
+            // if you are the area supervisor or the creator, you can see the redo
+            if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
+              reportList.push(redo);
             }
+
+          }else if(redo['stage'] === 'Reporte' && this.permits['qualityRedosGeneralList']){
+            reportList.push(redo);
           }
 
-          if(element['stage'] === 'Analizar'){
-            element['involvedAreas'].forEach(area => {
-              if(area['supervisor']['uid'] === this.auth.userCRC.uid){
-                analyzeList.push(element);
-              }
-            })
+          // checking if redi is on analyze stage
+          if(redo['stage'] === 'Analizar' && !this.permits['qualityRedosGeneralList']){
 
-            element['responsibleStaff'].forEach(staff => {
-              if(staff['uid'] === this.auth.userCRC.uid){
-                let _index = analyzeList.indexOf(element);
+            // if you are the area supervisor or the creator, you can see the redo
+            if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
+              analyzeList.push(redo);
+            }
+
+            // if you are supervisor of the involved area, you can see the redo
+            redo['involvedAreas'].forEach(area => {
+              if(area['supervisor']['uid'] === this.auth.userCRC.uid){
+                // but, if the redo already exist in list, we will skip the push
+                let _index = analyzeList.indexOf(redo);
                 if(_index === -1){
-                  analyzeList.push(element);
+                  analyzeList.push(redo);
                 }
               }
             })
-          }
 
-          if(element['stage'] === 'Acciones'){
-            element['involvedAreas'].forEach(area => {
-              if(area['supervisor']['uid'] === this.auth.userCRC.uid){
-                actionsList.push(element);
-              }
-            })
-
-            element['responsibleStaff'].forEach(staff => {
+            // if you are part of the responsible staff, you can see the redo
+            redo['responsibleStaff'].forEach(staff => {
               if(staff['uid'] === this.auth.userCRC.uid){
-                let _index = actionsList.indexOf(element);
+                // also here, if the redo already exist in list, we will skip the push
+                let _index = analyzeList.indexOf(redo);
                 if(_index === -1){
-                  actionsList.push(element);
+                  analyzeList.push(redo);
                 }
               }
             })
+          }else if(redo['stage'] === 'Analizar' && this.permits['qualityRedosGeneralList']){
+            analyzeList.push(redo);
+          }
+
+          // cheking if the redo is on actions stage
+          if(redo['stage'] === 'Acciones' && !this.permits['qualityRedosGeneralList']){
+
+            // if you are the area supervisor or the creator, you can see the redo
+            if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
+              actionsList.push(redo);
+            }
+
+            // if you are supervisor of the involved area, you can see the redo
+            redo['involvedAreas'].forEach(area => {
+              if(area['supervisor']['uid'] === this.auth.userCRC.uid){
+                // but, if the redo already exist in list, we will skip the push
+                let _index = actionsList.indexOf(redo);
+                if(_index === -1){
+                  actionsList.push(redo);
+                }
+              }
+            })
+
+            // if you are part of the responsible staff, you can see the redo
+            redo['responsibleStaff'].forEach(staff => {
+              if(staff['uid'] === this.auth.userCRC.uid){
+                // also here, if the redo already exist in list, we will skip the push
+                let _index = actionsList.indexOf(redo);
+                if(_index === -1){
+                  actionsList.push(redo);
+                }
+              }
+            })
+          }else if(redo['stage'] === 'Acciones' && this.permits['qualityRedosGeneralList']){
+            actionsList.push(redo);
+          }
+
+          // cheking if the redo is on closing/finalize stage
+          if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && !this.permits['qualityRedosGeneralList']){
+
+            // if you are the area supervisor or the creator, you can see the redo
+            if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
+              closingList.push(redo);
+            }
+
+            // if you are supervisor of the involved area, you can see the redo
+            redo['involvedAreas'].forEach(area => {
+              if(area['supervisor']['uid'] === this.auth.userCRC.uid){
+                // but, if the redo already exist in list, we will skip the push
+                let _index = closingList.indexOf(redo);
+                if(_index === -1){
+                  closingList.push(redo);
+                }
+              }
+            })
+
+            // if you are part of the responsible staff, you can see the redo
+            redo['responsibleStaff'].forEach(staff => {
+              if(staff['uid'] === this.auth.userCRC.uid){
+                // also here, if the redo already exist in list, we will skip the push
+                let _index = closingList.indexOf(redo);
+                if(_index === -1){
+                  closingList.push(redo);
+                }
+              }
+            })
+          }else if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && this.permits['qualityRedosGeneralList']){
+            closingList.push(redo);
           }
 
         });
@@ -855,6 +1017,9 @@ export class DatabaseService {
 
         this.qualityRedosActions = actionsList;
         this.dataQualityRedosActions.next(actionsList);
+
+        this.qualityRedosClosing = closingList;
+        this.dataQualityRedosClosing.next(closingList);
       }),
       map(res => {
         return res.sort((a,b)=>b['regDate']-a['regDate']);
@@ -914,6 +1079,15 @@ export class DatabaseService {
   }
 
   // ********************** MAINTENANCE METHODS
+
+  getMaintenanceSupervisors(): void{
+    this.maintenanceSupervisorsCollection = this.afs.collection(`db/systemConfigurations/maintenanceSupervisors`, ref => ref.orderBy('regDate','desc'));
+    this.maintenanceSupervisorsCollection.valueChanges().subscribe(res => {
+      this.maintenanceSupervisors = res;
+      this.dataMaintenanceSupervisors.next(res);
+    });
+  }
+
   getMaintenanceEquipments(): void{
     this.maintenanceEquipmentsCollection = this.afs.collection(`db/systemConfigurations/maintenanceEquipments`, ref => ref.orderBy('regDate','asc'));
     this.maintenanceEquipmentsCollection.valueChanges().subscribe(res => {
@@ -968,7 +1142,15 @@ export class DatabaseService {
     return this.maintenanceRequestsCollection.doc(id).collection(`log`).add(data);
   }
 
-  // ********************** MAINTENANCE METHODS
+  // ********************** SSGG METHODS
+  getSsggSupervisors(): void{
+    this.ssggSupervisorsCollection = this.afs.collection(`db/systemConfigurations/ssggSupervisors`, ref => ref.orderBy('regDate','desc'));
+    this.ssggSupervisorsCollection.valueChanges().subscribe(res => {
+      this.ssggSupervisors = res;
+      this.dataSsggSupervisors.next(res);
+    });
+  }
+
   getSsggTypes(): void{
     this.ssggTypesCollection = this.afs.collection(`db/systemConfigurations/ssggTypes`, ref => ref.orderBy('regDate','asc'));
     this.ssggTypesCollection.valueChanges().subscribe(res => {

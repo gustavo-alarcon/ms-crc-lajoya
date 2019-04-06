@@ -21,6 +21,9 @@ import { QualityRedoActionsConfirmApproveActionsComponent } from './quality-redo
 import { QualityRedoActionsConfirmValidateComponent } from './quality-redo-actions-confirm-validate/quality-redo-actions-confirm-validate.component';
 import { QualityRedoActionsConfirmResetComponent } from './quality-redo-actions-confirm-reset/quality-redo-actions-confirm-reset.component';
 import { QualityRedoActionsDialogRequestClosingComponent } from './quality-redo-actions-dialog-request-closing/quality-redo-actions-dialog-request-closing.component';
+import { QualityRedosActionsConfirmResendComponent } from './quality-redos-actions-confirm-resend/quality-redos-actions-confirm-resend.component';
+import { AuthService } from 'src/app/core/auth.service';
+import { QualityRedosClosingConfirmClosingComponent } from './quality-redos-closing-confirm-closing/quality-redos-closing-confirm-closing.component';
 
 @Component({
   selector: 'app-quality-restorations',
@@ -171,7 +174,7 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   isOpenReport: Array<any> = [];
   isOpenAnalyze: Array<any> = [];
   isOpenActions: Array<any> = [];
-  isOpenClosed: Array<any> = [];
+  isOpenClosing: Array<any> = [];
 
   reportFormGroup: FormGroup;
 
@@ -201,11 +204,14 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   dataSourceRedosActions = new MatTableDataSource();
   dataSourceRedosActionsPanel = new MatTableDataSource();
 
-  displayedColumnsActionsList: string[] = ['select', 'index', 'action', 'approved', 'responsible', 'additionalStaff', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'valid', 'delete'];
+  displayedColumnsActionsList: string[] = ['select', 'index', 'action', 'approved', 'responsibles', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'valid', 'delete'];
   dataSourceRedosActionsList = new MatTableDataSource();
 
-  displayedColumnsClosed: string[] = ['index', 'date', 'initialPicture', 'createdBy', 'area', 'equipment', 'priority', 'observation', 'status', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
-  dataSourceRedosClosed = new MatTableDataSource();
+  displayedColumnsClosingSignList: string[] = ['index', 'user', 'sign', 'resend'];
+  dataSourceRedosClosingSignList = new MatTableDataSource();
+
+  displayedColumnsClosing: string[] = ['index', 'date', 'initialPicture', 'createdBy', 'area', 'equipment', 'priority', 'observation', 'status', 'finalPicture', 'realTerminationDate', 'maintenanceDetails', 'edit'];
+  dataSourceRedosClosing = new MatTableDataSource();
 
 
   selectedFile = null;
@@ -224,6 +230,9 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   allValidated: boolean = false;
   allSigned: boolean = false;
 
+  isTechnician: boolean = false;
+  isQualitySupervisor: boolean = false;
+
   subscriptions: Array<Subscription> = [];
 
 
@@ -231,7 +240,8 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -241,6 +251,37 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     this.currentYear = this.monthFormControl.value.getFullYear();
 
     this.createForms();
+
+    // checking if you are a technician analyst
+    let techSubs = this.dbs.currentDataQualityRedoTechnicians
+      .subscribe(res => {
+        if(res){
+          this.isTechnician = false;
+          res.forEach(user => {
+            if(user['uid'] === this.auth.userCRC.uid){
+              this.isTechnician = true;
+            }
+          })
+        }
+      });
+
+    this.subscriptions.push(techSubs);
+
+    // checking if you are a quality supervisor
+    let quaSupSubs = this.dbs.currentDataQualityRedoQualityAnalysts
+      .subscribe(res => {
+        if(res){
+          this.isQualitySupervisor = false;
+          res.forEach(user => {
+            if(user['uid'] === this.auth.userCRC.uid){
+              this.isQualitySupervisor = true;
+            }
+          })
+        }
+      });
+
+    this.subscriptions.push(quaSupSubs);
+    
 
     this.filteredAreas = this.reportFormGroup.get('area').valueChanges
                           .pipe(
@@ -271,6 +312,13 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
                                     })
                                   });
 
+    let dataQualityClosingSubs =  this.dbs.currentDataQualityRedosClosing.subscribe(res => {
+                                    this.dataSourceRedosClosing.data = res;
+                                    res.forEach(element => {
+                                      this.isOpenClosing.push(false);
+                                    })
+                                  });
+
     
 
     this.subscriptions.push(dataQualityReportsSubs);
@@ -292,8 +340,8 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     this.dataSourceRedosActions.paginator = this.paginator.toArray()[2];
     this.dataSourceRedosActions.sort = this.sort.toArray()[2];
 
-    this.dataSourceRedosClosed.paginator = this.paginator.toArray()[3];
-    this.dataSourceRedosClosed.sort = this.sort.toArray()[3];
+    this.dataSourceRedosClosing.paginator = this.paginator.toArray()[3];
+    this.dataSourceRedosClosing.sort = this.sort.toArray()[3];
   }
 
   setMonthOfView(event, datepicker): void {
@@ -435,9 +483,9 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
   }
 
-  toggleCardClosed(index) {
-    this.isOpenClosed[index] = !this.isOpenClosed[index];
-  }
+  // toggleCardClosed(index) {
+  //   this.isOpenClosed[index] = !this.isOpenClosed[index];
+  // }
 
   createForms(): void{
     this.reportFormGroup = this.fb.group({
@@ -632,7 +680,7 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe( res => {
       if(res){
-        dialogRef.close();
+        this.currentTab.setValue(3);
       }
     })
   }
@@ -640,10 +688,11 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   checkSign(redo): void{
     let signingListSubs = this.dbs.qualityRedosCollection.doc(redo['id']).collection('signing').valueChanges().subscribe( res => {
       if(res.length){
+        this.dataSourceRedosClosingSignList.data = res;
         let counter = 0;
         this.allSigned = false;
         res.forEach(element => {
-          if(element['signed']){
+          if(element['sign']){
             counter++;
           }
         })
@@ -655,8 +704,19 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     })
   }
 
+  resendRequest(user, redo): void{
+    this.dialog.open(QualityRedosActionsConfirmResendComponent, {
+      data: {
+        redo: redo,
+        user: user
+      }
+    })
+  }
+
   closeRedo(redo): void {
-    
+    this.dialog.open(QualityRedosClosingConfirmClosingComponent,{
+      data: redo
+    })
   }
 
 }

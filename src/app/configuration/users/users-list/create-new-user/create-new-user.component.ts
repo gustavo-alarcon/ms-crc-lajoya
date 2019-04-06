@@ -3,7 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatabaseService } from 'src/app/core/database.service';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime, map, startWith } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-new-user',
@@ -25,6 +26,8 @@ export class CreateNewUserComponent implements OnInit {
   coincidence: boolean = false;
   visibility: string = 'password';
 
+  filteredPermits: Observable<any>;
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -45,7 +48,6 @@ export class CreateNewUserComponent implements OnInit {
       email: ['', Validators.required],
       phone: ['', Validators.required],
       password: ['', Validators.required],
-      area: [{supervisor:{displayName:''}}, Validators.required],
       jobTitle: ['', Validators.required],
       supervisor: ['', Validators.required],
       permit: ['', Validators.required]
@@ -62,7 +64,6 @@ export class CreateNewUserComponent implements OnInit {
 
     this.jobDataFormGroup = this.fb.group({
       code: ['', Validators.required],
-      area: [{supervisor:{displayName:''}}, Validators.required],
       jobTitle: ['', Validators.required],
       supervisor: ['', Validators.required],
       permit: ['', Validators.required]
@@ -87,6 +88,13 @@ export class CreateNewUserComponent implements OnInit {
     ).subscribe(res => {
       this.coincidence = res;
     })
+
+    this.filteredPermits = this.jobDataFormGroup.get('permit').valueChanges
+                            .pipe(
+                              startWith<any>(''),
+                              map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+                              map(name => name ? this.dbs.permits.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.permits)
+                            )
   }
 
   showSelectedArea(area): string | undefined {
@@ -103,6 +111,10 @@ export class CreateNewUserComponent implements OnInit {
 
   selectedSupervisor(event): void{
     
+  }
+
+  showSelectedPermit(permit): string | undefined {
+    return permit? permit['name'] : undefined;
   }
 
   toggleVisibility(): void{
@@ -140,7 +152,7 @@ export class CreateNewUserComponent implements OnInit {
         let appendData = {
           uid: res['uid'],
           regDate: Date.now(),
-          displayName: this.personalDataFormGroup.value['name'].split(" ",1)[0] + ', ' + this.personalDataFormGroup.value['lastname'].split(" ",1)[0]
+          displayName: this.personalDataFormGroup.value['name'].split(" ",1)[0] + ', ' + this.personalDataFormGroup.value['lastname'].split(" ",1)[0],
         }
 
         let mergedForms = Object.assign(this.personalDataFormGroup.value,this.jobDataFormGroup.value);

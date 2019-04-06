@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SidenavService } from 'src/app/core/sidenav.service';
 
 @Component({
   selector: 'app-system',
@@ -11,8 +12,9 @@ export class SystemComponent implements OnInit {
   securityOpenedFlag: boolean;
   qualityOpenedFlag: boolean;
   
-
-  constructor() { }
+  constructor(
+    public sidenav: SidenavService
+  ) { }
 
   ngOnInit() {
   }

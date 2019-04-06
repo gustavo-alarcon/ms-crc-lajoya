@@ -1,0 +1,19 @@
+<h1 class="ms-font-rubik ms-color-bt" style="font-size:1.3em" mat-dialog-title><mat-icon style="vertical-align:middle">location_on</mat-icon> Asignar área</h1>
+<mat-dialog-content>
+  <mat-progress-bar mode="indeterminate" *ngIf="uploading"></mat-progress-bar>
+  <mat-form-field class="w3-block w3-margin-right" style="max-width:250px"appearance="outline">
+    <mat-label>Área</mat-label>
+    <input matInput type="text" placeholder="Escriba y seleccione ..." [matAutocomplete]="autoAreas" [formControl]="areaControl">
+    <mat-autocomplete #autoAreas="matAutocomplete"
+                      [displayWith]="showSelectedArea">
+        <mat-option *ngFor="let area of filteredAreas | async" [value]="area">
+          <span><strong>{{area['name']}}</strong> | {{area['supervisor']['displayName']}}</span>
+        </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" class="w3-margin-right" (click)="assign()">Asignar</button>
+</mat-dialog-actions>

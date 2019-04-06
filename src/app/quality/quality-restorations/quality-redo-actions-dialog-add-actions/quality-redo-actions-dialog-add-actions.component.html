@@ -18,25 +18,9 @@
           </mat-hint>
         </mat-form-field>
         <br>
-
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
-          <mat-label>Responsable</mat-label>
-          <input type="text" matInput placeholder="Escriba y seleccione" formControlName="actionResponsible"
-            [matAutocomplete]="autoActionResponsible" required>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #autoActionResponsible="matAutocomplete"
-                          [displayWith]="showSelectedResponsible">
-          <mat-option *ngFor="let user of filteredUsers | async" [value]="user" style="font-size:14px">
-            <strong>{{user['displayName']}}</strong> | <span class="w3-small">{{user['jobTitle']}}</span>
-          </mat-option>
-        </mat-autocomplete>
-        <br>
   
         <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
-          <mat-label>Agregar personas</mat-label>
+          <mat-label>Agregar responsables</mat-label>
           <mat-chip-list #chipListActionsAdditionalStaff>
             <mat-chip *ngFor="let staff of actionsAdditionalStaffArray"
               [selectable]="selectable"

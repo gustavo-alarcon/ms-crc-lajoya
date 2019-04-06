@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatTableDataSource, MatSort, MatPaginator, MatDialog } from '@angular/material';
 import { CreateNewAreaComponent } from './create-new-area/create-new-area.component';
+import { SystemaGeneralAreaConfirmDeleteComponent } from './systema-general-area-confirm-delete/systema-general-area-confirm-delete.component';
+import { SidenavService } from 'src/app/core/sidenav.service';
 
 @Component({
   selector: 'app-system-general-area',
@@ -11,7 +13,7 @@ import { CreateNewAreaComponent } from './create-new-area/create-new-area.compon
 })
 export class SystemGeneralAreaComponent implements OnInit {
 
-  displayedColumns: string[] = ['index', 'name', 'supervisor', 'edit'];
+  displayedColumns: string[] = ['index', 'name', 'supervisor', 'delete'];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -21,6 +23,7 @@ export class SystemGeneralAreaComponent implements OnInit {
 
   constructor(
     public dbs: DatabaseService,
+    public sidenav: SidenavService,
     private dialog: MatDialog
   ) { 
 
@@ -38,6 +41,10 @@ export class SystemGeneralAreaComponent implements OnInit {
 
   }
 
+  toggleSidenav(): void{
+    this.sidenav.sidenavSystem();
+  }
+
   filterData(ref: string) {
     ref = ref.toLowerCase();
     this.filteredAreas = this.dbs.areas.filter(option =>       
@@ -48,6 +55,12 @@ export class SystemGeneralAreaComponent implements OnInit {
 
   createNewArea(): void{
     this.dialog.open(CreateNewAreaComponent);
+  }
+
+  deleteArea(area): void{
+    this.dialog.open(SystemaGeneralAreaConfirmDeleteComponent, {
+      data: area
+    })
   }
 
 }

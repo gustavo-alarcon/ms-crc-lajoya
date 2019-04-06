@@ -1,0 +1,87 @@
+<div class="w3-section">
+  <button mat-button (click)="toggleSidenav()" class="w3-margin-bottom"><mat-icon>menu</mat-icon> Menu</button>
+  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">check_circle_outline</mat-icon> Calidad</h1>
+  <mat-divider></mat-divider>
+  <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.1em"><mat-icon style="vertical-align:middle">repeat</mat-icon> Redos</h2>
+
+  <div class="ms-config-wraper">
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.2em;font-weight: 600;"><mat-icon style="vertical-align:middle">account_circle</mat-icon> Supervisores de calidad</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="qualityRedoQualityAnalystsFormControl"
+                placeholder="Escriba y seleccione ..." (keyup.enter)="addQualityRedoQualityAnalysts()"
+                [matAutocomplete]="autoQualityRedoQualityAnalysts">
+        <mat-hint>Presione ENTER para agregar</mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoQualityRedoQualityAnalysts="matAutocomplete"
+                        [displayWith]="showSelectedUser1">
+        <mat-option *ngFor="let user1 of filteredUsers1 | async" [value]="user1" (keyup.enter)="addQualityRedoQualityAnalysts()" (click)="addQualityRedoQualityAnalysts()">
+          <span><strong>{{user1['displayName']}}</strong> | {{user1['jobTitle']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+      <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityRedoQualityAnalysts"></mat-progress-bar>
+      <ng-container *ngFor="let item of dbs.currentDataQualityRedoQualityAnalysts | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['displayName']}} | <span class="w3-small">{{item['jobTitle']}}</span></p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteQualityRedoQualityAnalysts(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.2em;font-weight: 600;"><mat-icon style="vertical-align:middle">account_circle</mat-icon> Técnicos analístas de fallas</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="qualityRedoTechniciansFormControl"
+                placeholder="Escriba y seleccione ..." (keyup.enter)="addQualityRedoTechnicians()"
+                [matAutocomplete]="autoQualityRedoTechnicians">
+        <mat-hint>Presione ENTER para agregar</mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoQualityRedoTechnicians="matAutocomplete"
+                        [displayWith]="showSelectedUser2">
+        <mat-option *ngFor="let user2 of filteredUsers2 | async" [value]="user2" (keyup.enter)="addQualityRedoTechnicians()" (click)="addQualityRedoTechnicians()">
+          <span><strong>{{user2['displayName']}}</strong> | {{user2['jobTitle']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+      <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityRedoTechnicians"></mat-progress-bar>
+      <ng-container *ngFor="let item of dbs.currentDataQualityRedoTechnicians | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['displayName']}} | <span class="w3-small">{{item['jobTitle']}}</span></p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteQualityRedoTechnicians(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.2em;font-weight: 600;"><mat-icon style="vertical-align:middle">account_circle</mat-icon> Lista de confirmación de cierre</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="qualityRedoConfirmationListFormControl"
+                placeholder="Escriba y seleccione ..." (keyup.enter)="addQualityRedoConfirmationList()"
+                [matAutocomplete]="autoQualityRedoConfirmationList">
+        <mat-hint>Presione ENTER para agregar</mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoQualityRedoConfirmationList="matAutocomplete"
+                        [displayWith]="showSelectedUser3">
+        <mat-option *ngFor="let user3 of filteredUsers3 | async" [value]="user3" (keyup.enter)="addQualityRedoConfirmationList()" (click)="addQualityRedoConfirmationList()">
+          <span><strong>{{user3['displayName']}}</strong> | {{user3['jobTitle']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+      <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityRedoConfirmationList"></mat-progress-bar>
+      <ng-container *ngFor="let item of dbs.currentDataQualityRedoConfirmationList | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['displayName']}} | <span class="w3-small">{{item['jobTitle']}}</span></p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteQualityRedoConfirmationList(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+  
+  
+</div>    

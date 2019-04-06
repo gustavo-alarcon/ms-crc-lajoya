@@ -19,11 +19,11 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
   filteredUsers: Observable<any>;
   filteredAdditionalUsers: Observable<any>;
 
-  displayedColumnsActions: string[] = ['index', 'action', 'actionResponsible', 'actionsAdditionalStaff', 'delete'];
+  displayedColumnsActions: string[] = ['index', 'action', 'actionResponsibles', 'delete'];
   
 
-  @ViewChild('actionsAdditionalStaffInput') actionsAdditionalStaffInput: ElementRef<HTMLInputElement>;
-  @ViewChild('autoActionsAdditionalStaff') matAutocompleteStaff: MatAutocomplete;
+  @ViewChild('actionResponsiblesInput') actionsActionResponsiblesInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoActionResponsibles') matAutocompleteResponsibles: MatAutocomplete;
 
   dataSourceActions = new MatTableDataSource();
 
@@ -33,7 +33,7 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
   addOnBlur = true;
 
   actionsArray: Array<any> = [];
-  actionsAdditionalStaffArray: Array<any> = [];
+  actionResponsiblesArray: Array<any> = [];
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -52,61 +52,53 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
 
     this.createForms();
 
-    this.filteredUsers =  this.actionsFormGroup.get('actionResponsible').valueChanges
+    this.filteredUsers =  this.actionsFormGroup.get('actionResponsibles').valueChanges
                             .pipe(
                               startWith<any>(''),
                               map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
                               map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
                             );
 
-    this.filteredAdditionalUsers =  this.actionsFormGroup.get('actionsAdditionalStaff').valueChanges
-                                      .pipe(
-                                        startWith<any>(''),
-                                        map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
-                                        map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
-                                      );
-
   }
 
   createForms(): void{
     this.actionsFormGroup = this.fb.group({
       action: ['', [Validators.required]],
-      actionResponsible: ['', [Validators.required]],
-      actionsAdditionalStaff: '',
+      actionResponsibles: '',
     });
   }
 
   // CHIPS ACTIONS ADDITIONAL RESPONSIBLE STAFF
-  addActionsAdditionalStaff(event: MatChipInputEvent): void {
+  addActionResponsibles(event: MatChipInputEvent): void {
 
-    if (!this.matAutocompleteStaff.isOpen) {
+    if (!this.matAutocompleteResponsibles.isOpen) {
       const input = event.input;
       const value = event.value;
 
       if(typeof value === 'object'){
-        this.actionsAdditionalStaffArray.push(value);
+        this.actionResponsiblesArray.push(value);
       }
 
       if (input) {
         input.value = '';
       }
 
-      this.actionsFormGroup.get('actionsAdditionalStaff').setValue('');
+      this.actionsFormGroup.get('actionResponsibles').setValue('');
     }
   }
 
-  removeActionsAdditionalStaff(area: any): void {
-    const index = this.actionsAdditionalStaffArray.indexOf(area);
+  removeActionResponsibles(area: any): void {
+    const index = this.actionResponsiblesArray.indexOf(area);
 
     if (index >= 0) {
-      this.actionsAdditionalStaffArray.splice(index, 1);
+      this.actionResponsiblesArray.splice(index, 1);
     }
   }
 
-  selectedActionsAdditionalStaff(event: MatAutocompleteSelectedEvent): void {
-    this.actionsAdditionalStaffArray.push(event.option.value);
-    this.actionsAdditionalStaffInput.nativeElement.value = '';
-    this.actionsFormGroup.get('actionsAdditionalStaff').setValue(' ');
+  selectedActionResponsibles(event: MatAutocompleteSelectedEvent): void {
+    this.actionResponsiblesArray.push(event.option.value);
+    this.actionsActionResponsiblesInput.nativeElement.value = '';
+    this.actionsFormGroup.get('actionResponsibles').setValue(' ');
   }
   //  *********************************************************
 
@@ -119,8 +111,22 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
   }
 
   addAction(): void{
-    this.actionsArray.push(Object.assign(this.actionsFormGroup.value, {additionalStaff:this.actionsAdditionalStaffArray, approved:false, valid: false, finalPicture:'', finalArchive:'', status:'Por confirmar', realTerminationDate: 0}));
+    let action = {
+      action: this.actionsFormGroup.value['action'],
+      actionResponsibles: this.actionResponsiblesArray,
+      approved:false,
+      valid: false,
+      finalPicture:'',
+      finalArchive:'',
+      status:'Por confirmar',
+      realTerminationDate: 0
+    }
+    console.log(action);
+    this.actionsArray.push(action);
+    console.log(this.actionsArray);
     this.dataSourceActions.data = this.actionsArray;
+    this.actionResponsiblesArray = [];
+    this.createForms();
   }
 
   deleteAction(index): void{
@@ -130,13 +136,12 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
 
   save(): void{
 
-    if(this.actionsFormGroup.valid){
+    if(this.actionsArray.length){
 
       let dialogRef = this.dialog.open(QualityRedoAnalyzeConfirmActionsComponent,{
         data: {
           redo: this.data,
-          actions: this.actionsArray,
-          additionalStaff: this.actionsAdditionalStaffArray
+          actions: this.actionsArray
         }
       });
 
@@ -147,7 +152,7 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
       });
 
     }else{
-      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento","Cerrar", {
+      this.snackbar.open("Debe agregar por lo menos una acción a la lista para poder guardar el documento","Cerrar", {
         duration: 6000
       });
     }

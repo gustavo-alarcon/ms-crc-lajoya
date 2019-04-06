@@ -174,4 +174,10 @@ th.mat-header-cell{
     flex: 1 1 auto;
 }
 
+.ms-chip{
+    padding:0.5em;
+    font-weight:500;
+    border-radius:10px;
+}
+
 

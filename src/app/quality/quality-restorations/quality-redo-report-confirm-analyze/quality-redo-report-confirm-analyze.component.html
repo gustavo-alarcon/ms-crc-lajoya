@@ -5,6 +5,8 @@
   <p class="ms-font-roboto" style="font-weight:500">* El documento se actualizará y pasará a la lista de análisis.</p>
   <p class="ms-font-roboto w3-margin-bottom" style="font-weight:500">* Recuerde que las áreas y personas seleccionadas, no podrán ser editadas más adelante.</p>
 
+  <mat-checkbox [formControl]="sendNotificationsControl">Enviar notificaciones</mat-checkbox><br>
+
   <mat-progress-bar mode="indeterminate" style="margin-bottom:0.5em" *ngIf="uploading"></mat-progress-bar>
   <p style="font-size:0.8em; margin-bottom:0.5em"> </p>
   <mat-progress-bar mode="buffer" [value]="uploadPercent_initial | async" *ngIf="uploading_initial"></mat-progress-bar>

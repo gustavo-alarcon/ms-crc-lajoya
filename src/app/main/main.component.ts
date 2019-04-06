@@ -160,12 +160,12 @@ export class MainComponent implements OnInit {
 
   // REJECT AND CONFIRMATION CLOSING REQUEST
   rejectRequestClosing(redoId , noteId, signId): void{
-    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({signed: true});
+    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({sign: false});
     this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Rechazado'});
   }
 
   confirmRequestClosing(redoId , noteId, signId): void{
-    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({signed: true});
+    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({sign: true});
     this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Confirmado'});
   }
 

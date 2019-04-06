@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatabaseService } from 'src/app/core/database.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { debounceTime, map } from 'rxjs/operators';
 
@@ -20,7 +20,6 @@ export class CreateNewPermitComponent implements OnInit {
 
   securitySelection = new SelectionModel<any>(true, []);
   securityKeys: Array<any> = [
-    {name:'Dashboard', value:'securityDashboard'},
     {name:'FRED', value:'securityFred'},
     {name:'Formulario FRED', value:'securityFredForm'},
     {name:'Lista general FRED', value:'securityFredGeneralList'},
@@ -29,7 +28,6 @@ export class CreateNewPermitComponent implements OnInit {
     {name:'Eliminar FRED', value:'securityFredDelete'},
     {name:'Inspecciones', value:'securityInspections'},
     {name:'Cronograma de Inspecciones', value:'securityInspectionsCrono'},
-    {name:'Formulario Inspecciones', value:'securityInspectionsForm'},
     {name:'Lista general de Inspecciones', value:'securityInspectionsGeneralList'},
     {name:'Lista personal de Inspecciones', value:'securityInspectionsPersonalList'},
     {name:'Editar Inspecciones', value:'securityInspectionsEdit'},
@@ -43,26 +41,17 @@ export class CreateNewPermitComponent implements OnInit {
 
   qualitySelection = new SelectionModel<any>(true, []);
   qualityKeys: Array<any> = [
-    {name:'Dashboard',value:'qualityDashboard'},
     {name:'Rehaceres', value:'qualityRedos'},
-    {name:'Formulario Rehaceres',value:'qualityRedosForm'},
     {name:'Lista general de Rehaceres',value:'qualityRedosGeneralList'},
     {name:'Lista personal de Rehaceres',value:'qualityRedosPersonalList'},
     {name:'Editar Rehaceres',value:'qualityRedosEdit'},
     {name:'Eliminar Rehaceres',value:'qualityRedosDelete'},
     {name:'Inspecciones', value:'qualityInspections'},
     {name:'Cronograma de Inspecciones',value:'qualityInspectionsCrono'},
-    {name:'Formulario de Inspecciones',value:'qualityInspectionsForm'},
     {name:'Lista general de Inspecciones',value:'qualityInspectionsGeneralList'},
     {name:'Lista personal de Inspecciones',value:'qualityInspectionsPersonalList'},
     {name:'Editar Inspecciones',value:'qualityInspectionsEdit'},
     {name:'Eliminar Inspecciones',value:'qualityInspectionsDelete'},
-    {name:'Oportunidades de Mejora', value:'qualityUpgrades'},
-    {name:'Formulario de Mejoras',value:'qualityUpgradesForm'},
-    {name:'Lista general de Mejoras',value:'qualityUpgradesGeneralList'},
-    {name:'Lista personal de Mejoras',value:'qualityUpgradesPersonalList'},
-    {name:'Editar Mejoras',value:'qualityUpgradesEdit'},
-    {name:'Eliminar Mejoras',value:'qualityUpgradesDelete'},
     {name:'Tareas', value:'qualityTasks'},
     {name:'Formulario de Tareas',value:'qualityTasksForm'},
     {name:'Lista general de Tareas',value:'qualityTasksGeneralList'},
@@ -73,7 +62,6 @@ export class CreateNewPermitComponent implements OnInit {
 
   maintenanceSelection = new SelectionModel<any>(true, []);
   maintenanceKeys: Array<any> = [
-    {name:'Dashboard',value:'maintenanceDashboard'},
     {name:'Solicitudes', value:'maintenanceRequests'},
     {name:'Formulario de Solicitudes',value:'maintenanceRequestsForm'},
     {name:'Lista general de Solicitudes',value:'maintenanceRequestsGeneralList'},
@@ -84,7 +72,6 @@ export class CreateNewPermitComponent implements OnInit {
 
   ssggSelection = new SelectionModel<any>(true, []);
   ssggKeys: Array<any> = [
-    {name:'Dashboard',value:'ssggDashboard'},
     {name:'Solicitudes', value:'ssggRequests'},
     {name:'Formulario de Solicitudes',value:'ssggRequestsForm'},
     {name:'Lista general de Solicitudes',value:'ssggRequestsGeneralList'},
@@ -93,11 +80,19 @@ export class CreateNewPermitComponent implements OnInit {
     {name:'Eliminar Solicitudes',value:'ssggRequestsDelete'},
   ];
 
+  configurationSelection = new SelectionModel<any>(true, []);
+  configurationKeys: Array<any> = [
+    {name:'Usuarios', value:'configurationUsers'},
+    {name:'Valores del sistema',value:'configurationSystem'},
+    {name:'Notificaciones',value:'configurationNotification'}
+  ];
+
 
   constructor(
     private fb: FormBuilder,
     public dbs: DatabaseService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    public dialogRef: MatDialogRef<CreateNewPermitComponent>
   ) { }
 
   ngOnInit() {
@@ -125,7 +120,6 @@ export class CreateNewPermitComponent implements OnInit {
       generalDashboard: false,
 
       securitySection:false,
-      securityDashboard:false,
       securityFred:false,
       securityFredForm:false,
       securityFredGeneralList:false,
@@ -134,7 +128,6 @@ export class CreateNewPermitComponent implements OnInit {
       securityFredDelete:false,
       securityInspections:false,
       securityInspectionsCrono:false,
-      securityInspectionsForm:false,
       securityInspectionsGeneralList:false,
       securityInspectionsPersonalList:false,
       securityInspectionsEdit:false,
@@ -146,26 +139,17 @@ export class CreateNewPermitComponent implements OnInit {
       securityTasksDelete:false,
 
       qualitySection:false,
-      qualityDashboard:false,
       qualityRedos:false,
-      qualityRedosForm:false,
       qualityRedosGeneralList:false,
       qualityRedosPersonalList:false,
       qualityRedosEdit:false,
       qualityRedosDelete:false,
       qualityInspections:false,
       qualityInspectionsCrono:false,
-      qualityInspectionsForm:false,
       qualityInspectionsGeneralList:false,
       qualityInspectionsPersonalList:false,
       qualityInspectionsEdit:false,
       qualityInspectionsDelete:false,
-      qualityUpgrades:false,
-      qualityUpgradesForm:false,
-      qualityUpgradesGeneralList:false,
-      qualityUpgradesPersonalList:false,
-      qualityUpgradesEdit:false,
-      qualityUpgradesDelete:false,
       qualityTasks:false,
       qualityTasksForm:false,
       qualityTasksGeneralList:false,
@@ -174,7 +158,6 @@ export class CreateNewPermitComponent implements OnInit {
       qualityTasksDelete:false,
 
       maintenanceSection:false,
-      maintenanceDashboard:false,
       maintenanceRequests:false,
       maintenanceRequestsForm:false,
       maintenanceRequestsGeneralList:false,
@@ -183,13 +166,17 @@ export class CreateNewPermitComponent implements OnInit {
       maintenanceRequestsDelete:false,
 
       ssggSection:false,
-      ssggDashboard:false,
       ssggRequests:false,
       ssggRequestsForm:false,
       ssggRequestsGeneralList:false,
       ssggRequestsPersonalList:false,
       ssggRequestsEdit:false,
       ssggRequestsDelete:false,
+
+      configurationSection:false,
+      configurationUsers:false,
+      configurationSystem:false,
+      configurationNotification:false
 
     })
 
@@ -219,9 +206,9 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('qualitySection').setValue(true);
       }
-      console.log(this.permitsConfigurationFormGroup.value);
-      console.log(res);
-      console.log(this.qualitySelection.hasValue());
+      // console.log(this.permitsConfigurationFormGroup.value);
+      // console.log(res);
+      // console.log(this.qualitySelection.hasValue());
     })
 
     this.maintenanceSelection.onChange
@@ -234,9 +221,9 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('maintenanceSection').setValue(true);
       }
-      console.log(this.permitsConfigurationFormGroup.value);
-      console.log(res);
-      console.log(this.maintenanceSelection.hasValue());
+      // console.log(this.permitsConfigurationFormGroup.value);
+      // console.log(res);
+      // console.log(this.maintenanceSelection.hasValue());
     })
 
     this.ssggSelection.onChange
@@ -249,10 +236,26 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('ssggSection').setValue(true);
       }
-      console.log(this.permitsConfigurationFormGroup.value);
-      console.log(res);
-      console.log(this.ssggSelection.hasValue());
+      // console.log(this.permitsConfigurationFormGroup.value);
+      // console.log(res);
+      // console.log(this.ssggSelection.hasValue());
     })
+
+    this.configurationSelection.onChange
+    .pipe(
+      debounceTime(1000)
+    )
+    .subscribe(res => {
+      if(!this.configurationSelection.hasValue()){
+        this.permitsConfigurationFormGroup.get('configurationSection').setValue(false);
+      }else{
+        this.permitsConfigurationFormGroup.get('configurationSection').setValue(true);
+      }
+      // console.log(this.permitsConfigurationFormGroup.value);
+      // console.log(res);
+      // console.log(this.ssggSelection.hasValue());
+    })
+
   }
 
   // SECURITY METHODS
@@ -329,7 +332,63 @@ export class CreateNewPermitComponent implements OnInit {
     }
   }
 
+  // CONFIGURATION METHODS
+  isAllConfigurationSelected() {
+    const numSelected = this.configurationSelection.selected.length;
+
+    return numSelected === this.configurationKeys.length;
+  }
+
+  masterConfigurationToggle() {
+    if(this.isAllConfigurationSelected()){
+      this.configurationSelection.clear();
+      this.configurationKeys.forEach(key => this.permitsConfigurationFormGroup.get(key['value']).setValue(false));
+      this.permitsConfigurationFormGroup.get('configurationSection').setValue(false)
+    }else{
+      this.configurationKeys.forEach(key => this.configurationSelection.select(key['value']));
+      this.configurationKeys.forEach(key => this.permitsConfigurationFormGroup.get(key['value']).setValue(true));
+    }
+  }
+
   create(): void{
+    let _permits = {};
+
+    this.securitySelection.selected.forEach(element => {
+      _permits[element] = true;
+    });
+
+    this.qualitySelection.selected.forEach(element => {
+      _permits[element] = true;
+    });
+
+    this.maintenanceSelection.selected.forEach(element => {
+      _permits[element] = true;
+    });
+
+    this.ssggSelection.selected.forEach(element => {
+      _permits[element] = true;
+    });
+
+    this.configurationSelection.selected.forEach(element => {
+      _permits[element] = true;
+    });
+
+    this.dbs.permitsCollection
+      .add(_permits)
+        .then(ref => {
+          ref.update({
+            id: ref.id,
+            regDate: Date.now(),
+            name: this.detailsFormGroup.value['name']
+          });
+          this.snackbar.open("Listo!","Cerrar");
+          this.dialogRef.close(true);
+        })
+        .catch(err => {
+          console.log(err);
+          this.snackbar.open("Ups...Parece que hubo un error al guardar el permiso","Cerrar");
+          this.dialogRef.close(true);
+        })
 
   }
 

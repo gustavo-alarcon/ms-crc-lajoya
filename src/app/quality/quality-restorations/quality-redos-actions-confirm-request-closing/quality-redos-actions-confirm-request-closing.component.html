@@ -1,0 +1,12 @@
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">forward</mat-icon> Solicitar cierre</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <p class="ms-font-roboto">¿Está seguro de solicitar el cierre?</p>
+  
+  <mat-progress-bar mode="indeterminate" *ngIf="uploading"></mat-progress-bar>
+  
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-stroked-button mat-dialog-close style="margin:0em 0.5em 0em 0em" color="warn">No</button>
+  <button mat-raised-button color="primary" style="margin:0em 0.5em 0em 0em" (click)="save()">Si, solicitar</button>
+</mat-dialog-actions>

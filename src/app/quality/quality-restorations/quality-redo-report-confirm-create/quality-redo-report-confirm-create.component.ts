@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/core/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-quality-redo-report-confirm-create',
@@ -12,6 +13,8 @@ import { finalize } from 'rxjs/operators';
   styles: []
 })
 export class QualityRedoReportConfirmCreateComponent implements OnInit {
+
+  sendNotificationsControl = new FormControl(true);
 
   uploadPercent_initial: Observable<number>;
   uploading_initial: boolean = false;
@@ -58,8 +61,11 @@ export class QualityRedoReportConfirmCreateComponent implements OnInit {
                 createdBy: this.auth.userCRC,
                 uidCreator: this.auth.userCRC.uid,
                 uidSupervisor: this.data['form']['area']['supervisor']['uid'],
-                notificationList: []
               };
+
+              if(!this.sendNotificationsControl.value){
+                metaObject['status'] = 'Confirmado'
+              }
 
               this.reportObject = Object.assign(this.data['form'], metaObject);
       
@@ -90,65 +96,88 @@ export class QualityRedoReportConfirmCreateComponent implements OnInit {
                     });
                   });
 
-                // Adding task to supervisor
-                this.dbs.usersCollection
-                  .doc(this.data['form']['area']['supervisor']['uid'])
-                  .collection(`tasks`)
-                  .doc(reportRef.id)
-                  .set(this.reportObject, {merge: true})
-                
-                // Adding notification to area supervisor
-                this.dbs.usersCollection
-                  .doc(this.data['form']['area']['supervisor']['uid'])
-                  .collection(`notifications`)
-                  .add({
-                    regDate: Date.now(),
-                    senderId: this.auth.userCRC.uid,
-                    senderName: this.auth.userCRC.displayName,
-                    areaSupervisorId: this.data['form']['area']['supervisor']['uid'],
-                    areaSupervisorName: this.data['form']['area']['supervisor']['displayName'],
-                    redoId: reportRef.id,
-                    component: this.data['form']['component'],
-                    OT: this.data['form']['OT'],
-                    description: this.data['form']['description'],
-                    redoStatus: 'Por confirmar',
-                    status: 'unseen',
-                    type: 'quality redo report supervisor'
-                  })
-                    .then(ref => {
-                      ref.update({id: ref.id})
-                      this.snackbar.open("Listo!","Cerrar",{
-                        duration: 10000
+                // NOTIFICATIONS
+                if(this.sendNotificationsControl.value){
+
+                  // Adding notification to area supervisor
+                  this.dbs.usersCollection
+                    .doc(this.data['form']['area']['supervisor']['uid'])
+                    .collection(`notifications`)
+                    .add({
+                      regDate: Date.now(),
+                      senderId: this.auth.userCRC.uid,
+                      senderName: this.auth.userCRC.displayName,
+                      areaSupervisorId: this.data['form']['area']['supervisor']['uid'],
+                      areaSupervisorName: this.data['form']['area']['supervisor']['displayName'],
+                      redoId: reportRef.id,
+                      component: this.data['form']['component'],
+                      OT: this.data['form']['OT'],
+                      description: this.data['form']['description'],
+                      redoStatus: 'Por confirmar',
+                      status: 'unseen',
+                      type: 'quality redo report supervisor'
+                    })
+                      .then(ref => {
+                        ref.update({id: ref.id})
+                        this.snackbar.open("Listo!","Cerrar",{
+                          duration: 10000
+                        });
                       });
-                    });
+                  
+                  
+                  // sending notifications to the technicians
+                  this.dbs.qualityRedoTechnicians.forEach(user => {
+                    this.dbs.usersCollection
+                    .doc(user['uid'])
+                    .collection(`notifications`)
+                    .add({
+                      regDate: Date.now(),
+                      senderId: this.auth.userCRC.uid,
+                      senderName: this.auth.userCRC.displayName,
+                      areaSupervisorId: user['uid'],
+                      areaSupervisorName: user['displayName'],
+                      redoId: reportRef.id,
+                      component: this.data['form']['component'],
+                      OT: this.data['form']['OT'],
+                      description: this.data['form']['description'],
+                      status: 'unseen',
+                      type: 'quality redo report technician'
+                    })
+                      .then(ref => {
+                        ref.update({id: ref.id})
+                        this.snackbar.open("Listo!","Cerrar",{
+                          duration: 10000
+                        });
+                      });
+                  })
+
+                  // sending notifications to the quality supervisors
+                  this.dbs.qualityRedoQualityAnalysts.forEach(user => {
+                    this.dbs.usersCollection
+                    .doc(user['uid'])
+                    .collection(`notifications`)
+                    .add({
+                      regDate: Date.now(),
+                      senderId: this.auth.userCRC.uid,
+                      senderName: this.auth.userCRC.displayName,
+                      areaSupervisorId: user['uid'],
+                      areaSupervisorName: user['displayName'],
+                      redoId: reportRef.id,
+                      component: this.data['form']['component'],
+                      OT: this.data['form']['OT'],
+                      description: this.data['form']['description'],
+                      status: 'unseen',
+                      type: 'quality redo report quality supervisor'
+                    })
+                      .then(ref => {
+                        ref.update({id: ref.id})
+                        this.snackbar.open("Listo!","Cerrar",{
+                          duration: 10000
+                        });
+                      });
+                  })
+                }
                 
-                // UNDER DEVELOPING
-                // Adding notifications to Redo's report notification list
-                // this.qualityRedoReportNotificationList.forEach(element => {
-                //   this.dbs.usersCollection
-                //   .doc(element['uid'])
-                //   .collection(`notifications`)
-                //   .add({
-                //     regDate: Date.now(),
-                //     senderId: this.auth.userCRC.uid,
-                //     senderName: this.auth.userCRC.displayName,
-                //     areaSupervisorId: element['uid'],
-                //     areaSupervisorName: element['displayName'],
-                //     redoId: reportRef.id,
-                //     component: this.data['form']['component'],
-                //     OT: this.data['form']['OT'],
-                //     description: this.data['form']['description'],
-                //     status: 'unseen',
-                //     canUpdate: element['canUpdate'],
-                //     type: 'quality redo report list'
-                //   })
-                //     .then(ref => {
-                //       ref.update({id: ref.id})
-                //       this.snackbar.open("Listo!","Cerrar",{
-                //         duration: 10000
-                //       });
-                //     });
-                // })
 
               }).catch(err => {
                 console.log(err);

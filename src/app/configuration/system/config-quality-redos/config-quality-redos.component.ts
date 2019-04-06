@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from 'src/app/core/database.service';
 import { FormControl } from '@angular/forms';
+import { SidenavService } from 'src/app/core/sidenav.service';
 
 @Component({
   selector: 'app-config-quality-redos',
@@ -24,10 +25,15 @@ export class ConfigQualityRedosComponent implements OnInit {
   uploadingQualityCauseClassifications: boolean = false;
 
   constructor(
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    public sidenav: SidenavService
   ) { }
 
   ngOnInit() {
+  }
+
+  toggleSidenav(): void{
+    this.sidenav.sidenavSystem();
   }
 
   // List 1
