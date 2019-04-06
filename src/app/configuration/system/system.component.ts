@@ -11,6 +11,8 @@ export class SystemComponent implements OnInit {
   generalOpenedFlag: boolean;
   securityOpenedFlag: boolean;
   qualityOpenedFlag: boolean;
+  maintenanceOpenedFlag: boolean;
+  ssggOpenedFlag: boolean;
   
   constructor(
     public sidenav: SidenavService
@@ -41,6 +43,22 @@ export class SystemComponent implements OnInit {
 
   qualityClosed(): void{
     this.qualityOpenedFlag = false;
+  }
+
+  maintenanceOpened(): void{
+    this.maintenanceOpenedFlag = true;
+  }
+
+  maintenanceClosed(): void{
+    this.maintenanceOpenedFlag = false;
+  }
+
+  ssggOpened(): void{
+    this.ssggOpenedFlag = true;
+  }
+
+  ssggClosed(): void{
+    this.ssggOpenedFlag = false;
   }
 
 }

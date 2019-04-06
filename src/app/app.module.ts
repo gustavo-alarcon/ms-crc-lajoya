@@ -164,6 +164,8 @@ import { UsersDialogAssignAreaComponent } from './configuration/users/users-dial
 import { UsersPermitConfirmDeleteComponent } from './configuration/users-permit-list/users-permit-confirm-delete/users-permit-confirm-delete.component';
 import { UsersPermitDialogEditComponent } from './configuration/users-permit-list/users-permit-dialog-edit/users-permit-dialog-edit.component';
 import { UsersPermitConfirmEditComponent } from './configuration/users-permit-list/users-permit-confirm-edit/users-permit-confirm-edit.component';
+import { ConfigMaintenanceRequestsComponent } from './configuration/system/config-maintenance-requests/config-maintenance-requests.component';
+import { ConfigSsggRequestsComponent } from './configuration/system/config-ssgg-requests/config-ssgg-requests.component';
 
 
 
@@ -274,7 +276,9 @@ import { UsersPermitConfirmEditComponent } from './configuration/users-permit-li
     UsersDialogAssignAreaComponent,
     UsersPermitConfirmDeleteComponent,
     UsersPermitDialogEditComponent,
-    UsersPermitConfirmEditComponent
+    UsersPermitConfirmEditComponent,
+    ConfigMaintenanceRequestsComponent,
+    ConfigSsggRequestsComponent
     
   ],
   imports: [
