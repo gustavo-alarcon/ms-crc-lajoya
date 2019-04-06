@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { CreateNewPermitComponent } from './create-new-permit/create-new-permit.component';
-import { AuthService } from 'src/app/core/auth.service';
 import { DatabaseService } from 'src/app/core/database.service';
+import { SidenavService } from 'src/app/core/sidenav.service';
+import { UsersPermitConfirmDeleteComponent } from '../../users-permit-list/users-permit-confirm-delete/users-permit-confirm-delete.component';
+import { UsersPermitDialogEditComponent } from '../../users-permit-list/users-permit-dialog-edit/users-permit-dialog-edit.component';
 
 @Component({
   selector: 'app-users-permit-list',
@@ -21,6 +23,7 @@ export class UsersPermitListComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
+    public sidenav: SidenavService,
     public dbs: DatabaseService
   ) { }
 
@@ -33,6 +36,10 @@ export class UsersPermitListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
+  toggleSidenav(): void{
+    this.sidenav.sidenavUsers();
+  }
+
   filterData(ref): void{
     ref = ref.toLowerCase();
     this.filteredPermits = this.dbs.permits.filter(option =>       
@@ -43,6 +50,19 @@ export class UsersPermitListComponent implements OnInit {
 
   createNewPermit():void {
     this.dialog.open(CreateNewPermitComponent);
+  }
+
+  editPermit(permit): void{
+    console.log(permit);
+    this.dialog.open(UsersPermitDialogEditComponent, {
+      data: permit
+    })
+  }
+
+  deletePermit(permit): void{
+    this.dialog.open(UsersPermitConfirmDeleteComponent, {
+      data: permit
+    })
   }
 
 }

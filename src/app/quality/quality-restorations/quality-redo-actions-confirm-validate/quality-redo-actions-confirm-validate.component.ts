@@ -41,9 +41,10 @@ export class QualityRedoActionsConfirmValidateComponent implements OnInit {
         });
       });
 
-    // send notification to responsible
-    this.dbs.usersCollection
-      .doc(this.data['task']['actionResponsible']['uid'])
+    // send notification to responsibles
+    this.data['task']['actionResponsibles'].forEach(staff => {
+      this.dbs.usersCollection
+      .doc(staff['uid'])
       .collection('notifications')
       .add({
         regDate: Date.now(),
@@ -67,6 +68,8 @@ export class QualityRedoActionsConfirmValidateComponent implements OnInit {
           duration:6000
         });
       });
+    })
+    
   }
 
 }

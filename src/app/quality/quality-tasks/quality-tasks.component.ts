@@ -78,7 +78,7 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
 
   monthFormControl = new FormControl({value:new Date(), disabled: true});
 
-  displayedColumnsTasksByRedo: string[] = ['index', 'action', 'approved', 'responsible', 'additionalStaff', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'finalize'];
+  displayedColumnsTasksByRedo: string[] = ['index', 'action', 'approved', 'responsibles', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'finalize'];
   dataSourceTasksByRedo = new MatTableDataSource();
 
   dataSourceTasksByInspections = new MatTableDataSource();
@@ -134,19 +134,6 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     this.dataSourceTasksByInspections.sort = this.sort.toArray()[1];
   }
 
-  finalizeTask(task): void{
-    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeComponent, {
-      data: task
-    })
-
-    dialogRef.afterClosed().subscribe( res => {
-      if(res){
-        dialogRef.close();
-      }
-    })
-    
-  }
-
   setMonthOfView(event, datepicker): void {
     this.monthFormControl = new FormControl({value:event, disabled:true});
     this.monthIndex = this.monthFormControl.value.getMonth();
@@ -167,6 +154,21 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     
     datepicker.close();
   }
+
+  finalizeTask(task): void{
+    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeComponent, {
+      data: task
+    })
+
+    dialogRef.afterClosed().subscribe( res => {
+      if(res){
+        dialogRef.close();
+      }
+    })
+    
+  }
+
+  
 
   
 

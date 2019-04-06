@@ -147,7 +147,7 @@ export class QualityTasksDialogFinalizeComponent implements OnInit {
       return;
     }
 
-    this.dialog.open(QualityTasksConfirmFinalizeComponent, {
+    let dialogRef = this.dialog.open(QualityTasksConfirmFinalizeComponent, {
       data: {
         task: this.data,
         details: this.taskFormGroup.value['details'],
@@ -160,9 +160,9 @@ export class QualityTasksDialogFinalizeComponent implements OnInit {
       }
     })
 
-    this.dialogRef.afterClosed().subscribe( res => {
+    dialogRef.afterClosed().subscribe( res => {
       if(res){
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       }
     })
   }

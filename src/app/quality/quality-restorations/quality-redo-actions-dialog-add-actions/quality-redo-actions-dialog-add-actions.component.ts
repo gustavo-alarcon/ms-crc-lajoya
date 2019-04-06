@@ -19,7 +19,7 @@ export class QualityRedoActionsDialogAddActionsComponent implements OnInit {
   filteredUsers: Observable<any>;
   filteredAdditionalUsers: Observable<any>;
 
-  displayedColumnsActions: string[] = ['index', 'action', 'actionResponsible', 'actionsAdditionalStaff', 'delete'];
+  displayedColumnsActions: string[] = ['index', 'action', 'actionsAdditionalStaff', 'delete'];
   
 
   @ViewChild('actionsAdditionalStaffInput') actionsAdditionalStaffInput: ElementRef<HTMLInputElement>;
@@ -52,13 +52,6 @@ export class QualityRedoActionsDialogAddActionsComponent implements OnInit {
 
     this.createForms();
 
-    this.filteredUsers =  this.actionsFormGroup.get('actionResponsible').valueChanges
-                            .pipe(
-                              startWith<any>(''),
-                              map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
-                              map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
-                            );
-
     this.filteredAdditionalUsers =  this.actionsFormGroup.get('actionsAdditionalStaff').valueChanges
                                       .pipe(
                                         startWith<any>(''),
@@ -71,7 +64,6 @@ export class QualityRedoActionsDialogAddActionsComponent implements OnInit {
   createForms(): void{
     this.actionsFormGroup = this.fb.group({
       action: ['', [Validators.required]],
-      actionResponsible: ['', [Validators.required]],
       actionsAdditionalStaff: '',
     });
   }
@@ -119,8 +111,19 @@ export class QualityRedoActionsDialogAddActionsComponent implements OnInit {
   }
 
   addAction(): void{
-    this.actionsArray.push(Object.assign(this.actionsFormGroup.value, {additionalStaff:this.actionsAdditionalStaffArray, approved:false, valid: false, finalPicture:'', finalArchive:'', status:'Por confirmar', realTerminationDate: 0}));
+    let action = {
+      action: this.actionsFormGroup.value['action'],
+      actionResponsibles:this.actionsAdditionalStaffArray,
+      approved:false,
+      valid: false,
+      finalPicture:'',
+      finalArchive:'',
+      status:'Por confirmar',
+      realTerminationDate: 0
+    }
+    this.actionsArray.push(action);
     this.dataSourceActions.data = this.actionsArray;
+    this.actionsAdditionalStaffArray = [];
   }
 
   deleteAction(index): void{

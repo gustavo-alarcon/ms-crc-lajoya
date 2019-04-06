@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/core/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { finalize } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-quality-redo-report-confirm-analyze',
@@ -12,6 +13,8 @@ import { finalize } from 'rxjs/operators';
   styles: []
 })
 export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
+
+  sendNotificationsControl = new FormControl(true);
 
   uploading: boolean = false;
 
@@ -81,117 +84,138 @@ export class QualityRedoReportConfirmAnalyzeComponent implements OnInit {
             duration:6000
           });
         });
-
-      // uploading task for supervisor
-      this.dbs.usersCollection
-        .doc(this.data['redo']['area']['supervisor']['uid'])
-        .collection(`tasks`)
-        .doc(this.data['redo']['id'])
-        .set(reportObject, {merge: true})
       
-      // Adding notification to area supervisor
-      this.dbs.usersCollection
-        .doc(this.data['redo']['area']['supervisor']['uid'])
-        .collection(`notifications`)
-        .add({
-          regDate: Date.now(),
-          senderId: this.auth.userCRC.uid,
-          senderName: this.auth.userCRC.displayName,
-          areaSupervisorId: this.data['redo']['area']['supervisor']['uid'],
-          areaSupervisorName: this.data['redo']['area']['supervisor']['displayName'],
-          redoId: this.data['redo']['id'],
-          component: this.data['redo']['component'],
-          OT: this.data['redo']['OT'],
-          description: this.data['redo']['description'],
-          status: 'unseen',
-          type: 'quality redo analyze supervisor'
-        })
-          .then(ref => {
-            ref.update({id: ref.id})
-            this.snackbar.open("Listo!","Cerrar",{
-              duration: 10000
-            });
-          });
+      // NOTIFICATIONS
+      if(this.sendNotificationsControl.value){
 
-      // sending notification to involved areas
-      this.data['involvedAreas'].forEach(element => {
+        // Adding notification to area supervisor
         this.dbs.usersCollection
-        .doc(element['supervisor']['uid'])
-        .collection(`notifications`)
-        .add({
-          regDate: Date.now(),
-          senderId: this.auth.userCRC.uid,
-          senderName: this.auth.userCRC.displayName,
-          areaSupervisorId: element['supervisor']['uid'],
-          areaSupervisorName: element['supervisor']['displayName'],
-          redoId: this.data['redo']['id'],
-          component: this.data['redo']['component'],
-          OT: this.data['redo']['OT'],
-          description: this.data['redo']['description'],
-          status: 'unseen',
-          type: 'quality redo analyze involved supervisor'
-        })
-          .then(ref => {
-            ref.update({id: ref.id})
-            this.snackbar.open("Listo!","Cerrar",{
-              duration: 10000
+          .doc(this.data['redo']['area']['supervisor']['uid'])
+          .collection(`notifications`)
+          .add({
+            regDate: Date.now(),
+            senderId: this.auth.userCRC.uid,
+            senderName: this.auth.userCRC.displayName,
+            areaSupervisorId: this.data['redo']['area']['supervisor']['uid'],
+            areaSupervisorName: this.data['redo']['area']['supervisor']['displayName'],
+            redoId: this.data['redo']['id'],
+            component: this.data['redo']['component'],
+            OT: this.data['redo']['OT'],
+            description: this.data['redo']['description'],
+            status: 'unseen',
+            type: 'quality redo analyze supervisor'
+          })
+            .then(ref => {
+              ref.update({id: ref.id})
+              this.snackbar.open("Listo!","Cerrar",{
+                duration: 10000
+              });
             });
-          });
-      });
 
-      // sending notification to responsible staff
-      this.data['responsibleStaff'].forEach(element => {
-        this.dbs.usersCollection
-        .doc(element['uid'])
-        .collection(`notifications`)
-        .add({
-          regDate: Date.now(),
-          senderId: this.auth.userCRC.uid,
-          senderName: this.auth.userCRC.displayName,
-          staffId: element['uid'],
-          staffName: element['displayName'],
-          redoId: this.data['redo']['id'],
-          component: this.data['redo']['component'],
-          OT: this.data['redo']['OT'],
-          description: this.data['redo']['description'],
-          status: 'unseen',
-          type: 'quality redo analyze responsible staff'
-        })
-          .then(ref => {
-            ref.update({id: ref.id})
-            this.snackbar.open("Listo!","Cerrar",{
-              duration: 10000
+        // sending notification to involved areas
+        this.data['involvedAreas'].forEach(element => {
+          this.dbs.usersCollection
+          .doc(element['supervisor']['uid'])
+          .collection(`notifications`)
+          .add({
+            regDate: Date.now(),
+            senderId: this.auth.userCRC.uid,
+            senderName: this.auth.userCRC.displayName,
+            areaSupervisorId: element['supervisor']['uid'],
+            areaSupervisorName: element['supervisor']['displayName'],
+            redoId: this.data['redo']['id'],
+            component: this.data['redo']['component'],
+            OT: this.data['redo']['OT'],
+            description: this.data['redo']['description'],
+            status: 'unseen',
+            type: 'quality redo analyze involved supervisor'
+          })
+            .then(ref => {
+              ref.update({id: ref.id})
+              this.snackbar.open("Listo!","Cerrar",{
+                duration: 10000
+              });
             });
-          });
-      })
-      
-      // UNDER DEVELOPING
-      // Adding notifications to Redo's report notification list
-      // this.qualityRedoReportNotificationList.forEach(element => {
-      //   this.dbs.usersCollection
-      //   .doc(element['uid'])
-      //   .collection(`notifications`)
-      //   .add({
-      //     regDate: Date.now(),
-      //     senderId: this.auth.userCRC.uid,
-      //     senderName: this.auth.userCRC.displayName,
-      //     areaSupervisorId: element['uid'],
-      //     areaSupervisorName: element['displayName'],
-      //     redoId: reportRef.id,
-      //     component: this.data['form']['component'],
-      //     OT: this.data['form']['OT'],
-      //     description: this.data['form']['description'],
-      //     status: 'unseen',
-      //     canUpdate: element['canUpdate'],
-      //     type: 'quality redo report list'
-      //   })
-      //     .then(ref => {
-      //       ref.update({id: ref.id})
-      //       this.snackbar.open("Listo!","Cerrar",{
-      //         duration: 10000
-      //       });
-      //     });
-      // })
+        });
+
+        // sending notification to responsible staff
+        this.data['responsibleStaff'].forEach(element => {
+          this.dbs.usersCollection
+          .doc(element['uid'])
+          .collection(`notifications`)
+          .add({
+            regDate: Date.now(),
+            senderId: this.auth.userCRC.uid,
+            senderName: this.auth.userCRC.displayName,
+            staffId: element['uid'],
+            staffName: element['displayName'],
+            redoId: this.data['redo']['id'],
+            component: this.data['redo']['component'],
+            OT: this.data['redo']['OT'],
+            description: this.data['redo']['description'],
+            status: 'unseen',
+            type: 'quality redo analyze responsible staff'
+          })
+            .then(ref => {
+              ref.update({id: ref.id})
+              this.snackbar.open("Listo!","Cerrar",{
+                duration: 10000
+              });
+            });
+        })
+        
+        // sending notifications to the technicians
+        this.dbs.qualityRedoTechnicians.forEach(user => {
+          this.dbs.usersCollection
+          .doc(user['uid'])
+          .collection(`notifications`)
+          .add({
+            regDate: Date.now(),
+            senderId: this.auth.userCRC.uid,
+            senderName: this.auth.userCRC.displayName,
+            areaSupervisorId: user['uid'],
+            areaSupervisorName: user['displayName'],
+            redoId: this.data['redo']['id'],
+            component: this.data['redo']['component'],
+            OT: this.data['redo']['OT'],
+            description: this.data['redo']['description'],
+            status: 'unseen',
+            type: 'quality redo analyze technician'
+          })
+            .then(ref => {
+              ref.update({id: ref.id})
+              this.snackbar.open("Listo!","Cerrar",{
+                duration: 10000
+              });
+            });
+        })
+
+        // sending notifications to the quality supervisors
+        this.dbs.qualityRedoQualityAnalysts.forEach(user => {
+          this.dbs.usersCollection
+          .doc(user['uid'])
+          .collection(`notifications`)
+          .add({
+            regDate: Date.now(),
+            senderId: this.auth.userCRC.uid,
+            senderName: this.auth.userCRC.displayName,
+            areaSupervisorId: user['uid'],
+            areaSupervisorName: user['displayName'],
+            redoId: this.data['redo']['id'],
+            component: this.data['redo']['component'],
+            OT: this.data['redo']['OT'],
+            description: this.data['redo']['description'],
+            status: 'unseen',
+            type: 'quality redo analyze quality supervisor'
+          })
+            .then(ref => {
+              ref.update({id: ref.id})
+              this.snackbar.open("Listo!","Cerrar",{
+                duration: 10000
+              });
+            });
+        })
+      }
 
     }).catch(err => {
       console.log(err);

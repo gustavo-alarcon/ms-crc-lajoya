@@ -36,16 +36,20 @@ export class QualityRedoActionsConfirmApproveActionsComponent implements OnInit 
           element['redoId'] = this.data['redo']['id'];
           element['source'] = 'redo actions';
           
-          // adding task to action responsible
-          this.dbs.usersCollection
-            .doc(element['actionResponsible']['uid'])
+          // adding task to action responsibles
+          element['actionResponsibles'].forEach(staff => {
+            this.dbs.usersCollection
+            .doc(staff['uid'])
             .collection(`tasks`)
             .doc(element['id'])
             .set(element, {merge: true})
+          })
           
-          // sending notification to action responsible
-          this.dbs.usersCollection
-            .doc(element['actionResponsible']['uid'])
+          
+          // sending notification to action responsibles
+          element['actionResponsibles'].forEach(staff => {
+            this.dbs.usersCollection
+            .doc(staff['uid'])
             .collection(`notifications`)
             .add({
               regDate: Date.now(),
@@ -56,8 +60,8 @@ export class QualityRedoActionsConfirmApproveActionsComponent implements OnInit 
               component: this.data['redo']['component'],
               OT: this.data['redo']['OT'],
               description: this.data['redo']['description'],
-              responsibleId: element['actionResponsible']['uid'],
-              responsibleName: element['actionResponsible']['displayName'],
+              responsibleId: staff['uid'],
+              responsibleName: staff['displayName'],
               actionStatus: element['status'],
               task: element['action'],
               status: 'unseen',
@@ -69,44 +73,8 @@ export class QualityRedoActionsConfirmApproveActionsComponent implements OnInit 
                   duration: 10000
                 });
               });
-
-          
-          element['additionalStaff'].forEach(staff => {
-
-            // adding task to action responsible
-            this.dbs.usersCollection
-              .doc(staff['uid'])
-              .collection(`tasks`)
-              .doc(element['id'])
-              .set(element, {merge: true})
-            
-            // sending notifications to additional staff
-            this.dbs.usersCollection
-              .doc(staff['uid'])
-              .collection(`notifications`)
-              .add({
-                regDate: Date.now(),
-                senderId: this.auth.userCRC.uid,
-                senderName: this.auth.userCRC.displayName,
-                redoId: this.data['redo']['id'],
-                taskId: element['id'],
-                component: this.data['redo']['component'],
-                OT: this.data['redo']['OT'],
-                description: this.data['redo']['description'],
-                staffId: staff['uid'],
-                staffName: staff['displayName'],
-                actionStatus: element['status'],
-                task: element['action'],
-                status: 'unseen',
-                type: 'quality redo actions task staff'
-              })
-                .then(ref => {
-                  ref.update({id: ref.id})
-                  this.snackbar.open("Listo!","Cerrar",{
-                    duration: 10000
-                  });
-                });
           })
+          
         })
     })
 
@@ -131,108 +99,6 @@ export class QualityRedoActionsConfirmApproveActionsComponent implements OnInit 
           duration:6000
         });
       });
-
-    
-    // this.dbs.qualityRedosCollection.doc(this.data['redo']['id']).set(this.reportObject,{merge:true}).then(() => {
-
-    //   // Creating log object
-    //   let log = {
-    //     action: 'Adding actions!',
-    //     data: this.reportObject,
-    //     user: this.auth.userCRC,
-    //     regdate: Date.now()
-    //   }
-      
-    //   // Adding log to redo
-    //   this.dbs.addQualityRedoLog(this.data['redo']['id'], log)
-    //     .then(() => {
-    //       this.dialogRef.close('Acciones');
-    //       this.uploading = false;
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //       this.uploading = false;
-    //       this.snackbar.open("Ups!, parece que hubo un error (MR001) ...","Cerrar",{
-    //         duration:6000
-    //       });
-    //     });
-      
-    //   // sending notification to actions responsibles areas
-    //   this.data['redo']['actions'].forEach((element,index) => {
-
-    //     // adding task to action responsible
-    //     this.dbs.usersCollection
-    //       .doc(element['actionResponsible']['uid'])
-    //       .collection(`tasks`)
-    //       .doc(this.data['redo']['id'] + `${index}`)
-    //       .set(element, {merge: true})
-        
-    //     // sending notification to action responsible
-    //     this.dbs.usersCollection
-    //       .doc(element['actionResponsible']['uid'])
-    //       .collection(`notifications`)
-    //       .add({
-    //         regDate: Date.now(),
-    //         senderId: this.auth.userCRC.uid,
-    //         senderName: this.auth.userCRC.displayName,
-    //         redoId: this.data['redo']['id'],
-    //         component: this.data['redo']['component'],
-    //         OT: this.data['redo']['OT'],
-    //         description: this.data['redo']['description'],
-    //         responsibleId: element['actionResponsible']['uid'],
-    //         responsibleName: element['actionResponsible']['displayName'],
-    //         actionStatus: element['status'],
-    //         task: element['action'],
-    //         status: 'unseen',
-    //         type: 'quality redo actions task responsible'
-    //       })
-    //         .then(ref => {
-    //           ref.update({id: ref.id})
-    //           this.snackbar.open("Listo!","Cerrar",{
-    //             duration: 10000
-    //           });
-    //         });
-
-        
-    //     element['additionalStaff'].forEach(staff => {
-
-    //       // adding task to action responsible
-    //       this.dbs.usersCollection
-    //         .doc(staff['uid'])
-    //         .collection(`tasks`)
-    //         .doc(this.data['redo']['id'] + `${index}`)
-    //         .set(element, {merge: true})
-          
-    //       // sending notifications to additional staff
-    //       this.dbs.usersCollection
-    //         .doc(staff['uid'])
-    //         .collection(`notifications`)
-    //         .add({
-    //           regDate: Date.now(),
-    //           senderId: this.auth.userCRC.uid,
-    //           senderName: this.auth.userCRC.displayName,
-    //           redoId: this.data['redo']['id'],
-    //           redo: this.data['redo'],
-    //           component: this.data['redo']['component'],
-    //           OT: this.data['redo']['OT'],
-    //           description: this.data['redo']['description'],
-    //           staffId: staff['uid'],
-    //           staffName: staff['displayName'],
-    //           actionIndex: index,
-    //           actionStatus: element['status'],
-    //           task: element['action'],
-    //           status: 'unseen',
-    //           type: 'quality redo actions task staff'
-    //         })
-    //           .then(ref => {
-    //             ref.update({id: ref.id})
-    //             this.snackbar.open("Listo!","Cerrar",{
-    //               duration: 10000
-    //             });
-    //           });
-    //     })
-
-    //   });
       
     //   // UNDER DEVELOPING
     //   // Adding notifications to Redo's report notification list

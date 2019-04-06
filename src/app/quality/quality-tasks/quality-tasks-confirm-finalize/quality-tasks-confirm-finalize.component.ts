@@ -81,21 +81,14 @@ export class QualityTasksConfirmFinalizeComponent implements OnInit {
                     });
                   });
 
-                // Updating task for responsible
-                this.dbs.usersCollection
-                  .doc(this.data['task']['actionResponsible']['uid'])
-                  .collection(`tasks`)
-                  .doc(this.data['task']['id'])
-                  .set({finalPicture: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                
-                // Updating task for involved areas
-                this.data['task']['additionalStaff'].forEach(element => {
+                // Updating task for action responsibles
+                this.data['task']['actionResponsibles'].forEach(staff => {
                   this.dbs.usersCollection
-                    .doc(element['uid'])
+                    .doc(staff['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
                     .set({finalPicture: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                });
+                })
 
               }).catch(err => {
                 console.log(err);
@@ -147,22 +140,15 @@ export class QualityTasksConfirmFinalizeComponent implements OnInit {
                     });
                   });
 
-                // Updating task for responsible
-                this.dbs.usersCollection
-                  .doc(this.data['task']['actionResponsible']['uid'])
-                  .collection(`tasks`)
-                  .doc(this.data['task']['id'])
-                  .set({finalPicture2: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                
-                // Updating task for involved areas
-                this.data['task']['additionalStaff'].forEach(element => {
+                // Updating task for action responsibles
+                this.data['task']['actionResponsibles'].forEach(staff => {
                   this.dbs.usersCollection
-                    .doc(element['uid'])
+                    .doc(staff['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
                     .set({finalPicture2: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                });
-
+                })
+                
               }).catch(err => {
                 console.log(err);
                 this.snackbar.open(err,"Cerrar",{
@@ -213,21 +199,14 @@ export class QualityTasksConfirmFinalizeComponent implements OnInit {
                     });
                   });
 
-                // Updating task for responsible
-                this.dbs.usersCollection
-                  .doc(this.data['task']['actionResponsible']['uid'])
-                  .collection(`tasks`)
-                  .doc(this.data['task']['id'])
-                  .set({finalPicture3: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                
-                // Updating task for involved areas
-                this.data['task']['additionalStaff'].forEach(element => {
+                // Updating task for action responsibles
+                this.data['task']['actionResponsibles'].forEach(staff => {
                   this.dbs.usersCollection
-                    .doc(element['uid'])
+                    .doc(staff['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
                     .set({finalPicture3: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                });
+                })
 
               }).catch(err => {
                 console.log(err);
@@ -279,21 +258,14 @@ export class QualityTasksConfirmFinalizeComponent implements OnInit {
                     });
                   });
 
-                // Updating task for responsible
-                this.dbs.usersCollection
-                  .doc(this.data['task']['actionResponsible']['uid'])
-                  .collection(`tasks`)
-                  .doc(this.data['task']['id'])
-                  .set({finalArchive: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                
-                // Updating task for involved areas
-                this.data['task']['additionalStaff'].forEach(element => {
+                // Updating task for action responsibles
+                this.data['task']['actionResponsibles'].forEach(staff => {
                   this.dbs.usersCollection
-                    .doc(element['uid'])
+                    .doc(staff['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
                     .set({finalArchive: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                });
+                })
 
               }).catch(err => {
                 console.log(err);
@@ -345,21 +317,14 @@ export class QualityTasksConfirmFinalizeComponent implements OnInit {
                     });
                   });
 
-                // Updating task for responsible
-                this.dbs.usersCollection
-                  .doc(this.data['task']['actionResponsible']['uid'])
-                  .collection(`tasks`)
-                  .doc(this.data['task']['id'])
-                  .set({finalArchive2: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                
-                // Updating task for involved areas
-                this.data['task']['additionalStaff'].forEach(element => {
+                // Updating task for action responsibles
+                this.data['task']['actionResponsibles'].forEach(staff => {
                   this.dbs.usersCollection
-                    .doc(element['uid'])
+                    .doc(staff['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
                     .set({finalArchive2: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                });
+                })
 
               }).catch(err => {
                 console.log(err);
@@ -411,21 +376,14 @@ export class QualityTasksConfirmFinalizeComponent implements OnInit {
                     });
                   });
 
-                // Updating task for responsible
-                this.dbs.usersCollection
-                  .doc(this.data['task']['actionResponsible']['uid'])
-                  .collection(`tasks`)
-                  .doc(this.data['task']['id'])
-                  .set({finalArchive3: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                
-                // Updating task for involved areas
-                this.data['task']['additionalStaff'].forEach(element => {
+                // Updating task for action responsibles
+                this.data['task']['actionResponsibles'].forEach(staff => {
                   this.dbs.usersCollection
-                    .doc(element['uid'])
+                    .doc(staff['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
                     .set({finalArchive3: res, status: 'Finalizado', realTerminationDate: this.now}, {merge: true})
-                });
+                })
 
               }).catch(err => {
                 console.log(err);

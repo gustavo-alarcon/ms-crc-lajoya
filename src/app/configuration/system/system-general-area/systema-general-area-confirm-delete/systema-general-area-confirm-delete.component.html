@@ -1,0 +1,10 @@
+
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">delete</mat-icon> Borrar área</h2>
+<mat-dialog-content>
+  <p class="ms-font-poppins ms-color-bt" style="font-size:1em">¿Está seguro de borrar el área: <strong>{{data['name']}}</strong> ?</p>
+  <mat-progress-bar mode="indeterminate" *ngIf="deleting"></mat-progress-bar>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button class="w3-margin-right" mat-dialog-close>No</button>
+  <button mat-raised-button color="warn" (click)="delete()">Si, borrar</button>
+</mat-dialog-actions>

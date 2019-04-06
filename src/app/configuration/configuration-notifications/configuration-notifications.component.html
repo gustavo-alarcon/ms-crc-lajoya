@@ -1,0 +1,37 @@
+<mat-sidenav-container style="height:77vh">
+
+  <mat-sidenav mode="side" [opened]="sidenav.sidenavNotificationsToggle" class="w3-card-4">
+
+    <!-- <mat-expansion-panel style="width:20em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':securityOpenedFlag}" (opened)="securityOpened()" (closed)="securityClosed()">
+      <mat-expansion-panel-header>
+        <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':securityOpenedFlag}">
+          <mat-icon style="vertical-align:middle; margin-right:0.3em; border-radius:0px 0px 0px 0px">verified_user</mat-icon> Seguridad
+        </mat-panel-title>
+      </mat-expansion-panel-header> -->
+    
+      <button mat-button routerLink="config-notifications-security" style="text-align:left;width:100%;margin-top:1em"><mat-icon style="margin-right:0.2em">verified_user</mat-icon> Seguridad</button><br>
+      <!-- <p class="w3-margin-bottom"></p> -->
+    
+    <!-- </mat-expansion-panel> -->
+
+    <!-- <mat-expansion-panel style="width:20em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':qualityOpenedFlag}" (opened)="qualityOpened()" (closed)="qualityClosed()">
+      <mat-expansion-panel-header>
+        <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':qualityOpenedFlag}">
+          <mat-icon style="vertical-align:middle; margin-right:0.3em; border-radius:0px 0px 0px 0px">check_circle_outline</mat-icon> Calidad
+        </mat-panel-title>
+      </mat-expansion-panel-header> -->
+    
+      <button mat-button routerLink="config-notifications-quality" style="text-align:left;width:100%"><mat-icon style="margin-right:0.2em">check_circle_outline</mat-icon> Calidad</button><br>
+      <!-- <p class="w3-margin-bottom"></p> -->
+      <button mat-button routerLink="config-notifications-maintenance" style="text-align:left;width:100%"><mat-icon style="margin-right:0.2em">build</mat-icon> Mantenimiento</button><br>
+
+      <button mat-button routerLink="config-notifications-ssgg" style="text-align:left;width:100%"><mat-icon style="margin-right:0.2em">extension</mat-icon> Servicios Generales</button><br>
+    
+    <!-- </mat-expansion-panel> -->
+  </mat-sidenav>
+  
+  <mat-sidenav-content class="w3-padding">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -32,7 +32,7 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
     this.reportObject = {
       actionsDate: Date.now(),
       stage: 'Acciones',
-      upgradedToActionsby: this.auth.userCRC,
+      upgradedToActionsBy: this.auth.userCRC,
       uidActionsUpgrader: this.auth.userCRC.uid
     };
 

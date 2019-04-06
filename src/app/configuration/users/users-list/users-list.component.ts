@@ -3,6 +3,8 @@ import { DatabaseService } from 'src/app/core/database.service';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { CreateNewUserComponent } from './create-new-user/create-new-user.component';
 import { AuthService } from 'src/app/core/auth.service';
+import { SidenavService } from 'src/app/core/sidenav.service';
+import { UsersDialogAssignAreaComponent } from '../users-dialog-assign-area/users-dialog-assign-area.component';
 
 @Component({
   selector: 'app-users-list',
@@ -11,7 +13,7 @@ import { AuthService } from 'src/app/core/auth.service';
 })
 export class UsersListComponent implements OnInit {
 
-  displayedColumns: string[] = ['index', 'displayName', 'email', 'phone', 'permit', 'jobTitle', 'supervisor', 'area', 'edit'];
+  displayedColumns: string[] = ['index', 'displayName', 'email', 'phone', 'permit', 'jobTitle', 'supervisor', 'assignArea', 'area'];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -22,6 +24,7 @@ export class UsersListComponent implements OnInit {
   constructor(
     public dbs: DatabaseService,
     public auth: AuthService,
+    public sidenav: SidenavService,
     private dialog: MatDialog
   ) { }
 
@@ -37,6 +40,10 @@ export class UsersListComponent implements OnInit {
 
   }
 
+  toggleSidenav(): void{
+    this.sidenav.sidenavUsers();
+  }
+
   filterData(ref: string) {
     ref = ref.toLowerCase();
     this.filteredUsers = this.dbs.users.filter(option =>       
@@ -49,6 +56,12 @@ export class UsersListComponent implements OnInit {
 
   createNewUser(): void{
     this.dialog.open(CreateNewUserComponent);
+  }
+
+  assignArea(user): void{
+    this.dialog.open(UsersDialogAssignAreaComponent,{
+      data: user
+    })
   }
 
 }
