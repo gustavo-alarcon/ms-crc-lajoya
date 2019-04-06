@@ -2123,7 +2123,10 @@
               <div [@openCloseTable]="isOpenActions[i] ? 'openTable': 'closedTable'" style="background:#191919">
                 <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em">
                   <p class="w3-margin-bottom"> </p>
-
+                  <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Cerrar rehacer" (click)="closeRedo(document)"
+                    *ngIf="document['stage'] === 'Cierre'">
+                    <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
+                  </button>
                   <a [href]="document['finalReport']" *ngIf="document['stage'] === 'Finalizado'" target="_blank">
                     <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Descargar informe final"
                       *ngIf="document['stage'] === 'Finalizado'">
@@ -2535,6 +2538,10 @@
 
                       <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em; background: #191919">
                         <p class="w3-margin-bottom"> </p>
+                        <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Cerrar rehacer" (click)="closeRedo(analyze)"
+                          *ngIf="analyze['stage'] === 'Cierre'">
+                          <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
+                        </button>
                         <a [href]="analyze['finalReport']" *ngIf="analyze['stage'] === 'Finalizado'" target="_blank">
                           <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Descargar informe final">
                             <mat-icon class="example-icon">cloud_download</mat-icon> Descargar informe final

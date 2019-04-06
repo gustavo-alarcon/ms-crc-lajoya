@@ -37,6 +37,31 @@
       <p class="w3-margin-bottom"></p>
     
     </mat-expansion-panel>
+
+    <mat-expansion-panel style="width:20em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':maintenanceOpenedFlag}" (opened)="maintenanceOpened()" (closed)="maintenanceClosed()">
+      <mat-expansion-panel-header>
+        <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':maintenanceOpenedFlag}">
+          <mat-icon style="vertical-align:middle; margin-right:0.3em; border-radius:0px 0px 0px 0px">build</mat-icon> Mantenimiento
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="config-maintenance-requests" style="text-align:left;border-radius:0px 0px 0px 0px"><mat-icon style="margin-right:0.2em;margin-left:1.5em">inbox</mat-icon> Solicitudes</button>
+      <p class="w3-margin-bottom"></p>
+    
+    </mat-expansion-panel>
+
+    <mat-expansion-panel style="width:20em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':ssggOpenedFlag}" (opened)="ssggOpened()" (closed)="ssggClosed()">
+      <mat-expansion-panel-header>
+        <mat-panel-title style="font-weight:500" [ngClass]="{'ms-expansion-panel-title':ssggOpenedFlag}">
+          <mat-icon style="vertical-align:middle; margin-right:0.3em; border-radius:0px 0px 0px 0px">extension</mat-icon> Servicios Generales
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    
+      <button mat-button class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="config-ssgg-requests" style="text-align:left;border-radius:0px 0px 0px 0px"><mat-icon style="margin-right:0.2em;margin-left:1.5em">inbox</mat-icon> Solicitudes</button>
+      <p class="w3-margin-bottom"></p>
+    
+    </mat-expansion-panel>
+
   </mat-sidenav>
   
   <mat-sidenav-content class="w3-padding">

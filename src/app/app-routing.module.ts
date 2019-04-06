@@ -27,6 +27,8 @@ import { UsersPermitListComponent } from './configuration/users/users-permit-lis
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ConfigSecurityFredComponent } from './configuration/system/config-security-fred/config-security-fred.component';
 import { ConfigQualityRedosComponent } from './configuration/system/config-quality-redos/config-quality-redos.component';
+import { ConfigMaintenanceRequestsComponent } from './configuration/system/config-maintenance-requests/config-maintenance-requests.component';
+import { ConfigSsggRequestsComponent } from './configuration/system/config-ssgg-requests/config-ssgg-requests.component';
 import { ConfigurationNotificationsComponent } from './configuration/configuration-notifications/configuration-notifications.component';
 import { ConfigNotificationsSecurityComponent } from './configuration/configuration-notifications/config-notifications-security/config-notifications-security.component';
 import { ConfigNotificationsQualityComponent } from './configuration/configuration-notifications/config-notifications-quality/config-notifications-quality.component';
@@ -116,6 +118,12 @@ const routes: Routes = [
               },
               {
                 path: 'config-quality-redos', component: ConfigQualityRedosComponent,
+              },
+              {
+                path: 'config-maintenance-requests', component: ConfigMaintenanceRequestsComponent,
+              },
+              {
+                path: 'config-ssgg-requests', component: ConfigSsggRequestsComponent,
               }
             ]
           },

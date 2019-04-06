@@ -1,14 +1,13 @@
-<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">build</mat-icon> Guardar solicitud</h2>
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">build</mat-icon> Finalizar solicitud</h2>
 <mat-divider></mat-divider>
 <mat-dialog-content>
-  <p class="ms-font-roboto">¿Está seguro de querer modificar el documento?</p>
-  <br>
+  <p class="ms-font-roboto">¿Está seguro de querer finalizar el documento?</p>
   
   <mat-progress-bar mode="buffer" [value]="uploadPercent_final | async" *ngIf="uploading_final"></mat-progress-bar>
   <p style="font-size:0.8em" *ngIf="uploading_final && data['finalImage']">{{uploadPercent_final | async | number: '.2'}}/100 % ... Subiendo imagen final</p>
   
 </mat-dialog-content>
 <mat-dialog-actions class="w3-margin-top w3-margin-bottom">
-  <button mat-raised-button mat-dialog-close color="warn">No</button>
-  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+  <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>No</button>
+  <button mat-raised-button color="primary" (click)="save()">Si, finalizar</button>
 </mat-dialog-actions>
