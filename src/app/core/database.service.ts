@@ -244,6 +244,13 @@ export class DatabaseService {
   public dataMaintenanceEquipments = new BehaviorSubject<any[]>([]);
   public currentDataMaintenanceEquipments = this.dataMaintenanceEquipments.asObservable();
 
+  // ------------------------- EQUIPMENTS CONFIGURATION----------------------------
+  public maintenanceEquipmentsConfigCollection: AngularFirestoreCollection<any>;
+  public maintenanceEquipmentsConfig: Array<any> = [];
+
+  public dataMaintenanceEquipmentsConfig = new BehaviorSubject<any[]>([]);
+  public currentDataMaintenanceEquipmentsConfig = this.dataMaintenanceEquipmentsConfig.asObservable();
+
   // ------------------------- PRIORITIES ----------------------------
   public maintenancePrioritiesCollection: AngularFirestoreCollection<any>;
   public maintenancePriorities: Array<any> = [];
@@ -264,6 +271,13 @@ export class DatabaseService {
 
   public dataMaintenanceSupervisors = new BehaviorSubject<any[]>([]);
   public currentDataMaintenanceSupervisors = this.dataMaintenanceSupervisors.asObservable();
+
+  // -------------------------- NOTIFICATIONS MAINTENANCE BROADCAST ------------------------------
+  public maintenanceBroadcastListCollection: AngularFirestoreCollection<any>;
+  public maintenanceBroadcastList: Array<any> = [];
+
+  public dataMaintenanceBroadcastList = new BehaviorSubject<any[]>([]);
+  public currentDataMaintenanceBroadcastList = this.dataMaintenanceBroadcastList.asObservable();
 
   // ************************* SSGG ***************************
   // ------------------------- TYPES ----------------------------
@@ -457,10 +471,13 @@ export class DatabaseService {
 
       // MAINTENANCE - REQUESTS
       if(permits['maintenanceSection'] && permits['maintenanceRequests']){
+        
         this.getMaintenanceEquipments();
+        this.getMaintenanceEquipmentsconfig();
         this.getMaintenancePriorities();
 
         this.getMaintenanceSupervisors();
+        this.getMaintenanceBroadcastList();
 
         this.getMaintenanceRequests(false, actualFromDate.valueOf(), toDate.valueOf());
       }
@@ -582,6 +599,15 @@ export class DatabaseService {
     this.customersCollection.valueChanges().subscribe(res => {
       this.customers = res;
       this.dataCustomers.next(res);
+    });
+  }
+
+  getMaintenanceEquipmentsconfig(): void{
+    this.maintenanceEquipmentsConfigCollection = this.afs.collection(`db/systemConfigurations/maintenanceEquipments`, ref => ref.orderBy('area.name','asc'));
+    this.maintenanceEquipmentsConfigCollection.valueChanges()
+    .subscribe(res => {
+      this.maintenanceEquipmentsConfig = res;
+      this.dataMaintenanceEquipmentsConfig.next(res);
     });
   }
 
@@ -1088,9 +1114,31 @@ export class DatabaseService {
     });
   }
 
+  getMaintenanceBroadcastList(): void{
+    this.maintenanceBroadcastListCollection = this.afs.collection(`db/systemConfigurations/maintenanceBroadcastList`, ref => ref.orderBy('regDate','desc'));
+    this.maintenanceBroadcastListCollection.valueChanges().subscribe(res => {
+      this.maintenanceBroadcastList = res;
+      this.dataMaintenanceBroadcastList.next(res);
+    });
+  }
+
   getMaintenanceEquipments(): void{
-    this.maintenanceEquipmentsCollection = this.afs.collection(`db/systemConfigurations/maintenanceEquipments`, ref => ref.orderBy('regDate','asc'));
-    this.maintenanceEquipmentsCollection.valueChanges().subscribe(res => {
+    this.maintenanceEquipmentsCollection = this.afs.collection(`db/systemConfigurations/maintenanceEquipments`, ref => ref.orderBy('area.name','asc'));
+    this.maintenanceEquipmentsCollection.valueChanges()
+    .pipe(
+      map(res => {
+        let filteredArray = [];
+        res.forEach(element => {
+          if(element['area']['name'] === this.auth.userCRC.area['name']){
+            filteredArray.push(element);
+          }
+        })
+
+        return filteredArray;
+        
+      })
+    )
+    .subscribe(res => {
       this.maintenanceEquipments = res;
       this.dataMaintenanceEquipments.next(res);
     });
@@ -1115,18 +1163,18 @@ export class DatabaseService {
     this.maintenanceRequestsCollection.valueChanges()
       .pipe(
         map(res => {
-          if(this.auth.permits['maintenanceRequestsPersonalList']){
-            let filteredResults = [];
-            res.forEach(element => {
-              if(element['uid'] === this.auth.userCRC.uid || element['uidSupervisor'] === this.auth.userCRC.uid){
-                filteredResults.push(element);
-              }
-            });
+          // if(this.auth.permits['maintenanceRequestsPersonalList']){
+          //   let filteredResults = [];
+          //   res.forEach(element => {
+          //     if(element['uid'] === this.auth.userCRC.uid){
+          //       filteredResults.push(element);
+          //     }
+          //   });
 
-            return filteredResults;
-          }else{
+          //   return filteredResults;
+          // }else{
             return res;
-          }
+          // }
         }),
         map(res => {
           return res.sort((a,b)=>b['regDate']-a['regDate']);

@@ -51,16 +51,16 @@ export class MaintenanceRequestsConfirmSaveComponent implements OnInit {
                 initialPicture: res,
                 finalPicture: '',
                 regDate: Date.now(),
+                estimatedTerminationDate: 0,
                 realTerminationDate: 0,
                 createdBy: this.auth.userCRC,
                 status: 'Por confirmar',
                 observation: this.data['form']['observation'],
-                area: this.data['form']['area'],
-                priority: this.data['form']['priority'],
+                area: this.auth.userCRC.area,
+                priority: "Por asignar",
                 equipment: this.data['form']['equipment'],
                 source: 'maintenance',
-                uid: this.auth.userCRC.uid,
-                uidSupervisor: this.data['form']['area']['supervisor']['uid']
+                uid: this.auth.userCRC.uid
               };
       
               this.dbs.maintenanceRequestsCollection.add(requestObject).then(refRequest => {
@@ -89,37 +89,63 @@ export class MaintenanceRequestsConfirmSaveComponent implements OnInit {
 
                 requestObject['id'] = refRequest.id;
 
-                // REGISTRY IN AREA SUPERVISOR TASKS DB AND NOTIFICATIONS DB
-                this.dbs.usersCollection
-                  .doc(this.data['form']['area']['supervisor']['uid'])
+                // Adding request as task to maintenance supervisor
+                this.dbs.maintenanceSupervisors.forEach(user => {
+                  this.dbs.usersCollection
+                  .doc(user['uid'])
                   .collection(`tasks`)
                   .doc(refRequest.id)
                   .set(requestObject)
 
-                this.dbs.usersCollection
-                  .doc(this.data['form']['area']['supervisor']['uid'])
+                  this.dbs.usersCollection
+                  .doc(user['uid'])
+                  .collection(`notifications`)
+                  .add({
+                    regDate: Date.now(),
+                    estimatedTerminationDate: 0,
+                    senderId: this.auth.userCRC.uid,
+                    senderName: this.auth.userCRC.displayName,
+                    maintenanceRequestId: refRequest.id,
+                    equipment: this.data['form']['equipment']['name'],
+                    requestStatus: "Por confirmar",
+                    observation: this.data['form']['observation'],
+                    status: 'unseen',
+                    type: 'maintenance request supervisor'
+                  })
+                    .then(ref => {
+                      ref.update({id: ref.id})
+                      this.snackbar.open("Listo!","Cerrar",{
+                        duration: 2000
+                      });
+                    });
+                })
+                
+                this.dbs.maintenanceBroadcastList.forEach(user => {
+                  this.dbs.usersCollection
+                  .doc(user['uid'])
                   .collection(`notifications`)
                   .add({
                     regDate: Date.now(),
                     senderId: this.auth.userCRC.uid,
                     senderName: this.auth.userCRC.displayName,
-                    areaSupervisorId: this.data['form']['area']['supervisor']['uid'],
-                    areaSupervisorName: this.data['form']['area']['supervisor']['displayName'],
                     maintenanceRequestId: refRequest.id,
                     equipment: this.data['form']['equipment'],
-                    priority: this.data['form']['priority'],
+                    requestStatus: "Por confirmar",
                     observation: this.data['form']['observation'],
                     status: 'unseen',
-                    type: 'maintenance request'
+                    type: 'maintenance request broadcast'
                   })
                     .then(ref => {
                       ref.update({id: ref.id})
                       this.snackbar.open("Listo!","Cerrar",{
-                        duration: 10000
+                        duration: 2000
                       });
                     });
+                })
+                
 
               }).catch(err => {
+                console.error(err);
                 this.snackbar.open(err,"Cerrar",{
                   duration: 10000
                 });

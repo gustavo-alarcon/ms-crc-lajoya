@@ -268,6 +268,12 @@
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality redo actions request closing'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle</mat-icon> Rehacer - Conformidad de cierre
             </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'maintenance request supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">build</mat-icon> Mantenimiento - Solicitud
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'maintenance request broadcast'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">build</mat-icon> Mantenimiento - Solicitud
+            </button>
             
           </div>
           <span class="ms-fill"></span>
@@ -472,6 +478,40 @@
                 (click)="confirmRequestClosing(note['redoId'], note['id'], note['signId'])"
                 *ngIf="note['requestStatus'] === 'Por confirmar'">Confirmar</button>
             </div>
+          </div>
+
+          <!-- MAINTENANCE REQUEST SUPERVISOR-->
+          <div *ngIf="note['type'] === 'maintenance request supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']}}</strong></span><br>
+            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+                realización: 
+              {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateMaintenanceRequestsConfirmationFormControl"
+                [value]="note['estimatedTerminationDate']">
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              <mat-hint>
+                <strong>Asigne una fecha de cumplimiento para la solicitud</strong> mm/dd/yyyy*
+              </mat-hint>
+            </mat-form-field>
+            <div style="margin: 1em 0em 0.5em 0em">
+              <button mat-raised-button class="w3-margin-right" color="warn"
+                (click)="rejectMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+              <button mat-raised-button class="w3-margin-right" color="primary"
+                (click)="confirmMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+            </div>
+            <p  [ngClass]="{'w3-border-green w3-text-green': note['requestStatus']==='Confirmado', 'w3-border-red w3-text-red': note['requestStatus']==='Rechazado'}"
+                *ngIf="note['requestStatus'] != 'Por confirmar'"
+                class="w3-border"
+                style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['requestStatus']}}</p>
+          </div>
+
+          <!-- MAINTENANCE REQUEST BROADCAST-->
+          <div *ngIf="note['type'] === 'maintenance request broadcast'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']}}</strong></span><br>
           </div>
           
         </div>
