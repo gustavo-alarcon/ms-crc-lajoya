@@ -7,7 +7,7 @@
       <ng-template matStepLabel>Cabecera</ng-template>
 
       <form [formGroup]="headerDataFormGroup">
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Área responsable</mat-label>
           <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="area" [matAutocomplete]="autoArea" autocomplete="off">
           <mat-autocomplete #autoArea="matAutocomplete"
@@ -28,7 +28,7 @@
           </mat-hint>
         </mat-form-field>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Clase de Peligro</mat-label>
           <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="kindOfDanger" [matAutocomplete]="autoKindOfDanger" autocomplete="off">
           <mat-autocomplete #autoKindOfDanger="matAutocomplete">
@@ -45,7 +45,7 @@
         </mat-form-field>
         <br>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Tipo de Observación</mat-label>
           <input matInput type="text" placeholder="Seleccione..." formControlName="kindOfObservation" [matAutocomplete]="autoKindOfObservation" autocomplete="off">
           <mat-autocomplete #autoKindOfObservation="matAutocomplete">
@@ -61,7 +61,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Causas</mat-label>
           <input matInput type="text" placeholder="Seleccione..." formControlName="cause" [matAutocomplete]="autoCause" autocomplete="off">
           <mat-autocomplete #autoCause="matAutocomplete">
@@ -89,18 +89,27 @@
       <ng-template matStepLabel>Reseñas</ng-template>
 
       <form [formGroup]="descriptionDataFormGroup">
-          <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+          <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
             <mat-label>Descripción de la observación</mat-label>
-            <textarea matInput placeholder="Describa..." rows="4" formControlName="observationDescription"></textarea>
+            <textarea matInput placeholder="Describa..." rows="4" formControlName="observationDescription" required></textarea>
+            <mat-hint>
+              requerido *
+            </mat-hint>
           </mat-form-field>
     
-          <mat-form-field class="w3-margin-right w3-block" style="max-width:250px" appearance="outline">
+          <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
             <mat-label>Conclusiones / Recomendaciones</mat-label>
-            <textarea matInput placeholder="Describa..." rows="4" formControlName="recommendationDescription"></textarea>
-          </mat-form-field>
+            <textarea matInput placeholder="Describa..." rows="4" formControlName="recommendationDescription" required></textarea>
+            <mat-hint>
+              requerido *
+            </mat-hint>
+          </mat-form-field><br>
 
-          <button mat-raised-button color="primary" matTooltip="Agregar imagen" class="w3-margin-right" (click)="fileInput.click()"><mat-icon>add_photo_alternate</mat-icon></button>
           <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
+          <img  [src]="imageSrc || '../../../assets/images/no-image.png'"
+                style="width:200px; height:150px; cursor:pointer"
+                class="mat-elevation-z4 w3-hover-shadow"
+                (click)="fileInput.click()">
 
         <div>
           <button mat-stroked-button matStepperPrevious class="w3-margin-right w3-margin-top">Anterior</button>

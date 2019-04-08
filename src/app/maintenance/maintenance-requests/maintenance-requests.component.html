@@ -202,7 +202,7 @@
                     <span class="w3-small" *ngIf="request['estimatedTerminationDate'] > 0">
                       {{(request['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</span><br>
                     <span class="w3-small" *ngIf="request['estimatedTerminationDate'] > 0">({{request['estimatedTerminationDate'] | date : 'hh:mm:ss'}})</span><br>
-
+                    <p>----------</p><br>
                     <span class="w3-small" *ngIf="request['realTerminationDate'] === 0">**/**/****</span>
                     <span class="w3-small" *ngIf="request['realTerminationDate'] > 0">
                       {{(request['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span><br>
@@ -263,7 +263,7 @@
                 <div [@openCloseDescription]="isOpenRequest[i] ? 'openDescription': 'closedDescription'"
                   class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
                   <p style="font-weight:400; color:white; margin: 0px 0.1em">
-                    {{(request['equipment'].length>25 ? (request['equipment'] | slice:0:25)+'...':(request['equipment']))}}
+                    {{(request['equipment']['name'].length>25 ? (request['equipment']['name'] | slice:0:25)+'...':(request['equipment']['name']))}}
                   </p>
                   <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
                     *ngIf="request['regDate'] != 0">
@@ -272,12 +272,12 @@
               </div>
               <div [@openCloseContent]="isOpenRequest[i] ? 'openContent': 'closedContent'"
                 class="mat-elevation-z8">
-                <mat-toolbar style="background:#333333">
+                <mat-toolbar style="background:#191919">
+                  <button mat-raised-button class="w3-margin w3-text-white" color="primary" matTooltip="Cerrar solicitud" (click)="task(request)"
+                    [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar' || !isSupervisor">
+                    <mat-icon>check_circle</mat-icon> Finalizar
+                  </button>
                   <span class="ms-fill"></span>
-                  <button mat-raised-button class="w3-margin" color="primary" matTooltip="Cerrar solicitud" (click)="task(request)"
-                      [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar' || !isSupervisor">
-                      <mat-icon>check_circle</mat-icon> Finalizar
-                    </button>
                   <button mat-icon-button class="w3-text-white" matTooltip="Editar solicitud"  (click)="edit(request)" [disabled]="!auth.permits['maintenanceRequestsEdit']">
                     <mat-icon>edit</mat-icon>
                   </button>
@@ -314,7 +314,7 @@
                 <div class="w3-row">
                   <div class="w3-col s6 ms-header-mobile">Equipo</div>
                   <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                    <span class="w3-small" >{{request['equipment']}}</span>
+                    <span class="w3-small" >{{request['equipment']['name']}}</span>
                   </div>
                 </div>
                 <div class="w3-row">

@@ -351,16 +351,16 @@
                     Acciones</th>
                   <td mat-cell *matCellDef="let request"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
-                    <button mat-icon-button color="primary" matTooltip="Registrar cierre"  (click)="task(request)"
-                      [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar'">
-                      <mat-icon>ballot</mat-icon>
+                    <button mat-icon-button class="w3-margin-bottom w3-margin-top" color="primary" matTooltip="Registrar cierre"  (click)="task(request)"
+                      [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar' || !isSupervisor">
+                      <mat-icon>check_circle</mat-icon> Actualizar
                     </button>
-                    <button mat-icon-button color="primary" matTooltip="Editar solicitud" (click)="edit(request)">
-                      <mat-icon>edit</mat-icon>
+                    <button mat-raise-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud" (click)="edit(request)" [disabled]="auth.permits['ssggRequestsEdit']">
+                      <mat-icon>edit</mat-icon> Editar
                     </button><br>
-                    <button mat-icon-button color="warn" matTooltip="Borrar solicitud"
-                      (click)="delete(request['id'],request['involvedAreas'])">
-                      <mat-icon>delete</mat-icon>
+                    <button mat-raised-button class="w3-margin-bottom" color="warn" matTooltip="Borrar solicitud"
+                      (click)="delete(request['id'],request['involvedAreas'])" [disabled]="auth.permits['ssggRequestsDelete']">
+                      <mat-icon>delete</mat-icon> Borrar
                     </button><br>
                   </td>
                 </ng-container>
@@ -397,16 +397,16 @@
               <div [@openCloseContent]="isOpenRequest[i] ? 'openContent': 'closedContent'"
                 class="mat-elevation-z8">
                 <mat-toolbar style="background:#333333">
-                  <span class="ms-fill"></span>
-                  <button mat-icon-button color="primary" matTooltip="Registrar cierre"  (click)="task(request)"
-                    [disabled]="request['status'] === 'Finalizado' && request['status'] === 'Por confirmar'">
-                    <mat-icon>ballot</mat-icon>
+                  <button mat-icon-button color="primary" class="w3-text-white" matTooltip="Registrar cierre"  (click)="task(request)"
+                    [disabled]="request['status'] === 'Finalizado' && request['status'] === 'Por confirmar' || !isSupervisor">
+                    <mat-icon>check_circle</mat-icon> Actualizar
                   </button>
-                  <button mat-icon-button color="primary" matTooltip="Editar solicitud"  (click)="edit(request)">
+                  <span class="ms-fill"></span>
+                  <button mat-icon-button color="primary" matTooltip="Editar solicitud"  (click)="edit(request)"[disabled]="auth.permits['ssggRequestsEdit']" >
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Borrar solicitud"
-                    (click)="delete(request['id'],request['involvedAreas'])">
+                    (click)="delete(request['id'],request['involvedAreas'])" [disabled]="auth.permits['ssggRequestsDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>

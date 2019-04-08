@@ -1,0 +1,54 @@
+<div class="w3-section">
+  <button mat-button (click)="toggleSidenav()" class="w3-margin-bottom"><mat-icon>menu</mat-icon> Menu</button>
+  <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assignment_turned_in</mat-icon> Inspecciones</h2>
+  <div class="ms-config-wraper">
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Clase de peligro</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="kindOfDangerFormControl" placeholder="Escriba..." (keyup.enter)="addKindOfDanger()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataKindOfDanger | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteKindOfDanger(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Tipo de observación</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="kindOfObservationFormControl" placeholder="Escriba..." (keyup.enter)="addKindOfObservation()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataKindOfObservation | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteKindOfObservation(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Causas</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="causesFormControl" placeholder="Escriba..." (keyup.enter)="addCauses()">
+      </mat-form-field>
+      <ng-container *ngFor="let item of dbs.currentDataCauses | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteCauses(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+  
+  
+</div>    

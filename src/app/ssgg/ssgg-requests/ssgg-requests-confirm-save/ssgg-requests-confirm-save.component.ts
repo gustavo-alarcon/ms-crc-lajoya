@@ -52,7 +52,7 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                 regDate: Date.now(),
                 realTerminationDate: 0,
                 createdBy: this.auth.userCRC,
-                status: 'Por confirmar',
+                status: 'Confirmado',
                 mainArea: this.data['form']['mainArea'],
                 type: this.data['form']['type'],
                 priority: this.data['form']['priority'],

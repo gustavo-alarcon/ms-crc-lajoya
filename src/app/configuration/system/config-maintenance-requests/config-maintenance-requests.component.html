@@ -24,7 +24,7 @@
             class="w3-small">{{option['supervisor']['displayName']}}</span>
         </mat-option>
       </mat-autocomplete>
-      <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityComponents"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="uploadingMaintenanceComponents"></mat-progress-bar>
 
       <ng-container *ngFor="let item of dbs.currentDataMaintenanceEquipmentsConfig | async">
         <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">

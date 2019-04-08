@@ -34,6 +34,7 @@ import { ConfigNotificationsSecurityComponent } from './configuration/configurat
 import { ConfigNotificationsQualityComponent } from './configuration/configuration-notifications/config-notifications-quality/config-notifications-quality.component';
 import { ConfigNotificationsMaintenanceComponent } from './configuration/configuration-notifications/config-notifications-maintenance/config-notifications-maintenance.component';
 import { ConfigNotificationsSsggComponent } from './configuration/configuration-notifications/config-notifications-ssgg/config-notifications-ssgg.component';
+import { ConfigSecurityInspectionsComponent } from './configuration/system/config-security-inspections/config-security-inspections.component';
 
 const routes: Routes = [
   
@@ -115,6 +116,9 @@ const routes: Routes = [
               },
               {
                 path: 'config-security-fred', component: ConfigSecurityFredComponent,
+              },
+              {
+                path: 'config-security-inspections', component: ConfigSecurityInspectionsComponent,
               },
               {
                 path: 'config-quality-redos', component: ConfigQualityRedosComponent,

@@ -166,6 +166,7 @@ import { UsersPermitDialogEditComponent } from './configuration/users-permit-lis
 import { UsersPermitConfirmEditComponent } from './configuration/users-permit-list/users-permit-confirm-edit/users-permit-confirm-edit.component';
 import { ConfigMaintenanceRequestsComponent } from './configuration/system/config-maintenance-requests/config-maintenance-requests.component';
 import { ConfigSsggRequestsComponent } from './configuration/system/config-ssgg-requests/config-ssgg-requests.component';
+import { ConfigSecurityInspectionsComponent } from './configuration/system/config-security-inspections/config-security-inspections.component';
 
 
 
@@ -278,7 +279,8 @@ import { ConfigSsggRequestsComponent } from './configuration/system/config-ssgg-
     UsersPermitDialogEditComponent,
     UsersPermitConfirmEditComponent,
     ConfigMaintenanceRequestsComponent,
-    ConfigSsggRequestsComponent
+    ConfigSsggRequestsComponent,
+    ConfigSecurityInspectionsComponent
     
   ],
   imports: [
