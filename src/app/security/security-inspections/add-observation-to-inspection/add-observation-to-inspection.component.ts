@@ -25,6 +25,7 @@ export class AddObservationToInspectionComponent implements OnInit {
   filteredCauses: Observable<any>;
 
   selectedFile = null;
+  imageSrc: string | ArrayBuffer;
 
   constructor(
     public auth: AuthService,
@@ -121,6 +122,15 @@ export class AddObservationToInspectionComponent implements OnInit {
 
   onFileSelected(event): void{
     this.selectedFile = event.target.files[0];
+
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc = reader.result;
+
+      reader.readAsDataURL(file);
+    }
   }
 
 }

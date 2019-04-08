@@ -8,7 +8,7 @@
   <form [formGroup]="newInspectionFormGroup">
     <div class="w3-padding">
 
-      <mat-form-field class="w3-block ms-color-2b w3-block" style="max-width:240px" appearance="outline">
+      <mat-form-field class="w3-block ms-color-2b w3-margin-bottom" style="max-width:240px" appearance="outline">
         <mat-label>Fecha límite de inspección</mat-label>
         <input matInput [matDatepicker]="picker" placeholder="Elija una fecha ..."
           formControlName="estimatedTerminationDate">
@@ -24,7 +24,7 @@
       </mat-form-field>
       <br>
 
-      <mat-form-field class="w3-block ms-color-2b w3-block" style="max-width:240px" appearance="outline">
+      <mat-form-field class="w3-block ms-color-2b w3-margin-bottom" style="max-width:240px" appearance="outline">
         <mat-label>Inspector</mat-label>
         <input matInput type="text" placeholder="Seleccione..." formControlName="inspector"
           [matAutocomplete]="autoInspector" autocomplete="off">
@@ -40,7 +40,7 @@
       </mat-form-field>
       <br>
 
-      <mat-form-field class="w3-margin-right w3-block" style="max-width:240px" appearance="outline">
+      <mat-form-field class="w3-block w3-margin-bottom" style="max-width:240px" appearance="outline">
         <mat-label>Área a inspeccionar</mat-label>
         <input matInput type="text" placeholder="Seleccione..." formControlName="area" [matAutocomplete]="autoArea"
           autocomplete="off">
@@ -66,5 +66,5 @@
 <mat-dialog-actions class="w3-margin-top w3-margin-bottom">
   <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close >Cancelar</button>
   <button mat-raised-button color="primary" (click)="create()"
-    [disabled]="!(newInspectionFormGroup.valid)">Crear</button>
+    [disabled]="!(newInspectionFormGroup.valid) || loading">Crear</button>
 </mat-dialog-actions>

@@ -116,12 +116,9 @@
 
                 <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef
-                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Editar</th>
+                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
                   <td mat-cell *matCellDef="let user"
                     style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                    <!-- <button mat-icon-button color="primary">
-                      <mat-icon>edit</mat-icon>
-                    </button> -->
                     <button mat-icon-button color="warn" (click)="deleteInspection(user['id'])" matTooltip="Borrar Inspección">
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -401,9 +398,6 @@
                   </th>
                   <td mat-cell *matCellDef="let observation"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    <!-- <button mat-icon-button color="primary" matTooltip="Editar configuración de permisos">
-                      <mat-icon>edit</mat-icon>
-                    </button> -->
                     <button mat-icon-button color="warn" matTooltip="Borrar nivel de usuario" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                       <mat-icon>delete</mat-icon>
                     </button>

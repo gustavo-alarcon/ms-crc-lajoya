@@ -10,6 +10,7 @@ import { SsggRequestsConfirmSaveComponent } from './ssgg-requests-confirm-save/s
 import { SsggRequestsConfirmDeleteComponent } from './ssgg-requests-confirm-delete/ssgg-requests-confirm-delete.component';
 import { SsggRequestsDialogEditComponent } from './ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
 import { SsggRequestsDialogTaskComponent } from './ssgg-requests-dialog-task/ssgg-requests-dialog-task.component';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-ssgg-requests',
@@ -102,6 +103,8 @@ export class SsggRequestsComponent implements OnInit {
 
   subscriptions: Array<Subscription> = [];
 
+  isSupervisor: boolean = false;
+
   @ViewChild('involvedAreasInput') involvedAreasInput: ElementRef<HTMLInputElement>;
   @ViewChild('autoInvolvedAreas') matAutocomplete: MatAutocomplete;
 
@@ -117,7 +120,8 @@ export class SsggRequestsComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -166,6 +170,20 @@ export class SsggRequestsComponent implements OnInit {
                                       });
 
     this.subscriptions.push(dataSsggRequestsSubs);
+
+    let ssggSupervisorSubs =  this.dbs.currentDataSsggSupervisors
+                                .subscribe(res => {
+                                  if(res){
+                                    this.isSupervisor = false;
+                                    res.forEach(element => {
+                                      if(element['uid'] === this.auth.userCRC.uid){
+                                        this.isSupervisor = true;
+                                      }
+                                    })
+                                  }
+                                })
+
+    this.subscriptions.push(ssggSupervisorSubs);
 
   }
 
