@@ -1,6 +1,6 @@
 <mat-sidenav-container style="height:77vh">
 
-  <mat-sidenav mode="side" [opened]="sidenav.sidenavSystemToggle" class="w3-card-4">
+  <mat-sidenav mode="over" [opened]="sidenav.sidenavSystemToggle" class="w3-card-4">
 
     <mat-expansion-panel style="width:20em; box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-border-top w3-border-light-grey" [ngClass]="{'ms-expansion-panel-menu':generalOpenedFlag}" (opened)="generalOpened()" (closed)="generalClosed()">
       <mat-expansion-panel-header>

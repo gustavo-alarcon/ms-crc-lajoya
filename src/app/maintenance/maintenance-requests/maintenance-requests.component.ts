@@ -9,6 +9,7 @@ import { MaintenanceRequestsConfirmSaveComponent } from './maintenance-requests-
 import { MaintenanceRequestsConfirmDeleteComponent } from './maintenance-requests-confirm-delete/maintenance-requests-confirm-delete.component';
 import { MaintenanceRequestsDialogEditComponent } from './maintenance-requests-dialog-edit/maintenance-requests-dialog-edit.component';
 import { MaintenanceRequestsDialogTaskComponent } from './maintenance-requests-dialog-task/maintenance-requests-dialog-task.component';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-maintenance-requests',
@@ -99,11 +100,16 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
 
   subscriptions: Array<Subscription> = [];
 
+  isSupervisor: boolean = false;
+  isBroadcast: boolean = true;
+
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -121,20 +127,6 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
                                               map(name => name ? this.dbs.maintenanceEquipments.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.maintenanceEquipments)
                                             );
 
-    this.filteredMaintenancePriorities =  this.requestFormGroup.get('priority').valueChanges
-                                            .pipe(
-                                              startWith<any>(''),
-                                              map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                              map(name => name ? this.dbs.maintenancePriorities.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.maintenancePriorities)
-                                            );
-
-    this.filteredAreas = this.requestFormGroup.get('area').valueChanges
-                          .pipe(
-                            startWith<any>(''),
-                            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                            map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-                          );
-
     // ************** TAB - REQUEST LIST
     let dataMaintenanceRequestsSubs = this.dbs.currentDataMaintenanceRequests.subscribe(res => {
                                         this.filteredMaintenanceRequests = res;
@@ -145,6 +137,21 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
                                       });
 
     this.subscriptions.push(dataMaintenanceRequestsSubs);
+
+    // checking if user is supervisor
+    let isSupervisorSubs = this.dbs.currentDataMaintenanceSupervisors
+      .subscribe( res => {
+        if(res){
+          this.isSupervisor = false;
+          res.forEach(element => {
+            if(element['uid'] === this.auth.userCRC.uid){
+              this.isSupervisor = true;
+            }
+          })
+        }
+      })
+
+    this.subscriptions.push(isSupervisorSubs);
   }
 
   ngOnDestroy() {
@@ -175,9 +182,7 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
   createForms(): void{
     this.requestFormGroup = this.fb.group({
       equipment: ['', [Validators.required]],
-      area: ['', [Validators.required]],
-      observation: ['', [Validators.required]],
-      priority: ['', [Validators.required]]
+      observation: ['', [Validators.required]]
     });
   }
 
@@ -191,6 +196,10 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
 
   selectedArea(event): void{
     
+  }
+
+  showSelectedEquipment(equipment): string | undefined {
+    return equipment? equipment['name'] : undefined;
   }
 
   save(): void{

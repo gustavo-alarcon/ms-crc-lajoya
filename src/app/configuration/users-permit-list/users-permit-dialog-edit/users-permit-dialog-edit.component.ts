@@ -375,8 +375,13 @@ export class UsersPermitDialogEditComponent implements OnInit {
     _permits['name'] = this.data['name'];
     _permits['id'] = this.data['id'];
     _permits['regDate'] = Date.now();
+    _permits['generalDashboard'] = this.permitsConfigurationFormGroup.value['generalDashboard'];
+    _permits['securitySection'] = this.permitsConfigurationFormGroup.value['securitySection'];
+    _permits['qualitySection'] = this.permitsConfigurationFormGroup.value['qualitySection'];
+    _permits['maintenanceSection'] = this.permitsConfigurationFormGroup.value['maintenanceSection'];
+    _permits['ssggSection'] = this.permitsConfigurationFormGroup.value['ssggSection'];
+    _permits['configurationSection'] = this.permitsConfigurationFormGroup.value['configurationSection'];
 
-    console.log(_permits)
 
     this.dbs.permitsCollection
       .doc(this.data['id'])

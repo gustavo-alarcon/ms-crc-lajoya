@@ -1,3 +1,60 @@
-<p>
-  config-maintenance-requests works!
-</p>
+<div class="w3-section">
+  <button mat-button (click)="toggleSidenav()" class="w3-margin-bottom"><mat-icon>menu</mat-icon> Menu</button>
+  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;"><mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">build</mat-icon> Matenimiento</h1>
+  <mat-divider></mat-divider>
+
+  <div class="ms-config-wraper">
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon> Componentes por área</h2>
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" color="primary">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="maintenanceComponentsFormControl" placeholder="Escriba...">
+      </mat-form-field>
+      
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:280px">
+        <mat-label>Área</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" [formControl]="maintenanceAreaFormControl" (keyup.enter)="addMaintenanceComponent()"
+          [matAutocomplete]="autoArea" required>
+        <mat-hint>Presione ENTER para agregar</mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoArea="matAutocomplete" [displayWith]="showSelectedArea">
+        <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
+          <strong>{{option['name']}}</strong> | <span
+            class="w3-small">{{option['supervisor']['displayName']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+      <mat-progress-bar mode="indeterminate" *ngIf="uploadingQualityComponents"></mat-progress-bar>
+
+      <ng-container *ngFor="let item of dbs.currentDataMaintenanceEquipmentsConfig | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="w3-padding"> | </span>
+          <p class="w3-margin-left">{{item['area']['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteMaintenanceComponent(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+      <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.3em;font-weight: 600;"><mat-icon style="vertical-align:middle">settings</mat-icon>Prioridades</h2>
+      <mat-form-field color="primary" class="w3-block">
+        <mat-label>Agregar</mat-label>
+        <input matInput type="text" [formControl]="maintenancePrioritiesFormControl" placeholder="Escriba..." (keyup.enter)="addMaintenancePriorities()">
+        <mat-hint>Presione ENTER para agregar</mat-hint>
+      </mat-form-field>
+      <mat-progress-bar mode="indeterminate" *ngIf="uploadingMaintenancePriorities"></mat-progress-bar>
+      <ng-container *ngFor="let item of dbs.currentDataMaintenancePriorities | async">
+        <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+          <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
+          <button mat-icon-button color="warn" (click)="deleteMaintenancePriorities(item['id'])"><mat-icon>delete</mat-icon></button>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+  
+  
+</div>    

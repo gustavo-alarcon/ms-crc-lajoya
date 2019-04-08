@@ -15,7 +15,11 @@ export class ConfigNotificationsMaintenanceComponent implements OnInit {
   maintenanceSupervisorsFormControl = new FormControl();
   uploadingMaintenanceSupervisors: boolean = false;
 
+  maintenanceBroadcastFormControl = new FormControl();
+  uploadingMaintenanceBroadcast: boolean = false;
+
   filteredUsers1: Observable<any>;
+  filteredUsers2: Observable<any>;
 
   constructor(
     public sidenav: SidenavService,
@@ -30,13 +34,20 @@ export class ConfigNotificationsMaintenanceComponent implements OnInit {
         map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
         map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
       )
+
+    this.filteredUsers2 = this.maintenanceBroadcastFormControl.valueChanges
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
+        map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
+      )
   }
 
   toggleSidenav(): void{
     this.sidenav.sidenavNotifications();
   }
 
-  // List 1
+  // SUPERVISORS
   addMaintenanceSupervisors(): void {
     if (this.maintenanceSupervisorsFormControl.value) {
       this.uploadingMaintenanceSupervisors = true;
@@ -60,6 +71,28 @@ export class ConfigNotificationsMaintenanceComponent implements OnInit {
 
   showSelectedUser1(user): string | undefined {
     return user ? user['displayName'] : undefined;
+  }
+
+  // BROADCAST
+  addMaintenanceBroadcast(): void {
+    if (this.maintenanceBroadcastFormControl.value) {
+      this.uploadingMaintenanceBroadcast = true;
+      this.dbs.maintenanceBroadcastListCollection
+        .add(this.maintenanceBroadcastFormControl.value)
+        .then(ref => {
+          ref.update({
+            id: ref.id,
+            regDate: Date.now()
+          })
+          this.uploadingMaintenanceBroadcast = false;
+          this.maintenanceBroadcastFormControl.setValue('');
+        })
+    }
+
+  }
+
+  deleteMaintenanceBroadcast(id): void {
+    this.dbs.maintenanceBroadcastListCollection.doc(id).delete();
   }
 
 

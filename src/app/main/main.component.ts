@@ -22,6 +22,7 @@ export class MainComponent implements OnInit {
 
   dateSecurityFredFormControl = new FormControl();
   dateSecurityInspectionObservationFormControl = new FormControl();
+  dateMaintenanceRequestsConfirmationFormControl = new FormControl();
 
   constructor(
     public auth: AuthService,
@@ -167,6 +168,23 @@ export class MainComponent implements OnInit {
   confirmRequestClosing(redoId , noteId, signId): void{
     this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({sign: true});
     this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Confirmado'});
+  }
+
+  // REJECT AND CONFIRMATION MAINTENANCE REQUEST
+  rejectMaintenanceRequest(requestId, notificationId): void{
+    this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Rechazado'});
+    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  }
+
+  confirmMaintenanceRequest(requestId, notificationId): void{
+    if(this.dateMaintenanceRequestsConfirmationFormControl.value){
+      this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
+      this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
+    }else{
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
+        duration: 6000
+      });
+    }
   }
 
 }

@@ -29,6 +29,31 @@
           </div>
         </ng-container>
       </div>
+
+      <div class="w3-padding w3-round-large w3-margin mat-elevation-z8">
+        <h2 class="ms-font-poppins ms-color-bt" style="font-size:1.2em;font-weight: 600;"><mat-icon style="vertical-align:middle">account_circle</mat-icon> Lista de difusión</h2>
+        <mat-form-field color="primary" class="w3-block">
+          <mat-label>Agregar</mat-label>
+          <input matInput type="text" [formControl]="maintenanceBroadcastFormControl"
+                  placeholder="Escriba y seleccione ..." (keyup.enter)="addMaintenanceBroadcast()"
+                  [matAutocomplete]="autoMaintenanceBroadcast">
+          <mat-hint>Presione ENTER para agregar</mat-hint>
+        </mat-form-field>
+        <mat-autocomplete #autoMaintenanceBroadcast="matAutocomplete"
+                          [displayWith]="showSelectedUser1">
+          <mat-option *ngFor="let user of filteredUsers2 | async" [value]="user" (keyup.enter)="addMaintenanceBroadcast()" (click)="addMaintenanceBroadcast()">
+            <span><strong>{{user['displayName']}}</strong> | {{user['jobTitle']}}</span>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-progress-bar mode="indeterminate" *ngIf="uploadingMaintenanceBroadcast"></mat-progress-bar>
+        <ng-container *ngFor="let item of dbs.currentDataMaintenanceBroadcastList | async">
+          <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
+            <p class="w3-margin-left">{{item['displayName']}} | <span class="w3-small">{{item['jobTitle']}}</span></p>
+            <span class="ms-fill"></span>
+            <button mat-icon-button color="warn" (click)="deleteMaintenanceBroadcast(item['id'])"><mat-icon>delete</mat-icon></button>
+          </div>
+        </ng-container>
+      </div>
   
     </div>
     
