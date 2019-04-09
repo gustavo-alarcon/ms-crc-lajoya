@@ -1,3 +1,70 @@
-<p>
-  quality-add-inspection works!
-</p>
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title>
+  <mat-icon style="vertical-align:middle">calendar_today</mat-icon> Programar nueva inspección
+</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+  <form [formGroup]="newInspectionFormGroup">
+    <div class="w3-padding">
+
+      <mat-form-field class="w3-block ms-color-2b w3-margin-bottom" style="max-width:240px" appearance="outline">
+        <mat-label>Fecha límite de inspección</mat-label>
+        <input matInput [matDatepicker]="picker" placeholder="Elija una fecha ..."
+          formControlName="estimatedTerminationDate" required>
+        <mat-datepicker-toggle matSuffix [for]="picker">
+        </mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>
+          <strong>requerido *</strong>
+        </mat-error>
+        <mat-hint>
+          <strong>formato: mm/dd/yyyy</strong>
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="w3-block ms-color-2b w3-margin-bottom" style="max-width:240px" appearance="outline">
+        <mat-label>Inspector</mat-label>
+        <input matInput type="text" placeholder="Seleccione..." formControlName="inspector"
+          [matAutocomplete]="autoInspector" autocomplete="off" required>
+        <mat-hint>
+          {{newInspectionFormGroup.value['inspector']['jobTitle']}}
+        </mat-hint>
+        <mat-autocomplete #autoInspector="matAutocomplete" (optionSelected)="selectedInspector($event)"
+          [displayWith]="showSelectedInspector">
+          <mat-option *ngFor="let option of filteredUsers | async" [value]="option" style="font-size:14px">
+            <strong>{{option['displayName']}}</strong> | <span class="w3-small">{{option['jobTitle']}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="w3-block w3-margin-bottom" style="max-width:240px" appearance="outline">
+        <mat-label>Área a inspeccionar</mat-label>
+        <input matInput type="text" placeholder="Seleccione..." formControlName="area" [matAutocomplete]="autoArea"
+          autocomplete="off" required>
+        <mat-hint>
+          Sup.: {{newInspectionFormGroup.value['areaSupervisor']}}
+        </mat-hint>
+        <mat-error>
+          <strong>requerido *</strong>
+        </mat-error>
+        <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
+          [displayWith]="showSelectedArea">
+          <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
+            <strong>{{option['name']}}</strong> | <span>{{option['supervisor']['displayName']}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <br>
+
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close >Cancelar</button>
+  <button mat-raised-button color="primary" (click)="create()"
+    [disabled]="!(newInspectionFormGroup.valid) || loading">Crear</button>
+</mat-dialog-actions>

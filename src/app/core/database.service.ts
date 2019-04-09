@@ -464,6 +464,14 @@ export class DatabaseService {
         this.getQualityRedos(actualFromDate.valueOf(), toDate.valueOf());
       }
 
+      // QUALITY - INSPECTIONS
+      if(permits['qualitySection'] && permits['qualityInspections']){
+        this.getQualityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
+        // this.getKindOfDanger();
+        // this.getKindOfObsevation();
+        // this.getCauses();
+      }
+
       // QUALITY - TASKS
       if(permits['qualitySection'] && permits['qualityTasks']){
         this.getQualityTasks(actualFromDate.valueOf(), toDate.valueOf());
@@ -1079,6 +1087,14 @@ export class DatabaseService {
 
   addQualityRedoLog(id, data): Promise<any>{
     return this.qualityRedosCollection.doc(id).collection(`log`).add(data);
+  }
+
+  addQualityInspection(data): Promise<any>{
+    return this.qualityInspectionsCollection.add(data);
+  }
+
+  addQualityInspectionLog(id, data): Promise<any>{
+    return this.qualityInspectionsCollection.doc(id).collection(`log`).add(data);
   }
 
   getQualityInspections(justActualMonth?,from?,to?): void{
