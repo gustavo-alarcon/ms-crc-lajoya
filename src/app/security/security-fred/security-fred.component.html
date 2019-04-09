@@ -3,7 +3,7 @@
     <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED
   </h1>
   <mat-tab-group animationDuration="500ms">
-    <mat-tab label="Formulario">
+    <mat-tab label="Formulario" *ngIf="auth.permits['securityFredForm']">
       <div class="w3-padding">
         <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Formulario FRED</h2>
         <mat-vertical-stepper #stepperFRED class="mat-elevation-z8 w3-margin-top w3-round-large">
@@ -198,7 +198,7 @@
         </mat-vertical-stepper>
       </div>
     </mat-tab>
-    <mat-tab label="Lista">
+    <mat-tab label="Lista" *ngIf="auth.permits['securityFredGeneralList'] || auth.permits['securityFredPersonalList']">
       <ng-template matTabContent>
 
         <div class="w3-padding">
@@ -398,11 +398,11 @@
                     Acciones</th>
                   <td mat-cell *matCellDef="let fred"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
-                    <button mat-icon-button color="primary" matTooltip="Editar tarea" (click)="edit(fred)">
+                    <button mat-icon-button color="primary" matTooltip="Editar tarea" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
                       <mat-icon>edit</mat-icon>
                     </button><br>
                     <button mat-icon-button color="warn" matTooltip="Borrar tarea"
-                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -443,11 +443,11 @@
                 class="mat-elevation-z8">
                 <mat-toolbar style="background:#333333">
                   <span class="ms-fill"></span>
-                  <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)">
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>
@@ -735,11 +735,11 @@
                 <ng-container matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding-left:0.5em">Editar</th>
                   <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding-left:0.5em">
-                    <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)">
+                    <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
                       <mat-icon>edit</mat-icon>
                     </button><br>
                     <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -780,11 +780,11 @@
                 class="mat-elevation-z8">
                 <mat-toolbar style="background:#333333">
                   <span class="ms-fill"></span>
-                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)">
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>
@@ -1057,11 +1057,11 @@
                 <ng-container matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding-left:0.5em">Editar</th>
                   <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding-left:0.5em">
-                    <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)">
+                    <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
                       <mat-icon>edit</mat-icon>
                     </button><br>
                     <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -1102,11 +1102,11 @@
                 class="mat-elevation-z8">
                 <mat-toolbar style="background:#333333">
                   <span class="ms-fill"></span>
-                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)">
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])">
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>
