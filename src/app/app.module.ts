@@ -167,6 +167,8 @@ import { UsersPermitConfirmEditComponent } from './configuration/users-permit-li
 import { ConfigMaintenanceRequestsComponent } from './configuration/system/config-maintenance-requests/config-maintenance-requests.component';
 import { ConfigSsggRequestsComponent } from './configuration/system/config-ssgg-requests/config-ssgg-requests.component';
 import { ConfigSecurityInspectionsComponent } from './configuration/system/config-security-inspections/config-security-inspections.component';
+import { ConfigEditUserComponent } from './configuration/users/users-list/config-edit-user/config-edit-user.component';
+import { ConfigDeleteUserComponent } from './configuration/users/config-delete-user/config-delete-user.component';
 
 
 
@@ -280,7 +282,9 @@ import { ConfigSecurityInspectionsComponent } from './configuration/system/confi
     UsersPermitConfirmEditComponent,
     ConfigMaintenanceRequestsComponent,
     ConfigSsggRequestsComponent,
-    ConfigSecurityInspectionsComponent
+    ConfigSecurityInspectionsComponent,
+    ConfigEditUserComponent,
+    ConfigDeleteUserComponent
     
   ],
   imports: [
@@ -406,7 +410,9 @@ import { ConfigSecurityInspectionsComponent } from './configuration/system/confi
     UsersDialogAssignAreaComponent,
     UsersPermitConfirmDeleteComponent,
     UsersPermitDialogEditComponent,
-    UsersPermitConfirmEditComponent
+    UsersPermitConfirmEditComponent,
+    ConfigEditUserComponent,
+    ConfigDeleteUserComponent
   ],
   bootstrap: [AppComponent]
 })

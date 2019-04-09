@@ -42,37 +42,23 @@ export class CreateNewUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.newUserFormGroup = this.fb.group({
-      name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      email: ['', Validators.required],
-      phone: ['', Validators.required],
-      password: ['', Validators.required],
-      jobTitle: ['', Validators.required],
-      supervisor: ['', Validators.required],
-      permit: ['', Validators.required]
-    })
+    
 
     this.personalDataFormGroup = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', Validators.required],
-      phone: ['', Validators.required],
-      dni: ['', Validators.required],
+      phone: '',
+      dni: '',
       password: ['', Validators.required],
     })
 
     this.jobDataFormGroup = this.fb.group({
-      code: ['', Validators.required],
+      code: '',
       jobTitle: ['', Validators.required],
       supervisor: ['', Validators.required],
       permit: ['', Validators.required]
     })
-
-    // console.log(this.newUserFormGroup.value['email'].split("@",1)[0]);
-    this.data = {
-      email: this.newUserFormGroup.value['email']
-    }
 
     this.personalDataFormGroup.get('email').valueChanges.pipe(
       debounceTime(500),
@@ -130,7 +116,7 @@ export class CreateNewUserComponent implements OnInit {
   create(): void{
     this.loading = true;
     // this.http.post(`https://us-central1-crclajoya.cloudfunctions.net/msCreateUser/?email=${this.newUserFormGroup.value['email']}&displayName=${this.newUserFormGroup.value['name'].split(" ",1)[0] + ', ' + this.newUserFormGroup.value['lastname'].split(" ",1)[0]}&phoneNumber=${this.newUserFormGroup.value['phone']}&password=${this.newUserFormGroup.value['email'].split("@",1)[0] + this.now.getFullYear()}`
-    this.http.post(`https://us-central1-crclajoya.cloudfunctions.net/msCreateUser/?email=${this.personalDataFormGroup.value['email']}&displayName=${this.personalDataFormGroup.value['name'].split(" ",1)[0] + ', ' + this.personalDataFormGroup.value['lastname'].split(" ",1)[0]}&phoneNumber=${this.personalDataFormGroup.value['phone']}&password=${this.personalDataFormGroup.value['password']}`
+    this.http.post(`https://us-central1-crclajoya.cloudfunctions.net/msCreateUser/?email=${this.personalDataFormGroup.value['email']}&displayName=${this.personalDataFormGroup.value['name'].split(" ",1)[0] + ', ' + this.personalDataFormGroup.value['lastname'].split(" ",1)[0]}&password=${this.personalDataFormGroup.value['password']}`
     ,this.data
     ,this.httpOptions)
     .subscribe(res => {
@@ -149,17 +135,24 @@ export class CreateNewUserComponent implements OnInit {
       }
       
       if(res['result'] === "OK"){
-        let appendData = {
+
+        let updateData = {
+          displayName: this.personalDataFormGroup.value['name'].split(" ",1)[0] + ', ' + this.personalDataFormGroup.value['lastname'].split(" ",1)[0],
+          name: this.personalDataFormGroup.get('name').value,
+          lastname: this.personalDataFormGroup.get('lastname').value,
+          email: this.personalDataFormGroup.get('email').value,
+          phone: this.personalDataFormGroup.get('phone').value,
+          dni: this.personalDataFormGroup.get('dni').value,
+          password: this.personalDataFormGroup.get('password').value,
+          code: this.jobDataFormGroup.get('code').value,
+          jobTitle: this.jobDataFormGroup.get('jobTitle').value,
+          supervisor: this.jobDataFormGroup.get('supervisor').value,
+          permit: this.jobDataFormGroup.get('permit').value,
           uid: res['uid'],
           regDate: Date.now(),
-          displayName: this.personalDataFormGroup.value['name'].split(" ",1)[0] + ', ' + this.personalDataFormGroup.value['lastname'].split(" ",1)[0],
         }
 
-        let mergedForms = Object.assign(this.personalDataFormGroup.value,this.jobDataFormGroup.value);
-
-        let finalData = Object.assign(mergedForms, appendData);
-
-        this.dbs.addUser(finalData)
+        this.dbs.addUser(updateData)
           .then(() => {
             this.loading = false;
             this.dialogRef.close();

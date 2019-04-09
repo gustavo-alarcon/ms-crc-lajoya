@@ -19,7 +19,6 @@ exports.msCreateUser = functions.https.onRequest((req, res) => {
     app.auth().createUser({
         email: params['email'],
         emailVerified: false,
-        phoneNumber: "+51" + params['phoneNumber'],
         password: params['password'],
         displayName: params['displayName'],
         disabled: false
@@ -44,21 +43,55 @@ exports.msCreateUser = functions.https.onRequest((req, res) => {
 
 });
 
-exports.msUpdatePassword = functions.https.onRequest((req, res) => {
+exports.msUpdateUser = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     var params = req.query;
+    console.log(params);
 
     app.auth().updateUser(params['uid'], {
+      displayName: params['displayName'],
+      email: params['email'],
       password: params['password']
     })
       .then(userRecord => {
         console.log("Successfully updated user");
+        res.send({
+          result: "OK"
+        })
         return true;
       })
       .catch(error => {
+        res.send({
+          result: "ERROR",
+          code: error['errorInfo']['code']
+        })
         console.log("Error updating user:", error);
         return false;
       })
+  })
+})
+
+exports.msDeleteUser = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    var params = req.query;
+
+    admin.auth().deleteUser(params['uid'])
+      .then(() => {
+        console.log('Successfully deleted user');
+        res.send({
+          result: "OK"
+        })
+        return true;
+      })
+      .catch(error => {
+        console.log('Error deleting user:', error);
+        res.send({
+          result: "ERROR",
+          code: error['errorInfo']['code']
+        })
+        console.log("Error updating user:", error);
+        return false;
+      });
   })
 })
 

@@ -175,11 +175,12 @@
             <ng-container matColumnDef="edit" stickyEnd>
               <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
               <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
-                <button   mat-icon-button
-                          [ngClass]="{'w3-hover-text-indigo': auth.userCRC.uid === fred['observedStaff']['uid']}"
+                <button   mat-raised-button
+                          color="primary"
+                          class="w3-margin-top w3-margin-bottom"
                           matTooltip="Registrar avance"
                           [disabled]="auth.userCRC.uid != fred['observedStaff']['uid']"
-                          (click)="saveProgressOnTask(fred)"><mat-icon>ballot</mat-icon></button>
+                          (click)="saveProgressOnTask(fred)"><mat-icon>check_circle</mat-icon> Finalizar</button>
               </td>
             </ng-container>
     
@@ -218,8 +219,8 @@
             class="mat-elevation-z8">
             <mat-toolbar style="background:#333333">
               <span class="ms-fill"></span>
-              <button mat-icon-button style="color:white" matTooltip="Editar FRED"  (click)="saveProgressOnTask(fred)">
-                <mat-icon>ballot</mat-icon>
+              <button mat-icon-button style="color:white" matTooltip="Finalizar FRED"  (click)="saveProgressOnTask(fred)">
+                <mat-icon>check_circle</mat-icon>
               </button>
             </mat-toolbar>
             <div class="w3-row">
@@ -461,7 +462,7 @@
             <ng-container matColumnDef="edit" stickyEnd>
               <th mat-header-cell *matHeaderCellDef style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
               <td mat-cell *matCellDef="let observation" style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                <button mat-icon-button class="w3-hover-text-indigo" matTooltip="Registrar avance" (click)="saveProgressOnObservation(observation)"><mat-icon>ballot</mat-icon></button>
+                <button mat-raised-button color="primary" class="w3-margin-top w3-margin-bottom" matTooltip="Finalizar tarea" (click)="saveProgressOnObservation(observation)"><mat-icon>check_circle</mat-icon> Finalizar</button>
               </td>
             </ng-container>
     
@@ -501,7 +502,7 @@
             <mat-toolbar style="background:#333333">
               <span class="ms-fill"></span>
               <button mat-icon-button style="color:white" matTooltip="Editar Observación"  (click)="saveProgressOnObservation(observation)">
-                <mat-icon>ballot</mat-icon>
+                <mat-icon>check_circle</mat-icon>
               </button>
             </mat-toolbar>
 

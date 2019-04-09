@@ -15,6 +15,7 @@ import { FredConfirmDeleteComponent } from './fred-confirm-delete/fred-confirm-d
 import { Subscription, Observable } from 'rxjs';
 import { startWith, map, tap } from 'rxjs/operators';
 import { FredEditDialogComponent } from './fred-edit-dialog/fred-edit-dialog.component';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-security-fred',
@@ -138,7 +139,8 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    public auth : AuthService
   ) {
 
     // ****************  TAB - FRED

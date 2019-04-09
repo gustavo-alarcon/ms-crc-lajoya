@@ -5,6 +5,8 @@ import { CreateNewUserComponent } from './create-new-user/create-new-user.compon
 import { AuthService } from 'src/app/core/auth.service';
 import { SidenavService } from 'src/app/core/sidenav.service';
 import { UsersDialogAssignAreaComponent } from '../users-dialog-assign-area/users-dialog-assign-area.component';
+import { ConfigEditUserComponent } from './config-edit-user/config-edit-user.component';
+import { ConfigDeleteUserComponent } from '../config-delete-user/config-delete-user.component';
 
 @Component({
   selector: 'app-users-list',
@@ -13,7 +15,7 @@ import { UsersDialogAssignAreaComponent } from '../users-dialog-assign-area/user
 })
 export class UsersListComponent implements OnInit {
 
-  displayedColumns: string[] = ['index', 'displayName', 'email', 'phone', 'permit', 'jobTitle', 'supervisor', 'assignArea', 'area'];
+  displayedColumns: string[] = ['index', 'displayName', 'email', 'phone', 'permit', 'jobTitle', 'supervisor', 'assignArea', 'area', 'edit'];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -48,8 +50,7 @@ export class UsersListComponent implements OnInit {
     ref = ref.toLowerCase();
     this.filteredUsers = this.dbs.users.filter(option =>       
       option['displayName'].toLowerCase().includes(ref) ||
-      option['email'].includes(ref) ||
-      option['phone'].includes(ref));
+      option['email'].includes(ref));
 
     this.dataSource.data = this.filteredUsers;
   }
@@ -60,6 +61,18 @@ export class UsersListComponent implements OnInit {
 
   assignArea(user): void{
     this.dialog.open(UsersDialogAssignAreaComponent,{
+      data: user
+    })
+  }
+
+  editUser(user): void{
+    this.dialog.open(ConfigEditUserComponent, {
+      data: user
+    })
+  }
+
+  deleteUser(user): void{
+    this.dialog.open(ConfigDeleteUserComponent,{
       data: user
     })
   }
