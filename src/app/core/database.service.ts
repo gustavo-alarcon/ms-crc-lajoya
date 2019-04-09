@@ -503,7 +503,18 @@ export class DatabaseService {
   // *************** USERS
   getUsers(): void{
     this.usersCollection = this.afs.collection(`users`, ref => ref.orderBy('name','asc'));
-    this.usersCollection.valueChanges().subscribe(res => {
+    this.usersCollection.valueChanges()
+    .pipe(
+      map(res => {
+
+        res.forEach((user,index) => {
+          user['index'] = index
+        })
+        
+        return res;
+      })
+    )
+    .subscribe(res => {
       this.users = res;
       this.dataUsers.next(res);
     })
@@ -515,7 +526,16 @@ export class DatabaseService {
 
   getPermits(): void{
     this.permitsCollection = this.afs.collection(`db/systemConfigurations/permits`, ref => ref.orderBy('regDate','asc'));
-    this.permitsCollection.valueChanges().subscribe(res => {
+    this.permitsCollection.valueChanges()
+    .pipe(
+      map(res => {
+        res.forEach((element,index) => {
+          element['index'] = index;
+        })
+        return res;
+      })
+    )
+    .subscribe(res => {
       this.permits = res;
       this.dataPermits.next(res);
     })
