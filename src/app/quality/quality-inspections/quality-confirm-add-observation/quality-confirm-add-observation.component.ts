@@ -7,18 +7,18 @@ import { AuthService } from 'src/app/core/auth.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-inspection-observation-confirm-save',
-  templateUrl: './inspection-observation-confirm-save.component.html',
+  selector: 'app-quality-confirm-add-observation',
+  templateUrl: './quality-confirm-add-observation.component.html',
   styles: []
 })
-export class InspectionObservationConfirmSaveComponent implements OnInit {
+export class QualityConfirmAddObservationComponent implements OnInit {
 
   uploadPercent: Observable<number>;
   mergedForms: any;
   uploading: boolean = false;
 
   constructor(
-    public dialogRef: MatDialogRef<InspectionObservationConfirmSaveComponent>,
+    public dialogRef: MatDialogRef<QualityConfirmAddObservationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dbs: DatabaseService,
     private storage: AngularFireStorage,
@@ -31,14 +31,10 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
   }
 
   save(): void{
-    this.uploadFile();
-  }
-
-  uploadFile(): void{
 
     this.uploading = true;
 
-    const filePath = `/securityInspectionsObservationsPictures/${Date.now()}_${this.data[2].name}`;
+    const filePath = `/qualityInspectionsObservationsPictures/${Date.now()}_${this.data[2].name}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, this.data[2]);
 
@@ -61,14 +57,14 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
               percent: percentNumber,
               status: status,
               solved: false,
-              source: 'inspection'
+              source: 'quality inspection'
             };
     
             let finalObject = Object.assign(this.mergedForms,lastObject);
             
-            // REGISTERING OBSERVATION IN SECURITY INSPECTIONS ***
+            // REGISTERING OBSERVATION IN QUALITY INSPECTIONS ***
             // Adding the observation to the corresponding inspection
-            this.dbs.securityInspectionsCollection.doc(this.data[3]).collection(`observations`).add(finalObject)
+            this.dbs.qualityInspectionsCollection.doc(this.data[3]).collection(`observations`).add(finalObject)
             .then(refObservation => {
               // Updating the id of the document using the reference
               refObservation.update({id: refObservation.id})
@@ -81,11 +77,11 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                     regdate: Date.now()
                   }
                   // Adding the log to the coresponding inspection
-                  this.dbs.addInspectionLog(this.data[3], log)
+                  this.dbs.addQualityInspectionLog(this.data[3], log)
                     .catch(error => {
                       console.log(error);
                       this.uploading = false;
-                      this.snackbar.open("Ups!, parece que hubo un error (SI002) ...","Cerrar",{
+                      this.snackbar.open("Ups!, parece que hubo un error guardando el log de la observación ...","Cerrar",{
                         duration:6000
                       });
                     });
@@ -118,7 +114,7 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                       subject: this.data[1]['recommendationDescription'],
                       estimatedTerminationDate: 0,
                       status: 'unseen',
-                      type: 'inspection observation supervisor'
+                      type: 'quality inspection observation supervisor'
                     }
 
                     // Sending notification to area supervisor
@@ -129,7 +125,7 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                       .then(ref => {
                         ref.update({id: ref.id});
                         // Closing the dialog and setting the uploading flag to false
-                        this.dialogRef.close();
+                        this.dialogRef.close(true);
                         this.uploading = false;
                         this.snackbar.open("Listo!","Cerrar",{
                           duration:6000
@@ -146,7 +142,7 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                   });
 
               // UPDATING INSPECTION TO - IN PROGRESS
-              this.dbs.securityInspectionsCollection
+              this.dbs.qualityInspectionsCollection
                 .doc(this.data[0]['inspectionId'])
                 .update({status: 'En progreso'})
                   .catch(error => {
