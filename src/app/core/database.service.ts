@@ -433,9 +433,9 @@ export class DatabaseService {
         this.getSecuritySupervisors();
 
         this.getFredReference();
-        this.getSecuritySubstandardActFreds(actualFromDate.valueOf(), toDate.valueOf());
-        this.getSecuritySubstandardConditionFreds(actualFromDate.valueOf(), toDate.valueOf());
-        this.getSecurityRemarkableActFreds(actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecuritySubstandardActFreds(permits['securityFredPersonalList'],actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecuritySubstandardConditionFreds(permits['securityFredPersonalList'],actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecurityRemarkableActFreds(permits['securityFredPersonalList'],actualFromDate.valueOf(), toDate.valueOf());
       }
 
       // SECURITY - TASKS
@@ -655,15 +655,30 @@ export class DatabaseService {
     this.securityFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`);
   }
 
-  getSecuritySubstandardActFreds(from, to): void{
-    if(this.auth.permits['securityFredGeneralList']){
-      this.securitySubstandardActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
-    }else{
-      this.securitySubstandardActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('uid','==',this.auth.userCRC.uid).where('regDate','>=',from).where('regDate','<=',to));
-    }
+  getSecuritySubstandardActFreds(personal, from, to): void{
+    
+    this.securitySubstandardActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
+    
     
     this.securitySubstandardActFredsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList=[];
+          if(personal){
+            res.forEach(element => {
+              if( element['uid'] === this.auth.userCRC.uid ||
+                  element['uidStaff'] === this.auth.userCRC.uid ||
+                  element['uidSupervisor'] === this.auth.userCRC.uid){
+                personalList.push(element);
+              }
+            })
+            console.log('retornando personal')
+            return personalList;
+          }else{
+            console.log('retornando general')
+            return res;
+          }
+        }),
         map(res => {
           let fredArray = [];
           res.forEach(element => {
@@ -683,15 +698,27 @@ export class DatabaseService {
       })
   }
 
-  getSecuritySubstandardConditionFreds(from, to): void{
-    if(this.auth.permits['securityFredGeneralList']){
-      this.securitySubstandardConditionFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
-    }else{
-      this.securitySubstandardConditionFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('uid','==',this.auth.userCRC.uid).where('regDate','>=',from).where('regDate','<=',to));
-    }
+  getSecuritySubstandardConditionFreds(personal, from, to): void{
+    
+    this.securitySubstandardConditionFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
     
     this.securitySubstandardConditionFredsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList=[];
+          if(personal){
+            res.forEach(element => {
+              if( element['uid'] === this.auth.userCRC.uid ||
+                  element['uidStaff'] === this.auth.userCRC.uid ||
+                  element['uidSupervisor'] === this.auth.userCRC.uid){
+                personalList.push(element);
+              }
+            })
+            return personalList;
+          }else{
+            return res;
+          }
+        }),
         map(res => {
           let fredArray = [];
           res.forEach(element => {
@@ -711,15 +738,27 @@ export class DatabaseService {
       })
   }
 
-  getSecurityRemarkableActFreds(from, to): void{
-    if(this.auth.permits['securityFredGeneralList']){
-      this.securityRemarkableActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
-    }else{
-      this.securityRemarkableActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('uid','==',this.auth.userCRC.uid).where('regDate','>=',from).where('regDate','<=',to));
-    }
+  getSecurityRemarkableActFreds(personal, from, to): void{
+
+    this.securityRemarkableActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
     
     this.securityRemarkableActFredsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList=[];
+          if(personal){
+            res.forEach(element => {
+              if( element['uid'] === this.auth.userCRC.uid ||
+                  element['uidStaff'] === this.auth.userCRC.uid ||
+                  element['uidSupervisor'] === this.auth.userCRC.uid){
+                personalList.push(element);
+              }
+            })
+            return personalList;
+          }else{
+            return res;
+          }
+        }),
         map(res => {
           let fredArray = [];
           res.forEach(element => {

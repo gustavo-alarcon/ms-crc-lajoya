@@ -270,9 +270,9 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
 
     let toDate: Date = new Date(toYear, toMonth, 1);
 
-    this.dbs.getSecuritySubstandardActFreds(fromDate.valueOf(), toDate.valueOf());
-    this.dbs.getSecuritySubstandardConditionFreds(fromDate.valueOf(), toDate.valueOf());
-    this.dbs.getSecurityRemarkableActFreds(fromDate.valueOf(), toDate.valueOf());
+    this.dbs.getSecuritySubstandardActFreds(this.auth.permits['securityFredPersonalList'],fromDate.valueOf(), toDate.valueOf());
+    this.dbs.getSecuritySubstandardConditionFreds(this.auth.permits['securityFredPersonalList'],fromDate.valueOf(), toDate.valueOf());
+    this.dbs.getSecurityRemarkableActFreds(this.auth.permits['securityFredPersonalList'],fromDate.valueOf(), toDate.valueOf());
 
     datepicker.close();
   }

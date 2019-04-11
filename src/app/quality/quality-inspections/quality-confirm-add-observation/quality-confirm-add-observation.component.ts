@@ -44,7 +44,7 @@ export class QualityConfirmAddObservationComponent implements OnInit {
       finalize(() => {
         fileRef.getDownloadURL().subscribe( res => {
           if(res){
-            let percentNumber = 0;
+
             let status = 'Por confirmar';
             let estimatedDate = 0;
 
@@ -54,7 +54,6 @@ export class QualityConfirmAddObservationComponent implements OnInit {
               regDate: Date.now(),
               estimatedTerminationDate: estimatedDate,
               realTerminationDate: estimatedDate,
-              percent: percentNumber,
               status: status,
               solved: false,
               source: 'quality inspection'
