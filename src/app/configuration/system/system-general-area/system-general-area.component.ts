@@ -27,6 +27,9 @@ export class SystemGeneralAreaComponent implements OnInit {
     private dialog: MatDialog
   ) { 
 
+  }
+
+  ngOnInit() {
     this.dbs.currentDataAreas.subscribe(res => {
       this.filteredAreas = res;
       this.dataSource.data = res;
@@ -34,11 +37,6 @@ export class SystemGeneralAreaComponent implements OnInit {
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-
-  }
-
-  ngOnInit() {
-
   }
 
   toggleSidenav(): void{
