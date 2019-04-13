@@ -53,7 +53,6 @@ export class UsersPermitListComponent implements OnInit {
   }
 
   editPermit(permit): void{
-    console.log(permit);
     this.dialog.open(UsersPermitDialogEditComponent, {
       data: permit
     })

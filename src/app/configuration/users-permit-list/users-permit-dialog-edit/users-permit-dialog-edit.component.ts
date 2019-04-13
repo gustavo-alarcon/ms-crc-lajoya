@@ -52,6 +52,10 @@ export class UsersPermitDialogEditComponent implements OnInit {
     {name:'Lista personal de Inspecciones',value:'qualityInspectionsPersonalList'},
     {name:'Editar Inspecciones',value:'qualityInspectionsEdit'},
     {name:'Eliminar Inspecciones',value:'qualityInspectionsDelete'},
+    {name:'Observaciones personales', value:'qualityInspectionsSingleObservations'},
+    {name:'Eliminar Observaciones', value:'qualityInspectionsSingleObservationsDelete'},
+    {name:'Lista general de Observaciones', value:'qualityInspectionsSingleObservationsGeneralList'},
+    {name:'Lista personal de Observaciones', value:'qualityInspectionsSingleObservationsPersonalList'},
     {name:'Tareas', value:'qualityTasks'},
     {name:'Formulario de Tareas',value:'qualityTasksForm'},
     {name:'Lista general de Tareas',value:'qualityTasksGeneralList'},
@@ -116,6 +120,8 @@ export class UsersPermitDialogEditComponent implements OnInit {
         this.coincidence = res;
       })
 
+    console.log(this.data);
+
     this.permitsConfigurationFormGroup = this.fb.group({
       generalDashboard: this.data['generalDashboard'],
 
@@ -150,6 +156,10 @@ export class UsersPermitDialogEditComponent implements OnInit {
       qualityInspectionsPersonalList:this.data['qualityInspectionsPersonalList']?this.data['qualityInspectionsPersonalList']:false,
       qualityInspectionsEdit:this.data['qualityInspectionsEdit']?this.data['qualityInspectionsEdit']:false,
       qualityInspectionsDelete:this.data['qualityInspectionsDelete']?this.data['qualityInspectionsDelete']:false,
+      qualityInspectionsSingleObservations:this.data['qualityInspectionsSingleObservations']?this.data['qualityInspectionsSingleObservations']:false,
+      qualityInspectionsSingleObservationsDelete:this.data['qualityInspectionsSingleObservationsDelete']?this.data['qualityInspectionsSingleObservationsDelete']:false,
+      qualityInspectionsSingleObservationsGeneralList:this.data['qualityInspectionsSingleObservationsGeneralList']?this.data['qualityInspectionsSingleObservationsGeneralList']:false,
+      qualityInspectionsSingleObservationsPersonalList:this.data['qualityInspectionsSingleObservationsPersonalList']?this.data['qualityInspectionsSingleObservationsPersonalList']:false,
       qualityTasks:this.data['qualityTasks']?this.data['qualityTasks']:false,
       qualityTasksForm:this.data['qualityTasksForm']?this.data['qualityTasksForm']:false,
       qualityTasksGeneralList:this.data['qualityTasksGeneralList']?this.data['qualityTasksGeneralList']:false,
@@ -179,6 +189,9 @@ export class UsersPermitDialogEditComponent implements OnInit {
       configurationNotification:this.data['configurationNotification']?this.data['configurationNotification']:false
 
     })
+
+
+
 
     this.securitySelection.onChange
     .pipe(
@@ -350,39 +363,40 @@ export class UsersPermitDialogEditComponent implements OnInit {
   }
 
   edit(): void{
-    let _permits = {};
+    let _permits = this.permitsConfigurationFormGroup.value;
 
-    this.securitySelection.selected.forEach(element => {
-      _permits[element] = true;
-    });
+    // this.securitySelection.selected.forEach(element => {
+    //   _permits[element] = true;
+    // });
 
-    this.qualitySelection.selected.forEach(element => {
-      _permits[element] = true;
-    });
+    // this.qualitySelection.selected.forEach(element => {
+    //   _permits[element] = true;
+    // });
 
-    this.maintenanceSelection.selected.forEach(element => {
-      _permits[element] = true;
-    });
+    // this.maintenanceSelection.selected.forEach(element => {
+    //   _permits[element] = true;
+    // });
 
-    this.ssggSelection.selected.forEach(element => {
-      _permits[element] = true;
-    });
+    // this.ssggSelection.selected.forEach(element => {
+    //   _permits[element] = true;
+    // });
 
-    this.configurationSelection.selected.forEach(element => {
-      _permits[element] = true;
-    });
+    // this.configurationSelection.selected.forEach(element => {
+    //   _permits[element] = true;
+    // });
 
-    _permits['name'] = this.data['name'];
+
+
+    _permits['name'] = this.detailsFormGroup.value['name'];
     _permits['id'] = this.data['id'];
     _permits['regDate'] = Date.now();
-    _permits['generalDashboard'] = this.permitsConfigurationFormGroup.value['generalDashboard'];
-    _permits['securitySection'] = this.permitsConfigurationFormGroup.value['securitySection'];
-    _permits['qualitySection'] = this.permitsConfigurationFormGroup.value['qualitySection'];
-    _permits['maintenanceSection'] = this.permitsConfigurationFormGroup.value['maintenanceSection'];
-    _permits['ssggSection'] = this.permitsConfigurationFormGroup.value['ssggSection'];
-    _permits['configurationSection'] = this.permitsConfigurationFormGroup.value['configurationSection'];
-
-
+    _permits['generalDashboard'] = true;
+    _permits['securitySection'] = this.securitySelection.selected.length > 0 ? true: false;
+    _permits['qualitySection'] = this.qualitySelection.selected.length > 0 ? true: false;
+    _permits['maintenanceSection'] = this.maintenanceSelection.selected.length > 0 ? true: false;
+    _permits['ssggSection'] = this.ssggSelection.selected.length > 0 ? true: false;
+    _permits['configurationSection'] = this.configurationSelection.selected.length > 0 ? true: false;    
+    
     this.dbs.permitsCollection
       .doc(this.data['id'])
       .set(_permits)
