@@ -355,7 +355,7 @@
                       [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar' || !isSupervisor">
                       <mat-icon>check_circle</mat-icon> Actualizar
                     </button>
-                    <button mat-raise-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud" (click)="edit(request)" [disabled]="auth.permits['ssggRequestsEdit']">
+                    <button mat-raised-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud" (click)="edit(request)" [disabled]="auth.permits['ssggRequestsEdit']">
                       <mat-icon>edit</mat-icon> Editar
                     </button><br>
                     <button mat-raised-button class="w3-margin-bottom" color="warn" matTooltip="Borrar solicitud"

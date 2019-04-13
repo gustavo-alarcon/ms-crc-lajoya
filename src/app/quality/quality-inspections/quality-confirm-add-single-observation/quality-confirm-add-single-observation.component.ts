@@ -7,18 +7,18 @@ import { AuthService } from 'src/app/core/auth.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-inspection-observation-confirm-save',
-  templateUrl: './inspection-observation-confirm-save.component.html',
+  selector: 'app-quality-confirm-add-single-observation',
+  templateUrl: './quality-confirm-add-single-observation.component.html',
   styles: []
 })
-export class InspectionObservationConfirmSaveComponent implements OnInit {
+export class QualityConfirmAddSingleObservationComponent implements OnInit {
 
   uploadPercent: Observable<number>;
   mergedForms: any;
   uploading: boolean = false;
 
   constructor(
-    public dialogRef: MatDialogRef<InspectionObservationConfirmSaveComponent>,
+    public dialogRef: MatDialogRef<QualityConfirmAddSingleObservationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dbs: DatabaseService,
     private storage: AngularFireStorage,
@@ -27,18 +27,13 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.mergedForms = Object.assign(this.data[0],this.data[1]);
   }
 
   save(): void{
-    this.uploadFile();
-  }
-
-  uploadFile(): void{
 
     this.uploading = true;
 
-    const filePath = `/securityInspectionsObservationsPictures/${Date.now()}_${this.data[2].name}`;
+    const filePath = `/qualityInspectionsSingleObservationsPictures/${Date.now()}_${this.data[2].name}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, this.data[2]);
 
@@ -48,49 +43,32 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
       finalize(() => {
         fileRef.getDownloadURL().subscribe( res => {
           if(res){
-            let percentNumber = 0;
             let status = 'Por confirmar';
             let estimatedDate = 0;
 
-            let lastObject = {
+            let finalObject = {
+              area: this.data[0]['area'],
+              uidSupervisor: this.data[0]['area']['supervisor']['uid'],
               initialPicture: res,
               finalPicture: '',
               regDate: Date.now(),
               estimatedTerminationDate: estimatedDate,
               realTerminationDate: estimatedDate,
-              percent: percentNumber,
+              observationDescription: this.data[1]['observationDescription'],
+              recommendationDescription: this.data[1]['recommendationDescription'],
+              uid: this.auth.userCRC.uid,
+              createdBy: this.auth.userCRC,
               status: status,
               solved: false,
-              source: 'inspection'
+              source: 'quality inspection single observation'
             };
-    
-            let finalObject = Object.assign(this.mergedForms,lastObject);
             
-            // REGISTERING OBSERVATION IN SECURITY INSPECTIONS ***
-            // Adding the observation to the corresponding inspection
-            this.dbs.securityInspectionsCollection.doc(this.data[3]).collection(`observations`).add(finalObject)
+            // REGISTERING SINGLE OBSERVATION IN DB ***
+            // Adding the observation
+            this.dbs.qualitySingleObservationsCollection.add(finalObject)
             .then(refObservation => {
               // Updating the id of the document using the reference
               refObservation.update({id: refObservation.id})
-                .then(() => {
-                  // Constructing the log object
-                  let log = {
-                    action: 'observation added!',
-                    description: this.data[1]['recommendationDescription'],
-                    area: this.data[0]['area'],
-                    regdate: Date.now()
-                  }
-                  // Adding the log to the coresponding inspection
-                  this.dbs.addInspectionLog(this.data[3], log)
-                    .catch(error => {
-                      console.log(error);
-                      this.uploading = false;
-                      this.snackbar.open("Ups!, parece que hubo un error (SI002) ...","Cerrar",{
-                        duration:6000
-                      });
-                    });
-                  
-                });
 
               finalObject['id'] = refObservation.id;
 
@@ -113,12 +91,11 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                       areaName: this.data[0]['area']['name'],
                       areaSupervisorId: this.data[0]['area']['supervisor']['uid'],
                       areaSupervisorName: this.data[0]['area']['supervisor']['displayName'],
-                      inspectionId: this.data[0]['inspectionId'],
                       observationId: refObservation.id,
                       subject: this.data[1]['recommendationDescription'],
                       estimatedTerminationDate: 0,
                       status: 'unseen',
-                      type: 'inspection observation supervisor'
+                      type: 'quality inspection single observation supervisor'
                     }
 
                     // Sending notification to area supervisor
@@ -144,18 +121,6 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                       });
 
                   });
-
-              // UPDATING INSPECTION TO - IN PROGRESS
-              this.dbs.securityInspectionsCollection
-                .doc(this.data[0]['inspectionId'])
-                .update({status: 'En progreso'})
-                  .catch(error => {
-                    this.uploading = false;
-                    console.log(error);
-                    this.snackbar.open("Ups!, parece que hubo un error (SI004) ...","Cerrar",{
-                      duration:6000
-                    });
-                  });
               
 
             }).catch(err => {
@@ -169,5 +134,6 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
     )
     .subscribe()
   }
+
 
 }

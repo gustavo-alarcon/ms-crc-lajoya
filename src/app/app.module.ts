@@ -169,6 +169,14 @@ import { ConfigSsggRequestsComponent } from './configuration/system/config-ssgg-
 import { ConfigSecurityInspectionsComponent } from './configuration/system/config-security-inspections/config-security-inspections.component';
 import { ConfigEditUserComponent } from './configuration/users/users-list/config-edit-user/config-edit-user.component';
 import { ConfigDeleteUserComponent } from './configuration/users/config-delete-user/config-delete-user.component';
+import { QualityConfirmAddObservationComponent } from './quality/quality-inspections/quality-confirm-add-observation/quality-confirm-add-observation.component';
+import { QualityDialogAddSingleObservationComponent } from './quality/quality-inspections/quality-dialog-add-single-observation/quality-dialog-add-single-observation.component';
+import { QualityConfirmAddSingleObservationComponent } from './quality/quality-inspections/quality-confirm-add-single-observation/quality-confirm-add-single-observation.component';
+import { QualityConfirmDeleteSingleObservationComponent } from './quality/quality-inspections/quality-confirm-delete-single-observation/quality-confirm-delete-single-observation.component';
+import { QualityTasksDialogFinalizeObservationComponent } from './quality/quality-tasks/quality-tasks-dialog-finalize-observation/quality-tasks-dialog-finalize-observation.component';
+import { QualityTasksConfirmFinalizeObservationComponent } from './quality/quality-tasks/quality-tasks-confirm-finalize-observation/quality-tasks-confirm-finalize-observation.component';
+import { QualityTasksDialogFinalizeInspectionComponent } from './quality/quality-tasks/quality-tasks-dialog-finalize-inspection/quality-tasks-dialog-finalize-inspection.component';
+import { QualityTasksConfirmFinalizeInspectionComponent } from './quality/quality-tasks/quality-tasks-confirm-finalize-inspection/quality-tasks-confirm-finalize-inspection.component';
 
 
 
@@ -284,7 +292,15 @@ import { ConfigDeleteUserComponent } from './configuration/users/config-delete-u
     ConfigSsggRequestsComponent,
     ConfigSecurityInspectionsComponent,
     ConfigEditUserComponent,
-    ConfigDeleteUserComponent
+    ConfigDeleteUserComponent,
+    QualityConfirmAddObservationComponent,
+    QualityDialogAddSingleObservationComponent,
+    QualityConfirmAddSingleObservationComponent,
+    QualityConfirmDeleteSingleObservationComponent,
+    QualityTasksDialogFinalizeObservationComponent,
+    QualityTasksConfirmFinalizeObservationComponent,
+    QualityTasksDialogFinalizeInspectionComponent,
+    QualityTasksConfirmFinalizeInspectionComponent
     
   ],
   imports: [
@@ -412,7 +428,13 @@ import { ConfigDeleteUserComponent } from './configuration/users/config-delete-u
     UsersPermitDialogEditComponent,
     UsersPermitConfirmEditComponent,
     ConfigEditUserComponent,
-    ConfigDeleteUserComponent
+    ConfigDeleteUserComponent,
+    QualityConfirmAddObservationComponent,
+    QualityDialogAddSingleObservationComponent,
+    QualityConfirmAddSingleObservationComponent,
+    QualityConfirmDeleteSingleObservationComponent,
+    QualityTasksDialogFinalizeObservationComponent,
+    QualityTasksConfirmFinalizeObservationComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -11,6 +11,8 @@ import { QualityAddObservationToInspectionComponent } from './quality-add-observ
 import { QualityInspectionConfirmTerminationComponent } from './quality-inspection-confirm-termination/quality-inspection-confirm-termination.component';
 import { QualityInspectionConfirmDeleteComponent } from './quality-inspection-confirm-delete/quality-inspection-confirm-delete.component';
 import { QualityInspectionObservationConfirmDeleteComponent } from './quality-inspection-observation-confirm-delete/quality-inspection-observation-confirm-delete.component';
+import { QualityDialogAddSingleObservationComponent } from './quality-dialog-add-single-observation/quality-dialog-add-single-observation.component';
+import { QualityConfirmDeleteSingleObservationComponent } from './quality-confirm-delete-single-observation/quality-confirm-delete-single-observation.component';
 
 @Component({
   selector: 'app-quality-inspections',
@@ -100,8 +102,11 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['index', 'terminationDate', 'date', 'inspector', 'area', 'edit'];
   dataSource = new MatTableDataSource();
 
-  displayedColumnsInspectionObservations: string[] = ['index', 'kindOfDanger', 'kindOfObservation', 'observationDescription', 'initialPicture', 'cause', 'recommendationDescription', 'area', 'terminationDate', 'percent', 'status', 'finalPicture', 'edit'];
+  displayedColumnsInspectionObservations: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture',  'area', 'finalPicture', 'terminationDate', 'status',  'edit'];
   dataSourceQualityObservations = new MatTableDataSource();
+
+  displayedColumnsQualitySingleObservations: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture',  'area', 'finalPicture', 'terminationDate', 'status',  'edit'];
+  dataSourceQualitySingleObservations = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -148,6 +153,13 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(qualityObservations);
 
+    let qualitySingleObservationsSubs = this.dbs.currentDataQualitySingleObservations
+                                          .subscribe(res => {
+                                            this.dataSourceQualitySingleObservations.data = res;
+                                          })
+
+    this.subscriptions.push(qualitySingleObservationsSubs);
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -178,7 +190,7 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
   }
 
   toggleCardInspection(index, id_inspection) {
-    this.requestInspectionObservations(id_inspection);
+    this.requestQualityInspectionObservations(id_inspection);
     this.isOpenInspection[index] = !this.isOpenInspection[index];
   }
 
@@ -186,8 +198,8 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
     this.dialog.open(QualityAddInspectionComponent);
   }
 
-  requestInspectionObservations(id): void{
-    this.dbs.getInspectionObservations(id);
+  requestQualityInspectionObservations(id): void{
+    this.dbs.getQualityInspectionObservations(id);
   }
 
   addObservation(inspectionData): void{
@@ -218,6 +230,19 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
     this.dialog.open(QualityInspectionObservationConfirmDeleteComponent,{
       data:{
         id_inspection: id_inspection,
+        id_observation: id_observation
+      }
+    })
+  }
+
+  addSingleObservation(): void{
+    this.dialog.open(QualityDialogAddSingleObservationComponent)
+  }
+
+  deleteSingleObservation(id_observation): void{
+    console.log(id_observation)
+    this.dialog.open(QualityConfirmDeleteSingleObservationComponent,{
+      data:{
         id_observation: id_observation
       }
     })

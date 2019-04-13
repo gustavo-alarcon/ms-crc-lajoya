@@ -1,0 +1,35 @@
+<div class="w3-container">
+  <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
+    <mat-icon style="vertical-align:middle">check_circle</mat-icon> Finalizar tarea
+  </h2>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+
+    <form [formGroup]="taskFormGroup">
+
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Fotos</h2>
+      
+      <div class="ms-gallery-container w3-margin-bottom">
+        <input #fileInput_1 style="display: none" type="file" (change)="onFileSelected_1($event)">
+        <img  [src]="imageSrc_1 || '../../../assets/images/no-image.png'"
+              style="width:100px; height:75px; cursor:pointer"
+              class="mat-elevation-z4 w3-hover-shadow w3-margin-right w3-margin-bottom"
+              (click)="fileInput_1.click()">
+      </div>
+  
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:575px" appearance="outline">
+        <mat-label>Detalles adicionales</mat-label>
+        <textarea matInput placeholder="Describa ... " rows="4" formControlName="details"></textarea>
+      </mat-form-field>
+      <br>
+
+    </form>
+
+    <p class="w3-margin-bottom"> </p>
+
+  </mat-dialog-content>
+  <mat-dialog-actions class="w3-margin-bottom">
+    <button mat-stroked-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
+  </mat-dialog-actions>
+</div>

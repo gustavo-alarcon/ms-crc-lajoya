@@ -1,25 +1,30 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/core/auth.service';
 import { DatabaseService } from 'src/app/core/database.service';
-import { MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
-import { QualityInspectionObservationConfirmDeleteComponent } from '../quality-inspection-observation-confirm-delete/quality-inspection-observation-confirm-delete.component';
-import { QualityConfirmAddObservationComponent } from '../quality-confirm-add-observation/quality-confirm-add-observation.component';
+import { QualityConfirmAddSingleObservationComponent } from '../quality-confirm-add-single-observation/quality-confirm-add-single-observation.component';
 
 @Component({
-  selector: 'app-quality-add-observation-to-inspection',
-  templateUrl: './quality-add-observation-to-inspection.component.html',
+  selector: 'app-quality-dialog-add-single-observation',
+  templateUrl: './quality-dialog-add-single-observation.component.html',
   styles: []
 })
-export class QualityAddObservationToInspectionComponent implements OnInit {
+export class QualityDialogAddSingleObservationComponent implements OnInit {
 
   headerDataFormGroup: FormGroup;
   descriptionDataFormGroup: FormGroup;
 
   filteredAreas: Observable<any>;
-  selectedArea: Object = this.data['area'];
+  selectedArea: Object = {
+    area:'',
+    supervisor:{
+      displayName:'',
+      uid:''
+    }
+  };
 
   filteredKindOfDanger: Observable<any>;
   filteredKindOfObservation: Observable<any>;
@@ -34,20 +39,12 @@ export class QualityAddObservationToInspectionComponent implements OnInit {
     private fb: FormBuilder,
     private snackbar: MatSnackBar,
     private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<QualityAddObservationToInspectionComponent>
+    private dialogRef: MatDialogRef<QualityDialogAddSingleObservationComponent>
   ) { }
 
   ngOnInit() {
-    
     this.headerDataFormGroup = this.fb.group({
-      createdBy: this.auth.userCRC,
-      uid: this.auth.userCRC.uid,
-      uidSupervisor: this.data['area']['supervisor']['uid'],
-      regDate: Date.now(),
-      id: '',
-      inspectionId:this.data['id'],
-      area: [this.data['area'], Validators.required]
+      area: ['', Validators.required]
     })
 
     this.filteredAreas = this.headerDataFormGroup.get('area').valueChanges
@@ -79,13 +76,15 @@ export class QualityAddObservationToInspectionComponent implements OnInit {
         duration: 6000
       })
       return;
-    }
+    }    
 
     if(this.headerDataFormGroup.valid && this.descriptionDataFormGroup.valid){
-      this.dialog.open(QualityConfirmAddObservationComponent,{
-        data: [this.headerDataFormGroup.value, this.descriptionDataFormGroup.value, this.selectedFile, this.data['id']]
+      this.dialog.open(QualityConfirmAddSingleObservationComponent,{
+        data: [this.headerDataFormGroup.value, this.descriptionDataFormGroup.value, this.selectedFile]
       }).afterClosed().subscribe(res => {
-        this.dialogRef.close();
+        if(res){
+          this.dialogRef.close(true);
+        }
       })
     }else{
       this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento","Cerrar", {
