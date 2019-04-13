@@ -27,6 +27,7 @@ export class CreateNewUserComponent implements OnInit {
   visibility: string = 'password';
 
   filteredPermits: Observable<any>;
+  filteredUsers: Observable<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -81,6 +82,13 @@ export class CreateNewUserComponent implements OnInit {
                               map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
                               map(name => name ? this.dbs.permits.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.permits)
                             )
+
+    this.filteredUsers = this.jobDataFormGroup.get('supervisor').valueChanges
+                          .pipe(
+                            startWith<any>(''),
+                            map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
+                            map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
+                          )
   }
 
   showSelectedArea(area): string | undefined {

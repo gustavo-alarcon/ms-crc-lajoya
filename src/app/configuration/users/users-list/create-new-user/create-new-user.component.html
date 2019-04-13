@@ -139,7 +139,7 @@
           <mat-autocomplete #autoSupervisor="matAutocomplete"
                             (optionSelected)="selectedSupervisor($event)"
                             [displayWith]="showSelectedSupervisor">
-                            <mat-option *ngFor="let option of dbs.currentDataUsers | async" [value]="option" style="font-size:14px">
+                            <mat-option *ngFor="let option of filteredUsers | async" [value]="option" style="font-size:14px">
                               <strong>{{option['displayName']}}</strong> | <span class="w3-small">{{option['jobTitle']}}</span> 
                             </mat-option>
           </mat-autocomplete>

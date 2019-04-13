@@ -25,7 +25,7 @@
         <div class="w3-padding">
           <div style="display:flex">
               <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">{{currentMonth}}</h2>
-              <button mat-button disabled="true" class="ms-color-2b"><mat-icon>assignment_turned_in</mat-icon> {{dbs.securityInspections.length | number: '2.0'}} Inspecciones</button>
+              <button mat-button disabled="true" class="ms-color-2b"><mat-icon>assignment_turned_in</mat-icon> {{dbs.qualityInspections.length | number: '2.0'}} Inspecciones</button>
           </div>
           
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
@@ -102,27 +102,16 @@
 
 
 
-                <!-- <ng-container matColumnDef="environmentalObservation">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">¿Realizó
-                    observación ambiental?</th>
-                  <td mat-cell *matCellDef="let inspection"
-                    style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                    {{inspection['environmentalObservation']?'SI':'NO'}}
-                  </td>
-                </ng-container> -->
-
-
-
                 <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef
                     style="background:#eaeaea;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Editar</th>
                   <td mat-cell *matCellDef="let user"
                     style="color:#2b2b2b; padding:0px 1em 0px 1em; border-left:1px solid lightgrey">
-                    <!-- <button mat-icon-button color="primary">
-                      <mat-icon>edit</mat-icon>
-                    </button> -->
-                    <button mat-icon-button color="warn" (click)="deleteInspection(inspection['id'])" matTooltip="Borrar Inspección">
+                    <button mat-icon-button
+                            color="warn"
+                            (click)="deleteInspection(user['id'])"
+                            matTooltip="Borrar Inspección"
+                            [disabled]="!auth.permits['qualityInspectionsDelete']">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
@@ -151,7 +140,8 @@
                     </p>
                     <span class="ms-fill"></span>
                     <button mat-icon-button style="color:white" matTooltip="Borrar Inspección"
-                      (click)="deleteInspection(inspection['id'])">
+                            (click)="deleteInspection(inspection['id'])"
+                            [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionSingleObservationsDelete']">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </div>
@@ -184,7 +174,7 @@
       </ng-template>
     </mat-tab>
 
-    <mat-tab label="Lista">
+    <mat-tab label="Inspecciones">
       <ng-template matTabContent>
         <div class="w3-padding ms-color-2b">
           <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Inspecciones - {{currentYear}}</h2>
@@ -238,22 +228,22 @@
             </div>
 
             <mat-toolbar [@openCloseToolbar]="isOpenInspection[i] ? 'openToolbar': 'closedToolbar'"
-              style="background:#a6a6a6; transform:translateY(-10%)" class="ms-color-2b">
-              <button mat-raised-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Agregar observación"
+              style="background:#a6a6a6" class="ms-color-2b">
+              <button mat-raised-button color="primary" class="w3-margin-right" matTooltip="Agregar observación"
                 (click)="addObservation(inspection)" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                 <mat-icon class="example-icon">add_circle</mat-icon> Observación
               </button>
-              <button mat-stroked-button color="primary" class="w3-margin-right" style="margin-top:8px" matTooltip="Finalizar Inspección"
+              <button mat-stroked-button color="primary" class="w3-margin-right" matTooltip="Finalizar Inspección"
                 (click)="terminateInspection(inspection['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                 <mat-icon class="example-icon">check</mat-icon> Finalizar
               </button>
               <button mat-button *ngIf="inspection['inspector']['uid'] != auth.userCRC.uid" disabled>Solo el inspector puede actualizar información</button>
             </mat-toolbar>
 
-            <div [@openCloseTable]="isOpenInspection[i] ? 'openTable': 'closedTable'" class="w3-amber w3-round-large" style="overflow:auto">
-              <table mat-table [dataSource]="dataSourceInspectionObservations" matSort style="width:100%">
+            <div [@openCloseTable]="isOpenInspection[i] ? 'openTable': 'closedTable'" style="overflow:auto">
+              <table mat-table [dataSource]="dataSourceQualityObservations" matSort style="width:100%;">
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="index">
+                <ng-container matColumnDef="index">
                   <th mat-header-cell *matHeaderCellDef
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
                   <td mat-cell *matCellDef="let observation; let i = index"
@@ -262,29 +252,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
-                  matColumnDef="kindOfDanger">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Clase de
-                    Peligro</th>
-                  <td mat-cell *matCellDef="let observation" class="w3-small"
-                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    {{observation['kindOfDanger']}}
-                  </td>
-                </ng-container>
-
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
-                  matColumnDef="kindOfObservation">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Tipo de
-                    Observación</th>
-                  <td mat-cell *matCellDef="let observation" class="w3-small"
-                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    {{observation['kindOfObservation']}}
-                  </td>
-                </ng-container>
-
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                <ng-container
                   matColumnDef="observationDescription">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
@@ -295,7 +263,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                <ng-container
                   matColumnDef="initialPicture">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto</th>
@@ -310,16 +278,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="cause">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Causa</th>
-                  <td mat-cell *matCellDef="let observation" class="w3-small"
-                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    {{observation['cause']}}
-                  </td>
-                </ng-container>
-
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                <ng-container
                   matColumnDef="recommendationDescription">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
@@ -330,7 +289,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="area">
+                <ng-container matColumnDef="area">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
                     Área</th>
@@ -343,7 +302,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                <ng-container
                   matColumnDef="terminationDate">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
@@ -359,17 +318,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="percent">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">$ de
-                    Cumplimiento</th>
-                  <td mat-cell *matCellDef="let observation" class="w3-small"
-                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    {{observation['percent']}} %
-                  </td>
-                </ng-container>
-
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="status">
+                <ng-container matColumnDef="status">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado</th>
                   <td mat-cell *matCellDef="let observation" class="w3-small"
@@ -378,33 +327,40 @@
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo"
+                <ng-container
                   matColumnDef="finalPicture">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto
                     Levantamiento</th>
                   <td mat-cell *matCellDef="let observation" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    <a href="{{observation['finalPicture']}}" target="_blank"
-                      *ngIf="observation['finalPicture'] != ''">
+                    <a  href="{{observation['finalPicture']}}" target="_blank"
+                        *ngIf="observation['finalPicture']; else defaultPicture">
                       <div style="width:200px;height:120px;padding:6px 6px">
                         <img src="{{observation['finalPicture']}}" style="max-width:100%;height:100%"
                           class="w3-card-4">
                       </div>
                     </a>
+                    <ng-template #defaultPicture>
+                      <div style="width:200px;height:120px;padding:6px 6px">
+                        <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                          class="w3-card-4">
+                      </div>
+                    </ng-template>
                   </td>
                 </ng-container>
 
-                <ng-container class="mat-elevation-z8 w3-border-bottom w3-border-indigo" matColumnDef="edit">
+                <ng-container matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones
                   </th>
                   <td mat-cell *matCellDef="let observation"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-                    <!-- <button mat-icon-button color="primary" matTooltip="Editar configuración de permisos">
-                      <mat-icon>edit</mat-icon>
-                    </button> -->
-                    <button mat-icon-button color="warn" matTooltip="Borrar nivel de usuario" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
+                    <button mat-icon-button
+                            color="warn"
+                            matTooltip="Borrar nivel de usuario"
+                            (click)="deleteObservation(inspection['id'],observation['id'])"
+                            [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
@@ -471,48 +427,24 @@
                   <mat-toolbar style="background:#2b2b2b; color:white; font-weight:600">
                     <span class="ms-font-roboto" style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
                     <span class="ms-fill"></span>
-                    <!-- <button mat-icon-button style="color:white" matTooltip="Editar observación"><mat-icon>edit</mat-icon></button> -->
-                    <button mat-icon-button style="color:white" matTooltip="Borrar observación" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button style="color:white"
+                            matTooltip="Borrar observación"
+                            (click)="deleteObservation(inspection['id'],observation['id'])"
+                            [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionSingleObservationsDelete']">
+                            <mat-icon>delete</mat-icon>
+                    </button>
                   </mat-toolbar> 
                   
-                  
                   <div class="w3-row">
-                    <div class="w3-col s6 ms-header-mobile">Clase de peligro</div>
-                    <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                      <span class="w3-small">{{observation['kindOfDanger']}}</span>
-                    </div>
-                  </div>
-                  <div class="w3-row">
-                    <div class="w3-col s6 ms-header-mobile">Tipo de observación</div>
-                    <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                      <span class="w3-small">{{observation['kindOfObservation']}}</span>
-                    </div>
-                  </div>
-                  <div class="w3-row">
-                    <div class="w3-col s6 ms-header-mobile">Descripción de la obsrvación</div>
+                    <div class="w3-col s6 ms-header-mobile">Descripción de la observación</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small">{{observation['observationDescription']}}</span>
-                    </div>
-                  </div>
-                  <div class="w3-row">
-                    <div class="w3-col s6 ms-header-mobile">Causa</div>
-                    <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                      <span class="w3-small">{{observation['cause']}}</span>
                     </div>
                   </div>
                   <div class="w3-row">
                     <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas correctivas</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small">{{observation['recommendationDescription']}}</span>
-                    </div>
-                  </div>
-                  <div class="w3-row">
-                    <div class="w3-col s6 ms-header-mobile">Área</div>
-                    <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                      <span class="w3-small" style="font-weight:500">{{observation['area']['name']}}</span>
-                      <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                        <li class="w3-small">Sup.: {{observation['area']['supervisor']['displayName']}}</li>
-                      </ul>
                     </div>
                   </div>
                   <div class="w3-row">
@@ -533,12 +465,6 @@
                       <span matTooltip="Fecha realizada" class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</span>
                       <span matTooltip="Fecha realizada" class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
                         {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
-                    </div>
-                  </div>
-                  <div class="w3-row">
-                    <div class="w3-col s6 ms-header-mobile">Porcentaje de avance</div>
-                    <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                      <span class="w3-small" style="font-weight:500">{{observation['percent']}} %</span>
                     </div>
                   </div>
                   <div class="w3-row">
@@ -576,6 +502,282 @@
           </div>
           
         </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Observar">
+      <ng-template matTabContent>
+        <div class="w3-container">
+          <div class="w3-padding ms-color-2b">
+            <h2 class="ms-font-rubik" style="font-size:1.3em;">Observaciones - {{currentYear}}</h2>
+  
+            <button mat-stroked-button class="w3-margin-left" color="primary" (click)="addSingleObservation()"><mat-icon>add_circle</mat-icon> Crear observación</button>
+  
+            <mat-form-field class="w3-margin-left">
+              <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
+              <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
+              <mat-datepicker #dateFilter startView='year' (monthSelected)="setMonthOfView($event, dateFilter)"
+                disabled="false"></mat-datepicker>
+              <mat-hint>
+                <strong>Filtrar contenido por mes y año</strong>
+              </mat-hint>
+            </mat-form-field>
+  
+          </div>
+          <div style="display:flex">
+            <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">{{currentMonth}}</h2>
+            <button mat-button disabled="true" class="ms-color-2b"><mat-icon>assignment</mat-icon> {{dbs.qualitySingleObservations.length | number: '2.0'}} Observaciones</button>
+          </div>
+
+
+        </div>
+
+        <div class="w3-container w3-hide-small" style="overflow:auto">
+          <table mat-table [dataSource]="dataSourceQualitySingleObservations" matSort style="border-radius:10px 10px 0px 0px">
+
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
+              <td mat-cell *matCellDef="let observation; let i = index"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{i+1}}
+              </td>
+            </ng-container>
+
+            <ng-container
+              matColumnDef="observationDescription">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                Descripción de la observación (Condición / Acto Subestándar)</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                {{observation['observationDescription']}}
+              </td>
+            </ng-container>
+
+            <ng-container
+              matColumnDef="initialPicture">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <a href="{{observation['initialPicture']}}" target="_blank">
+                  <div style="width:200px;height:120px;padding:6px 6px">
+                    <img src="{{observation['initialPicture']}}" style="max-width:100%;height:100%"
+                      class="w3-card-4">
+                  </div>
+                </a>
+              </td>
+            </ng-container>
+
+            <ng-container
+              matColumnDef="recommendationDescription">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                Conclusiones / Recomendaciones / Medidas Correctivas</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                {{observation['recommendationDescription']}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                Área</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                <span style="font-weight:500">{{observation['area']['name']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li>Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                </ul>
+              </td>
+            </ng-container>
+
+            <ng-container
+              matColumnDef="terminationDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
+                Termino / Fecha Realización</th>
+              <td mat-cell *matCellDef="let observation"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">
+                  {{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                <p class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
+                  {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                {{observation['status']}}
+              </td>
+            </ng-container>
+
+            <ng-container
+              matColumnDef="finalPicture">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto
+                Levantamiento</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <a  href="{{observation['finalPicture']}}" target="_blank"
+                    *ngIf="observation['finalPicture']; else defaultPicture">
+                  <div style="width:200px;height:120px;padding:6px 6px">
+                    <img src="{{observation['finalPicture']}}" style="max-width:100%;height:100%"
+                      class="w3-card-4">
+                  </div>
+                </a>
+                <ng-template #defaultPicture>
+                  <div style="width:200px;height:120px;padding:6px 6px">
+                    <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                      class="w3-card-4">
+                  </div>
+                </ng-template>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones
+              </th>
+              <td mat-cell *matCellDef="let observation"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                <button mat-icon-button color="warn" matTooltip="Borrar observación" (click)="deleteSingleObservation(observation['id'])" [disabled]="observation['status'] === 'Finalizado' || observation['uidSupervisor'] != auth.userCRC.uid || !auth.permits['qualityInspectionSingleObservationsDelete']">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsQualitySingleObservations; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsQualitySingleObservations;"></tr>
+
+          </table>
+        </div>
+
+        <!-- MOBIL VERSION SINGLE OBSERVATIONS -->
+        <div class="w3-hide-large w3-hide-medium">
+          <ng-container *ngFor="let inspection of filteredInspections; let inspectionIndex = index">
+            <div id="inspection_{{inspectionIndex}}" [@openCloseCard]="isOpenInspection[inspectionIndex] ? 'openCard': 'closedCard'" class="mat-elevation-z8 ms-hero-image-inspection w3-display-container w3-round-large"
+              style="height:133px; cursor:pointer"
+              [ngStyle]="{'background-image': 'url(../../../assets/images/no-image-inspections-2.jpg)'}" (click)="toggleCardInspection(inspectionIndex, inspection['id'])">
+
+              <div class="w3-display-bottomleft w3-padding w3-round-large" style="background:rgba(0,0,0,0.2); width:100%; height:100%">
+                <div style="display:flex">
+                  <p style="font-weight:600; color:white; margin: 0.5em 0.1em">
+                    <span class="w3-round-large"
+                      style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{inspectionIndex +1}}</span>
+                    {{inspection['inspector']['displayName']}}
+                  </p>
+                  <span class="ms-fill"></span>
+                </div>
+
+                <mat-divider class="w3-white" style="margin:0.5em 0em"></mat-divider>
+                <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                  {{inspection['area']['name']}}
+                </p>
+                
+                <div style="display:flex; justify-content: space-between">
+                  <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite"
+                    *ngIf="inspection['estimatedTerminationDate'] === 0">
+                    **/**/****</span>
+                  <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite"
+                    *ngIf="inspection['estimatedTerminationDate'] > 0">
+                    {{(inspection['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
+                  <span class="ms-fill"></span>
+                  <span class="w3-amber w3-padding w3-round-large" style="font-size:0.9em"
+                    matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] === 0">
+                    **/**/****</span>
+                  <span class="w3-padding w3-round-large" style="font-size:0.9em; font-weight:600"
+                    [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7, 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7}"
+                    matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] > 0">
+                    {{(inspection['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div [@openCloseTableMobile]="isOpenInspection[inspectionIndex] ? 'openTableMobile': 'closedTableMobile'" class="mat-elevation-z4" style="background:white">
+              <div *ngFor="let observation of dbs.currentDataQualitySingleObservations | async; let i = index">
+                <mat-toolbar style="background:#2b2b2b; color:white; font-weight:600">
+                  <span class="ms-font-roboto" style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
+                  <span class="ms-fill"></span>
+                  <!-- <button mat-icon-button style="color:white" matTooltip="Editar observación"><mat-icon>edit</mat-icon></button> -->
+                  <button mat-icon-button style="color:white" matTooltip="Borrar observación" (click)="deleteObservation(inspection['id'],observation['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid"><mat-icon>delete</mat-icon></button>
+                </mat-toolbar> 
+                
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Descripción de la observación</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{observation['observationDescription']}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas correctivas</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small">{{observation['recommendationDescription']}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Área</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{observation['area']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Fecha propuesta / Fecha realización</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span matTooltip="Fecha propuesta" class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</span>
+                    <span matTooltip="Fecha propuesta" class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">
+                      {{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</span><br>
+                    <span matTooltip="Fecha realizada" class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</span>
+                    <span matTooltip="Fecha realizada" class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
+                      {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Estado</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span class="w3-small" style="font-weight:500">{{observation['status']}}</span>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Foto inicial</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="observation['initialPicture']">ver imagen</a>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Foto final</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <a class="w3-medium" target="_blank" [href]="observation['finalPicture']">ver imagen</a>
+                  </div>
+                </div>
+                
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Creación</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span>{{inspection['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                    <span class="w3-small">{{inspection['regDate'] | date : 'hh:mm:ss'}}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex; justify-content: center; background:#c5c5c5">
+                <button mat-icon-button class="w3-text-white"
+                (click)="toggleCardInspection(inspectionIndex, inspection['id'])">
+                <a href="#inspection_{{inspectionIndex}}"></a><mat-icon>keyboard_arrow_up</mat-icon></button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        
       </ng-template>
     </mat-tab>
   </mat-tab-group>

@@ -6,6 +6,9 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { QualityTasksDialogFinalizeComponent } from './quality-tasks-dialog-finalize/quality-tasks-dialog-finalize.component';
+import { QualityTasksDialogFinalizeObservationComponent } from './quality-tasks-dialog-finalize-observation/quality-tasks-dialog-finalize-observation.component';
+import { AuthService } from 'src/app/core/auth.service';
+import { QualityTasksDialogFinalizeInspectionComponent } from './quality-tasks-dialog-finalize-inspection/quality-tasks-dialog-finalize-inspection.component';
 
 @Component({
   selector: 'app-quality-tasks',
@@ -69,6 +72,8 @@ import { QualityTasksDialogFinalizeComponent } from './quality-tasks-dialog-fina
 export class QualityTasksComponent implements OnInit, OnDestroy {
 
   isOpenActions: Array<any> = [];
+  isOpenInspections: Array<any> = [];
+  isOpenSingleObsrevations: Array<any> = [];
 
   monthsKey: Array<string> = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   monthIndex: number;
@@ -81,7 +86,11 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
   displayedColumnsTasksByRedo: string[] = ['index', 'action', 'approved', 'responsibles', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'finalize'];
   dataSourceTasksByRedo = new MatTableDataSource();
 
+  displayedColumnsTasksByInspections: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture',  'area', 'finalPicture', 'terminationDate', 'status',  'edit'];
   dataSourceTasksByInspections = new MatTableDataSource();
+
+  displayedColumnsTasksBySingleObservations: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture',  'area', 'finalPicture', 'terminationDate', 'status',  'edit'];
+  dataSourceTasksBySingleObservations = new MatTableDataSource();
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
@@ -91,7 +100,8 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    public dbs: DatabaseService
+    public dbs: DatabaseService,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -100,7 +110,7 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     this.currentMonth = this.monthsKey[this.monthIndex];
     this.currentYear = this.monthFormControl.value.getFullYear();
 
-    let dataQualityTasksSubs =  this.dbs.currentDataQualityTasks
+    let dataQualityTasksByRedosSubs =  this.dbs.currentDataQualityTasks
                                       .pipe(
                                         map(res => {
                                           let tasksByRedo = [];
@@ -119,7 +129,38 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
                                         })
                                       });
 
-    this.subscriptions.push(dataQualityTasksSubs);
+    this.subscriptions.push(dataQualityTasksByRedosSubs);
+
+    let dataQualityTasksByInspectionsSubs = this.dbs.currentDataQualityTasks
+                                              .pipe(
+                                                map(res => {
+                                                  let tasksByRedo = [];
+                                                  res.forEach(element => {
+                                                    if(element['source'] === 'quality inspection'){
+                                                      tasksByRedo.push(element);
+                                                    }
+                                                  });
+                                                  return tasksByRedo;
+                                                })
+                                              )
+                                              .subscribe(res => {
+                                                this.dataSourceTasksByInspections.data = res;
+                                                res.forEach(element => {
+                                                  this.isOpenInspections.push(false);
+                                                })
+                                              });
+
+    this.subscriptions.push(dataQualityTasksByInspectionsSubs);
+
+    let dataQualityTasksBySingleObservationSubs = this.dbs.currentDataQualitySingleObservations
+                                                    .subscribe(res => {
+                                                      this.dataSourceTasksBySingleObservations.data = res;
+                                                      res.forEach(element => {
+                                                        this.isOpenSingleObsrevations.push(false);
+                                                      })
+                                                    });
+
+    this.subscriptions.push(dataQualityTasksBySingleObservationSubs);
   }
 
   ngOnDestroy() {
@@ -132,6 +173,9 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
 
     this.dataSourceTasksByInspections.paginator = this.paginator.toArray()[1];
     this.dataSourceTasksByInspections.sort = this.sort.toArray()[1];
+
+    this.dataSourceTasksBySingleObservations.paginator = this.paginator.toArray()[2];
+    this.dataSourceTasksBySingleObservations.sort = this.sort.toArray()[2];
   }
 
   setMonthOfView(event, datepicker): void {
@@ -166,6 +210,18 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
       }
     })
     
+  }
+
+  finalizeTaskObservation(task): void{
+    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeObservationComponent,{
+      data: task
+    })
+  }
+
+  finalizeTaskInspection(task): void{
+    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeInspectionComponent,{
+      data: task
+    })
   }
 
   

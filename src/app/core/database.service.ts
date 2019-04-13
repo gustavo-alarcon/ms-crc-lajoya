@@ -215,6 +215,13 @@ export class DatabaseService {
   public dataQualityInspectionObservations = new BehaviorSubject<any[]>([]);
   public currentDataQualityInspectionObservations = this.dataQualityInspectionObservations.asObservable();
 
+  // -------------------------- SINGLE OBSERVATIONS -------------------------------
+  public qualitySingleObservationsCollection: AngularFirestoreCollection<any>;
+  public qualitySingleObservations: Array<any> = [];
+
+  public dataQualitySingleObservations = new BehaviorSubject<any[]>([]);
+  public currentDataQualitySingleObservations = this.dataQualitySingleObservations.asObservable();
+
   // -------------------------- TASKS BY REDOS -------------------------------
   public qualityRedoTasksCollection: AngularFirestoreCollection<any>;
   public qualityRedoTasks: Array<any> = [];
@@ -413,7 +420,7 @@ export class DatabaseService {
     let toDate = new Date(toYear,toMonth,1);
 
     // ************ PERMITS
-    this.auth.currentDataPermits.subscribe( permits => {
+    this.auth.currentDataPermits.subscribe(permits => {
       // SECURITY - FRED
       if(permits['securitySection'] && permits['securityFred']){
         this.getAreas();
@@ -426,22 +433,20 @@ export class DatabaseService {
         this.getSecuritySupervisors();
 
         this.getFredReference();
-        this.getSecuritySubstandardActFreds(actualFromDate.valueOf(), toDate.valueOf());
-        this.getSecuritySubstandardConditionFreds(actualFromDate.valueOf(), toDate.valueOf());
-        this.getSecurityRemarkableActFreds(actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecuritySubstandardActFreds(permits['securityFredPersonalList'],actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecuritySubstandardConditionFreds(permits['securityFredPersonalList'],actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecurityRemarkableActFreds(permits['securityFredPersonalList'],actualFromDate.valueOf(), toDate.valueOf());
       }
 
       // SECURITY - TASKS
       if(permits['securitySection'] && permits['securityTasks']){
         this.getTasks(actualFromDate.valueOf(), toDate.valueOf());
-        this.getFredTasks(actualFromDate.valueOf(), toDate.valueOf());
-        this.getInspectionTasks(actualFromDate.valueOf(), toDate.valueOf());
       }
     
 
       // SECURITY - INSPECTIONS
       if(permits['securitySection'] && permits['securityInspections']){
-        this.getSecurityInspections(false, actualFromDate.valueOf(), toDate.valueOf());
+        this.getSecurityInspections(permits['securityInspectionsPersonalList'], actualFromDate.valueOf(), toDate.valueOf());
         this.getKindOfDanger();
         this.getKindOfObsevation();
         this.getCauses();
@@ -462,6 +467,12 @@ export class DatabaseService {
         this.getQualityRedoQualityAnalysts();
         // getting collections
         this.getQualityRedos(actualFromDate.valueOf(), toDate.valueOf());
+      }
+
+      // QUALITY - INSPECTIONS
+      if(permits['qualitySection'] && permits['qualityInspections']){
+        this.getQualityInspections(permits['qualityInspectionsPersonalList'], actualFromDate.valueOf(), toDate.valueOf());
+        this.getQualitySingleObservations(permits['qualityInspectionsSingleObservationsPersonalList'], actualFromDate.valueOf(), toDate.valueOf());
       }
 
       // QUALITY - TASKS
@@ -503,7 +514,18 @@ export class DatabaseService {
   // *************** USERS
   getUsers(): void{
     this.usersCollection = this.afs.collection(`users`, ref => ref.orderBy('name','asc'));
-    this.usersCollection.valueChanges().subscribe(res => {
+    this.usersCollection.valueChanges()
+    .pipe(
+      map(res => {
+
+        res.forEach((user,index) => {
+          user['index'] = index
+        })
+        
+        return res;
+      })
+    )
+    .subscribe(res => {
       this.users = res;
       this.dataUsers.next(res);
     })
@@ -515,7 +537,16 @@ export class DatabaseService {
 
   getPermits(): void{
     this.permitsCollection = this.afs.collection(`db/systemConfigurations/permits`, ref => ref.orderBy('regDate','asc'));
-    this.permitsCollection.valueChanges().subscribe(res => {
+    this.permitsCollection.valueChanges()
+    .pipe(
+      map(res => {
+        res.forEach((element,index) => {
+          element['index'] = index;
+        })
+        return res;
+      })
+    )
+    .subscribe(res => {
       this.permits = res;
       this.dataPermits.next(res);
     })
@@ -624,15 +655,28 @@ export class DatabaseService {
     this.securityFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`);
   }
 
-  getSecuritySubstandardActFreds(from, to): void{
-    if(this.auth.permits['securityFredGeneralList']){
-      this.securitySubstandardActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
-    }else{
-      this.securitySubstandardActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('uid','==',this.auth.userCRC.uid).where('regDate','>=',from).where('regDate','<=',to));
-    }
+  getSecuritySubstandardActFreds(personal, from, to): void{
+    
+    this.securitySubstandardActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
+    
     
     this.securitySubstandardActFredsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList=[];
+          if(personal){
+            res.forEach(element => {
+              if( element['uid'] === this.auth.userCRC.uid ||
+                  element['uidStaff'] === this.auth.userCRC.uid ||
+                  element['uidSupervisor'] === this.auth.userCRC.uid){
+                personalList.push(element);
+              }
+            })
+            return personalList;
+          }else{
+            return res;
+          }
+        }),
         map(res => {
           let fredArray = [];
           res.forEach(element => {
@@ -652,15 +696,27 @@ export class DatabaseService {
       })
   }
 
-  getSecuritySubstandardConditionFreds(from, to): void{
-    if(this.auth.permits['securityFredGeneralList']){
-      this.securitySubstandardConditionFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
-    }else{
-      this.securitySubstandardConditionFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('uid','==',this.auth.userCRC.uid).where('regDate','>=',from).where('regDate','<=',to));
-    }
+  getSecuritySubstandardConditionFreds(personal, from, to): void{
+    
+    this.securitySubstandardConditionFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
     
     this.securitySubstandardConditionFredsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList=[];
+          if(personal){
+            res.forEach(element => {
+              if( element['uid'] === this.auth.userCRC.uid ||
+                  element['uidStaff'] === this.auth.userCRC.uid ||
+                  element['uidSupervisor'] === this.auth.userCRC.uid){
+                personalList.push(element);
+              }
+            })
+            return personalList;
+          }else{
+            return res;
+          }
+        }),
         map(res => {
           let fredArray = [];
           res.forEach(element => {
@@ -680,15 +736,27 @@ export class DatabaseService {
       })
   }
 
-  getSecurityRemarkableActFreds(from, to): void{
-    if(this.auth.permits['securityFredGeneralList']){
-      this.securityRemarkableActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
-    }else{
-      this.securityRemarkableActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('uid','==',this.auth.userCRC.uid).where('regDate','>=',from).where('regDate','<=',to));
-    }
+  getSecurityRemarkableActFreds(personal, from, to): void{
+
+    this.securityRemarkableActFredsCollection = this.afs.collection(`db/crcLaJoya/securityFreds`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
     
     this.securityRemarkableActFredsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList=[];
+          if(personal){
+            res.forEach(element => {
+              if( element['uid'] === this.auth.userCRC.uid ||
+                  element['uidStaff'] === this.auth.userCRC.uid ||
+                  element['uidSupervisor'] === this.auth.userCRC.uid){
+                personalList.push(element);
+              }
+            })
+            return personalList;
+          }else{
+            return res;
+          }
+        }),
         map(res => {
           let fredArray = [];
           res.forEach(element => {
@@ -791,23 +859,25 @@ export class DatabaseService {
       })
   }
 
-  getSecurityInspections(justActualMonth?,from?,to?): void{
-    if(this.auth.permits['securityInspectionsGeneralList']){
-      if(justActualMonth){
-        this.securityInspectionsCollection = this.afs.collection(`db/crcLaJoya/securityInspections`, ref => ref.where('estimatedTerminationDate','>=',from));
-      }else{
-        this.securityInspectionsCollection = this.afs.collection(`db/crcLaJoya/securityInspections`, ref => ref.where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
-      }
-    }else{
-      if(justActualMonth){
-        this.securityInspectionsCollection = this.afs.collection(`db/crcLaJoya/securityInspections`, ref => ref.where('uidStaff','==', this.auth.userCRC.uid).where('estimatedTerminationDate','>=',from));
-      }else{
-        this.securityInspectionsCollection = this.afs.collection(`db/crcLaJoya/securityInspections`, ref => ref.where('uidStaff','==', this.auth.userCRC.uid).where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
-      }
-    }
+  getSecurityInspections(personal?,from?,to?): void{
+    this.securityInspectionsCollection = this.afs.collection(`db/crcLaJoya/securityInspections`, ref => ref.where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
 
     this.securityInspectionsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList = [];
+          if(personal){
+            res.forEach(doc => {
+              if( doc['uidStaff'] === this.auth.userCRC.uid ||
+                  doc['uidAreaSupervisor' ] === this.auth.userCRC.uid){
+                personalList.push(doc);
+              }
+            })
+            return personalList;
+          }else {
+            return res;
+          }
+        }),
         map(res => {
           return res.sort((a,b)=>b['regDate']-a['regDate']);
         })
@@ -924,18 +994,20 @@ export class DatabaseService {
         res.forEach(redo => {
 
           // checking if redo is on report stage and if you are redo admin
-          if(redo['stage'] === 'Reporte' && !this.permits['qualityRedosGeneralList']){
+          if(redo['stage'] === 'Reporte' && !this.auth.permits['qualityRedosGeneralList']){
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
               reportList.push(redo);
             }
+            console.log('returning personal');
 
-          }else if(redo['stage'] === 'Reporte' && this.permits['qualityRedosGeneralList']){
+          }else if(redo['stage'] === 'Reporte' && this.auth.permits['qualityRedosGeneralList']){
+            console.log('returning general');
             reportList.push(redo);
           }
 
-          // checking if redi is on analyze stage
-          if(redo['stage'] === 'Analizar' && !this.permits['qualityRedosGeneralList']){
+          // checking if redo is on analyze stage
+          if(redo['stage'] === 'Analizar' && !this.auth.permits['qualityRedosGeneralList']){
 
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
@@ -963,12 +1035,12 @@ export class DatabaseService {
                 }
               }
             })
-          }else if(redo['stage'] === 'Analizar' && this.permits['qualityRedosGeneralList']){
+          }else if(redo['stage'] === 'Analizar' && this.auth.permits['qualityRedosGeneralList']){
             analyzeList.push(redo);
           }
 
           // cheking if the redo is on actions stage
-          if(redo['stage'] === 'Acciones' && !this.permits['qualityRedosGeneralList']){
+          if(redo['stage'] === 'Acciones' && !this.auth.permits['qualityRedosGeneralList']){
 
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
@@ -996,12 +1068,12 @@ export class DatabaseService {
                 }
               }
             })
-          }else if(redo['stage'] === 'Acciones' && this.permits['qualityRedosGeneralList']){
+          }else if(redo['stage'] === 'Acciones' && this.auth.permits['qualityRedosGeneralList']){
             actionsList.push(redo);
           }
 
           // cheking if the redo is on closing/finalize stage
-          if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && !this.permits['qualityRedosGeneralList']){
+          if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && !this.auth.permits['qualityRedosGeneralList']){
 
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
@@ -1029,7 +1101,7 @@ export class DatabaseService {
                 }
               }
             })
-          }else if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && this.permits['qualityRedosGeneralList']){
+          }else if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && this.auth.permits['qualityRedosGeneralList']){
             closingList.push(redo);
           }
 
@@ -1061,23 +1133,70 @@ export class DatabaseService {
     return this.qualityRedosCollection.doc(id).collection(`log`).add(data);
   }
 
-  getQualityInspections(justActualMonth?,from?,to?): void{
-    if(this.auth.permits['qualityInspectionsGeneralList']){
-      if(justActualMonth){
-        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('estimatedTerminationDate','>=',from));
-      }else{
-        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
-      }
-    }else{
-      if(justActualMonth){
-        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('uidStaff','==', this.auth.userCRC.uid).where('estimatedTerminationDate','>=',from));
-      }else{
-        this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('uidStaff','==', this.auth.userCRC.uid).where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
-      }
-    }
+  addQualityInspection(data): Promise<any>{
+    return this.qualityInspectionsCollection.add(data);
+  }
+
+  addQualityInspectionLog(id, data): Promise<any>{
+    return this.qualityInspectionsCollection.doc(id).collection(`log`).add(data);
+  }
+
+  getQualitySingleObservations(personal?,from?,to?): void{
+
+    
+    this.qualitySingleObservationsCollection = this.afs.collection(`db/crcLaJoya/qualitySingleObsrvations`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
+    
+    this.qualitySingleObservationsCollection.valueChanges()
+    .pipe(
+      map(res => {
+        let personalList = [];
+        if(personal){
+          res.forEach(element => {
+            if( element['uid'] === this.auth.userCRC.uid ||
+                element['uidSupervisor'] === this.auth.userCRC.uid){
+                  personalList.push(element);
+                }
+          })
+          return personalList;
+        }else{
+          return res;
+        }
+      })
+    )
+    .subscribe(res => {
+      this.qualitySingleObservations = res;
+      this.dataQualitySingleObservations.next(res);
+    })
+  }
+
+  getQualityInspectionObservations(id): void{
+    this.qualityInspectionObservationsCollection = this.qualityInspectionsCollection.doc(id).collection(`/observations`, ref => ref.orderBy('regDate','asc'));
+    this.qualityInspectionObservationsCollection.valueChanges().subscribe(res => {
+      this.qualityInspectionObservations = res;
+      this.dataQualityInspectionObservations.next(res);
+    })
+  }
+
+  getQualityInspections(personal?,from?,to?): void{
+   
+    this.qualityInspectionsCollection = this.afs.collection(`db/crcLaJoya/qualityInspections`, ref => ref.where('estimatedTerminationDate','>=',from).where('estimatedTerminationDate','<=',to));
 
     this.qualityInspectionsCollection.valueChanges()
       .pipe(
+        map(res => {
+          let personalList = [];
+          if(personal){
+            res.forEach(doc => {
+              if( doc['uidStaff'] === this.auth.userCRC.uid ||
+                  doc['uidAreaSupervisor'] === this.auth.userCRC.uid){
+                    personalList.push(doc);
+                  }
+            })
+            return personalList;
+          }else{
+            return res;
+          }
+        }),
         map(res => {
           return res.sort((a,b)=>b['regDate']-a['regDate']);
         })

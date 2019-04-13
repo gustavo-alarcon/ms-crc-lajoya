@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { DatabaseService } from 'src/app/core/database.service';
+import { MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-quality-inspection-confirm-delete',
@@ -7,9 +9,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QualityInspectionConfirmDeleteComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public dbs: DatabaseService,
+    private snackbar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef : MatDialogRef<QualityInspectionConfirmDeleteComponent>
+  ) { }
 
   ngOnInit() {
+  }
+
+  delete(): void {
+    this.dbs.qualityInspectionsCollection.doc(this.data['id_inspection']).delete()
+      .then(() => {
+        this.snackbar.open("Listo!", "Cerrar", {
+          duration: 6000
+        });
+      })
+      .catch(err => {
+        this.snackbar.open("Ups!...parece que hubo un error", "Cerrar", {
+          duration: 6000
+        });
+        console.log(err);
+      });
+
+    this.dialogRef.close();
+
   }
 
 }
