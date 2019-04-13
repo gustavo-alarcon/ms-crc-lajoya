@@ -120,10 +120,7 @@ export class UsersPermitDialogEditComponent implements OnInit {
         this.coincidence = res;
       })
 
-    console.log(this.data);
-
     this.permitsConfigurationFormGroup = this.fb.group({
-      generalDashboard: this.data['generalDashboard'],
 
       securitySection:this.data['securitySection']?this.data['securitySection']:false,
       securityFred:this.data['securityFred']?this.data['securityFred']:false,
@@ -190,8 +187,7 @@ export class UsersPermitDialogEditComponent implements OnInit {
 
     })
 
-
-
+    this.fillingSelections();
 
     this.securitySelection.onChange
     .pipe(
@@ -204,9 +200,6 @@ export class UsersPermitDialogEditComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('securitySection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.securitySelection.hasValue());
     })
 
     this.qualitySelection.onChange
@@ -219,9 +212,6 @@ export class UsersPermitDialogEditComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('qualitySection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.qualitySelection.hasValue());
     })
 
     this.maintenanceSelection.onChange
@@ -234,9 +224,6 @@ export class UsersPermitDialogEditComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('maintenanceSection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.maintenanceSelection.hasValue());
     })
 
     this.ssggSelection.onChange
@@ -249,9 +236,6 @@ export class UsersPermitDialogEditComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('ssggSection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.ssggSelection.hasValue());
     })
 
     this.configurationSelection.onChange
@@ -264,10 +248,59 @@ export class UsersPermitDialogEditComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('configurationSection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.ssggSelection.hasValue());
     })
+  }
+
+  fillingSelections(): void{
+    this.securityKeys.forEach(key => {
+      if(this.data[key['value']]){
+        this.securitySelection.toggle(key['value']);
+      }
+    })
+
+    if(this.securitySelection.selected.length){
+      this.permitsConfigurationFormGroup.get('securitySection').setValue(true);
+    }
+
+    this.qualityKeys.forEach(key => {
+      if(this.data[key['value']]){
+        this.qualitySelection.toggle(key['value']);
+      }
+    })
+
+    if(this.qualitySelection.selected.length){
+      this.permitsConfigurationFormGroup.get('qualitySection').setValue(true);
+    }
+
+    this.maintenanceKeys.forEach(key => {
+      if(this.data[key['value']]){
+        this.maintenanceSelection.toggle(key['value']);
+      }
+    })
+
+    if(this.maintenanceSelection.selected.length){
+      this.permitsConfigurationFormGroup.get('maintenanceSection').setValue(true);
+    }
+
+    this.ssggKeys.forEach(key => {
+      if(this.data[key['value']]){
+        this.ssggSelection.toggle(key['value']);
+      }
+    })
+
+    if(this.ssggSelection.selected.length){
+      this.permitsConfigurationFormGroup.get('ssggSection').setValue(true);
+    }
+
+    this.configurationKeys.forEach(key => {
+      if(this.data[key['value']]){
+        this.configurationSelection.toggle(key['value']);
+      }
+    })
+
+    if(this.configurationSelection.selected.length){
+      this.permitsConfigurationFormGroup.get('configurationSection').setValue(true);
+    }
   }
 
   // SECURITY METHODS
@@ -390,7 +423,6 @@ export class UsersPermitDialogEditComponent implements OnInit {
     _permits['name'] = this.detailsFormGroup.value['name'];
     _permits['id'] = this.data['id'];
     _permits['regDate'] = Date.now();
-    _permits['generalDashboard'] = true;
     _permits['securitySection'] = this.securitySelection.selected.length > 0 ? true: false;
     _permits['qualitySection'] = this.qualitySelection.selected.length > 0 ? true: false;
     _permits['maintenanceSection'] = this.maintenanceSelection.selected.length > 0 ? true: false;
