@@ -121,7 +121,6 @@ export class CreateNewPermitComponent implements OnInit {
       })
 
     this.permitsConfigurationFormGroup = this.fb.group({
-      generalDashboard: false,
 
       securitySection:false,
       securityFred:false,
@@ -199,9 +198,6 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('securitySection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.securitySelection.hasValue());
     })
 
     this.qualitySelection.onChange
@@ -214,9 +210,6 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('qualitySection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.qualitySelection.hasValue());
     })
 
     this.maintenanceSelection.onChange
@@ -229,9 +222,6 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('maintenanceSection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.maintenanceSelection.hasValue());
     })
 
     this.ssggSelection.onChange
@@ -244,9 +234,6 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('ssggSection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.ssggSelection.hasValue());
     })
 
     this.configurationSelection.onChange
@@ -259,9 +246,6 @@ export class CreateNewPermitComponent implements OnInit {
       }else{
         this.permitsConfigurationFormGroup.get('configurationSection').setValue(true);
       }
-      // console.log(this.permitsConfigurationFormGroup.value);
-      // console.log(res);
-      // console.log(this.ssggSelection.hasValue());
     })
 
   }
@@ -380,6 +364,41 @@ export class CreateNewPermitComponent implements OnInit {
     this.configurationSelection.selected.forEach(element => {
       _permits[element] = true;
     });
+
+    // checking if some security checkbox is checked, so section has to be available
+    if(this.securitySelection.selected.length){
+      _permits['securitySection'] = true;
+    }else{
+      _permits['securitySection'] = false;
+    }
+
+    // checking if some quality checkbox is checked, so section has to be available
+    if(this.securitySelection.selected.length){
+      _permits['qualitySection'] = true;
+    }else{
+      _permits['qualitySection'] = false;
+    }
+
+    // checking if some maintenance checkbox is checked, so section has to be available
+    if(this.securitySelection.selected.length){
+      _permits['maintenanceSection'] = true;
+    }else{
+      _permits['maintenanceSection'] = false;
+    }
+
+    // checking if some ssgg checkbox is checked, so section has to be available
+    if(this.securitySelection.selected.length){
+      _permits['ssggSection'] = true;
+    }else{
+      _permits['ssggSection'] = false;
+    }
+
+    // checking if some configuration checkbox is checked, so section has to be available
+    if(this.securitySelection.selected.length){
+      _permits['configurationSection'] = true;
+    }else{
+      _permits['configurationSection'] = false;
+    }
 
     this.dbs.permitsCollection
       .add(_permits)

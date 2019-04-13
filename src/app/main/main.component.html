@@ -3,7 +3,7 @@
 
     <button mat-icon-button style="color:white" (click)="toggleSideMenu()">
       <mat-icon>menu</mat-icon>
-    </button>]
+    </button>
     <ng-container>
       <img src="../../assets/images/logo-crc-white.png" alt="logo ferreyros" style="height:80%">
     </ng-container>
@@ -61,7 +61,7 @@
     <mat-sidenav mode="over" #sideMenu [(opened)]="openedMenu" class="mat-elevation-z8">
       <div>
 
-        <button *ngIf="auth.permits['generalDashboard']" mat-button class="w3-block" routerLink="dashboard"
+        <button mat-button class="w3-block" routerLink="dashboard"
           style="padding: 0.8em 0em 0em 1.2em;;text-align:left;font-weight:500" (click)="toggleSideMenu()">
           <mat-icon class="ms-menu-icon" style="vertical-align: middle;margin-right:0.2em;margin-left:0.25em">bar_chart
           </mat-icon> Dashboard
