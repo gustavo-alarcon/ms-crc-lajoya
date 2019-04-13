@@ -672,10 +672,8 @@ export class DatabaseService {
                 personalList.push(element);
               }
             })
-            console.log('retornando personal')
             return personalList;
           }else{
-            console.log('retornando general')
             return res;
           }
         }),
@@ -996,18 +994,20 @@ export class DatabaseService {
         res.forEach(redo => {
 
           // checking if redo is on report stage and if you are redo admin
-          if(redo['stage'] === 'Reporte' && !this.permits['qualityRedosGeneralList']){
+          if(redo['stage'] === 'Reporte' && !this.auth.permits['qualityRedosGeneralList']){
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
               reportList.push(redo);
             }
+            console.log('returning personal');
 
-          }else if(redo['stage'] === 'Reporte' && this.permits['qualityRedosGeneralList']){
+          }else if(redo['stage'] === 'Reporte' && this.auth.permits['qualityRedosGeneralList']){
+            console.log('returning general');
             reportList.push(redo);
           }
 
-          // checking if redi is on analyze stage
-          if(redo['stage'] === 'Analizar' && !this.permits['qualityRedosGeneralList']){
+          // checking if redo is on analyze stage
+          if(redo['stage'] === 'Analizar' && !this.auth.permits['qualityRedosGeneralList']){
 
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
@@ -1035,12 +1035,12 @@ export class DatabaseService {
                 }
               }
             })
-          }else if(redo['stage'] === 'Analizar' && this.permits['qualityRedosGeneralList']){
+          }else if(redo['stage'] === 'Analizar' && this.auth.permits['qualityRedosGeneralList']){
             analyzeList.push(redo);
           }
 
           // cheking if the redo is on actions stage
-          if(redo['stage'] === 'Acciones' && !this.permits['qualityRedosGeneralList']){
+          if(redo['stage'] === 'Acciones' && !this.auth.permits['qualityRedosGeneralList']){
 
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
@@ -1068,12 +1068,12 @@ export class DatabaseService {
                 }
               }
             })
-          }else if(redo['stage'] === 'Acciones' && this.permits['qualityRedosGeneralList']){
+          }else if(redo['stage'] === 'Acciones' && this.auth.permits['qualityRedosGeneralList']){
             actionsList.push(redo);
           }
 
           // cheking if the redo is on closing/finalize stage
-          if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && !this.permits['qualityRedosGeneralList']){
+          if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && !this.auth.permits['qualityRedosGeneralList']){
 
             // if you are the area supervisor or the creator, you can see the redo
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
@@ -1101,7 +1101,7 @@ export class DatabaseService {
                 }
               }
             })
-          }else if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && this.permits['qualityRedosGeneralList']){
+          }else if((redo['stage'] === 'Cierre' || redo['stage'] === 'Finalizado') && this.auth.permits['qualityRedosGeneralList']){
             closingList.push(redo);
           }
 

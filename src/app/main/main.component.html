@@ -3,7 +3,7 @@
 
     <button mat-icon-button style="color:white" (click)="toggleSideMenu()">
       <mat-icon>menu</mat-icon>
-    </button>
+    </button>]
     <ng-container>
       <img src="../../assets/images/logo-crc-white.png" alt="logo ferreyros" style="height:80%">
     </ng-container>
@@ -77,12 +77,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <!-- <button mat-button *ngIf="auth.permits['securityDashboard']"
-            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/dashboard"
-            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
-            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
-            Dashboard
-          </button> -->
           <button mat-button *ngIf="auth.permits['securityFred']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="security/fred"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
@@ -114,12 +108,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <!-- <button mat-button *ngIf="auth.permits['qualityDashboard']"
-            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/dashboard"
-            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
-            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
-            Dashboard
-          </button> -->
           <button mat-button *ngIf="auth.permits['qualityRedos']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="quality/restorations"
             style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
@@ -149,12 +137,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <!-- <button mat-button *ngIf="auth.permits['maintenanceDashboard']"
-            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber"
-            routerLink="maintenance/dashboard" style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
-            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
-            Dashboard
-          </button><br> -->
           <button mat-button *ngIf="auth.permits['maintenanceRequests']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="maintenance/requests"
             style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
@@ -172,12 +154,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <!-- <button mat-button *ngIf="auth.permits['ssggDashboard']"
-            class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="ssgg/dashboard"
-            style="text-align:left;border-radius:0px 0px 0px 0px" (click)="toggleSideMenu()">
-            <mat-icon style="vertical-align: middle; margin-right:0.2em;margin-left:1.5em">bar_chart</mat-icon>
-            Dashboard
-          </button><br> -->
           <button mat-button *ngIf="auth.permits['ssggRequests']"
             class="w3-block w3-text-white ms-expansion-panel-menu w3-hover-text-amber" routerLink="ssgg/requests"
             style="text-align:left;border-radius:0px 0px 0px 0px;padding-bottom:1em" (click)="toggleSideMenu()">
@@ -273,6 +249,18 @@
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'maintenance request broadcast'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">build</mat-icon> Mantenimiento - Solicitud
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection inspector'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection observation supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección observación
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection single observation supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección personal
             </button>
             
           </div>
@@ -477,6 +465,65 @@
               <button mat-raised-button class="w3-margin-right" color="primary"
                 (click)="confirmRequestClosing(note['redoId'], note['id'], note['signId'])"
                 *ngIf="note['requestStatus'] === 'Por confirmar'">Confirmar</button>
+            </div>
+          </div>
+
+          <!-- QUALITY INSPECTION SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality inspection supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> programo a <strong>{{note['inspectorName']}}</strong> para inspeccionar su área el <strong>{{note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
+          </div>
+          <!-- QUALITY INSPECTION INSPECTOR -->
+          <div *ngIf="note['type'] === 'quality inspection inspector'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> lo programo para inspeccionar el área: <strong>{{note['areaName']}}</strong>, supervisada por: <strong>{{note['areaSupervisorName']}}</strong>. Debe realizar la inspección el <strong>{{ note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
+          </div>
+
+          <!-- QUALITY INSPECTION OBSERVATION SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> hizo la siguiente observación: <strong>{{note['subject']}}</strong></span>
+            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+              realización: 
+              {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateQualityInspectionObservationFormControl"
+                [value]="note['estimatedTerminationDate']">
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              <mat-hint>
+                <strong>Asigne una fecha de cumplimiento para la observación</strong> mm/dd/yyyy*
+              </mat-hint>
+            </mat-form-field>
+            <div style="margin: 1em 0em 0.5em 0em">
+              <button mat-raised-button class="w3-margin-right" color="warn"
+                (click)="rejectQualityInspectionObservation(note['inspectionId'], note['observationId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+              <button mat-raised-button class="w3-margin-right" color="primary"
+                (click)="confirmQualityInspectionObservation(note['inspectionId'], note['observationId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+            </div>
+          </div>
+
+          <!-- QUALITY INSPECTION SINGLE OBSERVATION SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality inspection single observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> hizo la siguiente observación personal en su área: <strong>{{note['subject']}}</strong></span>
+            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+              realización: 
+              {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateQualitySingleObservationFormControl"
+                [value]="note['estimatedTerminationDate']">
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              <mat-hint>
+                <strong>Asigne una fecha de cumplimiento para la observación</strong> mm/dd/yyyy*
+              </mat-hint>
+            </mat-form-field>
+            <div style="margin: 1em 0em 0.5em 0em">
+              <button mat-raised-button class="w3-margin-right" color="warn"
+                (click)="rejectQualitySingleObservation(note['observationId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+              <button mat-raised-button class="w3-margin-right" color="primary"
+                (click)="confirmQualitySingleObservation(note['observationId'], note['id'])"
+                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
             </div>
           </div>
 

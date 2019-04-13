@@ -157,7 +157,7 @@
                     <td mat-cell *matCellDef="let report"
                       style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
                       <button mat-icon-button color="primary" matTooltip="Analizar" (click)="nextStageAnalyze(report)"
-                        [disabled]="report['stage'] != 'Reporte' || report['status'] === 'Por confirmar' || report['status'] === 'Rechazado' || !isTechnician || !isQualitySupervisor">
+                        [disabled]="report['stage'] != 'Reporte' || report['status'] === 'Por confirmar' || report['status'] === 'Rechazado' || !isTechnician">
                         <mat-icon>next_week</mat-icon>
                       </button><br>
                       <button mat-icon-button color="primary" matTooltip="Editar reporte" (click)="editReport(report)">
@@ -197,7 +197,7 @@
                       <span class="ms-fill"></span>
                       <button mat-icon-button class="w3-text-white" matTooltip="Analizar"
                         (click)="nextStageAnalyze(report)"
-                        [disabled]="report['stage'] != 'Reporte' || report['status'] === 'Por confirmar' || report['status'] === 'Rechazado' || !isTechnician || !isQualitySupervisor">
+                        [disabled]="report['stage'] != 'Reporte' || report['status'] === 'Por confirmar' || report['status'] === 'Rechazado' || !isTechnician">
                         <mat-icon>next_week</mat-icon>
                       </button>
 
@@ -373,7 +373,7 @@
             <mat-toolbar [@openCloseToolbar]="isOpenAnalyze[i] ? 'openToolbar': 'closedToolbar'"
               style="background:#191919" class="ms-color-2b">
               <button mat-raised-button color="primary" class="w3-margin-right" matTooltip="Agregar acciones"
-                (click)="nextStageActions(analyze)" [disabled]="!isTechnician || !isQualitySupervisor">
+                (click)="nextStageActions(analyze)" [disabled]="!isTechnician">
                 <mat-icon class="example-icon">next_week</mat-icon> Acciones
               </button>
               <button mat-raised-button class="w3-margin-right" matTooltip="Editar análisis"
@@ -550,7 +550,7 @@
                     <span class="ms-fill"></span>
                     <button mat-icon-button class="w3-text-white" matTooltip="Proponer acciones"
                       (click)="nextStageActions(analyze)"
-                      [disabled]="analyze['stage'] != 'Analizar' || analyze['status'] === 'Por confirmar'  || !isTechnician || !isQualitySupervisor">
+                      [disabled]="analyze['stage'] != 'Analizar' || analyze['status'] === 'Por confirmar'  || !isTechnician">
                       <mat-icon>next_week</mat-icon>
                     </button>
                     <button mat-icon-button class="w3-text-white" matTooltip="Borrar análisis"
@@ -993,11 +993,11 @@
             <div [@openCloseToolbar]="isOpenActions[i] ? 'openToolbar': 'closedToolbar'" style="background:#191919">
               <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em">
                 <button mat-raised-button color="primary" class="w3-margin-right" matTooltip="Agregar acciones"
-                  (click)="addActions(document)" [disabled]="!isTechnician || !isQualitySupervisor">
+                  (click)="addActions(document)" [disabled]="!isTechnician">
                   <mat-icon class="example-icon">add_circle</mat-icon> Proponer acciones
                 </button>
                 <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip=""
-                  (click)="approveActions(document)" [disabled]="this.selection.selected.length === 0 || !isTechnician || !isQualitySupervisor">
+                  (click)="approveActions(document)" [disabled]="this.selection.selected.length === 0 || !isTechnician">
                   <mat-icon>check_circle</mat-icon> Aprobar acciones
                 </button>
                 <div>
@@ -1167,13 +1167,13 @@
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                     <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
                       (click)="validateAction(row, document)"
-                      [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                      [disabled]="row['status'] != 'Finalizado' || !row['approved'] || !isQualitySupervisor"
                       *ngIf="!row['valid']">
                       <mat-icon>check_circle</mat-icon> Validar
                     </button><br>
                     <button mat-raised-button color="warn" matTooltip="Validar el cumplimiento de la tarea"
                       (click)="resetAction(row, document)"
-                      [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                      [disabled]="row['status'] != 'Finalizado' || !row['approved'] || !isQualitySupervisor"
                       *ngIf="row['valid']">
                       <mat-icon>settings_backup_restore</mat-icon> Restaurar tarea
                     </button><br>
@@ -1550,13 +1550,13 @@
                         <div class="w3-col s6" style="padding: 0.5em 0.5em">
                           <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
                             (click)="validateAction(row, analyze)"
-                            [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                            [disabled]="row['status'] != 'Finalizado' || !row['approved'] || !isQualitySupervisor"
                             *ngIf="!row['valid']">
                             <mat-icon>check_circle</mat-icon> Validar
                           </button><br>
                           <button mat-raised-button color="warn" matTooltip="Validar el cumplimiento de la tarea"
                             (click)="resetAction(row, analyze)"
-                            [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                            [disabled]="row['status'] != 'Finalizado' || !row['approved'] || !isQualitySupervisor"
                             *ngIf="row['valid']">
                             <mat-icon>settings_backup_restore</mat-icon> Restaurar
                           </button><br>
@@ -2030,13 +2030,13 @@
                       style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                       <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
                         (click)="validateAction(row, document)"
-                        [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                        [disabled]="row['status'] != 'Finalizado' || !row['approved'] || !isQualitySupervisor"
                         *ngIf="!row['valid']">
                         <mat-icon>check_circle</mat-icon> Validar
                       </button><br>
                       <button mat-raised-button color="warn" matTooltip="Validar el cumplimiento de la tarea"
                         (click)="resetAction(row, document)"
-                        [disabled]="row['status'] != 'Finalizado' || !row['approved']  || document['stage'] === 'Cierre' || document['stage'] === 'Finalizado'"
+                        [disabled]="row['status'] != 'Finalizado' || !row['approved']  || document['stage'] === 'Cierre' || document['stage'] === 'Finalizado' || !isQualitySupervisor"
                         *ngIf="row['valid']">
                         <mat-icon>settings_backup_restore</mat-icon> Restaurar tarea
                       </button><br>
@@ -2431,13 +2431,13 @@
                           <div class="w3-col s6" style="padding: 0.5em 0.5em">
                             <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
                               (click)="validateAction(row, analyze)"
-                              [disabled]="row['status'] != 'Finalizado' || !row['approved']"
+                              [disabled]="row['status'] != 'Finalizado' || !row['approved'] || !isQualitySupervisor"
                               *ngIf="!row['valid']">
                               <mat-icon>check_circle</mat-icon> Validar
                             </button><br>
                             <button mat-raised-button color="warn" matTooltip="Validar el cumplimiento de la tarea"
                               (click)="resetAction(row, analyze)"
-                              [disabled]="row['status'] != 'Finalizado' || !row['approved'] || row['stage'] === 'Cierre'"
+                              [disabled]="row['status'] != 'Finalizado' || !row['approved'] || row['stage'] === 'Cierre' || !isQualitySupervisor"
                               *ngIf="row['valid']">
                               <mat-icon>settings_backup_restore</mat-icon> Restaurar
                             </button><br>

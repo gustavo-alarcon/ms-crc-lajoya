@@ -13,6 +13,9 @@ export class NotificationsComponent implements OnInit {
 
   dateSecurityFredFormControl = new FormControl();
   dateSecurityInspectionObservationFormControl = new FormControl();
+  dateMaintenanceRequestsConfirmationFormControl = new FormControl();
+  dateQualitySingleObservationFormControl = new FormControl();
+  dateQualityInspectionObservationFormControl = new FormControl();
 
   constructor(
     public auth: AuthService,
@@ -112,6 +115,61 @@ export class NotificationsComponent implements OnInit {
   confirmRequestClosing(redoId , noteId, signId): void{
     this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({sign: true});
     this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Confirmado'});
+  }
+
+  // REJECT AND CONFIRMATION MAINTENANCE REQUEST
+  rejectMaintenanceRequest(requestId, notificationId): void{
+    this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Rechazado'});
+    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  }
+
+  confirmMaintenanceRequest(requestId, notificationId): void{
+    if(this.dateMaintenanceRequestsConfirmationFormControl.value){
+      this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
+      this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
+    }else{
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
+        duration: 6000
+      });
+    }
+  }
+
+  // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON QUALITY INSPECTIONS
+  rejectQualityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
+    this.dbs.qualityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Rechazado'});
+    this.dbs.qualityTasksCollection.doc(observationId).update({status: 'Rechazado'});
+    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  }
+
+  confirmQualityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
+    if(this.dateQualityInspectionObservationFormControl.value){
+      this.dbs.qualityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
+      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
+      this.dbs.qualityTasksCollection.doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
+      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
+    }else{
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
+        duration: 6000
+      });
+    }
+  }
+
+  // REJECT AND CONFIRMATION SINGLE OBSERVATIONS
+  rejectQualitySingleObservation(observationId, notificationId): void{
+    this.dbs.qualitySingleObservationsCollection.doc(observationId).update({status: 'Rechazado'});
+    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  }
+
+  confirmQualitySingleObservation(observationId, notificationId): void{
+    if(this.dateQualitySingleObservationFormControl.value){
+      this.dbs.qualitySingleObservationsCollection.doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
+      this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
+    }else{
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
+        duration: 6000
+      });
+    }
   }
 
 }

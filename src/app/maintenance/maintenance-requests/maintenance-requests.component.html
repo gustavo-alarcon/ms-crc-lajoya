@@ -11,6 +11,21 @@
 
           <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Incidente</h2>
 
+          <!-- <mat-form-field class="w3-margin-right w3-margin-bottom w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
+            <mat-label>Equipo</mat-label>
+            <input type="text" matInput placeholder="Escriba y seleccione" formControlName="areas"
+              [matAutocomplete]="autoAreas" required>
+            <mat-hint>
+              Solo se listarán los equipos pertenecientes a su área
+            </mat-hint>
+          </mat-form-field>
+          <mat-autocomplete #autoEquipment="matAutocomplete" [displayWith]="showSelectedAreas">
+            <mat-option *ngFor="let area of filteredAreas| async" [value]="equipment" style="font-size:14px">
+              <span><strong>{{equipment['name']}}</strong> | {{equipment['area']['name']}}</span>
+            </mat-option>
+          </mat-autocomplete>
+          <br> -->
+
           <mat-form-field class="w3-margin-right w3-margin-bottom w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
             <mat-label>Equipo</mat-label>
             <input type="text" matInput placeholder="Escriba y seleccione" formControlName="equipment"
