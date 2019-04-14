@@ -28,15 +28,6 @@ export class MaintenanceRequestsConfirmDeleteComponent implements OnInit {
         console.log(err);
       });
 
-    
-    this.dbs.usersCollection.doc(this.data['id_supervisor']).collection('tasks').doc(this.data['id_request']).delete()
-      .catch(err => {
-        this.snackbar.open("Ups!...parece que hubo un error", "Cerrar", {
-          duration: 6000
-        });
-        console.log(err);
-      });
-
     this.snackbar.open("Listo!", "Cerrar", {
       duration: 6000
     });

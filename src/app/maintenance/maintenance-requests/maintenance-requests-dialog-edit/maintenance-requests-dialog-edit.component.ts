@@ -25,7 +25,8 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
   filteredMaintenanceEquipments: Observable<any>;
   filteredMaintenancePriorities: Observable<any>;
   filteredAreas: Observable<any>;
-  filteredMaintenanceRequests: Array<any>;
+  filteredMaintenanceRequests: Array<any> = [];
+  filteredEquipments: Array<any> = [];
 
   subscriptions: Array<Subscription> = [];
 
@@ -53,7 +54,7 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
                                             .pipe(
                                               startWith<any>(''),
                                               map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                              map(name => name ? this.dbs.maintenanceEquipments.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.maintenanceEquipments)
+                                              map(name => name ? this.filteredEquipments.filter(option => option['name'].toLowerCase().includes(name)) : this.filteredEquipments)
                                             );
 
     this.filteredMaintenancePriorities =  this.requestFormGroup.get('priority').valueChanges
@@ -63,12 +64,12 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
                                               map(name => name ? this.dbs.maintenancePriorities.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.maintenancePriorities)
                                             );
 
-    this.filteredAreas = this.requestFormGroup.get('area').valueChanges
-                          .pipe(
-                            startWith<any>(''),
-                            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                            map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-                          );
+    this.filteredAreas =  this.requestFormGroup.get('area').valueChanges
+                            .pipe(
+                              startWith<any>(''),
+                              map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+                              map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+                            );
 
     // ************** TAB - REQUEST LIST
     let dataMaintenanceRequestsSubs =  this.dbs.currentDataMaintenanceRequests.subscribe(res => {
@@ -97,6 +98,9 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
 
     this.imageSrc_initial = this.data['initialPicture'];
     this.imageSrc_final = this.data['finalPicture'];
+
+    let ref = this.data['area']['name'].toLowerCase();
+    this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
   }
 
   showSelectedArea(area): string | undefined {
@@ -104,7 +108,8 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
   }
 
   selectedArea(event): void{
-    
+    let ref = event.option.value['name'].toLowerCase();
+    this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
   }
 
   showSelectedEquipment(equipment): string | undefined {

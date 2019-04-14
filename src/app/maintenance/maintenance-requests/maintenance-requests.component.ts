@@ -98,7 +98,7 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
   filteredAreas: Observable<any>;
 
   filteredMaintenanceRequests: Array<any> = [];
-  filteredEquipments: Array<any> = [];;
+  filteredEquipments: Array<any> = [];
 
   subscriptions: Array<Subscription> = [];
 
@@ -206,9 +206,7 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
 
   selectedArea(event): void{
     let ref = event.option.value['name'].toLowerCase();
-    console.log(this.dbs.maintenanceEquipmentsConfig);
     this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
-    console.log(this.filteredEquipments);
   }
 
   showSelectedEquipment(equipment): string | undefined {

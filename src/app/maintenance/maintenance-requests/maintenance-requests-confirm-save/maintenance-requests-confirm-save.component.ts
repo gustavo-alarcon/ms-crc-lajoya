@@ -56,7 +56,7 @@ export class MaintenanceRequestsConfirmSaveComponent implements OnInit {
                 createdBy: this.auth.userCRC,
                 status: 'Por confirmar',
                 observation: this.data['form']['observation'],
-                area: this.auth.userCRC.area,
+                area: this.data['form']['area'],
                 priority: "Por asignar",
                 equipment: this.data['form']['equipment'],
                 source: 'maintenance',
@@ -89,13 +89,8 @@ export class MaintenanceRequestsConfirmSaveComponent implements OnInit {
 
                 requestObject['id'] = refRequest.id;
 
-                // Adding request as task to maintenance supervisor
+                // Sending notifications to maintenance supervisors
                 this.dbs.maintenanceSupervisors.forEach(user => {
-                  this.dbs.usersCollection
-                  .doc(user['uid'])
-                  .collection(`tasks`)
-                  .doc(refRequest.id)
-                  .set(requestObject)
 
                   this.dbs.usersCollection
                   .doc(user['uid'])
