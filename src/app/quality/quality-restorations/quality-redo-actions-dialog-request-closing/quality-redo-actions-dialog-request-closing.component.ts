@@ -19,6 +19,7 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit, 
   actionsArray: Array<any> = [];
   signingArray: Array<any> = [];
   confirmationArray: Array<any> = [];
+  techniciansInvolved: Array<any> = [];
   
 
   selection = new SelectionModel(true, []);
@@ -43,7 +44,36 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit, 
                             .subscribe(res => {
                               this.actionsArray = res;
 
+                              // pushing the area supervisor of the report
+                              this.confirmationArray.push({
+                                sign: false,
+                                displayName: this.data['redo']['area']['supervisor']['displayName'],
+                                uid: this.data['redo']['area']['supervisor']['uid']
+                              });
                               
+
+                              // pushing the technician responsible of elevate the report to analyze stage
+                              this.confirmationArray.push({
+                                sign: false,
+                                displayName: this.data['redo']['upgradedToAnalyzeBy']['displayName'],
+                                uid: this.data['redo']['upgradedToAnalyzeBy']['uid']
+                              });
+                              // adding the technician to list
+                              this.techniciansInvolved.push(this.data['redo']['upgradedToAnalyzeBy']);
+
+                              // pushing the technician responsible of elevate the analyze to actions stage
+                              this.confirmationArray.push({
+                                sign: false,
+                                displayName: this.data['redo']['upgradedToActionsBy']['displayName'],
+                                uid: this.data['redo']['upgradedToActionsBy']['uid']
+                              });
+                              // adding technician to list, but checking if is already lsited
+                              if(this.techniciansInvolved[0]['uid'] != this.data['redo']['uidActionsUpgrader']){
+                                this.techniciansInvolved.push(this.data['redo']['upgradedToActionsBy']);
+                              }
+                              
+
+                              // pushing the action responsibles from actions stage
                               res.forEach(action => {
                                 action['actionResponsibles'].forEach(responsible => {
                                   this.confirmationArray.push({
@@ -54,13 +84,7 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit, 
                                 })
                               });
 
-                              this.confirmationArray.push({
-                                sign: false,
-                                displayName: this.data['redo']['area']['supervisor']['displayName'],
-                                uid: this.data['redo']['area']['supervisor']['uid']
-                              });
-                              
-
+                              // pushing the area supervisor of involved areas in analyze stage
                               this.data['redo']['involvedAreas'].forEach(area => {
                                 this.confirmationArray.push({
                                   sign: false,
@@ -69,6 +93,7 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit, 
                                 });
                               });
 
+                              // pushing the staff responsible in analyze stage
                               this.data['redo']['responsibleStaff'].forEach(staff => {
                                 this.confirmationArray.push({
                                   sign: false,
@@ -77,23 +102,7 @@ export class QualityRedoActionsDialogRequestClosingComponent implements OnInit, 
                                 });
                               });
 
-                              // notification list by default
-                              this.dbs.qualityRedoTechnicians.forEach(user => {
-                                this.confirmationArray.push({
-                                  sign: false,
-                                  displayName: user['displayName'],
-                                  uid: user['uid']
-                                });
-                              })
-
-                              this.dbs.qualityRedoQualityAnalysts.forEach(user => {
-                                this.confirmationArray.push({
-                                  sign: false,
-                                  displayName: user['displayName'],
-                                  uid: user['uid']
-                                });
-                              })
-
+                              // pushing the confirmation list for closing
                               this.dbs.qualityRedoConfirmationList.forEach(user => {
                                 this.confirmationArray.push({
                                   sign: false,

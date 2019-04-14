@@ -255,7 +255,6 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
     // checking if you are a technician analyst
     let techSubs = this.dbs.currentDataQualityRedoTechnicians
       .subscribe(res => {
-        console.log(res);
         if(res){
           this.isTechnician = false;
           res.forEach(user => {
@@ -263,7 +262,6 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
               this.isTechnician = true;
             }
           })
-          console.log(this.isTechnician);
         }
       });
 
