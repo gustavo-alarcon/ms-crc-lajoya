@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from "../core/auth.service";
 import { Router } from '@angular/router';
 
@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
+  
+  email = new FormControl();
+  password = new FormControl();
+
   isAuth: boolean = false;
   element: any;
   visibility: boolean = true;
@@ -22,23 +25,6 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loginForm = this.fb.group({
-      email: ['',[
-        Validators.required,
-        Validators.email
-      ]],
-      password: ['', [
-        Validators.required
-      ]]
-    });
-  }
-
-  get email() {
-    return this.loginForm.get('email')
-  }
-
-  get password() {
-    return this.loginForm.get('password')
   }
 
   checkAuth() {
@@ -47,17 +33,6 @@ export class LoginComponent implements OnInit {
 
   goToDashboard() {
     this.router.navigateByUrl('/main');
-  }
-
-  showPassword(): void{
-    this.element = document.getElementById("pass");
-    if(this.element.getAttribute("type") === "password") {
-      this.element.setAttribute("type","text");
-      this.visibility = false;
-    } else {
-      this.element.setAttribute("type","password");
-      this.visibility = true;
-    }
   }
 
 }

@@ -5,6 +5,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { ShowNotificationsComponent } from '../notifications/show-notifications/show-notifications.component';
 import { FormControl } from '@angular/forms';
 import { DatabaseService } from '../core/database.service';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @Component({
   selector: 'app-main',
@@ -84,6 +85,10 @@ export class MainComponent implements OnInit {
 
   seen(id): void{
     this.auth.notificationSeen(id);
+  }
+
+  changePassword(): void{
+    this.dialog.open(ChangePasswordComponent);
   }
 
   // REJECT AND CONFIRMATION FOR TASK CREATED BY FRED

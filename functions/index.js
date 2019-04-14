@@ -95,3 +95,28 @@ exports.msDeleteUser = functions.https.onRequest((req, res) => {
   })
 })
 
+exports.msUpdatePassword = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    var params = req.query;
+
+    app.auth().updateUser(params['uid'], {
+      password: params['password']
+    })
+      .then(userRecord => {
+        console.log("Successfully updated user");
+        res.send({
+          result: "OK"
+        })
+        return true;
+      })
+      .catch(error => {
+        res.send({
+          result: "ERROR",
+          code: error['errorInfo']['code']
+        })
+        console.log("Error updating user:", error);
+        return false;
+      })
+  })
+})
+

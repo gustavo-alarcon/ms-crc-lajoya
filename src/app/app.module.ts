@@ -57,6 +57,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+
 
 
 // ANGULAR COMPONENTS
@@ -177,6 +179,9 @@ import { QualityTasksDialogFinalizeObservationComponent } from './quality/qualit
 import { QualityTasksConfirmFinalizeObservationComponent } from './quality/quality-tasks/quality-tasks-confirm-finalize-observation/quality-tasks-confirm-finalize-observation.component';
 import { QualityTasksDialogFinalizeInspectionComponent } from './quality/quality-tasks/quality-tasks-dialog-finalize-inspection/quality-tasks-dialog-finalize-inspection.component';
 import { QualityTasksConfirmFinalizeInspectionComponent } from './quality/quality-tasks/quality-tasks-confirm-finalize-inspection/quality-tasks-confirm-finalize-inspection.component';
+import { ChangePasswordComponent } from './main/change-password/change-password.component';
+import { ConfirmChangePasswordComponent } from './main/confirm-change-password/confirm-change-password.component';
+
 
 
 
@@ -300,7 +305,9 @@ import { QualityTasksConfirmFinalizeInspectionComponent } from './quality/qualit
     QualityTasksDialogFinalizeObservationComponent,
     QualityTasksConfirmFinalizeObservationComponent,
     QualityTasksDialogFinalizeInspectionComponent,
-    QualityTasksConfirmFinalizeInspectionComponent
+    QualityTasksConfirmFinalizeInspectionComponent,
+    ChangePasswordComponent,
+    ConfirmChangePasswordComponent
     
   ],
   imports: [
@@ -317,6 +324,7 @@ import { QualityTasksConfirmFinalizeInspectionComponent } from './quality/qualit
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    MatPasswordStrengthModule.forRoot(),
     MatProgressBarModule,
     MatInputModule,
     MatIconModule,
@@ -345,7 +353,8 @@ import { QualityTasksConfirmFinalizeInspectionComponent } from './quality/qualit
     MatSelectModule,
     MatCardModule,
     MatSliderModule,
-    MatChipsModule
+    MatChipsModule,
+    MatPasswordStrengthModule
   ],
   providers: [
     AuthService,
@@ -434,7 +443,8 @@ import { QualityTasksConfirmFinalizeInspectionComponent } from './quality/qualit
     QualityConfirmAddSingleObservationComponent,
     QualityConfirmDeleteSingleObservationComponent,
     QualityTasksDialogFinalizeObservationComponent,
-    QualityTasksConfirmFinalizeObservationComponent
+    QualityTasksConfirmFinalizeObservationComponent,
+    ChangePasswordComponent
   ],
   bootstrap: [AppComponent]
 })
