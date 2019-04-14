@@ -87,28 +87,18 @@ export class ConfigEditUserComponent implements OnInit {
   }
 
   createForms(): void{
-    // this.newUserFormGroup = this.fb.group({
-    //   name: [this.data['name'], Validators.required],
-    //   lastname: [this.data['lastname'], Validators.required],
-    //   email: [this.data['email'], Validators.required],
-    //   phone: [this.data['phone'], Validators.required],
-    //   password: [this.data['password'], Validators.required],
-    //   jobTitle: [this.data['jobTitle'], Validators.required],
-    //   supervisor: [this.data['supervisor'], Validators.required],
-    //   permit: [this.data['permit'], Validators.required]
-    // })
 
     this.personalDataFormGroup = this.fb.group({
       name: [this.data['name'], Validators.required],
       lastname: [this.data['lastname'], Validators.required],
       email: [this.data['email'], Validators.required],
-      phone: [this.data['phone'], Validators.required],
-      dni: [this.data['dni'], Validators.required],
+      phone: this.data['phone'],
+      dni: this.data['dni'],
       password: [this.data['password'], Validators.required],
     })
 
     this.jobDataFormGroup = this.fb.group({
-      code: [this.data['code'], Validators.required],
+      code: this.data['code'],
       jobTitle: [this.data['jobTitle'], Validators.required],
       supervisor: [this.data['supervisor'], Validators.required],
       permit: [this.data['permit'], Validators.required]
