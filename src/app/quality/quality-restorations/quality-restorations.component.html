@@ -992,12 +992,12 @@
 
             <div [@openCloseToolbar]="isOpenActions[i] ? 'openToolbar': 'closedToolbar'" style="background:#191919">
               <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em">
-                <button mat-raised-button color="primary" class="w3-margin-right" matTooltip="Agregar acciones"
+                <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip="Agregar acciones"
                   (click)="addActions(document)" [disabled]="!isTechnician">
                   <mat-icon class="example-icon">add_circle</mat-icon> Proponer acciones
                 </button>
                 <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip=""
-                  (click)="approveActions(document)" [disabled]="this.selection.selected.length === 0 || !isTechnician">
+                  (click)="approveActions(document)" [disabled]="this.selection.selected.length === 0 || !isQualitySupervisor">
                   <mat-icon>check_circle</mat-icon> Aprobar acciones
                 </button>
                 <div>
@@ -1187,7 +1187,7 @@
                   <td mat-cell *matCellDef="let row" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                     <button mat-icon-button color="warn" matTooltip="Borrar acción propuesta"
-                      (click)="deleteAction(row, document)">
+                      (click)="deleteAction(row, document)" [disabled]="!isTechnician">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -1204,7 +1204,7 @@
               <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em">
                 <p class="w3-margin-bottom"> </p>
                 <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" [matTooltip]="allValidated?'Solicitar cierre de documento':'Necesita que todas las tareas esten validadas para poder hacer una solicitud de cierre'"
-                  (click)="requestClosing(document)" [disabled]="!allValidated">
+                  (click)="requestClosing(document)" [disabled]="!allValidated || !isQualitySupervisor">
                   <mat-icon class="example-icon">forward</mat-icon> Solicitar cierre
                 </button>
                 <div>
@@ -1454,12 +1454,12 @@
                   <mat-tab label="Acciones">
                     <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em; background:#191919">
                       <span class="ms-font-raleway ms-color-wt w3-margin-bottom" style="font-weight:500; margin-bottom:0.5em; font-size:1.5em; width:100%">Acciones</span><br>  
-                      <button mat-raised-button color="primary" class="w3-margin-right; w3-margin-bottom" matTooltip="Agregar acciones"
+                      <button mat-raised-button color="primary" class="w3-margin-right; w3-margin-bottom w3-text-white" matTooltip="Agregar acciones"
                         (click)="addActions(analyze)">
                         <mat-icon class="example-icon">add_circle</mat-icon> Proponer acciones
                       </button>
                       <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip="Aprovar acciones seleccionadas"
-                        (click)="approveActions(analyze)" [ngStyle]="{'color:lightslategray':this.selection.selected.length === 0}" [disabled]="this.selection.selected.length === 0">
+                        (click)="approveActions(analyze)" [ngStyle]="{'color:lightslategray':this.selection.selected.length === 0}" [disabled]="this.selection.selected.length === 0 || !isQualitySupervisor">
                         <mat-icon>check_circle</mat-icon> Aprobar acciones
                       </button>
                       <div>
@@ -1495,7 +1495,7 @@
                         </div>
                         <span class="ms-fill"></span>
                         <button mat-icon-button matTooltip="Borrar acción propuesta"
-                          (click)="deleteAction(row, document)" style="color:white">
+                          (click)="deleteAction(row, document)" style="color:white" [disabled]="!isTechnician">
                           <mat-icon>delete</mat-icon>
                         </button><br>
                       </mat-toolbar>
@@ -1621,7 +1621,7 @@
                     <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em; background: #191919">
                       <p class="w3-margin-bottom"> </p>
                       <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" [matTooltip]="allValidated?'Solicitar cierre de documento':'Necesita que todas las tareas esten validadas para poder hacer una solicitud de cierre'"
-                        (click)="requestClosing(analyze)" [disabled]="!allValidated">
+                        (click)="requestClosing(analyze)" [disabled]="!allValidated || !isQualitySupervisor">
                         <mat-icon class="example-icon">forward</mat-icon> Solicitar cierre
                       </button>
                       <div>
@@ -1860,7 +1860,7 @@
                     <mat-icon class="example-icon">add_circle</mat-icon> Proponer acciones
                   </button>
                   <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip=""
-                    (click)="approveActions(document)" [disabled]="this.selection.selected.length === 0">
+                    (click)="approveActions(document)" [disabled]="this.selection.selected.length === 0 || document['stage'] === 'cierre'">
                     <mat-icon>check_circle</mat-icon> Aprobar acciones
                   </button>
                   <div>
@@ -2050,7 +2050,7 @@
                     <td mat-cell *matCellDef="let row" class="w3-small"
                       style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                       <button mat-icon-button color="warn" matTooltip="Borrar acción propuesta"
-                        (click)="deleteAction(row, document)">
+                        (click)="deleteAction(row, document)" [disabled]="!isTechnician">
                         <mat-icon>delete</mat-icon>
                       </button><br>
                     </td>
@@ -2124,7 +2124,7 @@
                 <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em">
                   <p class="w3-margin-bottom"> </p>
                   <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Cerrar rehacer" (click)="closeRedo(document)"
-                    *ngIf="document['stage'] === 'Cierre'">
+                    *ngIf="document['stage'] === 'Cierre'" [disabled]="!isQualitySupervisor || !allSigned">
                     <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
                   </button>
                   <a [href]="document['finalReport']" *ngIf="document['stage'] === 'Finalizado'" target="_blank">
@@ -2376,7 +2376,7 @@
                           </div>
                           <span class="ms-fill"></span>
                           <button mat-icon-button matTooltip="Borrar acción propuesta"
-                            (click)="deleteAction(row, document)" style="color:white">
+                            (click)="deleteAction(row, document)" style="color:white" [disabled]="!isTechnician">
                             <mat-icon>delete</mat-icon>
                           </button><br>
                         </mat-toolbar>
@@ -2539,7 +2539,7 @@
                       <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em; background: #191919">
                         <p class="w3-margin-bottom"> </p>
                         <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Cerrar rehacer" (click)="closeRedo(analyze)"
-                          *ngIf="analyze['stage'] === 'Cierre'">
+                          *ngIf="analyze['stage'] === 'Cierre'" [disabled]="!isQualitySupervisor  || !allSigned">
                           <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
                         </button>
                         <a [href]="analyze['finalReport']" *ngIf="analyze['stage'] === 'Finalizado'" target="_blank">
