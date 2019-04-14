@@ -1,26 +1,39 @@
 <div class="w3-display-container animated fadeIn delay-5 slower ms-login-bg" style="min-height:100vh">
 
-  <div class="w3-display-middle ms-login-card mat-elevation-z8" *ngIf="auth.userCRC.uid === ''; else getStarted">
+  <div class="w3-display-middle ms-login-card mat-elevation-z8" style="background:white" *ngIf="auth.userCRC.uid === ''; else getStarted">
     <img style="width:100%; margin-bottom:1em" src="../assets/images/logo-crc-v1.png" alt="logo ferreyros">
     <mat-divider color="primary"></mat-divider>
-    <form [formGroup]="loginForm" autocomplete="off">
+    
       <mat-progress-bar mode="indeterminate" *ngIf="auth.authLoader"></mat-progress-bar>
-      <mat-form-field color="primary" style="width:100%">
-        <input matInput  style="color:#000" type="text" placeholder="correo" formControlName="email">
-        <mat-error *ngIf="!loginForm.valid">
-          Correo <Strong>requerido</Strong>
-        </mat-error>
+
+      <mat-form-field class="w3-block w3-margin-right w3-margin-bottom w3-margin-top" appearance="outline">
+        <mat-label>Correo</mat-label>
+        <input matInput
+                type="email"
+                required
+                placeholder="Escriba..."
+                [formControl]="email">
+        
+        <mat-hint>
+          requerido *
+        </mat-hint>
       </mat-form-field>
       
-      <mat-form-field color="primary" style="width:100%">
-        <input #passInput id="pass" style="color:#000" matInput (keyup.enter)="checkAuth()" type="password" placeholder="password" formControlName="password">
-        <button mat-icon-button *ngIf="passInput.value && visibility" matSuffix aria-label="mostrar password" (click)="showPassword()"><mat-icon style="font-size: 1.3em">visibility</mat-icon></button>
-        <button mat-icon-button *ngIf="passInput.value && !visibility" matSuffix aria-label="mostrar password" (click)="showPassword()"><mat-icon style="font-size: 1.3em">visibility_off</mat-icon></button>
-        <mat-error *ngIf="!loginForm.valid">
-          Password <Strong>requerido</Strong>
-        </mat-error>
+      <mat-form-field class="w3-block w3-margin-right w3-margin-bottom" appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <mat-pass-toggle-visibility #togglePassword matSuffix></mat-pass-toggle-visibility>
+        <input matInput
+                [type]="togglePassword.type"
+                required
+                placeholder="Escriba..."
+                (keyup.enter)="checkAuth()"
+                [formControl]="password">
+        
+        <mat-hint>
+          requerido *
+        </mat-hint>
       </mat-form-field>
-    </form>
+
     <br>
     <div (click)="checkAuth()" class="w3-center w3-btn w3-block w3-round ms-login-btn">Ingresar</div>
   </div>
