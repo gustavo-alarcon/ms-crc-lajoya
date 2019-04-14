@@ -7,7 +7,6 @@
     <form [formGroup]="requestFormGroup">
 
       <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Cabecera</h2>
-
       <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
         <mat-label>Área</mat-label>
         <input type="text" matInput placeholder="Escriba y seleccione" formControlName="area"
@@ -35,11 +34,11 @@
       </mat-form-field>
       <mat-autocomplete #autoEquipment="matAutocomplete"
                         [displayWith]="showSelectedEquipment">
-        <mat-option *ngFor="let equipment of filteredMaintenanceEquipments | async" [value]="equipment['name']" style="font-size:14px">
+        <mat-option *ngFor="let equipment of filteredMaintenanceEquipments | async" [value]="equipment" style="font-size:14px">
           {{equipment['name']}}
         </mat-option>
       </mat-autocomplete>
-
+      <br>
       
 
       <mat-form-field class="w3-margin-right w3-block" style="max-width:575px" appearance="outline">

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Observable, Subscription, from } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatDialog, MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { DatabaseService } from 'src/app/core/database.service';
 import { startWith, map } from 'rxjs/operators';
@@ -95,10 +95,10 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
 
   filteredMaintenanceEquipments: Observable<any>;
   filteredMaintenancePriorities: Observable<any>;
-  filteredAreas: Observable<any> = from(this.dbs.areas);
+  filteredAreas: Observable<any>;
 
   filteredMaintenanceRequests: Array<any> = [];
-  filteredEquipments: Array<any> = [];;
+  filteredEquipments: Array<any> = [];
 
   subscriptions: Array<Subscription> = [];
 
@@ -207,7 +207,6 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
   selectedArea(event): void{
     let ref = event.option.value['name'].toLowerCase();
     this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
-    this.filteredMaintenanceEquipments = from(this.filteredEquipments);
   }
 
   showSelectedEquipment(equipment): string | undefined {

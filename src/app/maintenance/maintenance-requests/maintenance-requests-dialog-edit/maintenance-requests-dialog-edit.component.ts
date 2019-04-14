@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DatabaseService } from 'src/app/core/database.service';
-import { Observable, Subscription, from } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MaintenanceRequestsConfirmEditComponent } from '../maintenance-requests-confirm-edit/maintenance-requests-confirm-edit.component';
 
@@ -24,11 +24,8 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
 
   filteredMaintenanceEquipments: Observable<any>;
   filteredMaintenancePriorities: Observable<any>;
-  filteredAreasEquipment: Observable<any>;
-  filteredAreas: Observable<any> = from(this.dbs.areas);
-
+  filteredAreas: Observable<any>;
   filteredMaintenanceRequests: Array<any> = [];
-
   filteredEquipments: Array<any> = [];
 
   subscriptions: Array<Subscription> = [];
@@ -67,12 +64,12 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
                                               map(name => name ? this.dbs.maintenancePriorities.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.maintenancePriorities)
                                             );
 
-    this.filteredAreas = this.requestFormGroup.get('area').valueChanges
-                          .pipe(
-                            startWith<any>(''),
-                            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                            map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-                          );
+    this.filteredAreas =  this.requestFormGroup.get('area').valueChanges
+                            .pipe(
+                              startWith<any>(''),
+                              map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+                              map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+                            );
 
     // ************** TAB - REQUEST LIST
     let dataMaintenanceRequestsSubs =  this.dbs.currentDataMaintenanceRequests.subscribe(res => {
@@ -88,8 +85,8 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
 
   createForms(): void{
     this.requestFormGroup = this.fb.group({
-      area: [this.data['area'], [Validators.required]],
       equipment: [this.data['equipment'], [Validators.required]],
+      area: [this.data['area'], [Validators.required]],
       observation: [this.data['observation'], [Validators.required]],
       priority: [this.data['priority'], [Validators.required]]
     });
@@ -101,6 +98,9 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
 
     this.imageSrc_initial = this.data['initialPicture'];
     this.imageSrc_final = this.data['finalPicture'];
+
+    let ref = this.data['area']['name'].toLowerCase();
+    this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
   }
 
   showSelectedArea(area): string | undefined {
@@ -110,7 +110,6 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
   selectedArea(event): void{
     let ref = event.option.value['name'].toLowerCase();
     this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
-    this.filteredMaintenanceEquipments = from(this.filteredEquipments);
   }
 
   showSelectedEquipment(equipment): string | undefined {
