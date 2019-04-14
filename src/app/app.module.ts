@@ -181,6 +181,8 @@ import { QualityTasksDialogFinalizeInspectionComponent } from './quality/quality
 import { QualityTasksConfirmFinalizeInspectionComponent } from './quality/quality-tasks/quality-tasks-confirm-finalize-inspection/quality-tasks-confirm-finalize-inspection.component';
 import { ChangePasswordComponent } from './main/change-password/change-password.component';
 import { ConfirmChangePasswordComponent } from './main/confirm-change-password/confirm-change-password.component';
+import { SystemGeneralAreaDialogEditComponent } from './configuration/system/system-general-area/system-general-area-dialog-edit/system-general-area-dialog-edit.component';
+import { SystemGeneralAreaConfirmEditComponent } from './configuration/system/system-general-area/system-general-area-confirm-edit/system-general-area-confirm-edit.component';
 
 
 
@@ -307,7 +309,9 @@ import { ConfirmChangePasswordComponent } from './main/confirm-change-password/c
     QualityTasksDialogFinalizeInspectionComponent,
     QualityTasksConfirmFinalizeInspectionComponent,
     ChangePasswordComponent,
-    ConfirmChangePasswordComponent
+    ConfirmChangePasswordComponent,
+    SystemGeneralAreaDialogEditComponent,
+    SystemGeneralAreaConfirmEditComponent
     
   ],
   imports: [
@@ -444,7 +448,9 @@ import { ConfirmChangePasswordComponent } from './main/confirm-change-password/c
     QualityConfirmDeleteSingleObservationComponent,
     QualityTasksDialogFinalizeObservationComponent,
     QualityTasksConfirmFinalizeObservationComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    SystemGeneralAreaDialogEditComponent,
+    SystemGeneralAreaConfirmEditComponent
   ],
   bootstrap: [AppComponent]
 })

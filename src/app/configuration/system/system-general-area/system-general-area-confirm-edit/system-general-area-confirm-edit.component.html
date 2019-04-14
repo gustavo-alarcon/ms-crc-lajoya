@@ -1,0 +1,12 @@
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">edit</mat-icon> Editar área</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <p class="ms-font-roboto">¿Está seguro de guardar las modificaciones?</p>
+  <br>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-stroked-button class="w3-margin-right" color="warn" mat-dialog-close>No</button>
+  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+</mat-dialog-actions>

@@ -5,6 +5,7 @@ import { MatTableDataSource, MatSort, MatPaginator, MatDialog } from '@angular/m
 import { CreateNewAreaComponent } from './create-new-area/create-new-area.component';
 import { SystemaGeneralAreaConfirmDeleteComponent } from './systema-general-area-confirm-delete/systema-general-area-confirm-delete.component';
 import { SidenavService } from 'src/app/core/sidenav.service';
+import { SystemGeneralAreaDialogEditComponent } from './system-general-area-dialog-edit/system-general-area-dialog-edit.component';
 
 @Component({
   selector: 'app-system-general-area',
@@ -13,7 +14,7 @@ import { SidenavService } from 'src/app/core/sidenav.service';
 })
 export class SystemGeneralAreaComponent implements OnInit {
 
-  displayedColumns: string[] = ['index', 'name', 'supervisor', 'delete'];
+  displayedColumns: string[] = ['index', 'name', 'supervisor', 'actions'];
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -53,6 +54,12 @@ export class SystemGeneralAreaComponent implements OnInit {
 
   createNewArea(): void{
     this.dialog.open(CreateNewAreaComponent);
+  }
+
+  editArea(area): void{
+    this.dialog.open(SystemGeneralAreaDialogEditComponent, {
+      data: area
+    })
   }
 
   deleteArea(area): void{
