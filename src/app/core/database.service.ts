@@ -484,7 +484,7 @@ export class DatabaseService {
       if(permits['maintenanceSection'] && permits['maintenanceRequests']){
         
         this.getMaintenanceEquipments();
-        this.getMaintenanceEquipmentsconfig();
+        this.getMaintenanceEquipmentsConfig();
         this.getMaintenancePriorities();
 
         this.getMaintenanceSupervisors();
@@ -633,7 +633,7 @@ export class DatabaseService {
     });
   }
 
-  getMaintenanceEquipmentsconfig(): void{
+  getMaintenanceEquipmentsConfig(): void{
     this.maintenanceEquipmentsConfigCollection = this.afs.collection(`db/systemConfigurations/maintenanceEquipments`, ref => ref.orderBy('area.name','asc'));
     this.maintenanceEquipmentsConfigCollection.valueChanges()
     .subscribe(res => {

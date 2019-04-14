@@ -16,7 +16,8 @@
           <strong>requerido *</strong>
         </mat-hint>
       </mat-form-field>
-      <mat-autocomplete #autoEquipment="matAutocomplete">
+      <mat-autocomplete #autoEquipment="matAutocomplete"
+                        [displayWith]="showSelectedEquipment">
         <mat-option *ngFor="let equipment of filteredMaintenanceEquipments | async" [value]="equipment['name']" style="font-size:14px">
           {{equipment['name']}}
         </mat-option>

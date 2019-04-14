@@ -96,7 +96,9 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
   filteredMaintenanceEquipments: Observable<any>;
   filteredMaintenancePriorities: Observable<any>;
   filteredAreas: Observable<any>;
-  filteredMaintenanceRequests: Array<any>;
+
+  filteredMaintenanceRequests: Array<any> = [];
+  filteredEquipments: Array<any> = [];;
 
   subscriptions: Array<Subscription> = [];
 
@@ -124,8 +126,15 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
                                             .pipe(
                                               startWith<any>(''),
                                               map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                              map(name => name ? this.dbs.maintenanceEquipments.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.maintenanceEquipments)
+                                              map(name => name ? this.filteredEquipments.filter(option => option['name'].toLowerCase().includes(name)) : this.filteredEquipments)
                                             );
+
+    this.filteredAreas =  this.requestFormGroup.get('area').valueChanges
+                            .pipe(
+                              startWith<any>(''),
+                              map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+                              map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+                            );
 
     // ************** TAB - REQUEST LIST
     let dataMaintenanceRequestsSubs = this.dbs.currentDataMaintenanceRequests.subscribe(res => {
@@ -181,6 +190,7 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
 
   createForms(): void{
     this.requestFormGroup = this.fb.group({
+      area: ['', [Validators.required]],
       equipment: ['', [Validators.required]],
       observation: ['', [Validators.required]]
     });
@@ -195,7 +205,10 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
   }
 
   selectedArea(event): void{
-    
+    let ref = event.option.value['name'].toLowerCase();
+    console.log(this.dbs.maintenanceEquipmentsConfig);
+    this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
+    console.log(this.filteredEquipments);
   }
 
   showSelectedEquipment(equipment): string | undefined {
