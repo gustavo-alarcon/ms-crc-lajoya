@@ -56,7 +56,7 @@ export class MaintenanceRequestsConfirmSaveComponent implements OnInit {
                 createdBy: this.auth.userCRC,
                 status: 'Por confirmar',
                 observation: this.data['form']['observation'],
-                area: this.auth.userCRC.area,
+                area: this.data['area'],
                 priority: "Por asignar",
                 equipment: this.data['form']['equipment'],
                 source: 'maintenance',

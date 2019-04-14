@@ -8,6 +8,23 @@
 
       <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.3em">Cabecera</h2>
 
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
+        <mat-label>Área</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="area"
+          [matAutocomplete]="autoArea">
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
+        [displayWith]="showSelectedArea">
+        <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
+          <strong>{{option['name']}}</strong> | <span
+            class="w3-small">{{option['supervisor']['displayName']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+      <br>
+
       <mat-form-field class="w3-margin-right w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
         <mat-label>Equipo</mat-label>
         <input type="text" matInput placeholder="Escriba y seleccione" formControlName="equipment"
@@ -23,22 +40,7 @@
         </mat-option>
       </mat-autocomplete>
 
-      <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
-        <mat-label>Área</mat-label>
-        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="area"
-          [matAutocomplete]="autoArea" readonly>
-        <mat-hint>
-          <strong>requerido *</strong>
-        </mat-hint>
-      </mat-form-field>
-      <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
-        [displayWith]="showSelectedArea">
-        <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
-          <strong>{{option['name']}}</strong> | <span
-            class="w3-small">{{option['supervisor']['displayName']}}</span>
-        </mat-option>
-      </mat-autocomplete>
-      <br>
+      
 
       <mat-form-field class="w3-margin-right w3-block" style="max-width:575px" appearance="outline">
         <mat-label>Observaciones</mat-label>

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DatabaseService } from 'src/app/core/database.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, from } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MaintenanceRequestsConfirmEditComponent } from '../maintenance-requests-confirm-edit/maintenance-requests-confirm-edit.component';
 
@@ -24,8 +24,12 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
 
   filteredMaintenanceEquipments: Observable<any>;
   filteredMaintenancePriorities: Observable<any>;
-  filteredAreas: Observable<any>;
-  filteredMaintenanceRequests: Array<any>;
+  filteredAreasEquipment: Observable<any>;
+  filteredAreas: Observable<any> = from(this.dbs.areas);
+
+  filteredMaintenanceRequests: Array<any> = [];
+
+  filteredEquipments: Array<any> = [];
 
   subscriptions: Array<Subscription> = [];
 
@@ -53,7 +57,7 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
                                             .pipe(
                                               startWith<any>(''),
                                               map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                              map(name => name ? this.dbs.maintenanceEquipments.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.maintenanceEquipments)
+                                              map(name => name ? this.filteredEquipments.filter(option => option['name'].toLowerCase().includes(name)) : this.filteredEquipments)
                                             );
 
     this.filteredMaintenancePriorities =  this.requestFormGroup.get('priority').valueChanges
@@ -84,8 +88,8 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
 
   createForms(): void{
     this.requestFormGroup = this.fb.group({
-      equipment: [this.data['equipment'], [Validators.required]],
       area: [this.data['area'], [Validators.required]],
+      equipment: [this.data['equipment'], [Validators.required]],
       observation: [this.data['observation'], [Validators.required]],
       priority: [this.data['priority'], [Validators.required]]
     });
@@ -104,7 +108,9 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
   }
 
   selectedArea(event): void{
-    
+    let ref = event.option.value['name'].toLowerCase();
+    this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
+    this.filteredMaintenanceEquipments = from(this.filteredEquipments);
   }
 
   showSelectedEquipment(equipment): string | undefined {
