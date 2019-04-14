@@ -11,20 +11,22 @@
 
           <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Incidente</h2>
 
-          <!-- <mat-form-field class="w3-margin-right w3-margin-bottom w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
-            <mat-label>Equipo</mat-label>
-            <input type="text" matInput placeholder="Escriba y seleccione" formControlName="areas"
+          <mat-form-field class="w3-margin-right w3-margin-bottom w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
+            <mat-label>Área</mat-label>
+            <input type="text" matInput placeholder="Escriba y seleccione" formControlName="area"
               [matAutocomplete]="autoAreas" required>
             <mat-hint>
-              Solo se listarán los equipos pertenecientes a su área
+              Seleccione un área para filtrar los equipos
             </mat-hint>
           </mat-form-field>
-          <mat-autocomplete #autoEquipment="matAutocomplete" [displayWith]="showSelectedAreas">
-            <mat-option *ngFor="let area of filteredAreas| async" [value]="equipment" style="font-size:14px">
-              <span><strong>{{equipment['name']}}</strong> | {{equipment['area']['name']}}</span>
+          <mat-autocomplete #autoAreas="matAutocomplete"
+                            [displayWith]="showSelectedArea"
+                            (optionSelected)="selectedArea($event)">
+            <mat-option *ngFor="let area of filteredAreas| async" [value]="area" style="font-size:14px">
+              <span><strong>{{area['name']}}</strong> | {{area['supervisor']['displayName']}}</span>
             </mat-option>
           </mat-autocomplete>
-          <br> -->
+          <br>
 
           <mat-form-field class="w3-margin-right w3-margin-bottom w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
             <mat-label>Equipo</mat-label>
@@ -37,6 +39,9 @@
           <mat-autocomplete #autoEquipment="matAutocomplete" [displayWith]="showSelectedEquipment">
             <mat-option *ngFor="let equipment of filteredMaintenanceEquipments | async" [value]="equipment" style="font-size:14px">
               <span><strong>{{equipment['name']}}</strong> | {{equipment['area']['name']}}</span>
+            </mat-option>
+            <mat-option *ngIf="!filteredEquipments.length" disabled>
+              Primero seleccione un área
             </mat-option>
           </mat-autocomplete>
           <br>

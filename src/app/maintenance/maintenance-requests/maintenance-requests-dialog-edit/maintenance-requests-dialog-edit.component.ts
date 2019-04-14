@@ -107,6 +107,10 @@ export class MaintenanceRequestsDialogEditComponent implements OnInit {
     
   }
 
+  showSelectedEquipment(equipment): string | undefined {
+    return equipment? equipment['name'] : undefined;
+  }
+
   onFileSelected(event): void{
     this.selectedFile_initial = event.target.files[0];
 
