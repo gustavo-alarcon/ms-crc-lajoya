@@ -531,7 +531,7 @@
               </mat-form-field>
               <div style="margin: 1em 0em 0.5em 0em">
                 <button mat-raised-button class="w3-margin-right" color="warn"
-                  (click)="rejectMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
+                  (click)="rejectMaintenanceRequest(note['requestId'], note['id'])"
                   *ngIf="note['requestStatus'] === 'Por confirmar'">Rechazar</button>
                 <button mat-raised-button class="w3-margin-right" color="primary"
                   (click)="confirmMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
@@ -541,6 +541,10 @@
                 *ngIf="note['requestStatus'] != 'Por confirmar'" class="w3-border"
                 style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">
                 {{note['requestStatus']}}</p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Confirmado'">confirmado por:
+                <b>{{note['confirmedBy']}}</b></p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Rechazado'">rechazado por:
+                <b>{{note['rejectedBy']}}</b></p>
             </div>
 
             <!-- MAINTENANCE REQUEST BROADCAST-->
@@ -586,6 +590,10 @@
                 *ngIf="note['requestStatus'] != 'Por confirmar'" class="w3-border"
                 style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">
                 {{note['requestStatus']}}</p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Confirmado'">confirmado por:
+                <b>{{note['confirmedBy']}}</b></p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Rechazado'">rechazado por:
+                <b>{{note['rejectedBy']}}</b></p>
             </div>
 
           </div>
