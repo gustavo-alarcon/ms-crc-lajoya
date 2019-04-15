@@ -16,6 +16,7 @@ export class NotificationsComponent implements OnInit {
   dateMaintenanceRequestsConfirmationFormControl = new FormControl();
   dateQualitySingleObservationFormControl = new FormControl();
   dateQualityInspectionObservationFormControl = new FormControl();
+  dateSsggRequestsConfirmationFormControl = new FormControl();
 
   constructor(
     public auth: AuthService,
@@ -167,6 +168,40 @@ export class NotificationsComponent implements OnInit {
       this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
     }else{
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
+        duration: 6000
+      });
+    }
+  }
+
+  // REJECT AND CONFIRMATION FOR SSGG REQUESTS
+
+  rejectSsggRequest(requestId, areaSupervisorId, notificationId): void{
+    this.dbs.ssggRequestsCollection.doc(requestId).update({status: 'Rechazado'});
+    let supervisorList = this.dbs.ssggSupervisors.slice();
+    supervisorList.forEach(user =>{
+      this.dbs.usersCollection
+        .doc(user['uid'])
+        .collection('notifications')
+        .doc(requestId)
+        .update({requestStatus: 'Rechazado'})
+    })
+    this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).update({status: 'Rechazado'});
+  }
+
+  confirmSsggRequest(requestId, areaSupervisorId, notificationId): void{
+    if(this.dateSsggRequestsConfirmationFormControl.value){
+      this.dbs.ssggRequestsCollection.doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()});
+      let supervisorList = this.dbs.ssggSupervisors.slice();
+      supervisorList.forEach(user =>{
+        this.dbs.usersCollection
+          .doc(user['uid'])
+          .collection('notifications')
+          .doc(requestId)
+          .update({requestStatus: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()})
+      })
+      this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()});
+    }else{
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
         duration: 6000
       });
     }

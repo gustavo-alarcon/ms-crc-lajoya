@@ -8,5 +8,5 @@
 </mat-dialog-content>
 <mat-dialog-actions class="w3-margin-top w3-margin-bottom">
   <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>No</button>
-  <button mat-raised-button color="primary" (click)="save()">Si, guardar</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="uploading">Si, guardar</button>
 </mat-dialog-actions>
