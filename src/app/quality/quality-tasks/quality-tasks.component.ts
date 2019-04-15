@@ -73,7 +73,7 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
 
   isOpenActions: Array<any> = [];
   isOpenInspections: Array<any> = [];
-  isOpenSingleObsrevations: Array<any> = [];
+  isOpenSingleObservations: Array<any> = [];
 
   monthsKey: Array<string> = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   monthIndex: number;
@@ -96,6 +96,10 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
 
   subscriptions: Array<Subscription> = [];
+
+  filteredRedosTasks: Array<any> = [];
+  filteredInspectionsTasks: Array<any> = [];
+  filteredSingleObservationsTasks: Array<any> = [];
 
   constructor(
     private dialog: MatDialog,
@@ -123,6 +127,7 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
                                         })
                                       )
                                       .subscribe(res => {
+                                        this.filteredRedosTasks = res;
                                         this.dataSourceTasksByRedo.data = res;
                                         res.forEach(element => {
                                           this.isOpenActions.push(false);
@@ -144,6 +149,7 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
                                                 })
                                               )
                                               .subscribe(res => {
+                                                this.filteredInspectionsTasks = res;
                                                 this.dataSourceTasksByInspections.data = res;
                                                 res.forEach(element => {
                                                   this.isOpenInspections.push(false);
@@ -154,9 +160,10 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
 
     let dataQualityTasksBySingleObservationSubs = this.dbs.currentDataQualitySingleObservations
                                                     .subscribe(res => {
+                                                      this.filteredSingleObservationsTasks = res;
                                                       this.dataSourceTasksBySingleObservations.data = res;
                                                       res.forEach(element => {
-                                                        this.isOpenSingleObsrevations.push(false);
+                                                        this.isOpenSingleObservations.push(false);
                                                       })
                                                     });
 
@@ -197,6 +204,18 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     this.dbs.getQualityTasks(fromDate.valueOf(), toDate.valueOf());
     
     datepicker.close();
+  }
+
+  toggleCardActions(index) {
+    this.isOpenActions[index] = !this.isOpenActions[index];
+  }
+
+  toggleCardInspections(index) {
+    this.isOpenInspections[index] = !this.isOpenInspections[index];
+  }
+
+  toggleCardSingleObservations(index) {
+    this.isOpenSingleObservations[index] = !this.isOpenSingleObservations[index];
   }
 
   finalizeTask(task): void{
