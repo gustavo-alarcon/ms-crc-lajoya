@@ -29,7 +29,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.9r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.10r</button>
       </mat-menu>
     </div>
     <div class="w3-hide-large w3-hide-medium">
@@ -52,7 +52,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.9r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.10r</button>
       </mat-menu>
     </div>
   </mat-toolbar>
@@ -554,7 +554,7 @@
 
           <!-- MAINTENANCE REQUEST SUPERVISOR-->
           <div *ngIf="note['type'] === 'maintenance request supervisor'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']}}</strong></span><br>
+            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']['name']}}</strong></span><br>
             <p *ngIf="note['requestStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
                 realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
@@ -585,7 +585,7 @@
 
           <!-- MAINTENANCE REQUEST BROADCAST-->
           <div *ngIf="note['type'] === 'maintenance request broadcast'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']}}</strong></span><br>
+            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']['name']}}</strong></span><br>
           </div>
 
           <!-- SSGG REQUEST -->

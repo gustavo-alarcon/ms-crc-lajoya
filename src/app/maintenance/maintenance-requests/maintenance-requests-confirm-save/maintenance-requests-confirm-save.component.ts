@@ -103,7 +103,7 @@ export class MaintenanceRequestsConfirmSaveComponent implements OnInit {
                     senderId: this.auth.userCRC.uid,
                     senderName: this.auth.userCRC.displayName,
                     maintenanceRequestId: refRequest.id,
-                    equipment: this.data['form']['equipment']['name'],
+                    equipment: this.data['form']['equipment'],
                     requestId: refRequest.id,
                     requestStatus: "Por confirmar",
                     observation: this.data['form']['observation'],

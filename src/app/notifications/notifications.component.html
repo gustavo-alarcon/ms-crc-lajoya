@@ -513,7 +513,7 @@
             <div *ngIf="note['type'] === 'maintenance request supervisor'" class="ms-color-2b"
               style="padding-left:0.5em">
               <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo:
-                <strong>{{note['equipment']}}</strong></span><br>
+                <strong>{{note['equipment']['name']}}</strong></span><br>
               <p *ngIf="note['requestStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta
                 de
                 realización:
@@ -531,7 +531,7 @@
               </mat-form-field>
               <div style="margin: 1em 0em 0.5em 0em">
                 <button mat-raised-button class="w3-margin-right" color="warn"
-                  (click)="rejectMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
+                  (click)="rejectMaintenanceRequest(note['requestId'], note['id'])"
                   *ngIf="note['requestStatus'] === 'Por confirmar'">Rechazar</button>
                 <button mat-raised-button class="w3-margin-right" color="primary"
                   (click)="confirmMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
@@ -541,13 +541,17 @@
                 *ngIf="note['requestStatus'] != 'Por confirmar'" class="w3-border"
                 style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">
                 {{note['requestStatus']}}</p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Confirmado'">confirmado por:
+                <b>{{note['confirmedBy']}}</b></p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Rechazado'">rechazado por:
+                <b>{{note['rejectedBy']}}</b></p>
             </div>
 
             <!-- MAINTENANCE REQUEST BROADCAST-->
             <div *ngIf="note['type'] === 'maintenance request broadcast'" class="ms-color-2b"
               style="padding-left:0.5em">
               <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo:
-                <strong>{{note['equipment']}}</strong></span><br>
+                <strong>{{note['equipment']['name']}}</strong></span><br>
             </div>
 
             <!-- SSGG REQUEST -->
@@ -586,6 +590,10 @@
                 *ngIf="note['requestStatus'] != 'Por confirmar'" class="w3-border"
                 style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">
                 {{note['requestStatus']}}</p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Confirmado'">confirmado por:
+                <b>{{note['confirmedBy']}}</b></p>
+              <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Rechazado'">rechazado por:
+                <b>{{note['rejectedBy']}}</b></p>
             </div>
 
           </div>

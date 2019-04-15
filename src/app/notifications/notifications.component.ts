@@ -27,33 +27,34 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {
   }
 
-  seen(id): void{
+  seen(id): void {
     this.auth.notificationSeen(id);
   }
 
-  unseen(id): void{
+  unseen(id): void {
     this.auth.notificationUnseen(id);
   }
 
-  deleteNotification(id): void{
+  deleteNotification(id): void {
     this.auth.notificationsCompleteCollection.doc(id).delete();
   }
 
-  // REJECT AND CONFIRMATION FOR TASKs CREATED BY FRED
-  reject(fredId, supervisorId, notificationId): void{
-    this.dbs.securityFredsCollection.doc(fredId).update({status: 'Rechazado'});
-    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({status: 'Rechazado'});
-    this.dbs.securityTasksCollection.doc(fredId).update({status: 'Rechazado'});
-    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  // REJECT AND CONFIRMATION FOR TASK CREATED BY FRED
+
+  reject(fredId, supervisorId, notificationId): void {
+    this.dbs.securityFredsCollection.doc(fredId).update({ status: 'Rechazado' });
+    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({ status: 'Rechazado' });
+    this.dbs.securityTasksCollection.doc(fredId).update({ status: 'Rechazado' });
+    this.auth.notificationsCollection.doc(notificationId).update({ taskStatus: 'Rechazado' });
   }
 
-  confirm(fredId, supervisorId, notificationId): void{
-    if(this.dateSecurityFredFormControl.value){
-      this.dbs.securityFredsCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-      this.dbs.securityTasksCollection.doc(fredId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-    }else{
+  confirm(fredId, supervisorId, notificationId): void {
+    if (this.dateSecurityInspectionObservationFormControl.value) {
+      this.dbs.securityFredsCollection.doc(fredId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(fredId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+      this.dbs.securityTasksCollection.doc(fredId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+      this.auth.notificationsCollection.doc(notificationId).update({ taskStatus: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+    } else {
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
         duration: 6000
       });
@@ -61,112 +62,144 @@ export class NotificationsComponent implements OnInit {
   }
 
   // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON INSPECTIONS
-  rejectSecurityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
-    this.dbs.securityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Rechazado'});
-    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Rechazado'});
-    this.dbs.securityTasksCollection.doc(observationId).update({status: 'Rechazado'});
-    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  rejectSecurityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void {
+    this.dbs.securityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({ status: 'Rechazado' });
+    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({ status: 'Rechazado' });
+    this.dbs.securityTasksCollection.doc(observationId).update({ status: 'Rechazado' });
+    this.auth.notificationsCollection.doc(notificationId).update({ taskStatus: 'Rechazado' });
   }
 
-  confirmSecurityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
-    if(this.dateSecurityInspectionObservationFormControl.value){
-      this.dbs.securityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-      this.dbs.securityTasksCollection.doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf()});
-    }else{
+  confirmSecurityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void {
+    if (this.dateSecurityInspectionObservationFormControl.value) {
+      this.dbs.securityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+      this.dbs.securityTasksCollection.doc(observationId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+      this.auth.notificationsCollection.doc(notificationId).update({ taskStatus: 'Confirmado', estimatedTerminationDate: this.dateSecurityInspectionObservationFormControl.value.valueOf() });
+    } else {
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
         duration: 6000
       });
     }
   }
-  
+
   // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON INSPECTIONS
-  rejectQualityRedo(redoId, supervisorId, noteId): void{
-    this.dbs.qualityRedosCollection.doc(redoId).update({status: 'Rechazado'});
-    this.dbs.usersCollection.doc(supervisorId).collection('notifications').doc(noteId).update({redoStatus: 'Rechazado'});
+  rejectQualityRedo(redoId, supervisorId, noteId): void {
+    this.dbs.qualityRedosCollection.doc(redoId).update({ status: 'Rechazado' });
+    this.dbs.usersCollection.doc(supervisorId).collection('notifications').doc(noteId).update({ redoStatus: 'Rechazado' });
   }
 
-  confirmQualityRedo(redoId, supervisorId, noteId): void{
-    this.dbs.qualityRedosCollection.doc(redoId).update({status: 'Confirmado'});
-    this.dbs.usersCollection.doc(supervisorId).collection('notifications').doc(noteId).update({redoStatus: 'Confirmado'});
+  confirmQualityRedo(redoId, supervisorId, noteId): void {
+    this.dbs.qualityRedosCollection.doc(redoId).update({ status: 'Confirmado' });
+    this.dbs.usersCollection.doc(supervisorId).collection('notifications').doc(noteId).update({ redoStatus: 'Confirmado' });
   }
 
   // REJECT AND CONFIRMATION FOR TASKs CREATED BY REDOs ACTIONS
-  rejectQualityRedoAction(redoId, responsibleId, noteId, actionIndex, actions): void{
-    actions[actionIndex]['status'] = 'Rechazado';
-    this.dbs.qualityRedosCollection.doc(redoId).set({actions:actions}, {merge: true});
-    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(redoId + `${actionIndex}`).update({status: 'Rechazado'});
-    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).set({actionStatus: 'Rechazado', actionsList: actions}, {merge: true});
+  rejectQualityRedoAction(redoId, responsibleId, noteId, taskId): void {
+    this.dbs.qualityRedosCollection.doc(redoId).collection('actions').doc(taskId).update({ status: 'Rechazado' });
+    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(taskId).update({ status: 'Rechazado' });
+    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).update({ actionStatus: 'Rechazado' });
   }
 
-  confirmQualityRedoAction(redoId, responsibleId, noteId, taskId): void{
-
-    this.dbs.qualityRedosCollection.doc(redoId).collection('actions').doc(taskId).update({status: 'Confirmado'});
-    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(taskId).update({status: 'Confirmado'});
-    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).update({actionStatus: 'Confirmado'});
+  confirmQualityRedoAction(redoId, responsibleId, noteId, taskId): void {
+    this.dbs.qualityRedosCollection.doc(redoId).collection('actions').doc(taskId).update({ status: 'Confirmado' });
+    this.dbs.usersCollection.doc(responsibleId).collection('tasks').doc(taskId).update({ status: 'Confirmado' });
+    this.dbs.usersCollection.doc(responsibleId).collection('notifications').doc(noteId).update({ actionStatus: 'Confirmado' });
   }
 
   // REJECT AND CONFIRMATION CLOSING REQUEST
-  rejectRequestClosing(redoId , noteId, signId): void{
-    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({sign: false});
-    this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Rechazado'});
+  rejectRequestClosing(redoId, noteId, signId): void {
+    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({ sign: false });
+    this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({ requestStatus: 'Rechazado' });
   }
 
-  confirmRequestClosing(redoId , noteId, signId): void{
-    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({sign: true});
-    this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Confirmado'});
+  confirmRequestClosing(redoId, noteId, signId): void {
+    this.dbs.qualityRedosCollection.doc(redoId).collection('signing').doc(signId).update({ sign: true });
+    this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({ requestStatus: 'Confirmado' });
   }
 
-  // REJECT AND CONFIRMATION MAINTENANCE REQUEST
-  rejectMaintenanceRequest(requestId, notificationId): void{
-    this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Rechazado'});
-    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON QUALITY INSPECTIONS
+  rejectQualityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void {
+    this.dbs.qualityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({ status: 'Rechazado' });
+    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({ status: 'Rechazado' });
+    this.dbs.qualityTasksCollection.doc(observationId).update({ status: 'Rechazado' });
+    this.auth.notificationsCollection.doc(notificationId).update({ taskStatus: 'Rechazado' });
   }
 
-  confirmMaintenanceRequest(requestId, notificationId): void{
-    if(this.dateMaintenanceRequestsConfirmationFormControl.value){
-      this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
-    }else{
+  confirmQualityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void {
+    if (this.dateQualityInspectionObservationFormControl.value) {
+      this.dbs.qualityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf() });
+      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf() });
+      this.dbs.qualityTasksCollection.doc(observationId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf() });
+      this.auth.notificationsCollection.doc(notificationId).update({ taskStatus: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf() });
+    } else {
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
+        duration: 6000
+      });
+    }
+  }
+
+  // REJECT AND CONFIRMATION SINGLE OBSERVATION
+  rejectQualitySingleObservation(observationId, notificationId): void {
+    this.dbs.qualitySingleObservationsCollection.doc(observationId).update({ status: 'Rechazado' });
+    this.auth.notificationsCollection.doc(notificationId).update({ taskStatus: 'Rechazado' });
+  }
+
+  confirmQualitySingleObservation(observationId, notificationId): void {
+    if (this.dateQualitySingleObservationFormControl.value) {
+      this.dbs.qualitySingleObservationsCollection.doc(observationId).update({ status: 'Confirmado', estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf() });
+      this.auth.notificationsCollection.doc(notificationId).update({ estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf() });
+    } else {
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
         duration: 6000
       });
     }
   }
 
-  // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON QUALITY INSPECTIONS
-  rejectQualityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
-    this.dbs.qualityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Rechazado'});
-    this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Rechazado'});
-    this.dbs.qualityTasksCollection.doc(observationId).update({status: 'Rechazado'});
-    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
+  // REJECT AND CONFIRMATION MAINTENANCE REQUEST
+  rejectMaintenanceRequest(requestId, notificationId): void {
+    this.dbs.maintenanceRequestsCollection.doc(requestId).set({
+      status: 'Rechazado',
+      rejectedBy: this.auth.userCRC.displayName,
+      uidRejected: this.auth.userCRC.uid
+    }, { merge: true });
+
+    let supervisorList = this.dbs.maintenanceSupervisors.slice();
+    supervisorList.forEach(user => {
+      this.dbs.usersCollection
+        .doc(user['uid'])
+        .collection('notifications')
+        .doc(requestId)
+        .set({
+          requestStatus: 'Rechazado',
+          rejectedBy: this.auth.userCRC.displayName,
+          uidRejected: this.auth.userCRC.uid
+        }, { merge: true })
+    })
   }
 
-  confirmQualityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
-    if(this.dateQualityInspectionObservationFormControl.value){
-      this.dbs.qualityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
-      this.dbs.usersCollection.doc(supervisorId).collection(`tasks`).doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
-      this.dbs.qualityTasksCollection.doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateQualityInspectionObservationFormControl.value.valueOf()});
-    }else{
-      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
-        duration: 6000
-      });
-    }
-  }
+  confirmMaintenanceRequest(requestId, notificationId): void {
+    if (this.dateMaintenanceRequestsConfirmationFormControl.value) {
+      this.dbs.maintenanceRequestsCollection.doc(requestId).set({
+        status: 'Confirmado',
+        estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf(),
+        confirmedBy: this.auth.userCRC.displayName,
+        uidComfirmed: this.auth.userCRC.uid
+      }, { merge: true })
 
-  // REJECT AND CONFIRMATION SINGLE OBSERVATIONS
-  rejectQualitySingleObservation(observationId, notificationId): void{
-    this.dbs.qualitySingleObservationsCollection.doc(observationId).update({status: 'Rechazado'});
-    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
-  }
-
-  confirmQualitySingleObservation(observationId, notificationId): void{
-    if(this.dateQualitySingleObservationFormControl.value){
-      this.dbs.qualitySingleObservationsCollection.doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
-    }else{
+      let supervisorList = this.dbs.maintenanceSupervisors.slice();
+      supervisorList.forEach(user => {
+        this.dbs.usersCollection
+          .doc(user['uid'])
+          .collection('notifications')
+          .doc(requestId)
+          .set({
+            requestStatus: 'Confirmado',
+            estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf(),
+            confirmedBy: this.auth.userCRC.displayName,
+            uidComfirmed: this.auth.userCRC.uid
+          }, { merge: true })
+      })
+    } else {
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
         duration: 6000
       });
@@ -175,32 +208,61 @@ export class NotificationsComponent implements OnInit {
 
   // REJECT AND CONFIRMATION FOR SSGG REQUESTS
 
-  rejectSsggRequest(requestId, areaSupervisorId, notificationId): void{
-    this.dbs.ssggRequestsCollection.doc(requestId).update({status: 'Rechazado'});
+  rejectSsggRequest(requestId, areaSupervisorId, notificationId): void {
+    this.dbs.ssggRequestsCollection.doc(requestId).set({
+      status: 'Rechazado',
+      rejectedBy: this.auth.userCRC.displayName,
+      uidRejected: this.auth.userCRC.uid
+    }, { merge: true });
+
     let supervisorList = this.dbs.ssggSupervisors.slice();
-    supervisorList.forEach(user =>{
+    supervisorList.forEach(user => {
       this.dbs.usersCollection
         .doc(user['uid'])
         .collection('notifications')
         .doc(requestId)
-        .update({requestStatus: 'Rechazado'})
+        .set({
+          requestStatus: 'Rechazado',
+          rejectedBy: this.auth.userCRC.displayName,
+          uidRejected: this.auth.userCRC.uid
+        }, { merge: true })
     })
-    this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).set({
+      status: 'Rechazado',
+      rejectedBy: this.auth.userCRC.displayName,
+      uidRejected: this.auth.userCRC.uid
+    }, { merge: true });
   }
 
-  confirmSsggRequest(requestId, areaSupervisorId, notificationId): void{
-    if(this.dateSsggRequestsConfirmationFormControl.value){
-      this.dbs.ssggRequestsCollection.doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()});
+  confirmSsggRequest(requestId, areaSupervisorId, notificationId): void {
+    if (this.dateSsggRequestsConfirmationFormControl.value) {
+      this.dbs.ssggRequestsCollection.doc(requestId).set({
+        status: 'Confirmado',
+        estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf(),
+        confirmedBy: this.auth.userCRC.displayName,
+        uidComfirmed: this.auth.userCRC.uid
+      }, { merge: true })
+
       let supervisorList = this.dbs.ssggSupervisors.slice();
-      supervisorList.forEach(user =>{
+      supervisorList.forEach(user => {
         this.dbs.usersCollection
           .doc(user['uid'])
           .collection('notifications')
           .doc(requestId)
-          .update({requestStatus: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()})
+          .set({
+            requestStatus: 'Confirmado',
+            estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf(),
+            confirmedBy: this.auth.userCRC.displayName,
+            uidComfirmed: this.auth.userCRC.uid
+          }, { merge: true })
       })
-      this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()});
-    }else{
+      this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).set({
+        status: 'Confirmado',
+        estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf(),
+        confirmedBy: this.auth.userCRC.displayName,
+        uidComfirmed: this.auth.userCRC.uid
+      }, { merge: true })
+    } else {
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
         duration: 6000
       });
