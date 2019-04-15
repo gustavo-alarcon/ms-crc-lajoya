@@ -448,6 +448,8 @@ import { SystemGeneralAreaConfirmEditComponent } from './configuration/system/sy
     QualityConfirmDeleteSingleObservationComponent,
     QualityTasksDialogFinalizeObservationComponent,
     QualityTasksConfirmFinalizeObservationComponent,
+    QualityTasksDialogFinalizeInspectionComponent,
+    QualityTasksConfirmFinalizeInspectionComponent,
     ChangePasswordComponent,
     SystemGeneralAreaDialogEditComponent,
     SystemGeneralAreaConfirmEditComponent

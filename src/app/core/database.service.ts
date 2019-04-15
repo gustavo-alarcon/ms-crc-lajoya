@@ -1144,7 +1144,7 @@ export class DatabaseService {
   getQualitySingleObservations(personal?,from?,to?): void{
 
     
-    this.qualitySingleObservationsCollection = this.afs.collection(`db/crcLaJoya/qualitySingleObsrvations`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
+    this.qualitySingleObservationsCollection = this.afs.collection(`db/crcLaJoya/qualitySingleObservations`, ref => ref.where('regDate','>=',from).where('regDate','<=',to));
     
     this.qualitySingleObservationsCollection.valueChanges()
     .pipe(

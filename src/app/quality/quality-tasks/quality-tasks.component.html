@@ -62,12 +62,12 @@
                 style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Responsable</th>
               <td mat-cell *matCellDef="let row" class="w3-small"
                 style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <ng-container *ngFor="let staff of row['actionResponsibles']">
+                <ng-container *ngFor="let staff of row['actionResponsibles']">
                   <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
                   <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
                     <li class="w3-small">{{staff['jobTitle']}}</li>
                   </ul>
-              </ng-container>
+                </ng-container>
                 
               </td>
             </ng-container>
@@ -156,7 +156,142 @@
         <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
 
-      <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Rehaceres</h2>
+      <!-- MOBIL VERSION REDOS-->
+      <div class="w3-hide-large w3-hide-medium">
+        <ng-container *ngFor="let fred of filteredRedosTasks; let i = index">
+          <div [@openCloseCard]="isOpenActions[i] ? 'open': 'closed'"
+            (click)="toggleCardActions(i)"
+            class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+            [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+            <div class="w3-display-topright"
+              style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+              <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
+            </div>
+            <div [@openCloseDescription]="isOpenActions[i] ? 'openDescription': 'closedDescription'"
+              class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+              <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                {{(fred['action'].length>25 ? (fred['action'] | slice:0:25)+'...':(fred['action']))}}
+              </p>
+              <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                *ngIf="fred['estimatedTerminationDate'] != 0">
+                {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+              <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+            </div>
+          </div>
+          <div [@openCloseContent]="isOpenActions[i] ? 'openContent': 'closedContent'"
+            class="mat-elevation-z8">
+            <mat-toolbar style="background:#333333">
+              <span class="ms-fill"></span>
+              <button mat-raised-button style="color:white" color="primary" matTooltip="Finalizar Redo"  (click)="finalizeTask(fred)" [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado'">
+                <mat-icon>check_circle</mat-icon> Finalizar
+              </button>
+            </mat-toolbar>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Fecha</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Acción</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['action']}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Estado (Acción)</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['approved']?'Acción aprobada':'Por aprobar'}}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Responsable</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <ng-container *ngFor="let staff of fred['actionResponsibles']">
+                  <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li class="w3-small">{{staff['jobTitle']}}</li>
+                  </ul>
+                </ng-container>
+              </div>
+            </div>
+            
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Estado (Tarea)</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span class="w3-small">
+                  <span class="ms-chip" [ngClass]="{'w3-green':fred['status']==='Finalizado', 'w3-amber':fred['status']==='Por confirmar', 'w3-indigo':fred['status']==='Confirmado', 'w3-red':fred['status']==='Rechazado'}">
+                    {{fred['approved']?fred['status']:'***'}}
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Fecha de finalización</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <div *ngIf="fred['realTerminationDate'] != 0">
+                  <span>{{fred['realTerminationDate'] | date : 'dd/MM/yyy'}}</span><br>
+                  <span class="w3-small">{{fred['realTerminationDate'] | date : 'hh:mm:ss'}}</span>
+                </div>
+                <div *ngIf="fred['realTerminationDate'] === 0">
+                  <span>{{'**/**/**'}}</span><br>
+                  <span class="w3-small">{{'**:**:**'}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Archivos</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <a href="{{fred['finalArchive']}}" target="_blank"
+                  *ngIf="fred['finalArchive']; else defaultPictureAction">
+                  PDF
+                </a>
+                <ng-template #defaultPictureAction>
+                  ***
+                </ng-template>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                  *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                <ng-template #noImageLink>
+                  <span class="w3-small w3-text-gray">No disponible</span>
+                </ng-template>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                  *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                <ng-template #noImageLink>
+                  <span class="w3-small w3-text-gray">No disponible</span>
+                </ng-template>
+              </div>
+            </div>
+            <mat-toolbar>
+              <span class="ms-fill"></span>
+              <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardActions(i)">
+                <mat-icon>keyboard_arrow_up</mat-icon>
+              </button>
+            </mat-toolbar>
+          </div>
+        </ng-container>
+      </div>
+
+      <div *ngIf="!filteredRedosTasks.length"
+        class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+        <h2 class="ms-empty-list">
+          Sin novedades
+        </h2>
+      </div>
+
+
+      <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Inspecciones</h2>
       <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small" style="overflow: auto">
         <table mat-table [dataSource]="dataSourceTasksByInspections" matSort style="width:100%;">
 
@@ -284,6 +419,120 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumnsTasksByInspections;"></tr>
 
         </table>
+      </div>
+
+      <!-- MOBIL VERSION INSPECTION OBSERVATIONS-->
+      <div class="w3-hide-large w3-hide-medium">
+        <ng-container *ngFor="let fred of filteredInspectionsTasks; let i = index">
+          <div [@openCloseCard]="isOpenInspections[i] ? 'open': 'closed'"
+            (click)="toggleCardInspections(i)"
+            class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+            [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+            <div class="w3-display-topright"
+              style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+              <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
+            </div>
+            <div [@openCloseDescription]="isOpenInspections[i] ? 'openDescription': 'closedDescription'"
+              class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+              <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                {{(fred['observationDescription'].length>25 ? (fred['observationDescription'] | slice:0:25)+'...':(fred['observationDescription']))}}
+              </p>
+              <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                *ngIf="fred['estimatedTerminationDate'] != 0">
+                {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+              <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+            </div>
+          </div>
+          <div [@openCloseContent]="isOpenInspections[i] ? 'openContent': 'closedContent'"
+            class="mat-elevation-z8">
+            <mat-toolbar style="background:#333333">
+              <span class="ms-fill"></span>
+              <button mat-raised-button style="color:white" color="primary" matTooltip="Finalizar observación de inspección"  (click)="finalizeTaskInspection(fred)" [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado'">
+                <mat-icon>check_circle</mat-icon> Finalizar
+              </button>
+            </mat-toolbar>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Fecha</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Descripción de la observación (Condición / Acto Subestándar)</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['observationDescription']}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas Correctivas</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['recommendationDescription']}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Área</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span style="font-weight:500">{{fred['area']['name']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li>Sup.: {{fred['area']['supervisor']['displayName']}}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Fecha de
+                  Termino / Fecha Realización</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                  {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                  {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Estado</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span class="w3-small">{{fred['status']}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                  *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                <ng-template #noImageLink>
+                  <span class="w3-small w3-text-gray">No disponible</span>
+                </ng-template>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                  *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                <ng-template #noImageLink>
+                  <span class="w3-small w3-text-gray">No disponible</span>
+                </ng-template>
+              </div>
+            </div>
+            <mat-toolbar>
+              <span class="ms-fill"></span>
+              <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardInspections(i)">
+                <mat-icon>keyboard_arrow_up</mat-icon>
+              </button>
+            </mat-toolbar>
+          </div>
+        </ng-container>
+      </div>
+
+      <div *ngIf="!filteredInspectionsTasks.length"
+        class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+        <h2 class="ms-empty-list">
+          Sin novedades
+        </h2>
       </div>
       
 
@@ -420,334 +669,121 @@
         <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
 
-      <!-- MOBIL VERSION SINGLE OBSERVATIONS -->
-      <!-- <div class="w3-hide-large w3-hide-medium">
-        <ng-container *ngFor="let inspection of filteredInspections; let inspectionIndex = index">
-          <div id="inspection_{{inspectionIndex}}" [@openCloseCard]="isOpenInspection[inspectionIndex] ? 'openCard': 'closedCard'" class="mat-elevation-z8 ms-hero-image-inspection w3-display-container w3-round-large"
-            style="height:133px; cursor:pointer"
-            [ngStyle]="{'background-image': 'url(../../../assets/images/no-image-inspections-2.jpg)'}" (click)="toggleCardInspection(inspectionIndex, inspection['id'])">
-
-            <div class="w3-display-bottomleft w3-padding w3-round-large" style="background:rgba(0,0,0,0.2); width:100%; height:100%">
-              <div style="display:flex">
-                <p style="font-weight:600; color:white; margin: 0.5em 0.1em">
-                  <span class="w3-round-large"
-                    style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{inspectionIndex +1}}</span>
-                  {{inspection['inspector']['displayName']}}
-                </p>
-                <span class="ms-fill"></span>
-              </div>
-
-              <mat-divider class="w3-white" style="margin:0.5em 0em"></mat-divider>
-              <p style="font-weight:400; color:white; margin: 0px 0.1em">
-                {{inspection['area']['name']}}
-              </p>
-              
-              <div style="display:flex; justify-content: space-between">
-                <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite"
-                  *ngIf="inspection['estimatedTerminationDate'] === 0">
-                  **/**/****</span>
-                <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha límite"
-                  *ngIf="inspection['estimatedTerminationDate'] > 0">
-                  {{(inspection['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
-                <span class="ms-fill"></span>
-                <span class="w3-amber w3-padding w3-round-large" style="font-size:0.9em"
-                  matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] === 0">
-                  **/**/****</span>
-                <span class="w3-padding w3-round-large" style="font-size:0.9em; font-weight:600"
-                  [ngClass]="{'w3-red':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) > 8.64e7, 'w3-green':(inspection['realTerminationDate']-inspection['estimatedTerminationDate']) <= 8.64e7}"
-                  matTooltip="Fecha realizada" *ngIf="inspection['realTerminationDate'] > 0">
-                  {{(inspection['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
-              </div>
-            </div>
-          </div>
-
-          <div [@openCloseTableMobile]="isOpenInspection[inspectionIndex] ? 'openTableMobile': 'closedTableMobile'" class="mat-elevation-z4" style="background:white">
-            <div *ngFor="let observation of dbs.currentDataQualitySingleObservations | async; let i = index">
-              <mat-toolbar style="background:#2b2b2b; color:white; font-weight:600">
-                <span class="ms-font-roboto" style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
-                <span class="ms-fill"></span>
-                <button mat-icon-button style="color:white" matTooltip="Editar observación" (click)="finalizeTaskObservation(observation)"><mat-icon>check_circle</mat-icon></button>
-                <button mat-icon-button style="color:white" matTooltip="Borrar observación" (click)="deleteObservation(observation['id'])" [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid"><mat-icon>delete</mat-icon></button>
-              </mat-toolbar> 
-              
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Descripción de la observación</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small">{{observation['observationDescription']}}</span>
-                </div>
-              </div>
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas correctivas</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small">{{observation['recommendationDescription']}}</span>
-                </div>
-              </div>
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Área</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small" style="font-weight:500">{{observation['area']['name']}}</span>
-                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                    <li class="w3-small">Sup.: {{observation['area']['supervisor']['displayName']}}</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Fecha propuesta / Fecha realización</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span matTooltip="Fecha propuesta" class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</span>
-                  <span matTooltip="Fecha propuesta" class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">
-                    {{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</span><br>
-                  <span matTooltip="Fecha realizada" class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</span>
-                  <span matTooltip="Fecha realizada" class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
-                    {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</span>
-                </div>
-              </div>
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Estado</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small" style="font-weight:500">{{observation['status']}}</span>
-                </div>
-              </div>
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Foto inicial</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <a class="w3-medium" target="_blank" [href]="observation['initialPicture']">ver imagen</a>
-                </div>
-              </div>
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Foto final</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <a class="w3-medium" target="_blank" [href]="observation['finalPicture']">ver imagen</a>
-                </div>
-              </div>
-              
-              <div class="w3-row">
-                <div class="w3-col s6 ms-header-mobile">Creación</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span>{{inspection['regDate'] | date : 'dd/MM/yyy'}}</span><br>
-                  <span class="w3-small">{{inspection['regDate'] | date : 'hh:mm:ss'}}</span>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex; justify-content: center; background:#c5c5c5">
-              <button mat-icon-button class="w3-text-white"
-              (click)="toggleCardInspection(inspectionIndex, inspection['id'])">
-              <a href="#inspection_{{inspectionIndex}}"></a><mat-icon>keyboard_arrow_up</mat-icon></button>
-            </div>
-          </div>
-        </ng-container>
-      </div> -->
-
-      <!-- MOBIL VERSION ACTIONS-->
-      <!-- <div class="w3-hide-large w3-hide-medium w3-margin-top">
-        <ng-container *ngFor="let analyze of dbs.currentDataQualityRedosActions | async; let i = index">
-          <div [@openClosePanelMobile]="isOpenActions[i] ? 'openPanelMobile': 'closedPanelMobile'"
-            (click)="togglePanelActions(i, analyze)"
+      <!-- MOBIL VERSION SINGLE OBSERVATIONS-->
+      <div class="w3-hide-large w3-hide-medium">
+        <ng-container *ngFor="let fred of filteredSingleObservationsTasks; let i = index">
+          <div [@openCloseCard]="isOpenSingleObservations[i] ? 'open': 'closed'"
+            (click)="toggleCardSingleObservations(i)"
             class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
-            [ngStyle]="{'background-image': analyze['initialPicture'] ? ('url(' + analyze['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
-
-            <div class="w3-display-bottomleft w3-padding w3-round-large"
-              style="background:rgba(0,0,0,0.2); width:100%; height:100%">
-              <div style="display:flex">
-                <p style="font-weight:600; color:white; margin: 0.5em 0.1em">
-                  <span class="w3-round-large"
-                    style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{i +1}}</span>
-                  {{analyze['OT']}}
-                </p>
-                <span class="ms-fill"></span>
-                <button mat-icon-button class="w3-text-white" matTooltip="Proponer acciones"
-                  (click)="nextStageClose(analyze)"
-                  [disabled]="analyze['stage'] != 'Acciones' || analyze['status'] === 'Por confirmar'">
-                  <mat-icon>next_week</mat-icon>
-                </button>
-                <button mat-icon-button class="w3-text-white" matTooltip="Borrar rehacer"
-                  (click)="deleteActions(analyze)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-
-              <mat-divider class="w3-white" style="margin:0.5em 0em"></mat-divider>
+            [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+            <div class="w3-display-topright"
+              style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+              <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
+            </div>
+            <div [@openCloseDescription]="isOpenSingleObservations[i] ? 'openDescription': 'closedDescription'"
+              class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
               <p style="font-weight:400; color:white; margin: 0px 0.1em">
-                {{analyze['area']['name']}}
+                {{(fred['observationDescription'].length>25 ? (fred['observationDescription'] | slice:0:25)+'...':(fred['observationDescription']))}}
               </p>
-              <p style="font-weight:400; color:white; margin: 0px 0.1em">
-                {{analyze['component']}}
-              </p>
-
-              <div style="display:flex; justify-content: space-between">
-                <span style="padding:8px 0px; font-size:0.9em; color: white" matTooltip="Fecha de reporte"
-                  *ngIf="analyze['regDate'] > 0">
-                  {{(analyze['regDate']) | date: 'dd/MM/yyyy'}}</span>
-                <span class="ms-fill"></span>
-                <span class="w3-padding w3-round-large w3-center" style="font-size:0.9em; font-weight:500"
-                  [ngClass]="{'w3-red':analyze['status'] === 'Rechazado', 'w3-green':analyze['status'] === 'Confirmado', 'w3-amber':analyze['status'] === 'Por confirmar'}"
-                  matTooltip="Fecha de análisis">
-                  <span>Acciones</span><br>
-                  <span>{{analyze['actionsDate'] | date: 'dd/MM/yyyy' }}</span>
-
-                </span>
+              <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                *ngIf="fred['estimatedTerminationDate'] != 0">
+                {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+              <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+            </div>
+          </div>
+          <div [@openCloseContent]="isOpenSingleObservations[i] ? 'openContent': 'closedContent'"
+            class="mat-elevation-z8">
+            <mat-toolbar style="background:#333333">
+              <span class="ms-fill"></span>
+              <button mat-raised-button style="color:white" color="primary" matTooltip="Finalizar observación personal"  (click)="finalizeTaskObservation(fred)" [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado'">
+                <mat-icon>check_circle</mat-icon> Finalizar
+              </button>
+            </mat-toolbar>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Fecha</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
               </div>
             </div>
-
-          </div>
-
-          <div [@openCloseContent]="isOpenActions[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8"
-            style="min-height:560px">
-            
-            <div style=" display:flex; flex-wrap:wrap; align-items:center; padding:0.5em 1em; background:#191919">
-              <span class="ms-font-raleway ms-color-wt w3-margin-bottom" style="font-weight:500; margin-bottom:0.5em; font-size:1.5em; width:100%">Acciones</span><br>  
-              <button mat-raised-button color="primary" class="w3-margin-right; w3-margin-bottom" matTooltip="Agregar acciones"
-                (click)="addActions(analyze)">
-                <mat-icon class="example-icon">add_circle</mat-icon> Proponer acciones
-              </button>
-              <button mat-raised-button color="primary" class="w3-margin-right w3-text-white" matTooltip="Aprovar acciones seleccionadas"
-                (click)="approveActions(analyze)" [ngStyle]="{'color:lightslategray':this.selection.selected.length === 0}" [disabled]="this.selection.selected.length === 0">
-                <mat-icon>check_circle</mat-icon> Aprobar acciones
-              </button>
-              <div>
-                <ul style="margin-top:0.5em">
-                  <li class="ms-color-wt w3-small">
-                    Solo serán aprobadas las acciones seleccionadas (Este proceso no puede ser revertido)
-                  </li>
-                  <li class="ms-color-wt w3-small">
-                    Al aprobar una acción, se enviarán notificaciones al responsable y personal adicional
-                  </li>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Descripción de la observación (Condición / Acto Subestándar)</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['observationDescription']}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas Correctivas</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['recommendationDescription']}}</span>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Área</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span style="font-weight:500">{{fred['area']['name']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li>Sup.: {{fred['area']['supervisor']['displayName']}}</li>
                 </ul>
               </div>
-              <div>
-                <mat-checkbox *ngIf="actionsNotApproved" (change)="$event ? masterToggle() : null"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
-                <span [ngStyle]="{'color':actionsNotApproved ? 'lightslategray' : 'white'}">
-                  Seleccionar todo
-                </span>
-              </mat-checkbox>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Fecha de
+                  Termino / Fecha Realización</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                  {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                  {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
               </div>
             </div>
-            <ng-container *ngFor="let row of dataSourceRedosActionsList.data; let i = index">
-              <mat-toolbar style="background: #333333">
-                <span class="ms-font-roboto w3-margin-right" style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
-                <div>
-                  <mat-checkbox *ngIf="!row['approved']" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
-                    <span [ngStyle]="{'color':!row['approved'] ? 'lightslategray' : 'white'}" style="font-size:0.7em">
-                      Seleccionar para aprobar
-                    </span>
-                  </mat-checkbox>
-                </div>
-                <span class="ms-fill"></span>
-                <button mat-icon-button matTooltip="Borrar acción propuesta"
-                  (click)="deleteAction(row, document)" style="color:white">
-                  <mat-icon>delete</mat-icon>
-                </button><br>
-              </mat-toolbar>
-              
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Acción</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small">{{row['action']}}</span>
-                </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Estado</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <span class="w3-small">{{fred['status']}}</span>
               </div>
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">estado (Acción)</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small">{{row['approved']?'Acción aprobada':'Por aprobar'}}</span>
-                </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                  *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                <ng-template #noImageLink>
+                  <span class="w3-small w3-text-gray">No disponible</span>
+                </ng-template>
               </div>
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Responsable</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small" style="font-weight:500">{{row['actionResponsible']['displayName']}}</span>
-                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                    <li class="w3-small">{{row['actionResponsible']['jobTitle']}}</li>
-                  </ul>
-                </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+              <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                  *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                <ng-template #noImageLink>
+                  <span class="w3-small w3-text-gray">No disponible</span>
+                </ng-template>
               </div>
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Personal adicional</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <ng-container *ngFor="let staff of row['additionalStaff']">
-                    <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
-                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                      <li class="w3-small">{{staff['jobTitle']}}</li>
-                    </ul>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Estado (Tarea)</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <span class="w3-small">{{row['approved']?row['status']:'***'}}</span>
-                </div>
-              </div>
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Fecha de finalización</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <div *ngIf="row['realTerminationDate'] != 0">
-                    <span>{{row['realTerminationDate'] | date : 'dd/MM/yyy'}}</span><br>
-                    <span class="w3-small">{{row['realTerminationDate'] | date : 'hh:mm:ss'}}</span>
-                  </div>
-                  <div *ngIf="row['realTerminationDate'] === 0">
-                    <span>{{'**/**/**'}}</span><br>
-                    <span class="w3-small">{{'**:**:**'}}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Validar tarea</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <button mat-raised-button color="primary" matTooltip="Validar el cumplimiento de la tarea"
-                  (click)="validateAction(row, document)" [disabled]="row['status'] != 'Finalizado' || !row['valid']">
-                    <mat-icon>check_circle</mat-icon> Validar
-                  </button><br>
-                </div>
-              </div>
-
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Archivo</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <a href="{{row['finalPicture']}}" target="_blank"
-                  *ngIf="row['finalPicture']; else defaultPictureAction">
-                    <div style="width:200px;height:120px;padding:6px 6px">
-                      <img src="{{row['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
-                    </div>
-                  </a>
-                  <ng-template #defaultPictureAction>
-                    <div style="width:200px;height:120px;padding:6px 6px">
-                      <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
-                        class="w3-card-4">
-                    </div>
-                  </ng-template>
-                </div>
-              </div>
-
-              <div class="w3-row w3-border-bottom w3-border-lightgray w3-margin-top">
-                <div class="w3-col s6 ms-header-mobile">Archivo</div>
-                <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                  <a href="{{row['finalArchive']}}" target="_blank"
-                    *ngIf="row['finalArchive']; else defaultPictureAction">
-                    PDF
-                  </a>
-                  <ng-template #defaultPictureAction>
-                    ***
-                  </ng-template>
-                </div>
-              </div>
-
-            </ng-container>
+            </div>
             <mat-toolbar>
               <span class="ms-fill"></span>
-              <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardActions(i)">
+              <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardSingleObservations(i)">
                 <mat-icon>keyboard_arrow_up</mat-icon>
               </button>
             </mat-toolbar>
-            
           </div>
         </ng-container>
+      </div>
 
-      </div> -->
-
+      <div *ngIf="!filteredSingleObservationsTasks.length"
+        class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+        <h2 class="ms-empty-list">
+          Sin novedades
+        </h2>
+      </div>
+      
+      
     </div>
   
   
