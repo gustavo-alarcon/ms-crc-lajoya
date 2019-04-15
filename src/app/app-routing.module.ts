@@ -35,6 +35,7 @@ import { ConfigNotificationsQualityComponent } from './configuration/configurati
 import { ConfigNotificationsMaintenanceComponent } from './configuration/configuration-notifications/config-notifications-maintenance/config-notifications-maintenance.component';
 import { ConfigNotificationsSsggComponent } from './configuration/configuration-notifications/config-notifications-ssgg/config-notifications-ssgg.component';
 import { ConfigSecurityInspectionsComponent } from './configuration/system/config-security-inspections/config-security-inspections.component';
+import { ConfigCustomerComponent } from './configuration/system/system-general-area/config-customer/config-customer.component';
 
 const routes: Routes = [
   
@@ -113,6 +114,9 @@ const routes: Routes = [
               },
               {
                 path: 'areas', component: SystemGeneralAreaComponent
+              },
+              {
+                path: 'customers', component: ConfigCustomerComponent
               },
               {
                 path: 'config-security-fred', component: ConfigSecurityFredComponent,

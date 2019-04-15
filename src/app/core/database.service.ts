@@ -627,7 +627,16 @@ export class DatabaseService {
 
   getCustomers(): void{
     this.customersCollection = this.afs.collection(`db/systemConfigurations/customers`, ref => ref.orderBy('regDate','asc'));
-    this.customersCollection.valueChanges().subscribe(res => {
+    this.customersCollection.valueChanges()
+    .pipe(
+      map(res => {
+        res.forEach((element,index) => {
+          element['index'] = index;
+        })
+        return res;
+      })
+    )
+    .subscribe(res => {
       this.customers = res;
       this.dataCustomers.next(res);
     });
