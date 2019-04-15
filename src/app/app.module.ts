@@ -183,6 +183,10 @@ import { ChangePasswordComponent } from './main/change-password/change-password.
 import { ConfirmChangePasswordComponent } from './main/confirm-change-password/confirm-change-password.component';
 import { SystemGeneralAreaDialogEditComponent } from './configuration/system/system-general-area/system-general-area-dialog-edit/system-general-area-dialog-edit.component';
 import { SystemGeneralAreaConfirmEditComponent } from './configuration/system/system-general-area/system-general-area-confirm-edit/system-general-area-confirm-edit.component';
+import { ConfigCustomerComponent } from './configuration/system/system-general-area/config-customer/config-customer.component';
+import { CreateNewCustomerComponent } from './configuration/system/system-general-area/config-customer/create-new-customer/create-new-customer.component';
+import { CustomerDialogEditComponent } from './configuration/system/system-general-area/config-customer/customer-dialog-edit/customer-dialog-edit.component';
+import { CustomerConfirmDeleteComponent } from './configuration/system/system-general-area/config-customer/customer-confirm-delete/customer-confirm-delete.component';
 
 
 
@@ -311,7 +315,11 @@ import { SystemGeneralAreaConfirmEditComponent } from './configuration/system/sy
     ChangePasswordComponent,
     ConfirmChangePasswordComponent,
     SystemGeneralAreaDialogEditComponent,
-    SystemGeneralAreaConfirmEditComponent
+    SystemGeneralAreaConfirmEditComponent,
+    ConfigCustomerComponent,
+    CreateNewCustomerComponent,
+    CustomerDialogEditComponent,
+    CustomerConfirmDeleteComponent
     
   ],
   imports: [
@@ -452,7 +460,10 @@ import { SystemGeneralAreaConfirmEditComponent } from './configuration/system/sy
     QualityTasksConfirmFinalizeInspectionComponent,
     ChangePasswordComponent,
     SystemGeneralAreaDialogEditComponent,
-    SystemGeneralAreaConfirmEditComponent
+    SystemGeneralAreaConfirmEditComponent,
+    CreateNewCustomerComponent,
+    CustomerDialogEditComponent,
+    CustomerConfirmDeleteComponent
   ],
   bootstrap: [AppComponent]
 })
