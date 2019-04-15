@@ -125,13 +125,14 @@ export class FredConfirmSaveComponent implements OnInit {
 
                 finalObject['id'] = refFred.id;
 
-                // REGISTRY IN OBSERVED TASKS DB AND NOTIFICATIONS DB
+                // Adding task to observed staff
                 this.dbs.usersCollection
                   .doc(this.data[0]['observedStaff']['uid'])
                   .collection(`tasks`)
                   .doc(refFred.id)
                   .set(finalObject)
 
+                // Sending notification to observed staff. Also he/she has to confirm with estimated date of termination
                 this.dbs.usersCollection
                   .doc(this.data[0]['observedStaff']['uid'])
                   .collection(`notifications`)
@@ -141,6 +142,7 @@ export class FredConfirmSaveComponent implements OnInit {
                     senderName: this.auth.userCRC.displayName,
                     areaSupervisorId: this.data[0]['observedArea']['supervisor']['uid'],
                     areaSupervisorName: this.data[0]['observedArea']['supervisor']['displayName'],
+                    taskStatus: 'Por confirmar',
                     fredId: refFred.id,
                     status: 'unseen',
                     subject: this.data[2]['upgradeOpportunity'],
@@ -152,15 +154,98 @@ export class FredConfirmSaveComponent implements OnInit {
                         duration: 10000
                       });
                     });
+                
+                let tempUids = [];
+                
+                // STAFF SUPERVISOR NESTED 1
+                // checking if that supevisor exist
+                if(this.data[0]['observedStaff']['area']){
+                  tempUids.push(this.data[0]['observedStaff']['area']['supervisor']['uid']);
+                  // Adding task to supervisor nested 1
+                  this.dbs.usersCollection
+                  .doc(this.data[0]['observedStaff']['area']['supervisor']['uid'])
+                  .collection(`tasks`)
+                  .doc(refFred.id)
+                  .set(finalObject)
 
-                // REGISTRY IN SUPERVISOR TASKS DB AND NOTIFICATIONS DB
-                this.dbs.usersCollection
+                  // sending notification to supervisor nested 1
+                  this.dbs.usersCollection
+                  .doc(this.data[0]['observedStaff']['area']['supervisor']['uid'])
+                  .collection(`notifications`)
+                  .add({
+                    regDate: Date.now(),
+                    senderId: this.auth.userCRC.uid,
+                    senderName: this.auth.userCRC.displayName,
+                    staffId: this.data[0]['observedStaff']['uid'],
+                    staffName: this.data[0]['observedStaff']['displayName'],
+                    fredId: refFred.id,
+                    taskStatus: 'Por confirmar',
+                    status: 'unseen',
+                    subject: this.data[2]['upgradeOpportunity'],
+                    type: 'task staff nested 1'
+                  })
+                    .then(ref => {
+                      ref.update({id: ref.id})
+                      this.snackbar.open("Listo!","Cerrar",{
+                        duration: 10000
+                      });
+                    });
+                }
+                
+
+                // STAFF SUPERVISOR NESTED 2
+                // checking if that supevisor exist
+                if(this.data[0]['observedStaff']['area']['supervisor']['area']){
+
+                  // checking if already exist in uids array
+                  let _index = tempUids.indexOf(this.data[0]['observedStaff']['area']['supervisor']['area']['supervisor']['uid']);
+                  if(_index < 0){
+                    tempUids.push(this.data[0]['observedStaff']['area']['supervisor']['area']['supervisor']['uid']);
+                    // Adding task to supervisor nested 2
+                    this.dbs.usersCollection
+                    .doc(this.data[0]['observedStaff']['area']['supervisor']['area']['supervisor']['uid'])
+                    .collection(`tasks`)
+                    .doc(refFred.id)
+                    .set(finalObject)
+
+                    // sending notification to supervisor nested 2
+                    this.dbs.usersCollection
+                      .doc(this.data[0]['observedStaff']['area']['supervisor']['area']['supervisor']['uid'])
+                      .collection(`notifications`)
+                      .add({
+                        regDate: Date.now(),
+                        senderId: this.auth.userCRC.uid,
+                        senderName: this.auth.userCRC.displayName,
+                        staffId: this.data[0]['observedStaff']['uid'],
+                        staffName: this.data[0]['observedStaff']['displayName'],
+                        fredId: refFred.id,
+                        taskStatus: 'Por confirmar',
+                        status: 'unseen',
+                        subject: this.data[2]['upgradeOpportunity'],
+                        type: 'task staff nested 2'
+                      })
+                        .then(ref => {
+                          ref.update({id: ref.id})
+                          this.snackbar.open("Listo!","Cerrar",{
+                            duration: 10000
+                          });
+                        });
+                  }
+                  
+                }
+                
+
+                // checking if area supervisor uid already exists in list
+                let _index = tempUids.indexOf(this.data[0]['observedArea']['supervisor']['uid']);
+                if(_index < 0){
+                  // Adding task to area supervisor
+                  this.dbs.usersCollection
                   .doc(this.data[0]['observedArea']['supervisor']['uid'])
                   .collection(`tasks`)
                   .doc(refFred.id)
                   .set(finalObject)
 
-                this.dbs.usersCollection
+                  this.dbs.usersCollection
                   .doc(this.data[0]['observedArea']['supervisor']['uid'])
                   .collection(`notifications`)
                   .add({
@@ -170,9 +255,10 @@ export class FredConfirmSaveComponent implements OnInit {
                     staffId: this.data[0]['observedStaff']['uid'],
                     staffName: this.data[0]['observedStaff']['displayName'],
                     fredId: refFred.id,
+                    taskStatus: 'Por confirmar',
                     status: 'unseen',
                     subject: this.data[2]['upgradeOpportunity'],
-                    type: 'task'
+                    type: 'task supervisor'
                   })
                     .then(ref => {
                       ref.update({id: ref.id})
@@ -180,6 +266,8 @@ export class FredConfirmSaveComponent implements OnInit {
                         duration: 10000
                       });
                     });
+                }
+                
 
               }).catch(err => {
                 this.snackbar.open(err,"Cerrar",{
