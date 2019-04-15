@@ -105,6 +105,9 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
   isSupervisor: boolean = false;
   isBroadcast: boolean = true;
 
+  someAreaselected: boolean = false;
+  someEquipmentSelected: boolean = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -161,6 +164,10 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
       })
 
     this.subscriptions.push(isSupervisorSubs);
+
+    // adding sort and paginator
+    this.dataSourceRequests.paginator = this.paginator;
+    this.dataSourceRequests.sort = this.sort;
   }
 
   ngOnDestroy() {
@@ -205,6 +212,7 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
   }
 
   selectedArea(event): void{
+    this.someAreaselected = true;
     let ref = event.option.value['name'].toLowerCase();
     this.filteredEquipments = this.dbs.maintenanceEquipmentsConfig.filter(option => option['area']['name'].toLowerCase() === ref);
   }
@@ -213,7 +221,26 @@ export class MaintenanceRequestsComponent implements OnInit, OnDestroy {
     return equipment? equipment['name'] : undefined;
   }
 
+  selectedEquipment(event): void{
+    this.someEquipmentSelected = true;
+  }
+
   save(): void{
+
+    if(!this.someAreaselected){
+      this.snackbar.open("Debe seleccionar un área de la lista y luego escoger un equipo", "Cerrar",{
+        duration:6000
+      });
+      return;
+    }
+
+    if(!this.someEquipmentSelected){
+      this.snackbar.open("Debe seleccioanr un equipo de la lista de auto-completado","Cerrar",{
+        duration: 6000
+      });
+      return;
+    }
+
 
     if(!this.selectedFile){
       this.snackbar.open("Adjunte una imagen para poder guardar el documento","Cerrar", {

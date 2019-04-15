@@ -513,7 +513,7 @@
             <div *ngIf="note['type'] === 'maintenance request supervisor'" class="ms-color-2b"
               style="padding-left:0.5em">
               <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo:
-                <strong>{{note['equipment']}}</strong></span><br>
+                <strong>{{note['equipment']['name']}}</strong></span><br>
               <p *ngIf="note['requestStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta
                 de
                 realización:
@@ -551,7 +551,7 @@
             <div *ngIf="note['type'] === 'maintenance request broadcast'" class="ms-color-2b"
               style="padding-left:0.5em">
               <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo:
-                <strong>{{note['equipment']}}</strong></span><br>
+                <strong>{{note['equipment']['name']}}</strong></span><br>
             </div>
 
             <!-- SSGG REQUEST -->
