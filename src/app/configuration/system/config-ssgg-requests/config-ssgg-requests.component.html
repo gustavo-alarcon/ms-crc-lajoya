@@ -19,6 +19,7 @@
       <ng-container *ngFor="let item of dbs.currentDataSsggTypes | async">
         <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
           <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
           <button mat-icon-button color="warn" (click)="deleteSsggTypes(item['id'])"><mat-icon>delete</mat-icon></button>
         </div>
       </ng-container>
@@ -38,6 +39,7 @@
       <ng-container *ngFor="let item of dbs.currentDataSsggPriorities | async">
         <div class="w3-border-bottom w3-border-lightgray" style="display:flex; align-items: center">
           <p class="w3-margin-left">{{item['name']}}</p>
+          <span class="ms-fill"></span>
           <button mat-icon-button color="warn" (click)="deleteSsggPriorities(item['id'])"><mat-icon>delete</mat-icon></button>
         </div>
       </ng-container>

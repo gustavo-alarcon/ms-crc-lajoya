@@ -52,7 +52,7 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                 regDate: Date.now(),
                 realTerminationDate: 0,
                 createdBy: this.auth.userCRC,
-                status: 'Confirmado',
+                status: 'Por confirmar',
                 mainArea: this.data['form']['mainArea'],
                 type: this.data['form']['type'],
                 priority: this.data['form']['priority'],
@@ -80,6 +80,9 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                     .then(() => {
                       this.dialogRef.close(true);
                       this.uploading = false;
+                      this.snackbar.open("Listo!...Enviando notificaciones","Cerrar", {
+                        duration:6000
+                      })
                     })
                     .catch(error => {
                       console.log(error);
@@ -103,7 +106,9 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                   this.dbs.usersCollection
                     .doc(area['supervisor']['uid'])
                     .collection(`notifications`)
-                    .add({
+                    .doc(refRequest.id)
+                    .set({
+                      id:refRequest.id,
                       regDate: Date.now(),
                       senderId: this.auth.userCRC.uid,
                       senderName: this.auth.userCRC.displayName,
@@ -113,16 +118,34 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                       ssggType: this.data['form']['type'],
                       priority: this.data['form']['priority'],
                       resumen: this.data['form']['resumen'],
+                      requestStatus: 'Por confirmar',
                       status: 'unseen',
                       type: 'ssgg request'
                     })
-                      .then(ref => {
-                        ref.update({id: ref.id})
-                        this.snackbar.open("Listo!","Cerrar",{
-                          duration: 10000
-                        });
-                      });
                   });
+
+                // sending notifications to ssgg supervisors
+                this.dbs.ssggSupervisors.forEach(user => {
+                  this.dbs.usersCollection
+                    .doc(user['uid'])
+                    .collection(`notifications`)
+                    .doc(refRequest.id)
+                    .set({
+                      id:refRequest.id,
+                      regDate: Date.now(),
+                      senderId: this.auth.userCRC.uid,
+                      senderName: this.auth.userCRC.displayName,
+                      areaSupervisorId: user['uid'],
+                      areaSupervisorName: user['displayName'],
+                      ssggRequestId: refRequest.id,
+                      ssggType: this.data['form']['type'],
+                      priority: this.data['form']['priority'],
+                      resumen: this.data['form']['resumen'],
+                      requestStatus: 'Por confirmar',
+                      status: 'unseen',
+                      type: 'ssgg request ssgg supervisor'
+                    })
+                });
 
               }).catch(err => {
                 this.snackbar.open(err,"Cerrar",{

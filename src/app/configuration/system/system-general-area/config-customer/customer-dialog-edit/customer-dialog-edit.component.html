@@ -1,0 +1,46 @@
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">edit</mat-icon> Editar cliente</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  
+  <form [formGroup]="newCustomerFormGroup">
+    <div class="w3-padding">
+      
+      <mat-form-field class="w3-block ms-color-2b w3-margin-bottom" style="max-width:350px" appearance="outline">
+        <mat-label>Nombre del cliente</mat-label>
+        <input matInput type="text" placeholder="Escriba..." formControlName="fullName" autocomplete="off">
+        <mat-hint>
+          <ng-container *ngIf="coincidenceFullName">
+            El nombre: <strong>{{newCustomerFormGroup.value['fullName']}}</strong> , ya existe en la lista de clientes.
+          </ng-container>
+        </mat-hint>
+        <mat-error>
+          requerido*
+        </mat-error>
+      </mat-form-field>
+      <br>
+
+      <mat-form-field class="w3-block ms-color-2b w3-margin-bottom" style="max-width:350px" appearance="outline">
+        <mat-label>Alias</mat-label>
+        <input matInput type="text" placeholder="Escriba..." formControlName="alias" autocomplete="off">
+        <mat-hint>
+          <ng-container *ngIf="coincidenceAlias">
+            El nombre: <strong>{{newCustomerFormGroup.value['alias']}}</strong> , ya existe en la lista de clientes.
+          </ng-container>
+        </mat-hint>
+        <mat-error>
+          requerido*
+        </mat-error>
+      </mat-form-field>
+      <br>
+      
+    </div>
+  </form>
+
+  <p class="w3-margin-bottom"></p>
+
+</mat-dialog-content>
+<mat-dialog-actions class="w3-margin-top w3-margin-bottom">
+  <button mat-stroked-button mat-dialog-close class="w3-margin-right" color="warn">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="edit()" [disabled]="!(newCustomerFormGroup.valid) || loading">Guardar</button>
+</mat-dialog-actions>

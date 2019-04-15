@@ -112,6 +112,7 @@ export class QualityConfirmAddObservationComponent implements OnInit {
                       observationId: refObservation.id,
                       subject: this.data[1]['recommendationDescription'],
                       estimatedTerminationDate: 0,
+                      taskStatus: 'Por confirmar',
                       status: 'unseen',
                       type: 'quality inspection observation supervisor'
                     }

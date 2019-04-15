@@ -29,7 +29,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.8r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.9r</button>
       </mat-menu>
     </div>
     <div class="w3-hide-large w3-hide-medium">
@@ -52,7 +52,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.8r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.9r</button>
       </mat-menu>
     </div>
   </mat-toolbar>
@@ -260,7 +260,13 @@
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección observación
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection single observation supervisor'" disabled="true">
-              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección personal
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Observación personal
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'ssgg request ssgg supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">extension</mat-icon> Servicios generales - Solicitud
+            </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'ssgg request'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">extension</mat-icon> Servicios generales - Solicitud
             </button>
             
           </div>
@@ -299,6 +305,7 @@
                   style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['taskStatus']}}</p>
             </div>
           </div>
+
           <!-- TASK AREA SUPERVISOR / STAFF SUPERVISOR N1 / STAFF SUPERVISOR N2 -->
           <div *ngIf="note['type'] === 'task supervisor' || note['type'] === 'task staff nested 1' || note['type'] === 'task staff nested 2'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> asigno el siguiente FRED: <strong>{{note['subject']}}</strong> a <strong>{{note['staffName']}}</strong></span><br>
@@ -413,7 +420,7 @@
           <!-- REDO REPORT TO ANALYZE QUALITY SUPERVISOR -->
           <div *ngIf="note['type'] === 'quality redo analyze quality supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> analizó el rehacer del componente: <strong>{{note['component']}}</strong>, OT: <strong>{{note['OT']}}</strong>.</span><br>
-            <span class="w3-margin-top">Ahora ya puedes proponer acciones.</span>
+            <span class="w3-margin-top"></span>
           </div>
 
           <!-- REDO ANALYZE TO ACTIONS SUPERVISOR -->
@@ -490,10 +497,10 @@
           <!-- QUALITY INSPECTION OBSERVATION SUPERVISOR -->
           <div *ngIf="note['type'] === 'quality inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> hizo la siguiente observación: <strong>{{note['subject']}}</strong></span>
-            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+            <p *ngIf="note['taskStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
               realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
-            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="note['taskStatus'] === 'Por confirmar'">
               <input matInput [matDatepicker]="datePicker" [formControl]="dateQualityInspectionObservationFormControl"
                 [value]="note['estimatedTerminationDate']">
               <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
@@ -505,20 +512,24 @@
             <div style="margin: 1em 0em 0.5em 0em">
               <button mat-raised-button class="w3-margin-right" color="warn"
                 (click)="rejectQualityInspectionObservation(note['inspectionId'], note['observationId'], note['areaSupervisorId'], note['id'])"
-                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+                *ngIf="note['taskStatus'] === 'Por confirmar'">Rechazar</button>
               <button mat-raised-button class="w3-margin-right" color="primary"
                 (click)="confirmQualityInspectionObservation(note['inspectionId'], note['observationId'], note['areaSupervisorId'], note['id'])"
-                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+                *ngIf="note['taskStatus'] === 'Por confirmar'">Aceptar</button>
+              <p  [ngClass]="{'w3-border-green w3-text-green': note['taskStatus']==='Confirmado', 'w3-border-red w3-text-red': note['taskStatus']==='Rechazado'}"
+                *ngIf="note['taskStatus'] != 'Por confirmar'"
+                class="w3-border"
+                style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['taskStatus']}}</p>
             </div>
           </div>
 
           <!-- QUALITY INSPECTION SINGLE OBSERVATION SUPERVISOR -->
           <div *ngIf="note['type'] === 'quality inspection single observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> hizo la siguiente observación personal en su área: <strong>{{note['subject']}}</strong></span>
-            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+            <p *ngIf="note['taskStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
               realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
-            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="note['taskStatus'] === 'Por confirmar'">
               <input matInput [matDatepicker]="datePicker" [formControl]="dateQualitySingleObservationFormControl"
                 [value]="note['estimatedTerminationDate']">
               <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
@@ -530,20 +541,24 @@
             <div style="margin: 1em 0em 0.5em 0em">
               <button mat-raised-button class="w3-margin-right" color="warn"
                 (click)="rejectQualitySingleObservation(note['observationId'], note['id'])"
-                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+                *ngIf="note['taskStatus'] === 'Por confirmar'">Rechazar</button>
               <button mat-raised-button class="w3-margin-right" color="primary"
                 (click)="confirmQualitySingleObservation(note['observationId'], note['id'])"
-                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+                *ngIf="note['taskStatus'] === 'Por confirmar'">Aceptar</button>
+              <p  [ngClass]="{'w3-border-green w3-text-green': note['taskStatus']==='Confirmado', 'w3-border-red w3-text-red': note['taskStatus']==='Rechazado'}"
+                *ngIf="note['taskStatus'] != 'Por confirmar'"
+                class="w3-border"
+                style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['taskStatus']}}</p>
             </div>
           </div>
 
           <!-- MAINTENANCE REQUEST SUPERVISOR-->
           <div *ngIf="note['type'] === 'maintenance request supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']}}</strong></span><br>
-            <p *ngIf="note['estimatedTerminationDate']" class="w3-small" style="margin-top:1em">Fecha propuesta de
+            <p *ngIf="note['requestStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
                 realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
-            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="!note['estimatedTerminationDate']">
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="note['requestStatus'] === 'Por confirmar'">
               <input matInput [matDatepicker]="datePicker" [formControl]="dateMaintenanceRequestsConfirmationFormControl"
                 [value]="note['estimatedTerminationDate']">
               <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
@@ -554,22 +569,62 @@
             </mat-form-field>
             <div style="margin: 1em 0em 0.5em 0em">
               <button mat-raised-button class="w3-margin-right" color="warn"
-                (click)="rejectMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
-                *ngIf="!note['estimatedTerminationDate']">Rechazar</button>
+                (click)="rejectMaintenanceRequest(note['requestId'], note['id'])"
+                *ngIf="note['requestStatus'] === 'Por confirmar'">Rechazar</button>
               <button mat-raised-button class="w3-margin-right" color="primary"
                 (click)="confirmMaintenanceRequest(note['maintenanceRequestId'], note['id'])"
-                *ngIf="!note['estimatedTerminationDate']">Aceptar</button>
+                *ngIf="note['requestStatus'] === 'Por confirmar'">Aceptar</button>
             </div>
             <p  [ngClass]="{'w3-border-green w3-text-green': note['requestStatus']==='Confirmado', 'w3-border-red w3-text-red': note['requestStatus']==='Rechazado'}"
                 *ngIf="note['requestStatus'] != 'Por confirmar'"
                 class="w3-border"
                 style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['requestStatus']}}</p>
+            <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Confirmado'">confirmado por: <b>{{note['confirmedBy']}}</b></p>
+            <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Rechazado'">rechazado por: <b>{{note['rejectedBy']}}</b></p>
           </div>
 
           <!-- MAINTENANCE REQUEST BROADCAST-->
           <div *ngIf="note['type'] === 'maintenance request broadcast'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> abrió una solicitud de mantenimiento en el equipo: <strong>{{note['equipment']}}</strong></span><br>
           </div>
+
+          <!-- SSGG REQUEST -->
+          <div *ngIf="note['type'] === 'ssgg request'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de servicios generales en su área, indicando: <strong>{{note['resumen']}}</strong></span><br>
+          </div>
+
+          <!-- SSGG REQUEST SUPERVISOR-->
+          <div *ngIf="note['type'] === 'ssgg request ssgg supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> abrió una solicitud de servicios generales, indicando: <strong>{{note['resumen']}}</strong></span><br>
+            <p *ngIf="note['requestStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
+                realización: 
+              {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
+            <mat-form-field class="w3-margin-right w3-margin-bottom" *ngIf="note['requestStatus'] === 'Por confirmar'">
+              <input matInput [matDatepicker]="datePicker" [formControl]="dateSsggRequestsConfirmationFormControl"
+                [value]="note['estimatedTerminationDate']">
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              <mat-hint>
+                <strong>Asigne una fecha de cumplimiento para la solicitud</strong> mm/dd/yyyy*
+              </mat-hint>
+            </mat-form-field>
+            <div style="margin: 1em 0em 0.5em 0em">
+              <button mat-raised-button class="w3-margin-right" color="warn"
+                (click)="rejectSsggRequest(note['ssggRequestId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="note['requestStatus'] === 'Por confirmar'">Rechazar</button>
+              <button mat-raised-button class="w3-margin-right" color="primary"
+                (click)="confirmSsggRequest(note['ssggRequestId'], note['areaSupervisorId'], note['id'])"
+                *ngIf="note['requestStatus'] === 'Por confirmar'">Aceptar</button>
+            </div>
+            <p  [ngClass]="{'w3-border-green w3-text-green': note['requestStatus']==='Confirmado', 'w3-border-red w3-text-red': note['requestStatus']==='Rechazado'}"
+                *ngIf="note['requestStatus'] != 'Por confirmar'"
+                class="w3-border"
+                style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['requestStatus']}}</p>
+            <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Confirmado'">confirmado por: <b>{{note['confirmedBy']}}</b></p>
+            <p class="ms-color-bt w3-small" *ngIf="note['requestStatus'] === 'Rechazado'">rechazado por: <b>{{note['rejectedBy']}}</b></p>
+          </div>
+
+
           
         </div>
         <div style="display:flex">
