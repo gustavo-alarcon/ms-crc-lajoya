@@ -170,23 +170,6 @@ export class MainComponent implements OnInit {
     this.dbs.usersCollection.doc(this.auth.userCRC.uid).collection('notifications').doc(noteId).update({requestStatus: 'Confirmado'});
   }
 
-  // REJECT AND CONFIRMATION MAINTENANCE REQUEST
-  rejectMaintenanceRequest(requestId, notificationId): void{
-    this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Rechazado'});
-    this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Rechazado'});
-  }
-
-  confirmMaintenanceRequest(requestId, notificationId): void{
-    if(this.dateMaintenanceRequestsConfirmationFormControl.value){
-      this.dbs.maintenanceRequestsCollection.doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf()});
-    }else{
-      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
-        duration: 6000
-      });
-    }
-  }
-
   // REJECT AND CONFIRMATION FOR TASKs CREATED BY OBSERVATIONS ON QUALITY INSPECTIONS
   rejectQualityInspectionObservation(inspectionId, observationId, supervisorId, notificationId): void{
     this.dbs.qualityInspectionsCollection.doc(inspectionId).collection(`observations`).doc(observationId).update({status: 'Rechazado'});
@@ -225,33 +208,103 @@ export class MainComponent implements OnInit {
     }
   }
 
+  // REJECT AND CONFIRMATION MAINTENANCE REQUEST
+  rejectMaintenanceRequest(requestId, notificationId): void{
+    this.dbs.maintenanceRequestsCollection.doc(requestId).set({
+      status: 'Rechazado',
+      rejectedBy: this.auth.userCRC.displayName,
+      uidRejected: this.auth.userCRC.uid},{merge:true});
+
+    let supervisorList = this.dbs.maintenanceSupervisors.slice();
+    supervisorList.forEach(user =>{
+      this.dbs.usersCollection
+        .doc(user['uid'])
+        .collection('notifications')
+        .doc(requestId)
+        .set({
+          requestStatus: 'Rechazado',
+          rejectedBy: this.auth.userCRC.displayName,
+          uidRejected: this.auth.userCRC.uid},{merge:true})
+    })
+  }
+
+  confirmMaintenanceRequest(requestId, notificationId): void{
+    if(this.dateMaintenanceRequestsConfirmationFormControl.value){
+      this.dbs.maintenanceRequestsCollection.doc(requestId).set({
+        status: 'Confirmado',
+        estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf(),
+        confirmedBy: this.auth.userCRC.displayName,
+        uidComfirmed: this.auth.userCRC.uid},{merge:true})
+      
+      let supervisorList = this.dbs.maintenanceSupervisors.slice();
+      supervisorList.forEach(user =>{
+        this.dbs.usersCollection
+          .doc(user['uid'])
+          .collection('notifications')
+          .doc(requestId)
+          .set({
+            requestStatus: 'Confirmado',
+            estimatedTerminationDate: this.dateMaintenanceRequestsConfirmationFormControl.value.valueOf(),
+            confirmedBy: this.auth.userCRC.displayName,
+            uidComfirmed: this.auth.userCRC.uid},{merge:true})
+      })
+    }else{
+      this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
+        duration: 6000
+      });
+    }
+  }
+
   // REJECT AND CONFIRMATION FOR SSGG REQUESTS
 
   rejectSsggRequest(requestId, areaSupervisorId, notificationId): void{
-    this.dbs.ssggRequestsCollection.doc(requestId).update({status: 'Rechazado'});
+    this.dbs.ssggRequestsCollection.doc(requestId).set({
+      status: 'Rechazado',
+      rejectedBy: this.auth.userCRC.displayName,
+      uidRejected: this.auth.userCRC.uid},{merge:true});
+
     let supervisorList = this.dbs.ssggSupervisors.slice();
     supervisorList.forEach(user =>{
       this.dbs.usersCollection
         .doc(user['uid'])
         .collection('notifications')
         .doc(requestId)
-        .update({requestStatus: 'Rechazado'})
+        .set({
+          requestStatus: 'Rechazado',
+          rejectedBy: this.auth.userCRC.displayName,
+          uidRejected: this.auth.userCRC.uid},{merge:true})
     })
-    this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).update({status: 'Rechazado'});
+    this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).set({
+      status: 'Rechazado',
+      rejectedBy: this.auth.userCRC.displayName,
+      uidRejected: this.auth.userCRC.uid},{merge:true});
   }
 
   confirmSsggRequest(requestId, areaSupervisorId, notificationId): void{
     if(this.dateSsggRequestsConfirmationFormControl.value){
-      this.dbs.ssggRequestsCollection.doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()});
+      this.dbs.ssggRequestsCollection.doc(requestId).set({
+        status: 'Confirmado',
+        estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf(),
+        confirmedBy: this.auth.userCRC.displayName,
+        uidComfirmed: this.auth.userCRC.uid},{merge:true})
+
       let supervisorList = this.dbs.ssggSupervisors.slice();
       supervisorList.forEach(user =>{
         this.dbs.usersCollection
           .doc(user['uid'])
           .collection('notifications')
           .doc(requestId)
-          .update({requestStatus: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()})
+          .set({
+            requestStatus: 'Confirmado',
+            estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf(),
+            confirmedBy: this.auth.userCRC.displayName,
+            uidComfirmed: this.auth.userCRC.uid},{merge:true})
       })
-      this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).update({status: 'Confirmado', estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf()});
+      this.dbs.usersCollection.doc(areaSupervisorId).collection(`tasks`).doc(requestId).set({
+            status: 'Confirmado',
+            estimatedTerminationDate: this.dateSsggRequestsConfirmationFormControl.value.valueOf(),
+            confirmedBy: this.auth.userCRC.displayName,
+            uidComfirmed: this.auth.userCRC.uid},{merge:true})
     }else{
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la tarea", "Cerrar", {
         duration: 6000

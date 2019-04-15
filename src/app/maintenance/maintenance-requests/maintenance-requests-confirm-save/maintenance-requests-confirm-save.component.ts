@@ -95,47 +95,42 @@ export class MaintenanceRequestsConfirmSaveComponent implements OnInit {
                   this.dbs.usersCollection
                   .doc(user['uid'])
                   .collection(`notifications`)
-                  .add({
+                  .doc(refRequest.id)
+                  .set({
+                    id: refRequest.id,
                     regDate: Date.now(),
                     estimatedTerminationDate: 0,
                     senderId: this.auth.userCRC.uid,
                     senderName: this.auth.userCRC.displayName,
                     maintenanceRequestId: refRequest.id,
                     equipment: this.data['form']['equipment']['name'],
+                    requestId: refRequest.id,
                     requestStatus: "Por confirmar",
                     observation: this.data['form']['observation'],
                     status: 'unseen',
                     type: 'maintenance request supervisor'
                   })
-                    .then(ref => {
-                      ref.update({id: ref.id})
-                      this.snackbar.open("Listo!","Cerrar",{
-                        duration: 2000
-                      });
-                    });
                 })
                 
+                // Sending notifications to broadcast list
                 this.dbs.maintenanceBroadcastList.forEach(user => {
                   this.dbs.usersCollection
                   .doc(user['uid'])
                   .collection(`notifications`)
-                  .add({
+                  .doc(refRequest.id)
+                  .set({
+                    id: refRequest.id,
                     regDate: Date.now(),
                     senderId: this.auth.userCRC.uid,
                     senderName: this.auth.userCRC.displayName,
                     maintenanceRequestId: refRequest.id,
                     equipment: this.data['form']['equipment'],
+                    requestId:refRequest.id,
                     requestStatus: "Por confirmar",
                     observation: this.data['form']['observation'],
                     status: 'unseen',
                     type: 'maintenance request broadcast'
                   })
-                    .then(ref => {
-                      ref.update({id: ref.id})
-                      this.snackbar.open("Listo!","Cerrar",{
-                        duration: 2000
-                      });
-                    });
                 })
                 
 
