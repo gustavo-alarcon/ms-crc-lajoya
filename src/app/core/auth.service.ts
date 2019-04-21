@@ -8,6 +8,7 @@ import { Observable, BehaviorSubject } from "rxjs";
 import { User } from "./user";
 
 import { MatSnackBar } from '@angular/material';
+import { PushNotificationsService } from 'ng-push';
 
 @Injectable({
   providedIn: 'root'
@@ -47,12 +48,14 @@ export class AuthService {
   audio_android = new Audio();
   audio_ios = new Audio();
   
+  pushImage: string = "https://firebasestorage.googleapis.com/v0/b/crclajoya.appspot.com/o/assets%2Fpush-icon.ico?alt=media&token=3f0684b0-ed70-4737-82c3-0ba72a3a6dc3";
 
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router,
-    public snackbar: MatSnackBar
+    public snackbar: MatSnackBar,
+    private _pushNotifications: PushNotificationsService
   ) { 
     // AUDIO SETTINGS
     this.audio_android.src = "../../../assets/audio/quite-impressed.mp3";
@@ -62,6 +65,8 @@ export class AuthService {
 
     // NOTIFICATION COUNTER DECLARATION
     let notificationsCounter = 0;
+
+    
 
     // USER PERSISTENCE VALIDATION
     this.afAuth.authState.subscribe( user => {
@@ -82,6 +87,7 @@ export class AuthService {
             this.dataNotifications.next(sorted);
             if(this.notifications.length > notificationsCounter){
               this.playNotification();
+              this.pushNotificationBuilder(this.notifications[0]);
             }
             notificationsCounter = this.notifications.length;
           });
@@ -179,6 +185,39 @@ export class AuthService {
     });
 
     this.authLoader = false;
+  }
+
+  pushNotificationBuilder(notification): void{
+    console.log(notification['type']);
+    switch (notification['type']) {
+      case 'task confirmation':
+          this._pushNotifications.create("Seguridad", {
+            body:"Tienes un FRED por confirmar",
+            icon: this.pushImage,
+            vibrate: [200, 100, 200],
+            sticky: true
+          }).subscribe(res => {})
+        break;
+      case 'task staff nested 1':
+          this._pushNotifications.create("Seguridad", {
+            body:"Le han puesto un FRED a un colaborador suyo (N1)",
+            icon: this.pushImage,
+            vibrate: [200, 100, 200],
+            sticky: true
+          }).subscribe(res => {console.log(res)})
+        break;
+    
+      case 'task staff nested 2':
+          this._pushNotifications.create("Seguridad", {
+            body:"Le han puesto un FRED a un colabor suyo (N2)",
+            icon: this.pushImage,
+            vibrate: [200, 100, 200],
+            sticky: true,
+          }).subscribe(res => {})
+        break;
+      default:
+        break;
+    }
   }
 
   
