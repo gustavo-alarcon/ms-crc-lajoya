@@ -6,6 +6,7 @@ import { ShowNotificationsComponent } from '../notifications/show-notifications/
 import { FormControl } from '@angular/forms';
 import { DatabaseService } from '../core/database.service';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { PushNotificationsService } from 'ng-push';
 
 @Component({
   selector: 'app-main',
@@ -32,12 +33,15 @@ export class MainComponent implements OnInit {
     public auth: AuthService,
     public dbs: DatabaseService,
     private dialog: MatDialog,
-    public snackbar: MatSnackBar
+    public snackbar: MatSnackBar,
+    private _pushNotifications: PushNotificationsService
   ) {
     
   }
 
   ngOnInit() {
+
+    this._pushNotifications.requestPermission();
   }
 
   toggleSideMenu(): void {

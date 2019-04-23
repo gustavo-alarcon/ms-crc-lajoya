@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material';
 })
 export class DatabaseService {
 
+  public pushImage = 'https://firebasestorage.googleapis.com/v0/b/crclajoya.appspot.com/o/assets%2Fpush-icon.png?alt=media&token=f2f136c1-5753-4ece-b4b0-3e8c21b0dc03';
+
   // *********** DATA BASE COLLECTIONS - (START) ***************************
 
   // ************************** USERS **************************************

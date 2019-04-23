@@ -18,6 +18,7 @@ import { SidenavService } from './core/sidenav.service';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
+import { PushNotificationsModule } from 'ng-push';
 
 
 // FIREBASE MODULES
@@ -327,6 +328,7 @@ import { CustomerConfirmDeleteComponent } from './configuration/system/system-ge
     BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    PushNotificationsModule,
     ChartsModule,
     HttpClientModule,
     NgxPageScrollModule,
