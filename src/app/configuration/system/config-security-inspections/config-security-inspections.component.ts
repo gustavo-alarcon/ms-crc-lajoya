@@ -26,23 +26,6 @@ export class ConfigSecurityInspectionsComponent implements OnInit {
     this.sidenav.sidenavSystem();
   }
 
-  // KIND OF DANGER
-  addKindOfDanger(): void{
-    this.dbs.kindOfDangerCollection
-      .add({
-        name: this.kindOfDangerFormControl.value,
-        regDate: Date.now()
-      })
-        .then(ref => {
-          ref.update({id: ref.id})
-          this.kindOfDangerFormControl.setValue('');
-        })
-  }
-
-  deleteKindOfDanger(id): void{
-    this.dbs.kindOfDangerCollection.doc(id).delete();
-  }
-
   // KIND OF OBSERVATION
   addKindOfObservation(): void{
     this.dbs.kindOfObservationCollection

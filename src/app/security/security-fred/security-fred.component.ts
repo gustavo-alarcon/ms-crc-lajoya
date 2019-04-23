@@ -297,7 +297,7 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
       substandardAct: '',
       substandardCondition: '',
       remarkableAct: '',
-      upgradeOpportunity: ''
+      upgradeOpportunity: ['',Validators.required]
     });
   }
 
@@ -343,13 +343,6 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
 
   save(): void{
 
-    if(!this.selectedFile && (this.firstFormGroup.value['type'] === "Condición sub-estandar")){
-      this.snackbar.open("Adjunte una imagen para poder guardar el documento","Cerrar", {
-        duration: 6000
-      });
-      return;
-    }
-
     if(this.firstFormGroup.valid && this.secondFormGroup.valid){
       if(this.thirdFormGroup.value['solved'] === 'true'){
         this.thirdFormGroup.get('solved').setValue(true);
@@ -372,6 +365,21 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
 
           return;
         }
+      }
+
+      if(!this.thirdFormGroup.valid){
+        this.snackbar.open("Debe sugerir una oportunidad de mejora","Cerrar", {
+          duration: 6000
+        });
+
+        return;
+      }
+
+      if(!this.selectedFile && (this.firstFormGroup.value['type'] === "Condición sub-estandar")){
+        this.snackbar.open("Adjunte una imagen para poder guardar el documento","Cerrar", {
+          duration: 6000
+        });
+        return;
       }
       
       let dialogRef = this.dialog.open(FredConfirmSaveComponent,{

@@ -55,7 +55,7 @@ export class QualityRedoReportConfirmCreateComponent implements OnInit {
                 finalPicture: '',
                 regDate: Date.now(),
                 realTerminationDate: 0,
-                status: 'Por confirmar',
+                status: 'Confirmado',
                 stage: 'Reporte',
                 source: 'quality',
                 createdBy: this.auth.userCRC,

@@ -11,7 +11,7 @@ import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
 
   uploading: boolean = false;
-  
+
   reportObject: object;
 
   constructor(
@@ -25,7 +25,7 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
   ngOnInit() {
   }
 
-  save(): void{
+  save(): void {
 
     this.uploading = true;
 
@@ -37,13 +37,41 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
     };
 
     this.data['actions'].forEach(element => {
+      // adding action to respective redo as collection
       this.dbs.qualityRedosCollection.doc(this.data['redo']['id']).collection('actions').add(element)
         .then(ref => {
-          ref.update({id: ref.id, regDate: Date.now()})
+          ref.update({ id: ref.id, regDate: Date.now() })
         })
+      
+      // send notification to responsibles
+      // this.dbs.usersCollection
+      //   .doc(element['actionResponsibles'][0]['uid'])
+      //   .collection('notifications')
+      //   .add({
+      //     regDate: Date.now(),
+      //     senderId: this.auth.userCRC.uid,
+      //     senderName: this.auth.userCRC.displayName,
+      //     redoId: this.data['redo']['id'],
+      //     component: this.data['redo']['component'],
+      //     OT: this.data['redo']['OT'],
+      //     description: this.data['redo']['description'],
+      //     actionStatus: 'Confirmado',
+      //     status: 'unseen',
+      //     type: 'quality redo actions task validated'
+      //   })
+      //   .then(ref => {
+      //     ref.update({ id: ref.id })
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //     this.uploading = false;
+      //     this.snackbar.open("Ups!, parece que hubo un error enviando la notificación al responsable de la tarea...", "Cerrar", {
+      //       duration: 6000
+      //     });
+      //   });
     })
 
-    this.dbs.qualityRedosCollection.doc(this.data['redo']['id']).set(this.reportObject,{merge:true}).then(() => {
+    this.dbs.qualityRedosCollection.doc(this.data['redo']['id']).set(this.reportObject, { merge: true }).then(() => {
 
       // Creating log object
       let log = {
@@ -52,7 +80,7 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
         user: this.auth.userCRC,
         regdate: Date.now()
       }
-      
+
       // Adding log to redo
       this.dbs.addQualityRedoLog(this.data['redo']['id'], log)
         .then(() => {
@@ -62,11 +90,11 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
         .catch(error => {
           console.log(error);
           this.uploading = false;
-          this.snackbar.open("Ups!, parece que hubo un error (MR001) ...","Cerrar",{
-            duration:6000
+          this.snackbar.open("Ups!, parece que hubo un error (MR001) ...", "Cerrar", {
+            duration: 6000
           });
         });
-      
+
       // Adding notification to area supervisor
       this.dbs.usersCollection
         .doc(this.data['redo']['area']['supervisor']['uid'])
@@ -84,34 +112,34 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
           status: 'unseen',
           type: 'quality redo actions supervisor'
         })
-          .then(ref => {
-            ref.update({id: ref.id})
-            this.snackbar.open("Listo!","Cerrar",{
-              duration: 10000
-            });
+        .then(ref => {
+          ref.update({ id: ref.id })
+          this.snackbar.open("Listo!", "Cerrar", {
+            duration: 10000
           });
+        });
 
       // sending notification to involved areas
       this.data['redo']['involvedAreas'].forEach(element => {
         this.dbs.usersCollection
-        .doc(element['supervisor']['uid'])
-        .collection(`notifications`)
-        .add({
-          regDate: Date.now(),
-          senderId: this.auth.userCRC.uid,
-          senderName: this.auth.userCRC.displayName,
-          areaSupervisorId: element['supervisor']['uid'],
-          areaSupervisorName: element['supervisor']['displayName'],
-          redoId: this.data['redo']['id'],
-          component: this.data['redo']['component'],
-          OT: this.data['redo']['OT'],
-          description: this.data['redo']['description'],
-          status: 'unseen',
-          type: 'quality redo actions involved supervisor'
-        })
+          .doc(element['supervisor']['uid'])
+          .collection(`notifications`)
+          .add({
+            regDate: Date.now(),
+            senderId: this.auth.userCRC.uid,
+            senderName: this.auth.userCRC.displayName,
+            areaSupervisorId: element['supervisor']['uid'],
+            areaSupervisorName: element['supervisor']['displayName'],
+            redoId: this.data['redo']['id'],
+            component: this.data['redo']['component'],
+            OT: this.data['redo']['OT'],
+            description: this.data['redo']['description'],
+            status: 'unseen',
+            type: 'quality redo actions involved supervisor'
+          })
           .then(ref => {
-            ref.update({id: ref.id})
-            this.snackbar.open("Listo!","Cerrar",{
+            ref.update({ id: ref.id })
+            this.snackbar.open("Listo!", "Cerrar", {
               duration: 10000
             });
           });
@@ -120,29 +148,29 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
       // sending notifications to responsible staff
       this.data['redo']['responsibleStaff'].forEach(element => {
         this.dbs.usersCollection
-        .doc(element['uid'])
-        .collection(`notifications`)
-        .add({
-          regDate: Date.now(),
-          senderId: this.auth.userCRC.uid,
-          senderName: this.auth.userCRC.displayName,
-          staffId: element['uid'],
-          staffName: element['displayName'],
-          redoId: this.data['redo']['id'],
-          component: this.data['redo']['component'],
-          OT: this.data['redo']['OT'],
-          description: this.data['redo']['description'],
-          status: 'unseen',
-          type: 'quality redo actions responsible staff'
-        })
+          .doc(element['uid'])
+          .collection(`notifications`)
+          .add({
+            regDate: Date.now(),
+            senderId: this.auth.userCRC.uid,
+            senderName: this.auth.userCRC.displayName,
+            staffId: element['uid'],
+            staffName: element['displayName'],
+            redoId: this.data['redo']['id'],
+            component: this.data['redo']['component'],
+            OT: this.data['redo']['OT'],
+            description: this.data['redo']['description'],
+            status: 'unseen',
+            type: 'quality redo actions responsible staff'
+          })
           .then(ref => {
-            ref.update({id: ref.id})
-            this.snackbar.open("Listo!","Cerrar",{
+            ref.update({ id: ref.id })
+            this.snackbar.open("Listo!", "Cerrar", {
               duration: 10000
             });
           });
       })
-      
+
       // UNDER DEVELOPING
       // Adding notifications to Redo's report notification list
       // this.qualityRedoReportNotificationList.forEach(element => {
@@ -170,8 +198,8 @@ export class QualityRedoAnalyzeConfirmActionsComponent implements OnInit {
       //       });
       //     });
       // })
-        
+
     })
-    
+
   }
 }
