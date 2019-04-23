@@ -29,7 +29,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.10r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.12r</button>
       </mat-menu>
     </div>
     <div class="w3-hide-large w3-hide-medium">
@@ -52,7 +52,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.10r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.12r</button>
       </mat-menu>
     </div>
   </mat-toolbar>
@@ -184,6 +184,9 @@
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task supervisor' || note['type'] === 'task staff nested 1' || note['type'] === 'task staff nested 2'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon>Seguridad FRED
             </button>
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task done' || note['type'] === 'task done supervisor'" disabled="true">
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon>Seguridad FRED
+            </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection observation supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon> Tarea - Seguridad Inspección
             </button>
@@ -311,6 +314,11 @@
             <span><strong>{{note['senderName']}} </strong> asigno el siguiente FRED: <strong>{{note['subject']}}</strong> a <strong>{{note['staffName']}}</strong></span><br>
           </div>
 
+          <!-- TASK DONE -->
+          <div *ngIf="note['type'] === 'task done supervisor' || note['type'] === 'task done'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> creo el siguiente FRED: <strong>{{note['subject']}}</strong> a <strong>{{note['staffName']}}</strong> y lo marcó como resuelto.</span><br>
+          </div>
+
           <!-- TASK BY INSPECTION OBSERVATION -->
           <div *ngIf="note['type'] === 'inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}}</strong>, tuvo la siguiente observación: <strong>{{note['subject']}}</strong>.</span><br>
@@ -348,9 +356,9 @@
             <span><strong>{{note['senderName']}} </strong> lo programo para inspeccionar el área: <strong>{{note['areaName']}}</strong>, supervisada por: <strong>{{note['areaSupervisorName']}}</strong>. Debe realizar la inspección el <strong>{{ note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
           </div>
 
-          <!-- REDO REPORT CONFIRMATION SUPERVISOR -->
+          <!-- REDO REPORT SUPERVISOR -->
           <div *ngIf="note['type'] === 'quality redo report supervisor'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}}</strong>, abrio el siguiente rehacer en su área:</span><br>
+            <span><strong>{{note['senderName']}}</strong>, abrió el siguiente rehacer en su área:</span><br>
             <ul>
               <li>
                 <span>OT:<strong> {{note['OT']}}</strong></span>
@@ -359,18 +367,6 @@
                 <span>Componente:<strong> {{note['component']}}</strong></span>
               </li>
             </ul>
-            <p  [ngClass]="{'w3-border-green w3-text-green': note['redoStatus']==='Confirmado', 'w3-border-red w3-text-red': note['redoStatus']==='Rechazado'}"
-                *ngIf="note['redoStatus'] != 'Por confirmar'"
-                class="w3-border"
-                style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['redoStatus']}}</p>
-            <div style="margin: 1em 0em 0.5em 0em">
-              <button mat-raised-button class="w3-margin-right" color="warn"
-                (click)="rejectQualityRedo(note['redoId'], note['areaSupervisorId'], note['id'])"
-                *ngIf="note['redoStatus'] === 'Por confirmar'">Rechazar</button>
-              <button mat-raised-button class="w3-margin-right" color="primary"
-                (click)="confirmQualityRedo(note['redoId'], note['areaSupervisorId'], note['id'])"
-                *ngIf="note['redoStatus'] === 'Por confirmar'">Confirmar</button>
-            </div>
           </div>
           <!-- REDO REPORT TECHNICIANS -->
           <div *ngIf="note['type'] === 'quality redo report technician'" class="ms-color-2b" style="padding-left:0.5em">
@@ -384,7 +380,7 @@
                 <span>Componente:<strong> {{note['component']}}</strong></span>
               </li>
             </ul>
-            <span class="w3-margin-top">Luego de que el área observada confirme el redo, podrás comenzar con el análisis</span>
+            <span class="w3-margin-top">Ya puede comenzar con el análisis del rehacer</span>
           </div>
           <!-- REDO REPORT QUALITY SUPERVISOR -->
           <div *ngIf="note['type'] === 'quality redo report quality supervisor'" class="ms-color-2b" style="padding-left:0.5em">
@@ -398,6 +394,7 @@
                 <span>Componente:<strong> {{note['component']}}</strong></span>
               </li>
             </ul>
+            <span class="w3-margin-top">Los técnicos ya pueden comenzar con el análisis del rehacer</span>
           </div>
 
           <!-- REDO REPORT TO ANALYZE SUPERVISOR -->
