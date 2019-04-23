@@ -29,27 +29,10 @@
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Clase de Peligro</mat-label>
-          <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="kindOfDanger" [matAutocomplete]="autoKindOfDanger" autocomplete="off">
-          <mat-autocomplete #autoKindOfDanger="matAutocomplete">
-            <mat-option *ngFor="let danger of filteredKindOfDanger | async" [value]="danger['name']">
-              {{danger['name']}}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-          <mat-error>
-            <strong>requerido *</strong>
-          </mat-error>
-        </mat-form-field>
-        <br>
-
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Tipo de Observación</mat-label>
           <input matInput type="text" placeholder="Seleccione..." formControlName="kindOfObservation" [matAutocomplete]="autoKindOfObservation" autocomplete="off">
           <mat-autocomplete #autoKindOfObservation="matAutocomplete">
-            <mat-option *ngFor="let observation of filteredKindOfObservation | async" [value]="observation['name']">
+            <mat-option *ngFor="let observation of filteredKindOfObservation | async" [value]="observation['name']"  [matTooltip]="observation['name']" [matTooltipDisabled]="!(observation['name'].length > 27)">
               {{observation['name']}}
             </mat-option>
           </mat-autocomplete>
@@ -65,7 +48,7 @@
           <mat-label>Causas</mat-label>
           <input matInput type="text" placeholder="Seleccione..." formControlName="cause" [matAutocomplete]="autoCause" autocomplete="off">
           <mat-autocomplete #autoCause="matAutocomplete">
-            <mat-option *ngFor="let cause of filteredCauses | async" [value]="cause['name']">
+            <mat-option *ngFor="let cause of filteredCauses | async" [value]="cause['name']"  [matTooltip]="cause['name']" [matTooltipDisabled]="!(cause['name'].length > 20)">
               {{cause['name']}}
             </mat-option>
           </mat-autocomplete>

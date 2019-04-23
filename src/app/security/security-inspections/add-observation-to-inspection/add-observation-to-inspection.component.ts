@@ -49,7 +49,6 @@ export class AddObservationToInspectionComponent implements OnInit {
       id: '',
       inspectionId:this.data['id'],
       area: [this.data['area'], Validators.required],
-      kindOfDanger: ['', Validators.required],
       kindOfObservation: ['', Validators.required],
       cause: ['', Validators.required]
     })
@@ -60,13 +59,6 @@ export class AddObservationToInspectionComponent implements OnInit {
                             map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
                             map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
                           )
-
-    this.filteredKindOfDanger = this.headerDataFormGroup.get('kindOfDanger').valueChanges
-                                  .pipe(
-                                    startWith<any>(''),
-                                    map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                    map(name => name ? this.dbs.kindOfDanger.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.kindOfDanger)
-                                  )
 
     this.filteredKindOfObservation = this.headerDataFormGroup.get('kindOfObservation').valueChanges
                                       .pipe(

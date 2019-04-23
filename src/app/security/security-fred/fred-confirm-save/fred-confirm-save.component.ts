@@ -57,7 +57,7 @@ export class FredConfirmSaveComponent implements OnInit {
     if(this.data[3]){
       this.uploading = true;
 
-      const filePath = `/securityFredsPictures/${this.data[3].name}`;
+      const filePath = `/securityFredsPictures/${Date.now()}_${this.data[3].name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, this.data[3]);
 
@@ -104,8 +104,7 @@ export class FredConfirmSaveComponent implements OnInit {
                 refFred.update({id: refFred.id}).then(() => {
                   let log = {
                     action: 'Fred created!',
-                    description: this.data[2]['upgradeOpportunity'],
-                    area: this.data[0]['observedArea'],
+                    data: finalObject,
                     regdate: Date.now()
                   }
 
@@ -145,7 +144,7 @@ export class FredConfirmSaveComponent implements OnInit {
                     taskStatus: 'Por confirmar',
                     fredId: refFred.id,
                     status: 'unseen',
-                    subject: this.data[2]['upgradeOpportunity'],
+                    subject: this.data[2]['substandardAct']+this.data[2]['substandardCondition']+this.data[2]['remarkableAct'],
                     type: 'task confirmation'
                   })
                     .then(ref => {
@@ -181,7 +180,7 @@ export class FredConfirmSaveComponent implements OnInit {
                     fredId: refFred.id,
                     taskStatus: 'Por confirmar',
                     status: 'unseen',
-                    subject: this.data[2]['upgradeOpportunity'],
+                    subject: this.data[2]['substandardAct']+this.data[2]['substandardCondition']+this.data[2]['remarkableAct'],
                     type: 'task staff nested 1'
                   })
                     .then(ref => {
@@ -221,7 +220,7 @@ export class FredConfirmSaveComponent implements OnInit {
                         fredId: refFred.id,
                         taskStatus: 'Por confirmar',
                         status: 'unseen',
-                        subject: this.data[2]['upgradeOpportunity'],
+                        subject: this.data[2]['substandardAct']+this.data[2]['substandardCondition']+this.data[2]['remarkableAct'],
                         type: 'task staff nested 2'
                       })
                         .then(ref => {
@@ -257,7 +256,7 @@ export class FredConfirmSaveComponent implements OnInit {
                     fredId: refFred.id,
                     taskStatus: 'Por confirmar',
                     status: 'unseen',
-                    subject: this.data[2]['upgradeOpportunity'],
+                    subject: this.data[2]['substandardAct']+this.data[2]['substandardCondition']+this.data[2]['remarkableAct'],
                     type: 'task supervisor'
                   })
                     .then(ref => {
@@ -360,8 +359,8 @@ export class FredConfirmSaveComponent implements OnInit {
             areaSupervisorName: this.data[0]['observedArea']['supervisor']['displayName'],
             fredId: refFred.id,
             status: 'unseen',
-            subject: this.data[2]['upgradeOpportunity'],
-            type: 'task confirmation'
+            subject: this.data[2]['substandardAct']+this.data[2]['substandardCondition']+this.data[2]['remarkableAct'],
+            type: 'task done'
           })
             .then(ref => {
               ref.update({id: ref.id})
@@ -388,8 +387,8 @@ export class FredConfirmSaveComponent implements OnInit {
             staffName: this.data[0]['observedStaff']['displayName'],
             fredId: refFred.id,
             status: 'unseen',
-            subject: this.data[2]['upgradeOpportunity'],
-            type: 'task supervisor'
+            subject: this.data[2]['substandardAct']+this.data[2]['substandardCondition']+this.data[2]['remarkableAct'],
+            type: 'task done supervisor'
           })
             .then(ref => {
               ref.update({id: ref.id})

@@ -121,9 +121,7 @@ export class QualityRedoAnalyzeDialogActionsComponent implements OnInit {
       status:'Por confirmar',
       realTerminationDate: 0
     }
-    console.log(action);
     this.actionsArray.push(action);
-    console.log(this.actionsArray);
     this.dataSourceActions.data = this.actionsArray;
     this.actionResponsiblesArray = [];
     this.createForms();

@@ -43,12 +43,11 @@ export class QualityRedosClosingConfirmClosingComponent implements OnInit {
 
   save(): void{
 
+    this.dbs.qualityRedosCollection.doc(this.data['id']).update({stage: 'Finalizado'})
+
+    this.uploading = true;
+
     if(this.selectedFile){
-
-      this.dbs.qualityRedosCollection.doc(this.data['id']).update({stage: 'Finalizado'})
-
-      this.uploading = true;
-
       const filePath = `/qualityRedosFinalReport/${Date.now()}_${this.selectedFile.name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, this.selectedFile);
@@ -95,9 +94,11 @@ export class QualityRedosClosingConfirmClosingComponent implements OnInit {
       )
       .subscribe()
     }else{
-      this.snackbar.open("Tiene que adjuntar el informe final para poder cerrar el rehacer","Cerrar",{
-        duration: 6000
-      })
+      this.uploading = false;
+      this.dialogRef.close(true);
+      // this.snackbar.open("Tiene que adjuntar el informe final para poder cerrar el rehacer","Cerrar",{
+      //   duration: 6000
+      // })
     }
   }
 

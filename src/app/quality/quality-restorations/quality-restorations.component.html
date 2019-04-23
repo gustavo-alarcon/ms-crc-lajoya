@@ -149,8 +149,7 @@
                     </td>
                   </ng-container>
 
-
-                  <ng-container matColumnDef="edit">
+                  <ng-container matColumnDef="edit" stickyEnd>
                     <th mat-header-cell *matHeaderCellDef
                       style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
                       Acciones</th>
@@ -2127,9 +2126,9 @@
                     *ngIf="document['stage'] === 'Cierre'" [disabled]="!isQualitySupervisor || !allSigned">
                     <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
                   </button>
-                  <a [href]="document['finalReport']" *ngIf="document['stage'] === 'Finalizado'" target="_blank">
+                  <a [href]="document['finalReport']" *ngIf="document['stage'] === 'Finalizado' && document['finalReport']" target="_blank">
                     <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Descargar informe final"
-                      *ngIf="document['stage'] === 'Finalizado'">
+                      *ngIf="document['stage'] === 'Finalizado' && document['finalReport']">
                       <mat-icon class="example-icon">cloud_download</mat-icon> Descargar informe final
                     </button>
                   </a>
@@ -2542,7 +2541,7 @@
                           *ngIf="analyze['stage'] === 'Cierre'" [disabled]="!isQualitySupervisor  || !allSigned">
                           <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
                         </button>
-                        <a [href]="analyze['finalReport']" *ngIf="analyze['stage'] === 'Finalizado'" target="_blank">
+                        <a [href]="analyze['finalReport']" *ngIf="analyze['stage'] === 'Finalizado' && document['finalReport']" target="_blank">
                           <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Descargar informe final">
                             <mat-icon class="example-icon">cloud_download</mat-icon> Descargar informe final
                           </button>
