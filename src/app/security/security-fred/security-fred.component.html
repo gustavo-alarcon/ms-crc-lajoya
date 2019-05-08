@@ -11,7 +11,8 @@
             <form [formGroup]="firstFormGroup">
               <ng-template matStepLabel>Cabecera</ng-template>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Tipo de observación</mat-label>
                 <input type="text" matInput placeholder="Escriba y seleccione" formControlName="type"
                   [matAutocomplete]="autoType" required>
@@ -25,7 +26,8 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Área Observada</mat-label>
                 <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedArea"
                   [matAutocomplete]="autoArea" required>
@@ -41,7 +43,8 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Persona observada</mat-label>
                 <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedStaff"
                   [matAutocomplete]="autoStaff" required>
@@ -65,7 +68,8 @@
             *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
             <form [formGroup]="secondFormGroup">
               <ng-template matStepLabel>Observaciones</ng-template>
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Orden y Limpeza</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list1"
                   [matAutocomplete]="autoList1" required>
@@ -75,12 +79,14 @@
               </mat-form-field>
               <mat-autocomplete #autoList1="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList1 | async" [value]="option['name']"
-                  style="font-size:14px" [matTooltip]="option['name']" [matTooltipDisabled]="!(option['name'].length > 27)">
+                  style="font-size:14px" [matTooltip]="option['name']"
+                  [matTooltipDisabled]="!(option['name'].length > 27)">
                   {{option['name']}}
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Equipos de Protección Personal</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list2"
                   [matAutocomplete]="autoList2" required>
@@ -90,12 +96,14 @@
               </mat-form-field>
               <mat-autocomplete #autoList2="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList2 | async" [value]="option['name']"
-                  style="font-size:14px" [matTooltip]="option['name']" [matTooltipDisabled]="!(option['name'].length > 27)">
+                  style="font-size:14px" [matTooltip]="option['name']"
+                  [matTooltipDisabled]="!(option['name'].length > 27)">
                   {{option['name']}}
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Control de Riesgos Operacionales</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list3"
                   [matAutocomplete]="autoList3" required>
@@ -105,24 +113,28 @@
               </mat-form-field>
               <mat-autocomplete #autoList3="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList3 | async" [value]="option['name']"
-                  style="font-size:14px" [matTooltip]="option['name']" [matTooltipDisabled]="!(option['name'].length > 27)">
+                  style="font-size:14px" [matTooltip]="option['name']"
+                  [matTooltipDisabled]="!(option['name'].length > 27)">
                   {{option['name']}}
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Herramientas y Equipos</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list4"
                   [matAutocomplete]="autoList4" required>
               </mat-form-field>
               <mat-autocomplete #autoList4="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList4 | async" [value]="option['name']"
-                  style="font-size:14px" [matTooltip]="option['name']" [matTooltipDisabled]="!(option['name'].length > 27)">
+                  style="font-size:14px" [matTooltip]="option['name']"
+                  [matTooltipDisabled]="!(option['name'].length > 27)">
                   {{option['name']}}
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Riesgos Críticos</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list5"
                   [matAutocomplete]="autoList5" required>
@@ -132,7 +144,8 @@
               </mat-form-field>
               <mat-autocomplete #autoList5="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList5 | async" [value]="option['name']"
-                  style="font-size:14px" [matTooltip]="option['name']" [matTooltipDisabled]="!(option['name'].length > 27)">
+                  style="font-size:14px" [matTooltip]="option['name']"
+                  [matTooltipDisabled]="!(option['name'].length > 27)">
                   {{option['name']}}
                 </mat-option>
               </mat-autocomplete>
@@ -146,7 +159,8 @@
           <mat-step [stepControl]="thirdFormGroup" errorMessage="Complete todos los campos requeridos">
             <form [formGroup]="thirdFormGroup">
               <ng-template matStepLabel>Reseñas</ng-template>
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>¿Incidente solucionado?</mat-label>
                 <mat-select formControlName="solved">
                   <mat-option value="true">Si</mat-option>
@@ -154,34 +168,35 @@
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline"
-                *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline" *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
                 <mat-label>Acto sub-estandar</mat-label>
                 <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardAct"></textarea>
               </mat-form-field>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline"
-                *ngIf="firstFormGroup.value['type'] === 'Condición sub-estandar'">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline" *ngIf="firstFormGroup.value['type'] === 'Condición sub-estandar'">
                 <mat-label>Condición sub-estandar</mat-label>
                 <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardCondition"></textarea>
               </mat-form-field>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline"
-                *ngIf="firstFormGroup.value['type'] === 'Acto destacable'">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline" *ngIf="firstFormGroup.value['type'] === 'Acto destacable'">
                 <mat-label>Acto destacable</mat-label>
                 <textarea matInput placeholder="Describa..." rows="4" formControlName="remarkableAct"></textarea>
               </mat-form-field>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                appearance="outline">
                 <mat-label>Oportunidad de Mejora</mat-label>
-                <textarea matInput placeholder="Describa..." rows="4" formControlName="upgradeOpportunity" required></textarea>
+                <textarea matInput placeholder="Describa..." rows="4" formControlName="upgradeOpportunity"
+                  required></textarea>
               </mat-form-field>
 
               <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
-              <img  [src]="imageSrc || '../../../assets/images/no-image.png'"
-                    style="width:200px; height:150px; cursor:pointer"
-                    class="mat-elevation-z4 w3-hover-shadow"
-                    (click)="fileInput.click()">
+              <img [src]="imageSrc || '../../../assets/images/no-image.png'"
+                style="width:200px; height:150px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
+                (click)="fileInput.click()">
 
               <div class="w3-margin-top">
                 <button mat-stroked-button matStepperPrevious class="w3-margin-right w3-margin-top">Anterior</button>
@@ -207,10 +222,8 @@
           <mat-form-field class="w3-margin-left">
             <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
             <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
-            <mat-datepicker #dateFilter
-                            startView='year'
-                            (monthSelected)="setMonthOfView($event, dateFilter)"
-                            disabled="false"></mat-datepicker>
+            <mat-datepicker #dateFilter startView='year' (monthSelected)="setMonthOfView($event, dateFilter)"
+              disabled="false"></mat-datepicker>
             <mat-hint>
               <strong>Filtrar contenido por mes y año</strong>
             </mat-hint>
@@ -398,11 +411,13 @@
                     Acciones</th>
                   <td mat-cell *matCellDef="let fred"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
-                    <button mat-icon-button color="primary" matTooltip="Editar tarea" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
+                    <button mat-icon-button color="primary" matTooltip="Editar tarea" (click)="edit(fred)"
+                      [disabled]="!auth.permits['securityFredEdit']">
                       <mat-icon>edit</mat-icon>
                     </button><br>
                     <button mat-icon-button color="warn" matTooltip="Borrar tarea"
-                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])"
+                      [disabled]="!auth.permits['securityFredDelete']">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -419,10 +434,9 @@
           <!-- MOBIL VERSION SUB ACT-->
           <div class="w3-hide-large w3-hide-medium">
             <ng-container *ngFor="let fred of filteredSubstandardActFreds; let i = index">
-              <div [@openCloseCard]="isOpenSubstandardAct[i] ? 'open': 'closed'"
-                (click)="toggleCardSubstandardAct(i)"
+              <div [@openCloseCard]="isOpenSubstandardAct[i] ? 'open': 'closed'" (click)="toggleCardSubstandardAct(i)"
                 class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
-                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/default-image.png)'}">
                 <div class="w3-display-topright"
                   style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
                   <p style="font-size:1em; color:white"><strong>{{fred['percent']}} %</strong></p>
@@ -443,11 +457,13 @@
                 class="mat-elevation-z8">
                 <mat-toolbar style="background:#333333">
                   <span class="ms-fill"></span>
-                  <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)"
+                    [disabled]="!auth.permits['securityFredEdit']">
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])"
+                    [disabled]="!auth.permits['securityFredDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>
@@ -570,6 +586,7 @@
             </h2>
           </div>
 
+
           <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Condiciones sub-estandar</h2>
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
             <div class="w3-amber w3-round-large" style="max-height:100vh; overflow:auto">
@@ -617,10 +634,11 @@
 
                 <ng-container matColumnDef="observer">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Observador
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Observador
                   </th>
                   <td mat-cell *matCellDef="let fred"
-                      style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
                     <span class="w3-small">{{fred['createdBy']['displayName']}}</span>
                     <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
                       <li class="w3-small">Area: {{fred['createdBy']['area']['name']}}</li>
@@ -632,7 +650,8 @@
 
                 <ng-container matColumnDef="observedArea">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Área observada
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Área observada
                   </th>
                   <td mat-cell *matCellDef="let fred"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
@@ -645,7 +664,8 @@
 
                 <ng-container matColumnDef="staffObserved">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Personal
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Personal
                     observado</th>
                   <td mat-cell *matCellDef="let fred"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
@@ -735,11 +755,13 @@
                 <ng-container matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding-left:0.5em">Editar</th>
                   <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding-left:0.5em">
-                    <button mat-icon-button color="primary" matTooltip="Editar FRED"  (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
+                    <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)"
+                      [disabled]="!auth.permits['securityFredEdit']">
                       <mat-icon>edit</mat-icon>
                     </button><br>
                     <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])"
+                      [disabled]="!auth.permits['securityFredDelete']">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -759,7 +781,7 @@
               <div [@openCloseCard]="isOpenSubstandardCondition[i] ? 'open': 'closed'"
                 (click)="toggleCardSubstandardCondition(i)"
                 class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
-                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/default-image.png)'}">
                 <div class="w3-display-topright"
                   style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
                   <p style="font-size:1em; color:white"><strong>{{fred['percent']}} %</strong></p>
@@ -780,11 +802,13 @@
                 class="mat-elevation-z8">
                 <mat-toolbar style="background:#333333">
                   <span class="ms-fill"></span>
-                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)"
+                    [disabled]="!auth.permits['securityFredEdit']">
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])"
+                    [disabled]="!auth.permits['securityFredDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>
@@ -939,7 +963,8 @@
 
                 <ng-container matColumnDef="observer">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Observador
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Observador
                   </th>
                   <td mat-cell *matCellDef="let fred"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
@@ -954,7 +979,8 @@
 
                 <ng-container matColumnDef="observedArea">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Área observada
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Área observada
                   </th>
                   <td mat-cell *matCellDef="let fred"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
@@ -967,7 +993,8 @@
 
                 <ng-container matColumnDef="staffObserved">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">Personal
+                    style="background:#eaeaea;padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
+                    Personal
                     observado</th>
                   <td mat-cell *matCellDef="let fred"
                     style="color:#2b2b2b; padding:0px 1.5em 0px 1em; min-width:230px; border-left:1px solid lightgrey">
@@ -1057,11 +1084,13 @@
                 <ng-container matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef style="background:#eaeaea;padding-left:0.5em">Editar</th>
                   <td mat-cell *matCellDef="let fred" style="color:#2b2b2b; padding-left:0.5em">
-                    <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
+                    <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)"
+                      [disabled]="!auth.permits['securityFredEdit']">
                       <mat-icon>edit</mat-icon>
                     </button><br>
                     <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
+                      (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])"
+                      [disabled]="!auth.permits['securityFredDelete']">
                       <mat-icon>delete</mat-icon>
                     </button><br>
                   </td>
@@ -1078,10 +1107,9 @@
           <!-- MOBIL VERSION REMARKABLE ACT-->
           <div class="w3-hide-large w3-hide-medium">
             <ng-container *ngFor="let fred of filteredRemarkableActFreds; let i = index">
-              <div [@openCloseCard]="isOpenRemarkableAct[i] ? 'open': 'closed'"
-                (click)="toggleCardRemarkableAct(i)"
+              <div [@openCloseCard]="isOpenRemarkableAct[i] ? 'open': 'closed'" (click)="toggleCardRemarkableAct(i)"
                 class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
-                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+                [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/default-image.png)'}">
                 <div class="w3-display-topright"
                   style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
                   <p style="font-size:1em; color:white"><strong>{{fred['percent']}} %</strong></p>
@@ -1102,11 +1130,13 @@
                 class="mat-elevation-z8">
                 <mat-toolbar style="background:#333333">
                   <span class="ms-fill"></span>
-                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)" [disabled]="!auth.permits['securityFredEdit']">
+                  <button mat-icon-button color="primary" matTooltip="Editar FRED" (click)="edit(fred)"
+                    [disabled]="!auth.permits['securityFredEdit']">
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="warn" matTooltip="Borrar FRED"
-                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])" [disabled]="!auth.permits['securityFredDelete']">
+                    (click)="delete(fred['id'],fred['uid'],fred['uidStaff'],fred['uidSupervisor'])"
+                    [disabled]="!auth.permits['securityFredDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>

@@ -142,7 +142,7 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
       component: this.data['report']['component'],
       componentModel: ['', [Validators.required]],
       componentPartNumber: ['', [Validators.required]],
-      OTSegment: ['', [Validators.required]],
+      // OTSegment: ['', [Validators.required]],
       customer: ['', [Validators.required]],
       repairType: ['', [Validators.required]],
       hours: ['', [Validators.required]],

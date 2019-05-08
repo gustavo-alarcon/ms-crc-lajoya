@@ -196,7 +196,7 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   displayedColumnsReports: string[] = ['index', 'date', 'createdBy', 'OT', 'area', 'description', 'component', 'initialPicture', 'status', 'edit'];
   dataSourceRedosReports = new MatTableDataSource();
 
-  displayedColumnsAnalyze: string[] = ['redoType', 'component', 'OTSegment', 'customer', 'repairType', 'hours', 'failureMode', 'rootCause', 'involvedAreas', 'responsibleStaff', 'pictures'];
+  displayedColumnsAnalyze: string[] = ['redoType', 'component', 'customer', 'repairType', 'hours', 'failureMode', 'rootCause', 'involvedAreas', 'responsibleStaff', 'pictures'];
   dataSourceRedosAnalyze = new MatTableDataSource();
   dataSourceRedosAnalyzePanel = new MatTableDataSource();
 

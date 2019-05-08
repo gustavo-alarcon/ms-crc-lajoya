@@ -107,7 +107,7 @@ export class QualityConfirmAddSingleObservationComponent implements OnInit {
                       .then(ref => {
                         ref.update({id: ref.id});
                         // Closing the dialog and setting the uploading flag to false
-                        this.dialogRef.close();
+                        this.dialogRef.close(true);
                         this.uploading = false;
                         this.snackbar.open("Listo!","Cerrar",{
                           duration:6000
