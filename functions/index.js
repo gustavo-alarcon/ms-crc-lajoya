@@ -174,10 +174,6 @@ exports.msMailer = functions.https.onRequest((req, res) => {
       })
       return true;
     });
-
-    
-
-    
     
   })
 })
