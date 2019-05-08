@@ -2541,7 +2541,7 @@
                           *ngIf="analyze['stage'] === 'Cierre'" [disabled]="!isQualitySupervisor  || !allSigned">
                           <mat-icon class="example-icon">archive</mat-icon> Cerrar rehacer
                         </button>
-                        <a [href]="analyze['finalReport']" *ngIf="analyze['stage'] === 'Finalizado' && document['finalReport']" target="_blank">
+                        <a [href]="analyze['finalReport']" *ngIf="analyze['stage'] === 'Finalizado' && analyze['finalReport']" target="_blank">
                           <button mat-raised-button color="primary" class="w3-margin-right w3-margin-bottom w3-text-white" matTooltip="Descargar informe final">
                             <mat-icon class="example-icon">cloud_download</mat-icon> Descargar informe final
                           </button>
