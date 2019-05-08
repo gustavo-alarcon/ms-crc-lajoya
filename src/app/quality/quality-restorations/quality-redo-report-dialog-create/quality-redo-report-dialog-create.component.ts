@@ -83,7 +83,7 @@ export class QualityRedoReportDialogCreateComponent implements OnInit {
   save(): void{
 
     if(!this.imageSrc_initial){
-      this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento","Cerrar", {
+      this.snackbar.open("Adjunte imagen para poder crear el reporte","Cerrar", {
         duration: 6000
       });
       return;

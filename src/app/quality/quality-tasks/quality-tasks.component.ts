@@ -14,7 +14,7 @@ import { QualityTasksDialogFinalizeInspectionComponent } from './quality-tasks-d
   selector: 'app-quality-tasks',
   templateUrl: './quality-tasks.component.html',
   animations: [
-    trigger('openCloseCard',[
+    trigger('openCloseCard', [
       state('open', style({
         height: '156px',
         opacity: 0.8,
@@ -34,7 +34,7 @@ import { QualityTasksDialogFinalizeInspectionComponent } from './quality-tasks-d
         animate('0.5s ease-out')
       ])
     ]),
-    trigger('openCloseContent',[
+    trigger('openCloseContent', [
       state('openContent', style({
         maxHeight: '20000px',
         opacity: 1,
@@ -53,7 +53,7 @@ import { QualityTasksDialogFinalizeInspectionComponent } from './quality-tasks-d
         animate('0.5s')
       ])
     ]),
-    trigger('openCloseDescription',[
+    trigger('openCloseDescription', [
       state('openDescription', style({
         borderRadius: '0px 10px 0px 0px'
       })),
@@ -75,21 +75,21 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
   isOpenInspections: Array<any> = [];
   isOpenSingleObservations: Array<any> = [];
 
-  monthsKey: Array<string> = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  monthsKey: Array<string> = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   monthIndex: number;
   currentMonth: string;
   currentYear: number;
   year: number;
 
-  monthFormControl = new FormControl({value:new Date(), disabled: true});
+  monthFormControl = new FormControl({ value: new Date(), disabled: true });
 
   displayedColumnsTasksByRedo: string[] = ['index', 'action', 'approved', 'responsibles', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'finalize'];
   dataSourceTasksByRedo = new MatTableDataSource();
 
-  displayedColumnsTasksByInspections: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture',  'area', 'finalPicture', 'terminationDate', 'status',  'edit'];
+  displayedColumnsTasksByInspections: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture', 'area', 'finalPicture', 'terminationDate', 'status', 'edit'];
   dataSourceTasksByInspections = new MatTableDataSource();
 
-  displayedColumnsTasksBySingleObservations: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture',  'area', 'finalPicture', 'terminationDate', 'status',  'edit'];
+  displayedColumnsTasksBySingleObservations: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture', 'area', 'finalPicture', 'terminationDate', 'status', 'edit'];
   dataSourceTasksBySingleObservations = new MatTableDataSource();
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
@@ -114,58 +114,58 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     this.currentMonth = this.monthsKey[this.monthIndex];
     this.currentYear = this.monthFormControl.value.getFullYear();
 
-    let dataQualityTasksByRedosSubs =  this.dbs.currentDataQualityTasks
-                                      .pipe(
-                                        map(res => {
-                                          let tasksByRedo = [];
-                                          res.forEach(element => {
-                                            if(element['source'] === 'redo actions'){
-                                              tasksByRedo.push(element);
-                                            }
-                                          });
-                                          return tasksByRedo;
-                                        })
-                                      )
-                                      .subscribe(res => {
-                                        this.filteredRedosTasks = res;
-                                        this.dataSourceTasksByRedo.data = res;
-                                        res.forEach(element => {
-                                          this.isOpenActions.push(false);
-                                        })
-                                      });
+    let dataQualityTasksByRedosSubs = this.dbs.currentDataQualityTasks
+      .pipe(
+        map(res => {
+          let tasksByRedo = [];
+          res.forEach(element => {
+            if (element['source'] === 'redo actions') {
+              tasksByRedo.push(element);
+            }
+          });
+          return tasksByRedo;
+        })
+      )
+      .subscribe(res => {
+        this.filteredRedosTasks = res;
+        this.dataSourceTasksByRedo.data = res;
+        res.forEach(element => {
+          this.isOpenActions.push(false);
+        })
+      });
 
     this.subscriptions.push(dataQualityTasksByRedosSubs);
 
     let dataQualityTasksByInspectionsSubs = this.dbs.currentDataQualityTasks
-                                              .pipe(
-                                                map(res => {
-                                                  let tasksByRedo = [];
-                                                  res.forEach(element => {
-                                                    if(element['source'] === 'quality inspection'){
-                                                      tasksByRedo.push(element);
-                                                    }
-                                                  });
-                                                  return tasksByRedo;
-                                                })
-                                              )
-                                              .subscribe(res => {
-                                                this.filteredInspectionsTasks = res;
-                                                this.dataSourceTasksByInspections.data = res;
-                                                res.forEach(element => {
-                                                  this.isOpenInspections.push(false);
-                                                })
-                                              });
+      .pipe(
+        map(res => {
+          let tasksByRedo = [];
+          res.forEach(element => {
+            if (element['source'] === 'quality inspection') {
+              tasksByRedo.push(element);
+            }
+          });
+          return tasksByRedo;
+        })
+      )
+      .subscribe(res => {
+        this.filteredInspectionsTasks = res;
+        this.dataSourceTasksByInspections.data = res;
+        res.forEach(element => {
+          this.isOpenInspections.push(false);
+        })
+      });
 
     this.subscriptions.push(dataQualityTasksByInspectionsSubs);
 
     let dataQualityTasksBySingleObservationSubs = this.dbs.currentDataQualitySingleObservations
-                                                    .subscribe(res => {
-                                                      this.filteredSingleObservationsTasks = res;
-                                                      this.dataSourceTasksBySingleObservations.data = res;
-                                                      res.forEach(element => {
-                                                        this.isOpenSingleObservations.push(false);
-                                                      })
-                                                    });
+      .subscribe(res => {
+        this.filteredSingleObservationsTasks = res;
+        this.dataSourceTasksBySingleObservations.data = res;
+        res.forEach(element => {
+          this.isOpenSingleObservations.push(false);
+        })
+      });
 
     this.subscriptions.push(dataQualityTasksBySingleObservationSubs);
   }
@@ -174,7 +174,7 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.dataSourceTasksByRedo.paginator = this.paginator.toArray()[0];
     this.dataSourceTasksByRedo.sort = this.sort.toArray()[0];
 
@@ -186,23 +186,23 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
   }
 
   setMonthOfView(event, datepicker): void {
-    this.monthFormControl = new FormControl({value:event, disabled:true});
+    this.monthFormControl = new FormControl({ value: event, disabled: true });
     this.monthIndex = this.monthFormControl.value.getMonth();
     this.currentMonth = this.monthsKey[this.monthIndex];
     this.currentYear = this.monthFormControl.value.getFullYear();
     let fromDate: Date = new Date(this.currentYear, this.monthIndex, 1);
 
-    let toMonth = (fromDate.getMonth()+ 1) % 12;
+    let toMonth = (fromDate.getMonth() + 1) % 12;
     let toYear = this.currentYear;
 
-    if(fromDate.getMonth() + 1 >= 13){
-      toYear ++;
+    if (fromDate.getMonth() + 1 >= 13) {
+      toYear++;
     }
 
     let toDate: Date = new Date(toYear, toMonth, 1);
 
     this.dbs.getQualityTasks(fromDate.valueOf(), toDate.valueOf());
-    
+
     datepicker.close();
   }
 
@@ -218,33 +218,33 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     this.isOpenSingleObservations[index] = !this.isOpenSingleObservations[index];
   }
 
-  finalizeTask(task): void{
+  finalizeTask(task): void {
     let dialogRef = this.dialog.open(QualityTasksDialogFinalizeComponent, {
       data: task
     })
 
-    dialogRef.afterClosed().subscribe( res => {
-      if(res){
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
         dialogRef.close();
       }
     })
-    
+
   }
 
-  finalizeTaskObservation(task): void{
-    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeObservationComponent,{
+  finalizeTaskObservation(task): void {
+    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeObservationComponent, {
       data: task
     })
   }
 
-  finalizeTaskInspection(task): void{
-    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeInspectionComponent,{
+  finalizeTaskInspection(task): void {
+    let dialogRef = this.dialog.open(QualityTasksDialogFinalizeInspectionComponent, {
       data: task
     })
   }
 
-  
 
-  
+
+
 
 }

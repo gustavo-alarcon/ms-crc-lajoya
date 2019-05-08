@@ -226,11 +226,12 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteObservation(id_inspection, id_observation): void{
+  deleteObservation(id_inspection, id_observation, id_supervisor): void{
     this.dialog.open(QualityInspectionObservationConfirmDeleteComponent,{
       data:{
         id_inspection: id_inspection,
-        id_observation: id_observation
+        id_observation: id_observation,
+        id_supervisor: id_supervisor
       }
     })
   }
@@ -239,11 +240,12 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
     this.dialog.open(QualityDialogAddSingleObservationComponent)
   }
 
-  deleteSingleObservation(id_observation): void{
+  deleteSingleObservation(id_observation, id_supervisor): void{
     console.log(id_observation)
     this.dialog.open(QualityConfirmDeleteSingleObservationComponent,{
       data:{
-        id_observation: id_observation
+        id_observation: id_observation,
+        id_supervisor: id_supervisor
       }
     })
   }
