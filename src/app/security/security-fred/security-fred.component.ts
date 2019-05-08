@@ -133,6 +133,45 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
   filteredObsList4: Observable<any>;
   filteredObsList5: Observable<any>;
 
+  /**
+   * TEST
+   */
+
+  options = {
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalseparator: '.',
+    showLabels: false,
+    headers: [],
+    showTitle: true,
+    title: 'asfasf',
+    useBom: false,
+    removeNewLines: true,
+    keys: ['approved','age','name' ]
+  };
+  data = [
+    {
+      name: "Test, 1",
+      age: 13,
+      average: 8.2,
+      approved: true,
+      description: "using 'Content here, content here' "
+    },
+    {
+      name: 'Test 2',
+      age: 11,
+      average: 8.2,
+      approved: true,
+      description: "using 'Content here, content here' "
+    },
+    {
+      name: 'Test 3',
+      age: 10,
+      average: 8.2,
+      approved: true,
+      description: "using 'Content here, content here' "
+    }
+  ];
 
 
   constructor(
@@ -275,6 +314,10 @@ export class SecurityFredComponent implements OnInit, OnDestroy{
     this.dbs.getSecurityRemarkableActFreds(this.auth.permits['securityFredPersonalList'],fromDate.valueOf(), toDate.valueOf());
 
     datepicker.close();
+  }
+
+  show(event): void{
+    console.log(event);
   }
 
   createForms(): void{

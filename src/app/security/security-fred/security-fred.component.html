@@ -1,7 +1,13 @@
 <div class="w3-section">
-  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">
-    <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED
-  </h1>
+  <div style="display:flex">
+    <h1 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.5em;">
+      <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED
+    </h1>
+    <angular2csv #downloadList mat-raised-button [data]="data" filename="test" [options]="options"></angular2csv>
+
+    <button mat-raised-button class="w3-margin-right" (click)="show(downloadList)"><mat-icon>cloud_download</mat-icon>Descargar</button>
+  </div>
+  
   <mat-tab-group animationDuration="500ms">
     <mat-tab label="Formulario" *ngIf="auth.permits['securityFredForm']">
       <div class="w3-padding">

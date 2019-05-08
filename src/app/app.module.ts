@@ -19,6 +19,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
 import { PushNotificationsModule } from 'ng-push';
+import { Angular2CsvModule } from 'angular2-csv';
 
 
 // FIREBASE MODULES
@@ -329,6 +330,7 @@ import { CustomerConfirmDeleteComponent } from './configuration/system/system-ge
     AppRoutingModule,
     ReactiveFormsModule,
     PushNotificationsModule,
+    Angular2CsvModule,
     ChartsModule,
     HttpClientModule,
     NgxPageScrollModule,
