@@ -1,13 +1,9 @@
 <div class="w3-section">
-  <div style="display:flex">
-    <h1 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.5em;">
-      <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED
-    </h1>
-    <angular2csv #downloadList mat-raised-button [data]="data" filename="test" [options]="options"></angular2csv>
 
-    <button mat-raised-button class="w3-margin-right" (click)="show(downloadList)"><mat-icon>cloud_download</mat-icon>Descargar</button>
-  </div>
-  
+  <h1 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.5em;">
+    <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED
+  </h1>
+
   <mat-tab-group animationDuration="500ms">
     <mat-tab label="Formulario" *ngIf="auth.permits['securityFredForm']">
       <div class="w3-padding">
@@ -223,7 +219,7 @@
       <ng-template matTabContent>
 
         <div class="w3-padding">
-          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">Lista - {{currentMonth}} {{currentYear}}</h2>
+          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">{{currentMonth}} {{currentYear}}</h2>
 
           <mat-form-field class="w3-margin-left">
             <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
@@ -234,7 +230,19 @@
               <strong>Filtrar contenido por mes y año</strong>
             </mat-hint>
           </mat-form-field>
-          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Actos sub-estandar</h2>
+
+          <div class="w3-margin-top" style="display:flex;align-items:center">
+
+            <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">Actos sub-estandar</h2>
+
+            <app-custom-angular-csv [data]="downloadableList1" [filename]="titleList1" [options]="optionsList1">
+              <button mat-raised-button color="primary" [disabled]="!downloadableList1.length">
+                <mat-icon>cloud_download</mat-icon> Descargar
+              </button>
+            </app-custom-angular-csv>
+
+          </div>
+
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
             <div class="w3-amber w3-round-large" style="max-height:100vh; overflow:auto">
               <table mat-table [dataSource]="dataSourceSubstandardAct" matSort style="width:100%">
@@ -592,8 +600,18 @@
             </h2>
           </div>
 
+          <div class="w3-margin-top" style="display:flex;align-items:center">
 
-          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Condiciones sub-estandar</h2>
+            <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">Condiciones sub-estandar</h2>
+
+            <app-custom-angular-csv [data]="downloadableList2" [filename]="titleList2" [options]="optionsList2">
+              <button mat-raised-button color="primary" [disabled]="!downloadableList2.length">
+                <mat-icon>cloud_download</mat-icon> Descargar
+              </button>
+            </app-custom-angular-csv>
+
+          </div>
+          
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
             <div class="w3-amber w3-round-large" style="max-height:100vh; overflow:auto">
               <table mat-table [dataSource]="dataSourceSubstandardCondition" matSort style="width:100%">
@@ -924,9 +942,20 @@
             </h2>
           </div>
 
-          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Actos destacables</h2>
+          <div class="w3-margin-top" style="display:flex;align-items:center">
+
+            <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">Actos destacables</h2>
+
+            <app-custom-angular-csv [data]="downloadableList3" [filename]="titleList3" [options]="optionsList3">
+              <button mat-raised-button color="primary" [disabled]="!downloadableList3.length">
+                <mat-icon>cloud_download</mat-icon> Descargar
+              </button>
+            </app-custom-angular-csv>
+
+          </div>
+          
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
-            <div class="w3-amber w3-round-large" style="max-height:57vh; overflow:auto">
+            <div class="w3-amber w3-round-large" style="overflow:auto">
               <table mat-table [dataSource]="dataSourceRemarkableAct" matSort style="width:100%">
 
                 <ng-container matColumnDef="index">

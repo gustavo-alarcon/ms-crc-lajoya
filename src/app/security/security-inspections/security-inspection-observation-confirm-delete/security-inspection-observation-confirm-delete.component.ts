@@ -38,6 +38,25 @@ export class SecurityInspectionObservationConfirmDeleteComponent implements OnIn
             duration: 6000
           })
         })
+
+    this.dbs.usersCollection
+      .doc(this.data['id_supervisor'])
+      .collection('tasks')
+      .doc(this.data['id_observation'])
+      .delete()
+        .then(() => {
+          this.dialogRef.close(true);
+          this.snackbar.open("Listo!","Cerrar",{
+            duration: 6000
+          })
+        })
+        .catch(err => {
+          console.log(err);
+          this.dialogRef.close(true);
+          this.snackbar.open(err,"Cerrar",{
+            duration: 6000
+          })
+        })
   }
 
 }

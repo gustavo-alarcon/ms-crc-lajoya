@@ -4,7 +4,8 @@
   </h1>
   <mat-divider></mat-divider>
   <div class="w3-padding">
-    <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">Lista - {{currentMonth}} {{currentYear}}</h2>
+    <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">
+    {{currentMonth}} {{currentYear}}</h2>
 
     <mat-form-field class="w3-margin-left">
       <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
@@ -17,8 +18,8 @@
     </mat-form-field>
 
     <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por FRED</h2>
-    <div class="mat-elevation-z8 w3-margin-top w3-round w3-hide-small" style="overflow:auto">
-      <div class="w3-amber w3-round-large">
+    <div class="mat-elevation-z8 w3-margin-top w3-round w3-hide-small">
+      <div class="w3-amber w3-round-large" style="overflow:auto">
         <table mat-table [dataSource]="dataSourceFredTasks" matSort style="width:100%">
 
           <ng-container matColumnDef="index">
@@ -393,7 +394,7 @@
 
     <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Inspección</h2>
     <div class="mat-elevation-z8 w3-margin-top w3-round w3-hide-small">
-      <div class="w3-amber w3-round-large" style="max-height:57vh; overflow:auto">
+      <div class="w3-amber w3-round-large" style="overflow:auto">
         <table mat-table [dataSource]="dataSourceInspectionTasks" matSort style="width:100%">
 
           <ng-container matColumnDef="index">
