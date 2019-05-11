@@ -29,7 +29,7 @@ export class QualityConfirmAddSingleObservationComponent implements OnInit {
   ngOnInit() {
   }
 
-  save(): void{
+  save(): void {
 
     this.uploading = true;
 
@@ -41,13 +41,14 @@ export class QualityConfirmAddSingleObservationComponent implements OnInit {
 
     task.snapshotChanges().pipe(
       finalize(() => {
-        fileRef.getDownloadURL().subscribe( res => {
-          if(res){
+        fileRef.getDownloadURL().subscribe(res => {
+          if (res) {
             let status = 'Por confirmar';
             let estimatedDate = 0;
 
             let finalObject = {
               area: this.data[0]['area'],
+              responsibleArea: this.data[0]['responsibleArea'],
               uidSupervisor: this.data[0]['area']['supervisor']['uid'],
               initialPicture: res,
               finalPicture: '',
@@ -62,78 +63,111 @@ export class QualityConfirmAddSingleObservationComponent implements OnInit {
               solved: false,
               source: 'quality inspection single observation'
             };
-            
+
             // REGISTERING SINGLE OBSERVATION IN DB ***
             // Adding the observation
             this.dbs.qualitySingleObservationsCollection.add(finalObject)
-            .then(refObservation => {
-              // Updating the id of the document using the reference
-              refObservation.update({id: refObservation.id})
+              .then(refObservation => {
+                // Updating the id of the document using the reference
+                refObservation.update({ id: refObservation.id })
 
-              finalObject['id'] = refObservation.id;
+                finalObject['id'] = refObservation.id;
 
-              // REGISTERING OBSERVATION IN SUPERVISOR TASKS DB
-              // Adding the observation as task in the tasks collection of correspoding supervisor
-              this.dbs.usersCollection
-                .doc(this.data[0]['area']['supervisor']['uid'])
-                .collection(`tasks`)
-                .doc(refObservation.id)
-                .set(finalObject)
+                // Adding the observation as task in the tasks collection of responsible supervisor
+                this.dbs.usersCollection
+                  .doc(this.data[0]['responsibleArea']['supervisor']['uid'])
+                  .collection(`tasks`)
+                  .doc(refObservation.id)
+                  .set(finalObject)
                   .then(() => {
-                    
+
                     // Configuring notification for area supervisor
                     let notificationObject = {
                       regDate: Date.now(),
-                      id:'',
+                      id: '',
                       senderId: this.auth.userCRC.uid,
                       senderName: this.auth.userCRC.displayName,
-                      areaId: this.data[0]['area']['id'],
                       areaName: this.data[0]['area']['name'],
-                      areaSupervisorId: this.data[0]['area']['supervisor']['uid'],
-                      areaSupervisorName: this.data[0]['area']['supervisor']['displayName'],
+                      responsibleAreaName: this.data[0]['responsibleArea']['name'],
+                      areaSupervisorId: this.data[0]['responsibleArea']['supervisor']['uid'],
+                      areaSupervisorName: this.data[0]['responsibleArea']['supervisor']['displayName'],
                       observationId: refObservation.id,
                       subject: this.data[1]['recommendationDescription'],
                       estimatedTerminationDate: 0,
                       taskStatus: 'Por confirmar',
                       status: 'unseen',
-                      type: 'quality inspection single observation supervisor'
+                      type: 'quality inspection single observation responsible supervisor'
                     }
 
                     // Sending notification to area supervisor
                     this.dbs.usersCollection
-                    .doc(this.data[0]['area']['supervisor']['uid'])
-                    .collection('/notifications')
-                    .add(notificationObject)
+                      .doc(this.data[0]['responsibleArea']['supervisor']['uid'])
+                      .collection('notifications')
+                      .add(notificationObject)
                       .then(ref => {
-                        ref.update({id: ref.id});
+                        ref.update({ id: ref.id });
+                      })
+                      .catch(error => {
+                        this.uploading = false;
+                        console.log(error);
+                        this.snackbar.open("Ups!, parece que hubo un error (SI003) ...", "Cerrar", {
+                          duration: 6000
+                        });
+                      });
+
+                    // Configuring notification for area supervisor
+                    let notification2Object = {
+                      regDate: Date.now(),
+                      id: '',
+                      senderId: this.auth.userCRC.uid,
+                      senderName: this.auth.userCRC.displayName,
+                      areaName: this.data[0]['area']['name'],
+                      areaSupervisorId: this.data[0]['area']['supervisor']['uid'],
+                      areaSupervisorName: this.data[0]['area']['supervisor']['displayName'],
+                      responsibleAreaName: this.data[0]['responsibleArea']['name'],
+                      observationId: refObservation.id,
+                      subject: this.data[1]['recommendationDescription'],
+                      estimatedTerminationDate: 0,
+                      taskStatus: 'Por confirmar',
+                      status: 'unseen',
+                      type: 'quality inspection single observation area supervisor'
+                    }
+
+                    // Sending notification to reponsible supervisor
+                    this.dbs.usersCollection
+                      .doc(this.data[0]['area']['supervisor']['uid'])
+                      .collection('notifications')
+                      .add(notification2Object)
+                      .then(ref => {
+                        ref.update({ id: ref.id });
                         // Closing the dialog and setting the uploading flag to false
                         this.dialogRef.close(true);
                         this.uploading = false;
-                        this.snackbar.open("Listo!","Cerrar",{
-                          duration:6000
+                        this.snackbar.open("Listo!", "Cerrar", {
+                          duration: 6000
                         });
                       })
                       .catch(error => {
                         this.uploading = false;
                         console.log(error);
-                        this.snackbar.open("Ups!, parece que hubo un error (SI003) ...","Cerrar",{
-                          duration:6000
+                        this.snackbar.open("Ups!, parece que hubo un error (SI003) ...", "Cerrar", {
+                          duration: 6000
                         });
                       });
 
                   });
-              
 
-            }).catch(err => {
-              this.snackbar.open(err,"Cerrar",{
-                duration: 10000
-              });
-            })
+
+              }).catch(err => {
+                this.snackbar.open(err, "Cerrar", {
+                  duration: 10000
+                });
+              })
           }
         })
       })
     )
-    .subscribe()
+      .subscribe()
   }
 
 

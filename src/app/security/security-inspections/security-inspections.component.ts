@@ -101,7 +101,7 @@ export class SecurityInspectionsComponent implements OnInit {
   displayedColumns: string[] = ['index', 'terminationDate', 'date', 'inspector', 'area', 'edit'];
   dataSource = new MatTableDataSource();
 
-  displayedColumnsInspectionObservations: string[] = ['index', 'kindOfObservation', 'observationDescription', 'initialPicture', 'cause', 'recommendationDescription', 'area', 'terminationDate', 'percent', 'status', 'finalPicture', 'edit'];
+  displayedColumnsInspectionObservations: string[] = ['index', 'kindOfObservation', 'observationDescription', 'initialPicture', 'cause', 'recommendationDescription', 'area', 'responsibleArea', 'terminationDate', 'percent', 'status', 'finalPicture', 'edit'];
   dataSourceInspectionObservations = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -128,7 +128,7 @@ export class SecurityInspectionsComponent implements OnInit {
     quoteStrings: '"',
     decimalseparator: '.',
     showLabels: true,
-    headers: ['Fecha de inspección', 'Inspector - Usuario', 'Área - Nombre', 'Tipo de observación', 'Descripción de la obsrvación', 'Foto inicial', 'Causa', 'Recomendaciones', 'Área - Nombre', 'Área - Supervisor', 'Fecha propuesta', 'Fecha real', 'Porcentaje', 'Estado', 'Foto final'],
+    headers: ['Fecha de inspección', 'Inspector - Usuario', 'Área - Nombre', 'Tipo de observación', 'Descripción de la obsrvación', 'Foto inicial', 'Causa', 'Recomendaciones', 'Área observada - Nombre', 'Área observada- Supervisor', 'Área responsable- Nombre', 'Área responsable - Supervisor', 'Fecha propuesta', 'Fecha real', 'Porcentaje', 'Estado', 'Foto final'],
     showTitle: true,
     title: '',
     useBom: false,
@@ -259,7 +259,6 @@ export class SecurityInspectionsComponent implements OnInit {
   downloadObservations(inspections): void {
     this.downloadableObservations = [];
     inspections.forEach((inspection, index) => {
-      // console.log('Inspection ' + index + ': ', inspection);
       if (inspection['id']) {
         this.dbs.securityInspectionsCollection
           .doc(inspection['id'])
@@ -267,7 +266,6 @@ export class SecurityInspectionsComponent implements OnInit {
 
             snapshot.docs.forEach(doc => {
               let observation = doc.data();
-              // console.log(observation);
               // Initializing _object
               let _object = {}
 
@@ -295,11 +293,17 @@ export class SecurityInspectionsComponent implements OnInit {
               // Adding recommendation description
               _object['recommendationDescription'] = observation['recommendationDescription'] ? observation['recommendationDescription'] : '---';
 
-              // Adding area - name
-              _object['areaObservationName'] = observation['area']['name'] ? observation['area']['name'] : '---';
+              // Adding observed area - name
+              _object['observedAreaName'] = observation['area']['name'] ? observation['area']['name'] : '---';
 
-              // Adding area - supervisor
-              _object['areaSupervisor'] = observation['area']['supervisor']['displayName'];
+              // Adding observed area - supervisor
+              _object['observedAreaSupervisor'] = observation['area']['supervisor']['displayName'];
+
+              // Adding responsible area - name
+              _object['responsibleAreaName'] = observation['responsibleArea']['name'] ? observation['area']['name'] : '---';
+
+              // Adding responsible area - supervisor
+              _object['responsibleAreaSupervisor'] = observation['responsibleArea']['supervisor']['displayName'];
 
               // Adding observation estimated date
               _object['obsEstimatedTerminationDate'] = observation['estimatedTerminationDate'] ? this.datePipe.transform(new Date(observation['estimatedTerminationDate']), 'dd/MM/yyyy') : '---';
@@ -313,7 +317,7 @@ export class SecurityInspectionsComponent implements OnInit {
               // Adding status
               _object['status'] = observation['status'] ? observation['status'] : '---';
 
-              // Adding initial picture link
+              // Adding final picture link
               _object['finalPicture'] = observation['finalPicture'] ? observation['finalPicture'] : '---';
 
               this.downloadableObservations.push(_object);
@@ -347,7 +351,6 @@ export class SecurityInspectionsComponent implements OnInit {
   }
 
   terminateInspection(id_inspection): void {
-    console.log(id_inspection);
     this.dialog.open(SecurityInspectionConfirmTerminationComponent, {
       data: {
         id_inspection: id_inspection
@@ -365,7 +368,6 @@ export class SecurityInspectionsComponent implements OnInit {
   }
 
   deleteObservation(id_inspection, id_observation, id_supervisor): void {
-    // console.log(id_supervisor);
     this.dialog.open(SecurityInspectionObservationConfirmDeleteComponent, {
       data: {
         id_inspection: id_inspection,

@@ -267,7 +267,6 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
         tap(res => {
           this.downloadableList1 = [];
           res.forEach(element => {
-            console.log(element);
             // Initializing _object
             let _object = {}
 

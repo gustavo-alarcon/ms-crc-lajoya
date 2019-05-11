@@ -187,7 +187,7 @@
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task done' || note['type'] === 'task done supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon>Seguridad FRED
             </button>
-            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection observation supervisor'" disabled="true">
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection observation responsible supervisor' || note['type'] === 'inspection observation area supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon> Tarea - Seguridad Inspección
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task confirmation'" disabled="true">
@@ -259,10 +259,10 @@
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection inspector'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección
             </button>
-            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection observation supervisor'" disabled="true">
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection observation area supervisor' || note['type'] === 'quality inspection observation responsible supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Inspección observación
             </button>
-            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection single observation supervisor'" disabled="true">
+            <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'quality inspection single observation area supervisor' || note['type'] === 'quality inspection single observation responsible supervisor'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">check_circle_outline</mat-icon> Calidad - Observación personal
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'ssgg request ssgg supervisor'" disabled="true">
@@ -318,9 +318,9 @@
             <span><strong>{{note['senderName']}} </strong> creo el siguiente FRED: <strong>{{note['subject']}}</strong> a <strong>{{note['staffName']}}</strong> y lo marcó como resuelto.</span><br>
           </div>
 
-          <!-- TASK BY INSPECTION OBSERVATION -->
-          <div *ngIf="note['type'] === 'inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}}</strong>, tuvo la siguiente observación: <strong>{{note['subject']}}</strong>.</span><br>
+          <!-- TASK BY INSPECTION OBSERVATION RESPONSIBLE SUPERVISOR-->
+          <div *ngIf="note['type'] === 'inspection observation responsible supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> tuvo la siguiente observación: <strong>{{note['subject']}}</strong>, inspeccionando el área: <strong>{{note['areaName']}}</strong> y lo asignó como responsable</span><br>
             <p *ngIf="note['taskStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
                 realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
@@ -346,6 +346,12 @@
                     style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['taskStatus']}}</p>
             </div>
           </div>
+
+          <!-- OBSERVATION AREA SUPERVISOR -->
+          <div *ngIf="note['type'] === 'inspection observation area supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> tuvo la siguiente observación durante la inspección programada en su área: <strong>{{note['subject']}}</strong> y asigno al área : <strong>{{note['responsibleAreaName']}}</strong> como responsable</span>
+          </div>
+
           <!-- INSPECTION SUPERVISOR -->
           <div *ngIf="note['type'] === 'inspection supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> programo a <strong>{{note['inspectorName']}}</strong> para inspeccionar su área el <strong>{{note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
@@ -485,14 +491,15 @@
           <div *ngIf="note['type'] === 'quality inspection supervisor'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> programo a <strong>{{note['inspectorName']}}</strong> para inspeccionar su área el <strong>{{note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
           </div>
+
           <!-- QUALITY INSPECTION INSPECTOR -->
           <div *ngIf="note['type'] === 'quality inspection inspector'" class="ms-color-2b" style="padding-left:0.5em">
             <span><strong>{{note['senderName']}} </strong> lo programo para inspeccionar el área: <strong>{{note['areaName']}}</strong>, supervisada por: <strong>{{note['areaSupervisorName']}}</strong>. Debe realizar la inspección el <strong>{{ note['inspectionDate'] | date: 'dd/MM/yyyy'}}</strong></span>
           </div>
 
-          <!-- QUALITY INSPECTION OBSERVATION SUPERVISOR -->
-          <div *ngIf="note['type'] === 'quality inspection observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}} </strong> hizo la siguiente observación: <strong>{{note['subject']}}</strong></span>
+          <!-- QUALITY INSPECTION OBSERVATION RESPONSIBLE SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality inspection observation responsible supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> tuvo la siguiente observación: <strong>{{note['subject']}}</strong>, inspeccionando el área: <strong>{{note['areaName']}}</strong> y lo asignó como responsable</span><br>
             <p *ngIf="note['taskStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
               realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
@@ -519,9 +526,14 @@
             </div>
           </div>
 
-          <!-- QUALITY INSPECTION SINGLE OBSERVATION SUPERVISOR -->
-          <div *ngIf="note['type'] === 'quality inspection single observation supervisor'" class="ms-color-2b" style="padding-left:0.5em">
-            <span><strong>{{note['senderName']}} </strong> hizo la siguiente observación personal en su área: <strong>{{note['subject']}}</strong></span>
+          <!-- QUALITY INSPECTION OBSERVATION AREA SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality inspection observation area supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> tuvo la siguiente observación durante la inspección programada en su área: <strong>{{note['subject']}}</strong> y asigno al área : <strong>{{note['responsibleAreaName']}}</strong> como responsable</span>
+          </div>
+
+          <!-- QUALITY INSPECTION SINGLE OBSERVATION RESPONSIBLE SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality inspection single observation responsible supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> lo asigno como responsable de la siguiente observación personal: <strong>{{note['subject']}}</strong>, en el área <strong>{{note['areaName']}}</strong></span><br>
             <p *ngIf="note['taskStatus'] === 'Confirmado'" class="w3-small" style="margin-top:1em">Fecha propuesta de
               realización: 
               {{note['estimatedTerminationDate'] | date : 'dd/MM/yyyy'}}</p>
@@ -546,6 +558,11 @@
                 class="w3-border"
                 style="padding:8px; border-radius:10px; display:inline-block; margin-bottom:0px">{{note['taskStatus']}}</p>
             </div>
+          </div>
+
+          <!-- QUALITY INSPECTION SINGLE OBSERVATION AREA SUPERVISOR -->
+          <div *ngIf="note['type'] === 'quality inspection single observation area supervisor'" class="ms-color-2b" style="padding-left:0.5em">
+            <span><strong>{{note['senderName']}} </strong> tuvo la siguiente observación personal en su área: <strong>{{note['subject']}}</strong> y asigno al área : <strong>{{note['responsibleAreaName']}}</strong> como responsable</span>
           </div>
 
           <!-- MAINTENANCE REQUEST SUPERVISOR-->

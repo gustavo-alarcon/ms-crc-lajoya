@@ -19,6 +19,13 @@ export class AddObservationToInspectionComponent implements OnInit {
 
   filteredAreas: Observable<any>;
   selectedArea: Object = this.data['area'];
+  filteredResponsibleAreas: Observable<any>;
+  selectedResponsibleArea: Object = {
+    name: '',
+    supevisor: {
+      displayName: ''
+    }
+  };
 
   filteredKindOfDanger: Observable<any>;
   filteredKindOfObservation: Observable<any>;
@@ -47,32 +54,40 @@ export class AddObservationToInspectionComponent implements OnInit {
       uidSupervisor: this.data['area']['supervisor']['uid'],
       regDate: Date.now(),
       id: '',
-      inspectionId:this.data['id'],
+      inspectionId: this.data['id'],
       area: [this.data['area'], Validators.required],
+      responsibleArea: ['', Validators.required],
       kindOfObservation: ['', Validators.required],
       cause: ['', Validators.required]
     })
 
     this.filteredAreas = this.headerDataFormGroup.get('area').valueChanges
-                          .pipe(
-                            startWith<any>(''),
-                            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                            map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-                          )
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+      )
+
+    this.filteredResponsibleAreas = this.headerDataFormGroup.get('responsibleArea').valueChanges
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+      )
 
     this.filteredKindOfObservation = this.headerDataFormGroup.get('kindOfObservation').valueChanges
-                                      .pipe(
-                                        startWith<any>(''),
-                                        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                        map(name => name ? this.dbs.kindOfObservation.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.kindOfObservation)
-                                      )
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.kindOfObservation.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.kindOfObservation)
+      )
 
     this.filteredCauses = this.headerDataFormGroup.get('cause').valueChanges
-                                  .pipe(
-                                    startWith<any>(''),
-                                    map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                    map(name => name ? this.dbs.causes.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.causes)
-                                  )
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.causes.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.causes)
+      )
 
     // ************* DESCRIPTION FORM GROUP DEFINITIONS
 
@@ -83,36 +98,44 @@ export class AddObservationToInspectionComponent implements OnInit {
   }
 
   displayArea(area): string | undefined {
-    return area? area['name'] : undefined;
+    return area ? area['name'] : undefined;
   }
 
-  setSelectedArea(event): void{
+  setSelectedArea(event): void {
     this.selectedArea = event.option.value;
   }
 
+  displayResponsibleArea(area): string | undefined {
+    return area ? area['name'] : undefined;
+  }
 
-  addObservation(): void{
-    if(!this.selectedFile){
-      this.snackbar.open("Adjunte una imagen para poder guardar el documento","Cerrar", {
+  setSelectedResponsibleArea(event): void {
+    this.selectedResponsibleArea = event.option.value;
+  }
+
+
+  addObservation(): void {
+    if (!this.selectedFile) {
+      this.snackbar.open("Adjunte una imagen para poder guardar el documento", "Cerrar", {
         duration: 6000
       })
       return;
     }
 
-    if(this.headerDataFormGroup.valid && this.descriptionDataFormGroup.valid){
-      this.dialog.open(InspectionObservationConfirmSaveComponent,{
+    if (this.headerDataFormGroup.valid && this.descriptionDataFormGroup.valid) {
+      this.dialog.open(InspectionObservationConfirmSaveComponent, {
         data: [this.headerDataFormGroup.value, this.descriptionDataFormGroup.value, this.selectedFile, this.data['id']]
       }).afterClosed().subscribe(res => {
         this.dialogRef.close();
       })
-    }else{
-      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento","Cerrar", {
+    } else {
+      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento", "Cerrar", {
         duration: 6000
       });
     }
   }
 
-  onFileSelected(event): void{
+  onFileSelected(event): void {
     this.selectedFile = event.target.files[0];
 
     if (event.target.files && event.target.files[0]) {
