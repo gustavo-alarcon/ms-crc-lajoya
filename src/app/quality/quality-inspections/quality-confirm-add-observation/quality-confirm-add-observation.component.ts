@@ -142,6 +142,7 @@ export class QualityConfirmAddObservationComponent implements OnInit {
                       areaSupervisorId: this.data[0]['area']['supervisor']['uid'],
                       areaSupervisorName: this.data[0]['area']['supervisor']['displayName'],
                       responsibleAreaName: this.data[0]['responsibleArea']['name'],
+                      responsibleAreaSupervisorId: this.data[0]['responsibleArea']['supervisor']['uid'],
                       inspectionId: this.data[0]['inspectionId'],
                       observationId: refObservation.id,
                       subject: this.data[1]['recommendationDescription'],

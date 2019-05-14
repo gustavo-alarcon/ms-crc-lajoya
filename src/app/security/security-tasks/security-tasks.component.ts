@@ -80,7 +80,7 @@ export class SecurityTasksComponent implements OnInit, OnDestroy {
   displayedColumnsFredTasks: string[] = ['index', 'date', 'type', 'observations', 'initialPicture', 'observer', 'observedArea', 'staffObserved', 'eventDescription', 'upgradeOpportunity', 'status', 'percent', 'terminationDates', 'finalPicture', 'edit'];
   dataSourceFredTasks = new MatTableDataSource();
 
-  displayedColumnsInspectionTasks: string[] = ['index', 'kindOfDanger', 'kindOfObservation', 'observationDescription', 'initialPicture', 'cause', 'recommendationDescription', 'area', 'status', 'percent', 'terminationDate', 'finalPicture', 'edit'];
+  displayedColumnsInspectionTasks: string[] = ['index', 'kindOfObservation', 'observationDescription', 'initialPicture', 'cause', 'recommendationDescription', 'area', 'responsibleArea', 'status', 'percent', 'terminationDate', 'finalPicture', 'edit'];
   dataSourceInspectionTasks = new MatTableDataSource();
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();

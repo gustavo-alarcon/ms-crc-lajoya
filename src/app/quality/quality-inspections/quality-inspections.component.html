@@ -202,7 +202,7 @@
 
         <div class="w3-padding" style="min-height: 62vh">
 
-          <div style="display:flex;align-items:center;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:1em">
             <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em; margin-bottom:0px">{{currentMonth}}</h2>
 
             <app-custom-angular-csv [data]="downloadableInspectionsObservations" [filename]="titleInspectionsObservations"
@@ -394,7 +394,7 @@
                   <td mat-cell *matCellDef="let observation"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                     <button mat-icon-button color="warn" matTooltip="Borrar observación"
-                      (click)="deleteObservation(inspection['id'],observation['id'],observation['uidSupervisor'])"
+                      (click)="deleteObservation(inspection['id'],observation['id'], observation['responsibleArea']['supervisor']['uid'])"
                       [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -471,7 +471,7 @@
                       style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
                     <span class="ms-fill"></span>
                     <button mat-icon-button style="color:white" matTooltip="Borrar observación"
-                      (click)="deleteObservation(inspection['id'],observation['id'],observation['uidSupervisor'])"
+                      (click)="deleteObservation(inspection['id'],observation['id'],observation['responsibleArea']['supervisor']['uid'])"
                       [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -585,7 +585,7 @@
             </mat-form-field>
 
           </div>
-          <div style="display:flex;align-items:center">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:1em">
             <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">{{currentMonth}}</h2>
             <button mat-button disabled="true" class="ms-color-2b">
               <mat-icon>assignment</mat-icon> {{dbs.qualitySingleObservations.length | number: '2.0'}} Observaciones
@@ -724,7 +724,7 @@
               <td mat-cell *matCellDef="let observation"
                 style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                 <button mat-icon-button color="warn" matTooltip="Borrar observación"
-                  (click)="deleteSingleObservation(observation['id'],observation['uidSupervisor'])"
+                  (click)="deleteSingleObservation(observation['id'],observation['responsibleArea']['supervisor']['uid'])"
                   [disabled]="observation['status'] === 'Finalizado' || observation['uidSupervisor'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                   <mat-icon>delete</mat-icon>
                 </button>
@@ -747,7 +747,7 @@
                     style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
                   <span class="ms-fill"></span>
                   <button mat-icon-button style="color:white" matTooltip="Borrar observación"
-                    (click)="deleteSingleObservation(observation['id'],observation['uidSupervisor'])"
+                    (click)="deleteSingleObservation(observation['id'],observation['responsibleArea']['supervisor']['uid'])"
                     [disabled]="observation['status'] === 'Finalizado' ||!auth.permits['qualityInspectionsSingleObservationsDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>

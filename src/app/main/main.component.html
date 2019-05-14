@@ -29,7 +29,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.14r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.15r</button>
       </mat-menu>
     </div>
     <div class="w3-hide-large w3-hide-medium">
@@ -52,7 +52,7 @@
         <button mat-menu-item class="ms-font-3" (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon> Cambiar clave
         </button>
-        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.14r</button>
+        <button mat-menu-item class="w3-small ms-font-3" disabled>version 1.2.15r</button>
       </mat-menu>
     </div>
   </mat-toolbar>
@@ -188,7 +188,7 @@
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon>Seguridad FRED
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'inspection observation responsible supervisor' || note['type'] === 'inspection observation area supervisor'" disabled="true">
-              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon> Tarea - Seguridad Inspección
+              <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle">assignment</mat-icon> Seguridad - Inspección Observación
             </button>
             <button mat-button class="w3-small ms-color-2b" style="padding-left:0.5em" *ngIf="note['type'] === 'task confirmation'" disabled="true">
               <mat-icon matRipple mat-list-icon class="ms-color-2b" style="vertical-align:middle" *ngIf="note['type'] === 'task confirmation'">offline_pin</mat-icon> Tarea - Seguridad FRED
@@ -649,10 +649,11 @@
       </div>
 
       <div class="padding:1em 1em" *ngIf="auth.notifications.length === 0">
-        <p style="font-size:1.5em" class="ms-color-bt ms-font-raleway w3-center"> No tiene notificaciones nuevas</p>
+        <p style="font-size:1.5em; padding: 1em 1em" class="ms-color-bt ms-font-raleway w3-center"> No tiene notificaciones nuevas</p>
       </div>
 
     </mat-sidenav>
+    
     <mat-sidenav-content class="w3-padding">
       <router-outlet></router-outlet>
     </mat-sidenav-content>

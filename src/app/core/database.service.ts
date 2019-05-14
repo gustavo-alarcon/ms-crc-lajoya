@@ -472,7 +472,7 @@ export class DatabaseService {
       }
 
       // QUALITY - INSPECTIONS
-      if(permits['qualitySection'] && permits['qualityInspections']){
+      if(permits['qualitySection']){
         this.getQualityInspections(permits['qualityInspectionsPersonalList'], actualFromDate.valueOf(), toDate.valueOf());
         this.getQualitySingleObservations(permits['qualityInspectionsSingleObservationsPersonalList'], actualFromDate.valueOf(), toDate.valueOf());
       }
@@ -1164,7 +1164,8 @@ export class DatabaseService {
         if(personal){
           res.forEach(element => {
             if( element['uid'] === this.auth.userCRC.uid ||
-                element['uidSupervisor'] === this.auth.userCRC.uid){
+                element['uidSupervisor'] === this.auth.userCRC.uid ||
+                element['responsibleArea']['supervisor']['uid'] === this.auth.userCRC.uid){
                   personalList.push(element);
                 }
           })

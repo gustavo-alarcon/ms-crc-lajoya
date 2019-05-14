@@ -16,6 +16,8 @@ export class QualityTasksConfirmFinalizeInspectionComponent implements OnInit {
   uploadPercent_1: Observable<number>;
   uploading_1: boolean = false;
 
+  processStep: string = 'Completando información';
+
   now: number = Date.now();
 
   constructor(
@@ -30,11 +32,18 @@ export class QualityTasksConfirmFinalizeInspectionComponent implements OnInit {
   ngOnInit() {
   }
 
-  save(): void{
+  save(): void {
 
-    this.dbs.qualityTasksCollection.doc(this.data['task']['id']).set({details: this.data['details'], status: 'Finalizado', realTerminationDate: this.now},{merge: true});
+    this.processStep = "Cargando imágen";
 
-    if(this.data['img1']){
+    this.dbs.qualityTasksCollection.doc(this.data['task']['id']).set({ details: this.data['details'], status: 'Finalizado', realTerminationDate: this.now }, { merge: true });
+
+    this.dbs.qualityInspectionsCollection.doc(this.data['task']['inspectionId'])
+      .collection('observations')
+      .doc(this.data['task']['id'])
+      .set({ details: this.data['details'], status: 'Finalizado', realTerminationDate: this.now }, { merge: true });
+
+    if (this.data['img1']) {
       this.uploading_1 = true;
 
       const filePath = `/qualityTasksInspectionsPictures/${Date.now()}_${this.data['img1'].name}`;
@@ -45,25 +54,33 @@ export class QualityTasksConfirmFinalizeInspectionComponent implements OnInit {
 
       task.snapshotChanges().pipe(
         finalize(() => {
-          fileRef.getDownloadURL().subscribe( res => {
-            if(res){
-      
-              this.dbs.qualityTasksCollection.doc(this.data['task']['id']).set({finalPicture: res},{merge: true})
+          fileRef.getDownloadURL().subscribe(res => {
+            if (res) {
+              this.processStep = "...Actualizando tarea";
+              this.dbs.qualityTasksCollection.doc(this.data['task']['id']).set({ finalPicture: res }, { merge: true })
                 .then(() => {
-    
-                }).catch(err => {
+                  this.processStep = "...Actualizando observación en inspección";
+                  this.dbs.qualityInspectionsCollection.doc(this.data['task']['inspectionId'])
+                    .collection('observations')
+                    .doc(this.data['task']['id'])
+                    .set({ finalPicture: res }, { merge: true })
+                    .then(() => {
+                      this.processStep = "...Listo!";
+                      this.dialogRef.close(true);
+                    });
+                })
+                .catch(err => {
                   this.dialogRef.close(true);
                   console.log(err);
-                  this.snackbar.open(err,"Cerrar",{
+                  this.snackbar.open(err, "Cerrar", {
                     duration: 10000
                   });
-                });
+                })
+
             }
           })
         })
-      )
-      .subscribe()
+      ).subscribe()
     }
   }
-
 }

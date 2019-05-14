@@ -204,7 +204,7 @@ export class MainComponent implements OnInit {
   confirmQualitySingleObservation(observationId, notificationId): void{
     if(this.dateQualitySingleObservationFormControl.value){
       this.dbs.qualitySingleObservationsCollection.doc(observationId).update({status: 'Confirmado', estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
-      this.auth.notificationsCollection.doc(notificationId).update({estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
+      this.auth.notificationsCollection.doc(notificationId).update({taskStatus: 'Confirmado', estimatedTerminationDate: this.dateQualitySingleObservationFormControl.value.valueOf()});
     }else{
       this.snackbar.open("Debe seleccionar una fecha de cumplimiento para poder confirmar la solicitud", "Cerrar", {
         duration: 6000

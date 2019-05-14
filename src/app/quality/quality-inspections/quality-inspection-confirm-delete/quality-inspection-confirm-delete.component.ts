@@ -27,7 +27,7 @@ export class QualityInspectionConfirmDeleteComponent implements OnInit {
         snapshot.docs.forEach(doc => {
           let observation = doc.data();
           this.dbs.usersCollection
-            .doc(observation['area']['supervisor']['uid'])
+            .doc(observation['responsibleArea']['supervisor']['uid'])
             .collection('tasks')
             .doc(observation['id'])
             .delete()

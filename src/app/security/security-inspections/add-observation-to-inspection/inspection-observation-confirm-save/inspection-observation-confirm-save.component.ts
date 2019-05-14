@@ -102,7 +102,7 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                   .set(finalObject)
                   .then(() => {
 
-                    // Configuring notification for area supervisor
+                    // Configuring notification for responsible supervisor
                     let notificationObject = {
                       regDate: Date.now(),
                       id: '',
@@ -121,7 +121,7 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                       type: 'inspection observation responsible supervisor'
                     }
 
-                    // Sending notification to area supervisor
+                    // Sending notification to responsible supervisor
                     this.dbs.usersCollection
                       .doc(this.data[0]['responsibleArea']['supervisor']['uid'])
                       .collection('notifications')
@@ -156,7 +156,7 @@ export class InspectionObservationConfirmSaveComponent implements OnInit {
                       type: 'inspection observation area supervisor'
                     }
 
-                    // Sending notification to reponsible supervisor
+                    // Sending notification to area supervisor
                     this.dbs.usersCollection
                       .doc(this.data[0]['area']['supervisor']['uid'])
                       .collection('notifications')

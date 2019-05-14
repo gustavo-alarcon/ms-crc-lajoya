@@ -11,7 +11,7 @@
       <form [formGroup]="headerDataFormGroup">
 
         <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Área responsable</mat-label>
+          <mat-label>Área observada</mat-label>
           <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="area"
             [matAutocomplete]="autoArea" autocomplete="off">
           <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="setSelectedArea($event)"

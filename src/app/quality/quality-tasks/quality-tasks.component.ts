@@ -86,10 +86,10 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
   displayedColumnsTasksByRedo: string[] = ['index', 'action', 'approved', 'responsibles', 'finalPicture', 'status', 'realTerminationDate', 'finalArchive', 'finalize'];
   dataSourceTasksByRedo = new MatTableDataSource();
 
-  displayedColumnsTasksByInspections: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture', 'area', 'finalPicture', 'terminationDate', 'status', 'edit'];
+  displayedColumnsTasksByInspections: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture', 'area', 'responsibleArea', 'finalPicture', 'terminationDate', 'status', 'edit'];
   dataSourceTasksByInspections = new MatTableDataSource();
 
-  displayedColumnsTasksBySingleObservations: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture', 'area', 'finalPicture', 'terminationDate', 'status', 'edit'];
+  displayedColumnsTasksBySingleObservations: string[] = ['index', 'observationDescription', 'recommendationDescription', 'initialPicture', 'area', 'responsibleArea', 'finalPicture', 'terminationDate', 'status', 'edit'];
   dataSourceTasksBySingleObservations = new MatTableDataSource();
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
@@ -139,13 +139,14 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
     let dataQualityTasksByInspectionsSubs = this.dbs.currentDataQualityTasks
       .pipe(
         map(res => {
-          let tasksByRedo = [];
+          console.log(res);
+          let tasksByInspectionObservation = [];
           res.forEach(element => {
             if (element['source'] === 'quality inspection') {
-              tasksByRedo.push(element);
+              tasksByInspectionObservation.push(element);
             }
           });
-          return tasksByRedo;
+          return tasksByInspectionObservation;
         })
       )
       .subscribe(res => {
@@ -165,6 +166,7 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
         res.forEach(element => {
           this.isOpenSingleObservations.push(false);
         })
+        console.log(res);
       });
 
     this.subscriptions.push(dataQualityTasksBySingleObservationSubs);
