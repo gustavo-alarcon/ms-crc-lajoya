@@ -25,11 +25,19 @@
 
         </div>
         <div class="w3-padding">
-          <div style="display:flex">
+          <div style="display:flex; align-items:center">
             <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">{{currentMonth}}</h2>
+
             <button mat-button disabled="true" class="ms-color-2b">
               <mat-icon>assignment_turned_in</mat-icon> {{dbs.qualityInspections.length | number: '2.0'}} Inspecciones
             </button>
+
+            <app-custom-angular-csv [data]="downloadableInspections" [filename]="titleInspections"
+              [options]="optionsInspections">
+              <button mat-raised-button color="primary" [disabled]="!downloadableInspections.length">
+                <mat-icon>cloud_download</mat-icon> Descargar
+              </button>
+            </app-custom-angular-csv>
           </div>
 
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
@@ -191,11 +199,23 @@
             </mat-hint>
           </mat-form-field>
         </div>
+
         <div class="w3-padding" style="min-height: 62vh">
-          <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em; margin-bottom:0px">{{currentMonth}}</h2>
+
+          <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:1em">
+            <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em; margin-bottom:0px">{{currentMonth}}</h2>
+
+            <app-custom-angular-csv [data]="downloadableInspectionsObservations" [filename]="titleInspectionsObservations"
+              [options]="optionsInspectionsObservations">
+              <button mat-raised-button color="primary" [disabled]="!downloadableInspectionsObservations.length">
+                <mat-icon>cloud_download</mat-icon> Descargar
+              </button>
+            </app-custom-angular-csv>
+          </div>
+          
 
           <div *ngFor="let inspection of dbs.currentDataQualityInspections | async; let i = index"
-            class="w3-hide-small">
+            class="w3-hide-small w3-margin-top">
             <div [@openCloseCard]="isOpenInspection[i] ? 'openCard': 'closedCard'"
               class="w3-block w3-round-large mat-elevation-z4 w3-margin-top w3-white"
               style="z-index:1; position:relative" (click)="toggleCardInspection(i, inspection['id'])">
@@ -299,12 +319,25 @@
                 <ng-container matColumnDef="area">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header
                     style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-                    Área</th>
+                    Área observada</th>
                   <td mat-cell *matCellDef="let observation" class="w3-small"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
                     <span style="font-weight:500">{{observation['area']['name']}}</span>
                     <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
                       <li>Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="responsibleArea">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                    Área responsbble</th>
+                  <td mat-cell *matCellDef="let observation" class="w3-small"
+                    style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                    <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
                     </ul>
                   </td>
                 </ng-container>
@@ -361,7 +394,7 @@
                   <td mat-cell *matCellDef="let observation"
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                     <button mat-icon-button color="warn" matTooltip="Borrar observación"
-                      (click)="deleteObservation(inspection['id'],observation['id'],observation['uidSupervisor'])"
+                      (click)="deleteObservation(inspection['id'],observation['id'], observation['responsibleArea']['supervisor']['uid'])"
                       [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -376,7 +409,7 @@
           </div>
 
           <!-- MOBIL VERSION LIST INSPECTIONS -->
-          <div class="w3-hide-large w3-hide-medium">
+          <div class="w3-hide-large w3-hide-medium w3-margin-top">
             <ng-container *ngFor="let inspection of filteredInspections; let inspectionIndex = index">
               <div id="inspection_{{inspectionIndex}}"
                 [@openCloseCard]="isOpenInspection[inspectionIndex] ? 'openCard': 'closedCard'"
@@ -438,7 +471,7 @@
                       style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
                     <span class="ms-fill"></span>
                     <button mat-icon-button style="color:white" matTooltip="Borrar observación"
-                      (click)="deleteObservation(inspection['id'],observation['id'],observation['uidSupervisor'])"
+                      (click)="deleteObservation(inspection['id'],observation['id'],observation['responsibleArea']['supervisor']['uid'])"
                       [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -457,11 +490,20 @@
                     </div>
                   </div>
                   <div class="w3-row">
-                    <div class="w3-col s6 ms-header-mobile">Área</div>
+                    <div class="w3-col s6 ms-header-mobile">Área observada</div>
                     <div class="w3-col s6" style="padding: 0.5em 0.5em">
                       <span class="w3-small" style="font-weight:500">{{observation['area']['name']}}</span>
                       <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
                         <li class="w3-small">Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-col s6 ms-header-mobile">Área responsable</div>
+                    <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                      <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
+                      <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                        <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
                       </ul>
                     </div>
                   </div>
@@ -543,17 +585,23 @@
             </mat-form-field>
 
           </div>
-          <div style="display:flex">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:1em">
             <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.2em">{{currentMonth}}</h2>
             <button mat-button disabled="true" class="ms-color-2b">
               <mat-icon>assignment</mat-icon> {{dbs.qualitySingleObservations.length | number: '2.0'}} Observaciones
             </button>
+            <app-custom-angular-csv [data]="downloadableSingleObservations" [filename]="titleSingleObservations"
+              [options]="optionsSingleObservations">
+              <button mat-raised-button color="primary" [disabled]="!downloadableSingleObservations.length">
+                <mat-icon>cloud_download</mat-icon> Descargar
+              </button>
+            </app-custom-angular-csv>
           </div>
 
 
         </div>
 
-        <div class="w3-container w3-hide-small" style="overflow:auto">
+        <div class="w3-container w3-hide-small w3-margin-top" style="overflow:auto">
           <table mat-table [dataSource]="dataSourceQualitySingleObservations" matSort
             style="border-radius:10px 10px 0px 0px">
 
@@ -612,6 +660,19 @@
               </td>
             </ng-container>
 
+            <ng-container matColumnDef="responsibleArea">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header
+                style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                Área</th>
+              <td mat-cell *matCellDef="let observation" class="w3-small"
+                style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
+                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                  <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
+                </ul>
+              </td>
+            </ng-container>
+
             <ng-container matColumnDef="terminationDate">
               <th mat-header-cell *matHeaderCellDef mat-sort-header
                 style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
@@ -663,7 +724,7 @@
               <td mat-cell *matCellDef="let observation"
                 style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                 <button mat-icon-button color="warn" matTooltip="Borrar observación"
-                  (click)="deleteSingleObservation(observation['id'],observation['uidSupervisor'])"
+                  (click)="deleteSingleObservation(observation['id'],observation['responsibleArea']['supervisor']['uid'])"
                   [disabled]="observation['status'] === 'Finalizado' || observation['uidSupervisor'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                   <mat-icon>delete</mat-icon>
                 </button>
@@ -677,7 +738,7 @@
         </div>
 
         <!-- MOBIL VERSION SINGLE OBSERVATIONS -->
-        <div class="w3-hide-large w3-hide-medium">
+        <div class="w3-hide-large w3-hide-medium w3-margin-top">
           <ng-container>
             <div class="mat-elevation-z4" style="background:white">
               <div *ngFor="let observation of dbs.currentDataQualitySingleObservations | async; let i = index">
@@ -685,10 +746,9 @@
                   <span class="ms-font-roboto"
                     style="padding: 0px 12px; color:white; background: rgba(255,255,255,0.2); font-size: 0.7em">{{i+1}}</span>
                   <span class="ms-fill"></span>
-                  <!-- <button mat-icon-button style="color:white" matTooltip="Editar observación"><mat-icon>edit</mat-icon></button> -->
                   <button mat-icon-button style="color:white" matTooltip="Borrar observación"
-                    (click)="deleteSingleObservation(observation['id'],observation['uidSupervisor'])"
-                  [disabled]="observation['status'] === 'Finalizado' ||!auth.permits['qualityInspectionsSingleObservationsDelete']">
+                    (click)="deleteSingleObservation(observation['id'],observation['responsibleArea']['supervisor']['uid'])"
+                    [disabled]="observation['status'] === 'Finalizado' ||!auth.permits['qualityInspectionsSingleObservationsDelete']">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </mat-toolbar>
@@ -706,11 +766,20 @@
                   </div>
                 </div>
                 <div class="w3-row">
-                  <div class="w3-col s6 ms-header-mobile">Área</div>
+                  <div class="w3-col s6 ms-header-mobile">Área observada</div>
                   <div class="w3-col s6" style="padding: 0.5em 0.5em">
                     <span class="w3-small" style="font-weight:500">{{observation['area']['name']}}</span>
                     <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
                       <li class="w3-small">Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col s6 ms-header-mobile">Área responsable</div>
+                  <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                    <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
                     </ul>
                   </div>
                 </div>

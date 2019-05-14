@@ -39,7 +39,7 @@ export class FredConfirmSaveComponent implements OnInit {
       this.observations.push({group: 'Control de Riesgos Operacionales', observations: [this.data[1]['list3']]});
     }
     if(this.data[1]['list4'] != 'No observado'){
-      this.observations.push({group: 'Herramientas y equipos', observations: [this.data[1]['list4']]});
+      this.observations.push({group: 'Herramientas y Equipos', observations: [this.data[1]['list4']]});
     }
     if(this.data[1]['list5'] != 'No observado'){
       this.observations.push({group: 'Riesgos Críticos', observations: [this.data[1]['list5']]});

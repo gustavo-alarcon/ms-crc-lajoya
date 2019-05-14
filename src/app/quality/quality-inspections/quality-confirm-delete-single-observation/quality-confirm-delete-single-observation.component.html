@@ -3,6 +3,7 @@
     <mat-icon style="vertical-align:middle">delete</mat-icon> Borrar Observación
   </h2>
   <mat-divider></mat-divider>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
   <mat-dialog-content>
     <p class="ms-font-raleway ms-color-2b">¿Está seguro de borrar la observación?</p>
   </mat-dialog-content>

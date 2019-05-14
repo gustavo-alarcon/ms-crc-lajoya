@@ -19,16 +19,19 @@ export class QualityDialogAddSingleObservationComponent implements OnInit {
 
   filteredAreas: Observable<any>;
   selectedArea: Object = {
-    area:'',
-    supervisor:{
-      displayName:'',
-      uid:''
+    area: '',
+    supervisor: {
+      displayName: '',
+      uid: ''
     }
   };
-
-  filteredKindOfDanger: Observable<any>;
-  filteredKindOfObservation: Observable<any>;
-  filteredCauses: Observable<any>;
+  filteredResponsibleAreas: Observable<any>;
+  selectedResponsibleArea: Object = {
+    name: '',
+    supevisor: {
+      displayName: ''
+    }
+  };
 
   selectedFile = null;
   imageSrc: string | ArrayBuffer;
@@ -44,16 +47,23 @@ export class QualityDialogAddSingleObservationComponent implements OnInit {
 
   ngOnInit() {
     this.headerDataFormGroup = this.fb.group({
-      area: ['', Validators.required]
+      area: ['', Validators.required],
+      responsibleArea: ['', Validators.required]
     })
 
     this.filteredAreas = this.headerDataFormGroup.get('area').valueChanges
-                          .pipe(
-                            startWith<any>(''),
-                            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                            map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-                          )
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+      )
 
+    this.filteredResponsibleAreas = this.headerDataFormGroup.get('responsibleArea').valueChanges
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+      )
     // ************* DESCRIPTION FORM GROUP DEFINITIONS
 
     this.descriptionDataFormGroup = this.fb.group({
@@ -63,37 +73,45 @@ export class QualityDialogAddSingleObservationComponent implements OnInit {
   }
 
   displayArea(area): string | undefined {
-    return area? area['name'] : undefined;
+    return area ? area['name'] : undefined;
   }
 
-  setSelectedArea(event): void{
+  setSelectedArea(event): void {
     this.selectedArea = event.option.value;
   }
 
-  addObservation(): void{
-    if(!this.selectedFile){
-      this.snackbar.open("Adjunte una imagen para poder guardar el documento","Cerrar", {
+  displayResponsibleArea(area): string | undefined {
+    return area ? area['name'] : undefined;
+  }
+
+  setSelectedResponsibleArea(event): void {
+    this.selectedResponsibleArea = event.option.value;
+  }
+
+  addObservation(): void {
+    if (!this.selectedFile) {
+      this.snackbar.open("Adjunte una imagen para poder guardar el documento", "Cerrar", {
         duration: 6000
       })
       return;
-    }    
+    }
 
-    if(this.headerDataFormGroup.valid && this.descriptionDataFormGroup.valid){
-      this.dialog.open(QualityConfirmAddSingleObservationComponent,{
+    if (this.headerDataFormGroup.valid && this.descriptionDataFormGroup.valid) {
+      this.dialog.open(QualityConfirmAddSingleObservationComponent, {
         data: [this.headerDataFormGroup.value, this.descriptionDataFormGroup.value, this.selectedFile]
       }).afterClosed().subscribe(res => {
-        if(res){
+        if (res) {
           this.dialogRef.close(true);
         }
       })
-    }else{
-      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento","Cerrar", {
+    } else {
+      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento", "Cerrar", {
         duration: 6000
       });
     }
   }
 
-  onFileSelected(event): void{
+  onFileSelected(event): void {
     this.selectedFile = event.target.files[0];
 
     if (event.target.files && event.target.files[0]) {

@@ -1,6 +1,6 @@
 {
   "name": "ms-crc-lajoya",
-  "version": "1.2.14",
+  "version": "1.2.16",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "angular2-csv": "^0.2.9",
     "core-js": "^2.5.4",
     "firebase": "^5.8.1",
     "hammerjs": "^2.0.8",

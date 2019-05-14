@@ -9,6 +9,8 @@ import { MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 })
 export class SecurityInspectionObservationConfirmDeleteComponent implements OnInit {
 
+  loading: boolean = false;
+
   constructor(
     public dbs: DatabaseService,
     private snackbar: MatSnackBar,
@@ -17,23 +19,45 @@ export class SecurityInspectionObservationConfirmDeleteComponent implements OnIn
   ) { }
 
   ngOnInit() {
+    console.log(this.data);
   }
 
   delete(): void{
+    this.loading = true;
+    
     this.dbs.securityInspectionsCollection
       .doc(this.data['id_inspection'])
       .collection(`observations`)
       .doc(this.data['id_observation'])
       .delete()
         .then(() => {
+          // Now what ?
+        })
+        .catch(err => {
+          console.log(err);
+          this.loading = false;
           this.dialogRef.close();
+          this.snackbar.open(err,"Cerrar",{
+            duration: 6000
+          })
+        })
+
+    this.dbs.usersCollection
+      .doc(this.data['id_supervisor'])
+      .collection('tasks')
+      .doc(this.data['id_observation'])
+      .delete()
+        .then(() => {
+          this.loading = false;
+          this.dialogRef.close(true);
           this.snackbar.open("Listo!","Cerrar",{
             duration: 6000
           })
         })
         .catch(err => {
           console.log(err);
-          this.dialogRef.close();
+          this.loading = false;
+          this.dialogRef.close(true);
           this.snackbar.open(err,"Cerrar",{
             duration: 6000
           })

@@ -35,7 +35,7 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
     if (this.data['image']) {
       this.uploading_final = true;
 
-      const filePath = `/securityFredsPictures/${this.data['image'].name}`;
+      const filePath = `/securityInspectionsObservationsPictures/${Date.now()}_${this.data['image'].name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, this.data['image']);
 
@@ -120,7 +120,7 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
                     description: finalObject,
                     regdate: Date.now()
                   }
-                  log['description.observatioId'] = this.data['task']['id'];
+                  log['description.observationId'] = this.data['task']['id'];
 
                   // Adding log to respective inspection
                   this.dbs.addInspectionLog(this.data['task']['inspectionId'], log)
@@ -138,7 +138,7 @@ export class SecurityTasksConfirmSaveComponent implements OnInit {
 
                   // UPDATING IN SUPERVISOR TASKS DB
                   this.dbs.usersCollection
-                    .doc(this.data['task']['area']['supervisor']['uid'])
+                    .doc(this.data['task']['responsibleArea']['supervisor']['uid'])
                     .collection(`tasks`)
                     .doc(this.data['task']['id'])
                     .set(finalObject, { merge: true })

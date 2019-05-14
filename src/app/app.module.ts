@@ -8,6 +8,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 import { HttpClientModule } from '@angular/common/http';
 
+// ANGULAR PIPES
+import { DatePipe } from '@angular/common';
+
 
 // CRC SERVICES
 import { AuthService } from './core/auth.service';
@@ -19,6 +22,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
 import { PushNotificationsModule } from 'ng-push';
+import { Angular2CsvModule } from 'angular2-csv';
 
 
 // FIREBASE MODULES
@@ -188,6 +192,7 @@ import { ConfigCustomerComponent } from './configuration/system/system-general-a
 import { CreateNewCustomerComponent } from './configuration/system/system-general-area/config-customer/create-new-customer/create-new-customer.component';
 import { CustomerDialogEditComponent } from './configuration/system/system-general-area/config-customer/customer-dialog-edit/customer-dialog-edit.component';
 import { CustomerConfirmDeleteComponent } from './configuration/system/system-general-area/config-customer/customer-confirm-delete/customer-confirm-delete.component';
+import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-csv.component';
 
 
 
@@ -320,7 +325,8 @@ import { CustomerConfirmDeleteComponent } from './configuration/system/system-ge
     ConfigCustomerComponent,
     CreateNewCustomerComponent,
     CustomerDialogEditComponent,
-    CustomerConfirmDeleteComponent
+    CustomerConfirmDeleteComponent,
+    CustomAngularCsvComponent
     
   ],
   imports: [
@@ -329,6 +335,7 @@ import { CustomerConfirmDeleteComponent } from './configuration/system/system-ge
     AppRoutingModule,
     ReactiveFormsModule,
     PushNotificationsModule,
+    Angular2CsvModule,
     ChartsModule,
     HttpClientModule,
     NgxPageScrollModule,
@@ -377,7 +384,8 @@ import { CustomerConfirmDeleteComponent } from './configuration/system/system-ge
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { showError: true }
-    }
+    },
+    DatePipe
   ],
   entryComponents: [
     ShowNotificationsComponent,

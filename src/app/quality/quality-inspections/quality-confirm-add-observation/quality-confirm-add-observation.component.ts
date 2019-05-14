@@ -27,10 +27,10 @@ export class QualityConfirmAddObservationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.mergedForms = Object.assign(this.data[0],this.data[1]);
+    this.mergedForms = Object.assign(this.data[0], this.data[1]);
   }
 
-  save(): void{
+  save(): void {
 
     this.uploading = true;
 
@@ -42,8 +42,8 @@ export class QualityConfirmAddObservationComponent implements OnInit {
 
     task.snapshotChanges().pipe(
       finalize(() => {
-        fileRef.getDownloadURL().subscribe( res => {
-          if(res){
+        fileRef.getDownloadURL().subscribe(res => {
+          if (res) {
 
             let status = 'Por confirmar';
             let estimatedDate = 0;
@@ -58,112 +58,147 @@ export class QualityConfirmAddObservationComponent implements OnInit {
               solved: false,
               source: 'quality inspection'
             };
-    
-            let finalObject = Object.assign(this.mergedForms,lastObject);
-            
+
+            let finalObject = Object.assign(this.mergedForms, lastObject);
+
             // REGISTERING OBSERVATION IN QUALITY INSPECTIONS ***
             // Adding the observation to the corresponding inspection
             this.dbs.qualityInspectionsCollection.doc(this.data[3]).collection(`observations`).add(finalObject)
-            .then(refObservation => {
-              // Updating the id of the document using the reference
-              refObservation.update({id: refObservation.id})
-                .then(() => {
-                  // Constructing the log object
-                  let log = {
-                    action: 'observation added!',
-                    description: this.data[1]['recommendationDescription'],
-                    area: this.data[0]['area'],
-                    regdate: Date.now()
-                  }
-                  // Adding the log to the coresponding inspection
-                  this.dbs.addQualityInspectionLog(this.data[3], log)
-                    .catch(error => {
-                      console.log(error);
-                      this.uploading = false;
-                      this.snackbar.open("Ups!, parece que hubo un error guardando el log de la observación ...","Cerrar",{
-                        duration:6000
-                      });
-                    });
-                  
-                });
-
-              finalObject['id'] = refObservation.id;
-
-              // REGISTERING OBSERVATION IN SUPERVISOR TASKS DB
-              // Adding the observation as task in the tasks collection of correspoding supervisor
-              this.dbs.usersCollection
-                .doc(this.data[0]['area']['supervisor']['uid'])
-                .collection(`tasks`)
-                .doc(refObservation.id)
-                .set(finalObject)
+              .then(refObservation => {
+                // Updating the id of the document using the reference
+                refObservation.update({ id: refObservation.id })
                   .then(() => {
-                    
+                    // Constructing the log object
+                    let log = {
+                      action: 'observation added!',
+                      description: this.data[1]['recommendationDescription'],
+                      area: this.data[0]['area'],
+                      regdate: Date.now()
+                    }
+                    // Adding the log to the coresponding inspection
+                    this.dbs.addQualityInspectionLog(this.data[3], log)
+                      .catch(error => {
+                        console.log(error);
+                        this.uploading = false;
+                        this.snackbar.open("Ups!, parece que hubo un error guardando el log de la observación ...", "Cerrar", {
+                          duration: 6000
+                        });
+                      });
+
+                  });
+
+                finalObject['id'] = refObservation.id;
+
+                // Adding the observation as task in the tasks collection of responsible supervisor
+                this.dbs.usersCollection
+                  .doc(this.data[0]['responsibleArea']['supervisor']['uid'])
+                  .collection(`tasks`)
+                  .doc(refObservation.id)
+                  .set(finalObject)
+                  .then(() => {
+
                     // Configuring notification for area supervisor
                     let notificationObject = {
                       regDate: Date.now(),
-                      id:'',
+                      id: '',
                       senderId: this.auth.userCRC.uid,
                       senderName: this.auth.userCRC.displayName,
-                      areaId: this.data[0]['area']['id'],
                       areaName: this.data[0]['area']['name'],
-                      areaSupervisorId: this.data[0]['area']['supervisor']['uid'],
-                      areaSupervisorName: this.data[0]['area']['supervisor']['displayName'],
+                      responsibleAreaName: this.data[0]['responsibleArea']['name'],
+                      areaSupervisorId: this.data[0]['responsibleArea']['supervisor']['uid'],
+                      areaSupervisorName: this.data[0]['responsibleArea']['supervisor']['displayName'],
                       inspectionId: this.data[0]['inspectionId'],
                       observationId: refObservation.id,
                       subject: this.data[1]['recommendationDescription'],
                       estimatedTerminationDate: 0,
                       taskStatus: 'Por confirmar',
                       status: 'unseen',
-                      type: 'quality inspection observation supervisor'
+                      type: 'quality inspection observation responsible supervisor'
                     }
 
                     // Sending notification to area supervisor
                     this.dbs.usersCollection
-                    .doc(this.data[0]['area']['supervisor']['uid'])
-                    .collection('/notifications')
-                    .add(notificationObject)
+                      .doc(this.data[0]['responsibleArea']['supervisor']['uid'])
+                      .collection('notifications')
+                      .add(notificationObject)
                       .then(ref => {
-                        ref.update({id: ref.id});
+                        ref.update({ id: ref.id });
+                      })
+                      .catch(error => {
+                        this.uploading = false;
+                        console.log(error);
+                        this.snackbar.open("Ups!, parece que hubo un error (SI003) ...", "Cerrar", {
+                          duration: 6000
+                        });
+                      });
+
+                    // Configuring notification for area supervisor
+                    let notification2Object = {
+                      regDate: Date.now(),
+                      id: '',
+                      senderId: this.auth.userCRC.uid,
+                      senderName: this.auth.userCRC.displayName,
+                      areaName: this.data[0]['area']['name'],
+                      areaSupervisorId: this.data[0]['area']['supervisor']['uid'],
+                      areaSupervisorName: this.data[0]['area']['supervisor']['displayName'],
+                      responsibleAreaName: this.data[0]['responsibleArea']['name'],
+                      responsibleAreaSupervisorId: this.data[0]['responsibleArea']['supervisor']['uid'],
+                      inspectionId: this.data[0]['inspectionId'],
+                      observationId: refObservation.id,
+                      subject: this.data[1]['recommendationDescription'],
+                      estimatedTerminationDate: 0,
+                      taskStatus: 'Por confirmar',
+                      status: 'unseen',
+                      type: 'quality inspection observation area supervisor'
+                    }
+
+                    // Sending notification to reponsible supervisor
+                    this.dbs.usersCollection
+                      .doc(this.data[0]['area']['supervisor']['uid'])
+                      .collection('notifications')
+                      .add(notification2Object)
+                      .then(ref => {
+                        ref.update({ id: ref.id });
                         // Closing the dialog and setting the uploading flag to false
                         this.dialogRef.close(true);
                         this.uploading = false;
-                        this.snackbar.open("Listo!","Cerrar",{
-                          duration:6000
+                        this.snackbar.open("Listo!", "Cerrar", {
+                          duration: 6000
                         });
                       })
                       .catch(error => {
                         this.uploading = false;
                         console.log(error);
-                        this.snackbar.open("Ups!, parece que hubo un error (SI003) ...","Cerrar",{
-                          duration:6000
+                        this.snackbar.open("Ups!, parece que hubo un error (SI003) ...", "Cerrar", {
+                          duration: 6000
                         });
                       });
 
                   });
 
-              // UPDATING INSPECTION TO - IN PROGRESS
-              this.dbs.qualityInspectionsCollection
-                .doc(this.data[0]['inspectionId'])
-                .update({status: 'En progreso'})
+                // UPDATING INSPECTION TO - IN PROGRESS
+                this.dbs.qualityInspectionsCollection
+                  .doc(this.data[0]['inspectionId'])
+                  .update({ status: 'En progreso' })
                   .catch(error => {
                     this.uploading = false;
                     console.log(error);
-                    this.snackbar.open("Ups!, parece que hubo un error (SI004) ...","Cerrar",{
-                      duration:6000
+                    this.snackbar.open("Ups!, parece que hubo un error (SI004) ...", "Cerrar", {
+                      duration: 6000
                     });
                   });
-              
 
-            }).catch(err => {
-              this.snackbar.open(err,"Cerrar",{
-                duration: 10000
-              });
-            })
+
+              }).catch(err => {
+                this.snackbar.open(err, "Cerrar", {
+                  duration: 10000
+                });
+              })
           }
         })
       })
     )
-    .subscribe()
+      .subscribe()
   }
 
 }

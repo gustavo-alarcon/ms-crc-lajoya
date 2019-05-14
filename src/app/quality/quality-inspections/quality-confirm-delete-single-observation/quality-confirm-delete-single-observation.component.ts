@@ -9,6 +9,8 @@ import { MatSnackBar, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 })
 export class QualityConfirmDeleteSingleObservationComponent implements OnInit {
 
+  loading: boolean = false;
+
   constructor(
     public dbs: DatabaseService,
     private snackbar: MatSnackBar,
@@ -20,6 +22,8 @@ export class QualityConfirmDeleteSingleObservationComponent implements OnInit {
   }
 
   delete(): void{
+    this.loading = true;
+
     this.dbs.qualitySingleObservationsCollection
       .doc(this.data['id_observation'])
       .delete()
@@ -32,6 +36,7 @@ export class QualityConfirmDeleteSingleObservationComponent implements OnInit {
           this.snackbar.open(err,"Cerrar",{
             duration: 6000
           })
+          this.loading = false;
         })
 
     this.dbs.usersCollection
@@ -44,13 +49,15 @@ export class QualityConfirmDeleteSingleObservationComponent implements OnInit {
           this.snackbar.open("Listo!","Cerrar",{
             duration: 6000
           })
+          this.loading = false;
         })
         .catch(err => {
           console.log(err);
           this.dialogRef.close(true);
           this.snackbar.open(err,"Cerrar",{
             duration: 6000
-          })
+          });
+          this.loading = false;
         })
   }
 

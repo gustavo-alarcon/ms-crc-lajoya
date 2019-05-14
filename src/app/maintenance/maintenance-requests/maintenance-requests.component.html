@@ -261,7 +261,7 @@
                       <mat-icon>edit</mat-icon> Editar
                     </button><br>
                     <button mat-raised-button class="w3-margin-bottom" color="warn" matTooltip="Borrar solicitud"
-                      (click)="delete(request['id'],request['uidSupervisor'])" [disabled]="!auth.permits['maintenanceRequestsDelete']">
+                      (click)="delete(request['id'])" [disabled]="!auth.permits['maintenanceRequestsDelete']">
                       <mat-icon>delete</mat-icon> Borrar
                     </button><br>
                   </td>

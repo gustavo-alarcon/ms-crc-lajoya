@@ -1,4 +1,6 @@
-<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title><mat-icon style="vertical-align:middle">assignment_turned_in</mat-icon> Agregar observación</h2>
+<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title>
+  <mat-icon style="vertical-align:middle">assignment_turned_in</mat-icon> Agregar observación
+</h2>
 <mat-divider></mat-divider>
 <mat-dialog-content class="w3-roung-large">
   <mat-vertical-stepper #stepperFRED class="w3-margin-top w3-round-large">
@@ -8,13 +10,13 @@
 
       <form [formGroup]="headerDataFormGroup">
         <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Área responsable</mat-label>
-          <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="area" [matAutocomplete]="autoArea" autocomplete="off">
-          <mat-autocomplete #autoArea="matAutocomplete"
-                            (optionSelected)="setSelectedArea($event)"
-                            [displayWith]="displayArea">
+          <mat-label>Área observada</mat-label>
+          <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="area"
+            [matAutocomplete]="autoArea" autocomplete="off">
+          <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="setSelectedArea($event)"
+            [displayWith]="displayArea">
             <mat-option *ngFor="let area of filteredAreas | async" [value]="area">
-              <strong>{{area['name']}}</strong>
+              <strong>{{area['name']}}</strong> | {{area['supervisor']['displayName']}}
             </mat-option>
           </mat-autocomplete>
           <mat-hint *ngIf="!selectedArea['supervisor']['displayName']">
@@ -23,7 +25,19 @@
           <mat-hint *ngIf="selectedArea['supervisor']['displayName']">
             Supervisor: {{selectedArea['supervisor']['displayName']}}
           </mat-hint>
-        </mat-form-field>
+        </mat-form-field><br>
+
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+          <mat-label>Área responsable</mat-label>
+          <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="responsibleArea"
+            [matAutocomplete]="autoResponsibleArea" autocomplete="off">
+          <mat-autocomplete #autoResponsibleArea="matAutocomplete" (optionSelected)="setSelectedResponsibleArea($event)"
+            [displayWith]="displayResponsibleArea">
+            <mat-option *ngFor="let area of filteredResponsibleAreas | async" [value]="area">
+              <strong>{{area['name']}}</strong> | {{area['supervisor']['displayName']}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field><br>
 
         <div>
           <button mat-stroked-button matStepperNext>Siguiente</button>
@@ -37,27 +51,27 @@
       <ng-template matStepLabel>Reseñas</ng-template>
 
       <form [formGroup]="descriptionDataFormGroup">
-          <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-            <mat-label>Descripción de la observación</mat-label>
-            <textarea matInput placeholder="Describa..." rows="4" formControlName="observationDescription" required></textarea>
-            <mat-hint>
-              requerido *
-            </mat-hint>
-          </mat-form-field>
-    
-          <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-            <mat-label>Conclusiones / Recomendaciones</mat-label>
-            <textarea matInput placeholder="Describa..." rows="4" formControlName="recommendationDescription" required></textarea>
-            <mat-hint>
-              requerido *
-            </mat-hint>
-          </mat-form-field><br>
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+          <mat-label>Descripción de la observación</mat-label>
+          <textarea matInput placeholder="Describa..." rows="4" formControlName="observationDescription"
+            required></textarea>
+          <mat-hint>
+            requerido *
+          </mat-hint>
+        </mat-form-field>
 
-          <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
-          <img  [src]="imageSrc || '../../../assets/images/no-image.png'"
-                style="width:200px; height:150px; cursor:pointer"
-                class="mat-elevation-z4 w3-hover-shadow"
-                (click)="fileInput.click()">
+        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+          <mat-label>Conclusiones / Recomendaciones</mat-label>
+          <textarea matInput placeholder="Describa..." rows="4" formControlName="recommendationDescription"
+            required></textarea>
+          <mat-hint>
+            requerido *
+          </mat-hint>
+        </mat-form-field><br>
+
+        <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
+        <img [src]="imageSrc || '../../../assets/images/no-image.png'" style="width:200px; height:150px; cursor:pointer"
+          class="mat-elevation-z4 w3-hover-shadow" (click)="fileInput.click()">
 
         <div>
           <button mat-stroked-button matStepperPrevious class="w3-margin-right w3-margin-top">Anterior</button>
@@ -69,6 +83,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="w3-margin-top w3-margin-bottom" style="border-top: 1px solid lightgray;">
-  <button mat-stroked-button color="warn" class="w3-margin-right"mat-dialog-close >Cancelar</button>
-  <button mat-raised-button color="primary" (click)="addObservation()" [disabled]="!(headerDataFormGroup.valid && descriptionDataFormGroup.valid)">Crear</button>
+  <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" (click)="addObservation()"
+    [disabled]="!(headerDataFormGroup.valid && descriptionDataFormGroup.valid)">Crear</button>
 </mat-dialog-actions>
