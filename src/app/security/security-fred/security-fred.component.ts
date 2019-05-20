@@ -16,6 +16,8 @@ import { startWith, map, tap } from 'rxjs/operators';
 import { FredEditDialogComponent } from './fred-edit-dialog/fred-edit-dialog.component';
 import { AuthService } from 'src/app/core/auth.service';
 import { DatePipe } from '@angular/common';
+import { isObjectValidator } from "../../validators/general/is-object-validator";
+import { typeValidator } from "../../validators/security-fred/type-validator";
 
 @Component({
   selector: 'app-security-fred',
@@ -184,6 +186,8 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
   downloadableList2 = [];
   downloadableList3 = [];
 
+  defaultImage: string = '../../../assets/images/default-image.png'
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -281,19 +285,19 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
             let _obs5 = '---';
 
             element['observations'].forEach(obs => {
-              if(obs['group'] === "Orden y Limpieza"){
+              if (obs['group'] === "Orden y Limpieza") {
                 _obs1 = obs['observations'][0];
               }
-              if(obs['group'] === "Equipos de Protección Personal"){
+              if (obs['group'] === "Equipos de Protección Personal") {
                 _obs2 = obs['observations'][0];
               }
-              if(obs['group'] === "Control de Riesgos Operacionales"){
+              if (obs['group'] === "Control de Riesgos Operacionales") {
                 _obs3 = obs['observations'][0];
               }
-              if(obs['group'] === "Herramientas y Equipos"){
+              if (obs['group'] === "Herramientas y Equipos") {
                 _obs4 = obs['observations'][0];
               }
-              if(obs['group'] === "Riesgos Críticos"){
+              if (obs['group'] === "Riesgos Críticos") {
                 _obs5 = obs['observations'][0];
               }
             })
@@ -408,7 +412,7 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
             _object['fecha propuesta cierre'] = element['estimatedTerminationDate'] ? this.datePipe.transform(new Date(element['estimatedTerminationDate']), 'dd/MM/yyyy hh:mm:ss') : '---';
 
             // Adding real date
-            _object['fecha real cierre'] = element['realTerminationDate'] ? this.datePipe.transform(new Date(element['realTerminationDate']), 'dd/MM/yyyy hh:mm:ss') : '---';      
+            _object['fecha real cierre'] = element['realTerminationDate'] ? this.datePipe.transform(new Date(element['realTerminationDate']), 'dd/MM/yyyy hh:mm:ss') : '---';
 
             // Adding final picture
             _object['foto final'] = element['finalPicture'] ? element['finalPicture'] : '---';
@@ -428,7 +432,7 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
     this.subscriptions.push(dataSecurityFredCat2Sub);
 
     let dataSecurityFredCat3Sub = this.dbs.currentDataSecurityRemarkableActFreds
-    .pipe(
+      .pipe(
         tap(res => {
           this.downloadableList3 = [];
           res.forEach(element => {
@@ -475,7 +479,7 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
             _object['fecha propuesta cierre'] = element['estimatedTerminationDate'] ? this.datePipe.transform(new Date(element['estimatedTerminationDate']), 'dd/MM/yyyy hh:mm:ss') : '---';
 
             // Adding real date
-            _object['fecha real cierre'] = element['realTerminationDate'] ? this.datePipe.transform(new Date(element['realTerminationDate']), 'dd/MM/yyyy hh:mm:ss') : '---'; 
+            _object['fecha real cierre'] = element['realTerminationDate'] ? this.datePipe.transform(new Date(element['realTerminationDate']), 'dd/MM/yyyy hh:mm:ss') : '---';
 
             // Adding final picture
             _object['foto final'] = element['finalPicture'] ? element['finalPicture'] : '---';
@@ -484,13 +488,13 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
           });
         })
       )
-    .subscribe(res => {
-      this.filteredRemarkableActFreds = res;
-      this.dataSourceRemarkableAct.data = res;
-      this.filteredRemarkableActFreds.forEach(element => {
-        this.isOpenRemarkableAct.push(false);
+      .subscribe(res => {
+        this.filteredRemarkableActFreds = res;
+        this.dataSourceRemarkableAct.data = res;
+        this.filteredRemarkableActFreds.forEach(element => {
+          this.isOpenRemarkableAct.push(false);
+        })
       })
-    })
 
     this.subscriptions.push(dataSecurityFredCat3Sub);
 
@@ -510,6 +514,17 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  ngAfterViewInit() {
+    this.dataSourceSubstandardAct.paginator = this.paginator.toArray()[0];
+    this.dataSourceSubstandardAct.sort = this.sort.toArray()[0];
+
+    this.dataSourceSubstandardCondition.paginator = this.paginator.toArray()[1];
+    this.dataSourceSubstandardCondition.sort = this.sort.toArray()[1];
+
+    this.dataSourceRemarkableAct.paginator = this.paginator.toArray()[2];
+    this.dataSourceRemarkableAct.sort = this.sort.toArray()[2];
   }
 
   setMonthOfView(event, datepicker): void {
@@ -541,17 +556,17 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
 
   createForms(): void {
     this.firstFormGroup = this.fb.group({
-      type: ['', [Validators.required]],
-      observedArea: ['', [Validators.required]],
-      observedStaff: ['', [Validators.required]]
+      type: ['', [Validators.required, typeValidator]],
+      observedArea: ['', [Validators.required, isObjectValidator]],
+      observedStaff: ['', [Validators.required, isObjectValidator]]
     });
 
     this.secondFormGroup = this.fb.group({
-      list1: ['No observado', [Validators.required]],
-      list2: ['No observado', [Validators.required]],
-      list3: ['No observado', [Validators.required]],
-      list4: ['No observado', [Validators.required]],
-      list5: ['No observado', [Validators.required]],
+      list1: ['No observado', [Validators.required, isObjectValidator]],
+      list2: ['No observado', [Validators.required, isObjectValidator]],
+      list3: ['No observado', [Validators.required, isObjectValidator]],
+      list4: ['No observado', [Validators.required, isObjectValidator]],
+      list5: ['No observado', [Validators.required, isObjectValidator]],
     });
 
     this.thirdFormGroup = this.fb.group({
@@ -563,15 +578,37 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSourceSubstandardAct.paginator = this.paginator.toArray()[0];
-    this.dataSourceSubstandardAct.sort = this.sort.toArray()[0];
+  // GETTERS
+  get fredType() {
+    return this.firstFormGroup.get('type');
+  }
 
-    this.dataSourceSubstandardCondition.paginator = this.paginator.toArray()[1];
-    this.dataSourceSubstandardCondition.sort = this.sort.toArray()[1];
+  get fredObservedArea() {
+    return this.firstFormGroup.get('observedArea');
+  }
 
-    this.dataSourceRemarkableAct.paginator = this.paginator.toArray()[2];
-    this.dataSourceRemarkableAct.sort = this.sort.toArray()[2];
+  get fredObservedStaff() {
+    return this.firstFormGroup.get('observedStaff');
+  }
+
+  get fredList1() {
+    return this.firstFormGroup.get('list1');
+  }
+
+  get fredList2() {
+    return this.firstFormGroup.get('list2');
+  }
+
+  get fredList3() {
+    return this.firstFormGroup.get('list3');
+  }
+
+  get fredList4() {
+    return this.firstFormGroup.get('list4');
+  }
+
+  get fredList5() {
+    return this.firstFormGroup.get('list5');
   }
 
   toggleCardSubstandardAct(index) {

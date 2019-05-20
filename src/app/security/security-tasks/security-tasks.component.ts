@@ -125,7 +125,6 @@ export class SecurityTasksComponent implements OnInit, OnDestroy {
         this.filteredFredsTasks.forEach(element => {
           this.isOpenFred.push(false);
         })
-        console.log("FRED TASKS:", res);
       });
 
     this.subscriptions.push(fredTasksSub);
@@ -148,7 +147,6 @@ export class SecurityTasksComponent implements OnInit, OnDestroy {
         this.filteredObservationsTasks.forEach(element => {
           this.isOpenObservation.push(false);
         });
-        console.log("INSPECTIONS TASKS:", res);
       });
 
     this.subscriptions.push(inspectionTasksSub);
