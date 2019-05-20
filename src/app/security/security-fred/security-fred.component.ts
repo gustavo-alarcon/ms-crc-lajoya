@@ -592,23 +592,23 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
   }
 
   get fredList1() {
-    return this.firstFormGroup.get('list1');
+    return this.secondFormGroup.get('list1');
   }
 
   get fredList2() {
-    return this.firstFormGroup.get('list2');
+    return this.secondFormGroup.get('list2');
   }
 
   get fredList3() {
-    return this.firstFormGroup.get('list3');
+    return this.secondFormGroup.get('list3');
   }
 
   get fredList4() {
-    return this.firstFormGroup.get('list4');
+    return this.secondFormGroup.get('list4');
   }
 
   get fredList5() {
-    return this.firstFormGroup.get('list5');
+    return this.secondFormGroup.get('list5');
   }
 
   toggleCardSubstandardAct(index) {
