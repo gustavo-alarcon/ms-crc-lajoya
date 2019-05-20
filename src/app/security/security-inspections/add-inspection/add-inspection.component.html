@@ -31,6 +31,13 @@
         <mat-hint>
           {{newInspectionFormGroup.value['inspector']['jobTitle']}}
         </mat-hint>
+        <mat-error *ngIf="(inspector.dirty || inspector.touched) && inspector.invalid && inspector.errors.required">
+          <strong>requerido *</strong>
+        </mat-error><br>
+        <mat-error
+          *ngIf="(inspector.dirty || inspector.touched) && inspector.invalid && inspector.errors.invalidObject">
+          <strong>Debe seleccionar una opción*</strong>
+        </mat-error>
         <mat-autocomplete #autoInspector="matAutocomplete" (optionSelected)="selectedInspector($event)"
           [displayWith]="showSelectedInspector">
           <mat-option *ngFor="let option of filteredUsers | async" [value]="option" style="font-size:14px">
@@ -47,8 +54,13 @@
         <mat-hint>
           Sup.: {{newInspectionFormGroup.value['areaSupervisor']}}
         </mat-hint>
-        <mat-error>
+        <mat-error
+          *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.required">
           <strong>requerido *</strong>
+        </mat-error><br>
+        <mat-error
+          *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.invalidObject">
+          <strong>Debe seleccionar una opción*</strong>
         </mat-error>
         <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
           [displayWith]="showSelectedArea">
@@ -64,7 +76,7 @@
 
 </mat-dialog-content>
 <mat-dialog-actions class="w3-margin-top w3-margin-bottom">
-  <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close >Cancelar</button>
+  <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>Cancelar</button>
   <button mat-raised-button color="primary" (click)="create()"
     [disabled]="!(newInspectionFormGroup.valid) || loading">Crear</button>
 </mat-dialog-actions>

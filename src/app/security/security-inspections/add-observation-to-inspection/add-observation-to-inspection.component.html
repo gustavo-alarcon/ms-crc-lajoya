@@ -20,11 +20,11 @@
               <strong>{{area['name']}}</strong> | <span class="w3-small">{{area['supervisor']['displayName']}}</span>
             </mat-option>
           </mat-autocomplete>
-          <mat-hint *ngIf="!selectedArea['supervisor']['displayName']">
+          <mat-error *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.required">
             <strong>requerido *</strong>
-          </mat-hint>
-          <mat-error>
-            <strong>requerido *</strong>
+          </mat-error><br>
+          <mat-error *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.invalidObject">
+            <strong>Debe seleccionar una opción*</strong>
           </mat-error>
           <mat-hint *ngIf="selectedArea['supervisor']['displayName']">
             {{selectedArea['supervisor']['displayName']}}
@@ -35,6 +35,14 @@
           <mat-label>Área responsable</mat-label>
           <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="responsibleArea"
             [matAutocomplete]="autoResponsibleArea" autocomplete="off">
+          <mat-error
+            *ngIf="(responsibleArea.dirty || responsibleArea.touched) && responsibleArea.invalid && responsibleArea.errors.required">
+            <strong>requerido *</strong>
+          </mat-error><br>
+          <mat-error
+            *ngIf="(responsibleArea.dirty || responsibleArea.touched) && responsibleArea.invalid && responsibleArea.errors.invalidObject">
+            <strong>Debe seleccionar una opción*</strong>
+          </mat-error>
           <mat-autocomplete #autoResponsibleArea="matAutocomplete" (optionSelected)="setSelectedResponsibleArea($event)"
             [displayWith]="displayResponsibleArea">
             <mat-option *ngFor="let area of filteredResponsibleAreas | async" [value]="area">
@@ -47,36 +55,32 @@
           <mat-label>Tipo de Observación</mat-label>
           <input matInput type="text" placeholder="Seleccione..." formControlName="kindOfObservation"
             [matAutocomplete]="autoKindOfObservation" autocomplete="off">
+          <mat-error
+            *ngIf="(kindOfObservation.dirty || kindOfObservation.touched) && kindOfObservation.invalid && kindOfObservation.errors.required">
+            <strong>requerido *</strong>
+          </mat-error>
           <mat-autocomplete #autoKindOfObservation="matAutocomplete">
             <mat-option *ngFor="let observation of filteredKindOfObservation | async" [value]="observation['name']"
               [matTooltip]="observation['name']" [matTooltipDisabled]="!(observation['name'].length > 27)">
               {{observation['name']}}
             </mat-option>
           </mat-autocomplete>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-          <mat-error>
-            <strong>requerido *</strong>
-          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Causas</mat-label>
           <input matInput type="text" placeholder="Seleccione..." formControlName="cause" [matAutocomplete]="autoCause"
             autocomplete="off">
+          <mat-error
+            *ngIf="(cause.dirty || cause.touched) && cause.invalid && cause.errors.required">
+            <strong>requerido *</strong>
+          </mat-error>
           <mat-autocomplete #autoCause="matAutocomplete">
             <mat-option *ngFor="let cause of filteredCauses | async" [value]="cause['name']"
               [matTooltip]="cause['name']" [matTooltipDisabled]="!(cause['name'].length > 20)">
               {{cause['name']}}
             </mat-option>
           </mat-autocomplete>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-          <mat-error>
-            <strong>requerido *</strong>
-          </mat-error>
         </mat-form-field>
 
         <div class="w3-margin-top">

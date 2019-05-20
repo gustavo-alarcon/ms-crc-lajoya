@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatSnackBar, MatDialog, MatDialogRef } from '@angular/
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { InspectionObservationConfirmSaveComponent } from './inspection-observation-confirm-save/inspection-observation-confirm-save.component';
+import { isObjectValidator } from 'src/app/validators/general/is-object-validator';
 
 @Component({
   selector: 'app-add-observation-to-inspection',
@@ -55,10 +56,10 @@ export class AddObservationToInspectionComponent implements OnInit {
       regDate: Date.now(),
       id: '',
       inspectionId: this.data['id'],
-      area: [this.data['area'], Validators.required],
-      responsibleArea: ['', Validators.required],
-      kindOfObservation: ['', Validators.required],
-      cause: ['', Validators.required]
+      area: [this.data['area'], [Validators.required, isObjectValidator]],
+      responsibleArea: ['', [Validators.required, isObjectValidator]],
+      kindOfObservation: ['', [Validators.required]],
+      cause: ['', [Validators.required]]
     })
 
     this.filteredAreas = this.headerDataFormGroup.get('area').valueChanges
@@ -97,6 +98,24 @@ export class AddObservationToInspectionComponent implements OnInit {
     })
   }
 
+  // GETTERS
+  get area() {
+    return this.headerDataFormGroup.get('area');
+  }
+
+  get responsibleArea() {
+    return this.headerDataFormGroup.get('responsibleArea');
+  }
+
+  get kindOfObservation() {
+    return this.headerDataFormGroup.get('kindOfObservation');
+  }
+
+  get cause() {
+    return this.headerDataFormGroup.get('cause');
+  }
+  // ************************
+
   displayArea(area): string | undefined {
     return area ? area['name'] : undefined;
   }
@@ -111,6 +130,14 @@ export class AddObservationToInspectionComponent implements OnInit {
 
   setSelectedResponsibleArea(event): void {
     this.selectedResponsibleArea = event.option.value;
+  }
+
+  displayKindOfObservation(observation): string | undefined {
+    return observation ? observation['name'] : undefined;
+  }
+
+  displayCause(cause): string | undefined {
+    return cause ? cause['name'] : undefined;
   }
 
 
