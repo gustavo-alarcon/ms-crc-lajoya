@@ -18,9 +18,12 @@
                 <mat-label>Tipo de observación</mat-label>
                 <input type="text" matInput placeholder="Escriba y seleccione" formControlName="type"
                   [matAutocomplete]="autoType" required>
-                <mat-hint>
+                <mat-error *ngIf="(fredType.dirty || fredType.touched) && fredType.invalid && fredType.errors.required">
                   <strong>requerido *</strong>
-                </mat-hint>
+                </mat-error><br>
+                <mat-error *ngIf="(fredType.dirty || fredType.touched) && fredType.invalid && fredType.errors.invalidType">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoType="matAutocomplete">
                 <mat-option *ngFor="let type of filteredTypes | async" [value]="type" style="font-size:14px">
@@ -33,9 +36,12 @@
                 <mat-label>Área Observada</mat-label>
                 <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedArea"
                   [matAutocomplete]="autoArea" required>
-                <mat-hint>
+                <mat-error *ngIf="(fredObservedArea.dirty || fredObservedArea.touched) && fredObservedArea.invalid && fredObservedArea.errors.required">
                   <strong>requerido *</strong>
-                </mat-hint>
+                </mat-error><br>
+                <mat-error *ngIf="(fredObservedArea.dirty || fredObservedArea.touched) && fredObservedArea.invalid && fredObservedArea.errors.invalidObject">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
                 [displayWith]="showSelectedArea">
@@ -50,9 +56,12 @@
                 <mat-label>Persona observada</mat-label>
                 <input type="text" matInput placeholder="Escriba y seleccione" formControlName="observedStaff"
                   [matAutocomplete]="autoStaff" required>
-                <mat-hint>
+                <mat-error *ngIf="(fredObservedStaff.dirty || fredObservedStaff.touched) && fredObservedStaff.invalid && fredObservedStaff.errors.required">
                   <strong>requerido *</strong>
-                </mat-hint>
+                </mat-error><br>
+                <mat-error *ngIf="(fredObservedStaff.dirty || fredObservedStaff.touched) && fredObservedStaff.invalid && fredObservedStaff.errors.invalidObject">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoStaff="matAutocomplete" (optionSelected)="selectedStaff($event)"
                 [displayWith]="showSelectedStaff">
@@ -75,9 +84,12 @@
                 <mat-label>Orden y Limpeza</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list1"
                   [matAutocomplete]="autoList1" required>
-                <mat-hint>
+                <mat-error *ngIf="(fredList1.dirty || fredList1.touched) && fredList1.invalid && fredList1.errors.required">
                   <strong>requerido *</strong>
-                </mat-hint>
+                </mat-error><br>
+                <mat-error *ngIf="(fredList1.dirty || fredList1.touched) && fredList1.invalid && fredList1.errors.invalidObject">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList1="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList1 | async" [value]="option['name']"
@@ -92,9 +104,12 @@
                 <mat-label>Equipos de Protección Personal</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list2"
                   [matAutocomplete]="autoList2" required>
-                <mat-hint>
+                <mat-error *ngIf="(fredList2.dirty || fredList2.touched) && fredList2.invalid && fredList2.errors.required">
                   <strong>requerido *</strong>
-                </mat-hint>
+                </mat-error><br>
+                <mat-error *ngIf="(fredList2.dirty || fredList2.touched) && fredList2.invalid && fredList2.errors.invalidObject">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList2="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList2 | async" [value]="option['name']"
@@ -109,9 +124,12 @@
                 <mat-label>Control de Riesgos Operacionales</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list3"
                   [matAutocomplete]="autoList3" required>
-                <mat-hint>
+                <mat-error *ngIf="(fredList3.dirty || fredList3.touched) && fredList3.invalid && fredList3.errors.required">
                   <strong>requerido *</strong>
-                </mat-hint>
+                </mat-error><br>
+                <mat-error *ngIf="(fredList3.dirty || fredList3.touched) && fredList3.invalid && fredList3.errors.invalidObject">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList3="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList3 | async" [value]="option['name']"
@@ -126,6 +144,12 @@
                 <mat-label>Herramientas y Equipos</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list4"
                   [matAutocomplete]="autoList4" required>
+                <mat-error *ngIf="(fredList4.dirty || fredList4.touched) && fredList4.invalid && fredList4.errors.required">
+                  <strong>requerido *</strong>
+                </mat-error><br>
+                <mat-error *ngIf="(fredList4.dirty || fredList4.touched) && fredList4.invalid && fredList4.errors.invalidObject">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList4="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList4 | async" [value]="option['name']"
@@ -140,9 +164,12 @@
                 <mat-label>Riesgos Críticos</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list5"
                   [matAutocomplete]="autoList5" required>
-                <mat-hint>
+                <mat-error *ngIf="(fredList5.dirty || fredList5.touched) && fredList5.invalid && fredList5.errors.required">
                   <strong>requerido *</strong>
-                </mat-hint>
+                </mat-error><br>
+                <mat-error *ngIf="(fredList5.dirty || fredList5.touched) && fredList5.invalid && fredList5.errors.invalidObject">
+                  <strong>Debe seleccionar una opción*</strong>
+                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList5="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList5 | async" [value]="option['name']"
@@ -215,6 +242,7 @@
         </mat-vertical-stepper>
       </div>
     </mat-tab>
+
     <mat-tab label="Lista" *ngIf="auth.permits['securityFredGeneralList'] || auth.permits['securityFredPersonalList']">
       <ng-template matTabContent>
 
@@ -290,7 +318,10 @@
                     <a href="{{fred['initialPicture']}}" target="_blank"
                       *ngIf="fred['initialPicture']; else defaultPictureTable1">
                       <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="{{fred['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <img  [defaultImage]="defaultImage"
+                              [lazyLoad]="fred['initialPicture']"
+                              [offset]="100"
+                              style="max-width:100%;height:100%" class="w3-card-4">
                       </div>
                     </a>
                     <ng-template #defaultPictureTable1>
@@ -407,7 +438,10 @@
                     <a href="{{fred['finalPicture']}}" target="_blank"
                       *ngIf="fred['finalPicture']; else defaultPictureTable1">
                       <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="{{fred['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <img  [defaultImage]="defaultImage"
+                              [lazyLoad]="fred['finalPicture']"
+                              [offset]="100"
+                              style="max-width:100%;height:100%" class="w3-card-4">
                       </div>
                     </a>
                     <ng-template #defaultPictureTable1>
@@ -611,7 +645,7 @@
             </app-custom-angular-csv>
 
           </div>
-          
+
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
             <div class="w3-amber w3-round-large" style="max-height:100vh; overflow:auto">
               <table mat-table [dataSource]="dataSourceSubstandardCondition" matSort style="width:100%">
@@ -644,7 +678,10 @@
                     <a href="{{fred['initialPicture']}}" target="_blank"
                       *ngIf="fred['initialPicture']; else defaultPictureTable2">
                       <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="{{fred['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <img  [defaultImage]="defaultImage"
+                              [lazyLoad]="fred['initialPicture']"
+                              [offset]="100"
+                              style="max-width:100%;height:100%" class="w3-card-4">
                       </div>
                     </a>
                     <ng-template #defaultPictureTable2>
@@ -764,7 +801,10 @@
                     <a href="{{fred['finalPicture']}}" target="_blank"
                       *ngIf="fred['finalPicture']; else defaultPictureTable2">
                       <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="{{fred['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <img  [defaultImage]="defaultImage"
+                              [lazyLoad]="fred['finalPicture']"
+                              [offset]="100"
+                              style="max-width:100%;height:100%" class="w3-card-4">
                       </div>
                     </a>
                     <ng-template #defaultPictureTable2>
@@ -953,7 +993,7 @@
             </app-custom-angular-csv>
 
           </div>
-          
+
           <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
             <div class="w3-amber w3-round-large" style="overflow:auto">
               <table mat-table [dataSource]="dataSourceRemarkableAct" matSort style="width:100%">
@@ -984,7 +1024,10 @@
                     <a href="{{fred['initialPicture']}}" target="_blank"
                       *ngIf="fred['initialPicture']; else defaultPictureTable3">
                       <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="{{fred['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <img  [defaultImage]="defaultImage"
+                              [lazyLoad]="fred['initialPicture']"
+                              [offset]="100"
+                              style="max-width:100%;height:100%" class="w3-card-4">
                       </div>
                     </a>
                     <ng-template #defaultPictureTable3>
@@ -1104,7 +1147,10 @@
                     <a href="{{fred['finalPicture']}}" target="_blank"
                       *ngIf="fred['finalPicture']; else defaultPictureTable3">
                       <div style="width:200px;height:120px;padding:6px 6px">
-                        <img src="{{fred['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <img  [defaultImage]="defaultImage"
+                              [lazyLoad]="fred['finalPicture']"
+                              [offset]="100"
+                              style="max-width:100%;height:100%" class="w3-card-4">
                       </div>
                     </a>
                     <ng-template #defaultPictureTable3>

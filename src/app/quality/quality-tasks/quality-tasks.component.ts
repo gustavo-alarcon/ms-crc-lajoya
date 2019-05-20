@@ -166,7 +166,6 @@ export class QualityTasksComponent implements OnInit, OnDestroy {
         res.forEach(element => {
           this.isOpenSingleObservations.push(false);
         })
-        console.log(res);
       });
 
     this.subscriptions.push(dataQualityTasksBySingleObservationSubs);

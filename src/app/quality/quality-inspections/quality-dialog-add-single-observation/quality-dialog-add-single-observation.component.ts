@@ -6,6 +6,7 @@ import { DatabaseService } from 'src/app/core/database.service';
 import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
 import { QualityConfirmAddSingleObservationComponent } from '../quality-confirm-add-single-observation/quality-confirm-add-single-observation.component';
+import { isObjectValidator } from 'src/app/validators/general/is-object-validator';
 
 @Component({
   selector: 'app-quality-dialog-add-single-observation',
@@ -47,8 +48,8 @@ export class QualityDialogAddSingleObservationComponent implements OnInit {
 
   ngOnInit() {
     this.headerDataFormGroup = this.fb.group({
-      area: ['', Validators.required],
-      responsibleArea: ['', Validators.required]
+      area: ['', [Validators.required, isObjectValidator]],
+      responsibleArea: ['', [Validators.required, isObjectValidator]]
     })
 
     this.filteredAreas = this.headerDataFormGroup.get('area').valueChanges
@@ -70,6 +71,15 @@ export class QualityDialogAddSingleObservationComponent implements OnInit {
       observationDescription: ['', Validators.required],
       recommendationDescription: ['', Validators.required],
     })
+  }
+
+  // GETTERS
+  get area() {
+    return this.headerDataFormGroup.get('area');
+  }
+
+  get responsibleArea() {
+    return this.headerDataFormGroup.get('responsibleArea');
   }
 
   displayArea(area): string | undefined {

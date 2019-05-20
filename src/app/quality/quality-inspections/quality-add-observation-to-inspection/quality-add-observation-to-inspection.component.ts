@@ -7,6 +7,7 @@ import { MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/
 import { startWith, map } from 'rxjs/operators';
 import { QualityInspectionObservationConfirmDeleteComponent } from '../quality-inspection-observation-confirm-delete/quality-inspection-observation-confirm-delete.component';
 import { QualityConfirmAddObservationComponent } from '../quality-confirm-add-observation/quality-confirm-add-observation.component';
+import { isObjectValidator } from 'src/app/validators/general/is-object-validator';
 
 @Component({
   selector: 'app-quality-add-observation-to-inspection',
@@ -51,8 +52,8 @@ export class QualityAddObservationToInspectionComponent implements OnInit {
       regDate: Date.now(),
       id: '',
       inspectionId: this.data['id'],
-      area: [this.data['area'], Validators.required],
-      responsibleArea: ['', Validators.required]
+      area: [this.data['area'], [Validators.required, isObjectValidator]],
+      responsibleArea: ['', [Validators.required, isObjectValidator]]
     })
 
     this.filteredAreas = this.headerDataFormGroup.get('area').valueChanges
@@ -75,6 +76,15 @@ export class QualityAddObservationToInspectionComponent implements OnInit {
       observationDescription: ['', Validators.required],
       recommendationDescription: ['', Validators.required],
     })
+  }
+
+  // GETTERS
+  get area() {
+    return this.headerDataFormGroup.get('area');
+  }
+
+  get responsibleArea() {
+    return this.headerDataFormGroup.get('responsibleArea');
   }
 
   displayArea(area): string | undefined {

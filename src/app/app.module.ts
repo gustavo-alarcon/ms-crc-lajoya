@@ -23,6 +23,7 @@ import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { NgxPageScrollCoreModule } from 'ngx-page-scroll-core';
 import { PushNotificationsModule } from 'ng-push';
 import { Angular2CsvModule } from 'angular2-csv';
+import { LazyLoadImageModule, intersectionObserverPreset } from 'ng-lazyload-image';
 
 
 // FIREBASE MODULES
@@ -340,6 +341,9 @@ import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-c
     HttpClientModule,
     NgxPageScrollModule,
     NgxPageScrollCoreModule,
+    LazyLoadImageModule.forRoot({
+        preset: intersectionObserverPreset
+      }),
     AngularFireModule.initializeApp(environment.firebase, 'ms-crc-lajoya'),
     AngularFirestoreModule.enablePersistence(),
     AngularFirestoreModule,

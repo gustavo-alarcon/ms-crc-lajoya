@@ -5,6 +5,7 @@ import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { startWith, map, debounceTime } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/core/auth.service';
+import { isObjectValidator } from 'src/app/validators/general/is-object-validator';
 
 @Component({
   selector: 'app-add-inspection',
@@ -33,8 +34,8 @@ export class AddInspectionComponent implements OnInit {
   ngOnInit() {
     this.newInspectionFormGroup = this.fb.group({
       estimatedTerminationDate: ['', Validators.required],
-      inspector: ['', Validators.required],
-      area: ['', Validators.required],
+      inspector: ['', [Validators.required, isObjectValidator]],
+      area: ['', [Validators.required, isObjectValidator]],
       areaSupervisor: [{value:'', disabled:false}]
     });
 
@@ -67,6 +68,18 @@ export class AddInspectionComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  /**
+   * GETTERS
+   */
+
+  get inspector() {
+    return this.newInspectionFormGroup.get('inspector');
+  }
+
+  get area() { 
+    return this.newInspectionFormGroup.get('area');
   }
 
   showSelectedInspector(inspector): string | undefined{
