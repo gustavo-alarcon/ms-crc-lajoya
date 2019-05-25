@@ -562,11 +562,11 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
     });
 
     this.secondFormGroup = this.fb.group({
-      list1: ['No observado', [Validators.required, isObjectValidator]],
-      list2: ['No observado', [Validators.required, isObjectValidator]],
-      list3: ['No observado', [Validators.required, isObjectValidator]],
-      list4: ['No observado', [Validators.required, isObjectValidator]],
-      list5: ['No observado', [Validators.required, isObjectValidator]],
+      list1: [{name:'No observado'}, [Validators.required, isObjectValidator]],
+      list2: [{name:'No observado'}, [Validators.required, isObjectValidator]],
+      list3: [{name:'No observado'}, [Validators.required, isObjectValidator]],
+      list4: [{name:'No observado'}, [Validators.required, isObjectValidator]],
+      list5: [{name:'No observado'}, [Validators.required, isObjectValidator]],
     });
 
     this.thirdFormGroup = this.fb.group({

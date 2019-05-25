@@ -211,7 +211,7 @@
           
 
           <div *ngFor="let inspection of dbs.currentDataSecurityInspections | async; let i = index"
-            class="w3-hide-small">
+            class="w3-hide-small w3-margin-top">
             <div [@openCloseCard]="isOpenInspection[i] ? 'openCard': 'closedCard'"
               class="w3-block w3-round-large mat-elevation-z4 w3-margin-top w3-white"
               style="z-index:1; position:relative" (click)="toggleCardInspection(i, inspection['id'])">
@@ -436,7 +436,7 @@
           </div>
 
           <!-- MOBIL VERSION LIST INSPECTIONS -->
-          <div class="w3-hide-large w3-hide-medium">
+          <div class="w3-hide-large w3-hide-medium w3-margin-top">
             <ng-container *ngFor="let inspection of filteredInspections; let inspectionIndex = index">
               <div id="inspection_{{inspectionIndex}}"
                 [@openCloseCard]="isOpenInspection[inspectionIndex] ? 'openCard': 'closedCard'"
@@ -448,7 +448,8 @@
                 <div class="w3-display-bottomleft w3-padding w3-round-large"
                   style="background:rgba(0,0,0,0.2); width:100%; height:100%">
                   <div style="display:flex">
-                    <p style="font-weight:600; color:white; margin: 0.5em 0.1em">
+                    <p  class="mat-body"
+                        style="font-weight:600; color:white; margin: 0.5em 0.1em">
                       <span class="w3-round-large"
                         style="background: rgba(255,255,255,0.2); padding:4px 12px; margin-right:8px">{{inspectionIndex +1}}</span>
                       {{inspection['inspector']['displayName']}}
