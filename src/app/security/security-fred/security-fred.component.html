@@ -84,12 +84,6 @@
                 <mat-label>Orden y Limpeza</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list1"
                   [matAutocomplete]="autoList1" required>
-                <mat-error *ngIf="(fredList1.dirty || fredList1.touched) && fredList1.invalid && fredList1.errors.required">
-                  <strong>requerido *</strong>
-                </mat-error><br>
-                <mat-error *ngIf="(fredList1.dirty || fredList1.touched) && fredList1.invalid && fredList1.errors.invalidObject">
-                  <strong>Debe seleccionar una opción*</strong>
-                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList1="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList1 | async" [value]="option['name']"
@@ -104,12 +98,6 @@
                 <mat-label>Equipos de Protección Personal</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list2"
                   [matAutocomplete]="autoList2" required>
-                <mat-error *ngIf="(fredList2.dirty || fredList2.touched) && fredList2.invalid && fredList2.errors.required">
-                  <strong>requerido *</strong>
-                </mat-error><br>
-                <mat-error *ngIf="(fredList2.dirty || fredList2.touched) && fredList2.invalid && fredList2.errors.invalidObject">
-                  <strong>Debe seleccionar una opción*</strong>
-                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList2="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList2 | async" [value]="option['name']"
@@ -124,12 +112,6 @@
                 <mat-label>Control de Riesgos Operacionales</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list3"
                   [matAutocomplete]="autoList3" required>
-                <mat-error *ngIf="(fredList3.dirty || fredList3.touched) && fredList3.invalid && fredList3.errors.required">
-                  <strong>requerido *</strong>
-                </mat-error><br>
-                <mat-error *ngIf="(fredList3.dirty || fredList3.touched) && fredList3.invalid && fredList3.errors.invalidObject">
-                  <strong>Debe seleccionar una opción*</strong>
-                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList3="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList3 | async" [value]="option['name']"
@@ -144,12 +126,6 @@
                 <mat-label>Herramientas y Equipos</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list4"
                   [matAutocomplete]="autoList4" required>
-                <mat-error *ngIf="(fredList4.dirty || fredList4.touched) && fredList4.invalid && fredList4.errors.required">
-                  <strong>requerido *</strong>
-                </mat-error><br>
-                <mat-error *ngIf="(fredList4.dirty || fredList4.touched) && fredList4.invalid && fredList4.errors.invalidObject">
-                  <strong>Debe seleccionar una opción*</strong>
-                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList4="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList4 | async" [value]="option['name']"
@@ -164,12 +140,6 @@
                 <mat-label>Riesgos Críticos</mat-label>
                 <input type="text" matInput placeholder="Seleccione..." formControlName="list5"
                   [matAutocomplete]="autoList5" required>
-                <mat-error *ngIf="(fredList5.dirty || fredList5.touched) && fredList5.invalid && fredList5.errors.required">
-                  <strong>requerido *</strong>
-                </mat-error><br>
-                <mat-error *ngIf="(fredList5.dirty || fredList5.touched) && fredList5.invalid && fredList5.errors.invalidObject">
-                  <strong>Debe seleccionar una opción*</strong>
-                </mat-error>
               </mat-form-field>
               <mat-autocomplete #autoList5="matAutocomplete">
                 <mat-option *ngFor="let option of filteredObsList5 | async" [value]="option['name']"

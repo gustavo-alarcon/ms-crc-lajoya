@@ -1,6 +1,7 @@
 {
   "name": "ms-crc-lajoya",
-  "version": "1.2.18",
+  "version": "1.2.19",
+  "author": "Meraki Solutions",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",

@@ -1010,10 +1010,8 @@ export class DatabaseService {
             if(redo['uidSupervisor'] === this.auth.userCRC.uid || redo['uidCreator'] === this.auth.userCRC.uid){
               reportList.push(redo);
             }
-            console.log('returning personal');
 
           }else if(redo['stage'] === 'Reporte' && this.auth.permits['qualityRedosGeneralList']){
-            console.log('returning general');
             reportList.push(redo);
           }
 
