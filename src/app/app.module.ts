@@ -64,6 +64,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+import { PlatformModule } from '@angular/cdk/platform';
 
 
 
@@ -328,7 +329,7 @@ import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-c
     CustomerDialogEditComponent,
     CustomerConfirmDeleteComponent,
     CustomAngularCsvComponent
-    
+
   ],
   imports: [
     BrowserModule,
@@ -342,8 +343,8 @@ import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-c
     NgxPageScrollModule,
     NgxPageScrollCoreModule,
     LazyLoadImageModule.forRoot({
-        preset: intersectionObserverPreset
-      }),
+      preset: intersectionObserverPreset
+    }),
     AngularFireModule.initializeApp(environment.firebase, 'ms-crc-lajoya'),
     AngularFirestoreModule.enablePersistence(),
     AngularFirestoreModule,
@@ -379,7 +380,8 @@ import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-c
     MatCardModule,
     MatSliderModule,
     MatChipsModule,
-    MatPasswordStrengthModule
+    MatPasswordStrengthModule,
+    PlatformModule
   ],
   providers: [
     AuthService,

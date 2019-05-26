@@ -1,825 +1,843 @@
-<div class="w3-section">
-  <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">
-    <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assignment</mat-icon> Calidad -
-    Tareas
-  </h1>
-  <mat-divider></mat-divider>
-
-  <div class="w3-padding">
-    <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentYear}}</h2>
-
-    <mat-form-field class="w3-margin-right">
-      <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
-      <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
-      <mat-datepicker #dateFilter startView='year' (monthSelected)="setMonthOfView($event, dateFilter)"
-        disabled="false"></mat-datepicker>
-      <mat-hint>
-        <strong>Filtrar contenido por mes y año</strong>
-      </mat-hint>
-    </mat-form-field>
-
-    <div style="display:flex">
-      <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.3em;">{{currentMonth}}</h2>
-      <button mat-button disabled="true" class="ms-color-2b">
-        <mat-icon>assignment_turned_in</mat-icon> {{dbs.qualityTasks.length | number: '2.0'}} Tareas
-      </button>
+<div class="w3-section w3-margin-left w3-margin-right animated fadeInUp delay-2">
+  <div class="w3-row">
+    <div class="w3-col s0 m1 l1">
+      <p></p>
     </div>
+    <div class="w3-col s12 m10 l10" style="min-height:86vh">
+      <h1 class="ms-font-rubik ms-color-2b" style="font-size:1.5em;">
+        <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assignment</mat-icon> Calidad
+        -
+        Tareas
+      </h1>
+      <mat-divider></mat-divider>
 
-    <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Rehaceres</h2>
-    <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
-      <div class="w3-amber" style="overflow:auto">
-        <table mat-table [dataSource]="dataSourceTasksByRedo" matSort style="width:100%">
+      <div class="w3-padding">
+        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">{{currentYear}}</h2>
 
-          <ng-container matColumnDef="index">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°
-            </th>
-            <td mat-cell *matCellDef="let row; let i = index" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              {{i+1}}
-            </td>
-          </ng-container>
+        <mat-form-field class="w3-margin-right">
+          <input matInput [matDatepicker]="dateFilter" [formControl]="monthFormControl">
+          <mat-datepicker-toggle matSuffix [for]="dateFilter"></mat-datepicker-toggle>
+          <mat-datepicker #dateFilter startView='year' (monthSelected)="setMonthOfView($event, dateFilter)"
+            disabled="false"></mat-datepicker>
+          <mat-hint>
+            <strong>Filtrar contenido por mes y año</strong>
+          </mat-hint>
+        </mat-form-field>
 
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acción</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              {{row['action']}}
-            </td>
-          </ng-container>
+        <div style="display:flex">
+          <h2 class="ms-font-rubik ms-color-2b w3-margin-right" style="font-size:1.3em;">{{currentMonth}}</h2>
+          <button mat-button disabled="true" class="ms-color-2b">
+            <mat-icon>assignment_turned_in</mat-icon> {{dbs.qualityTasks.length | number: '2.0'}} Tareas
+          </button>
+        </div>
 
-          <ng-container matColumnDef="approved">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado (Acción)</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              {{row['approved']?'Acción aprobada':'Por aprobar'}}
-            </td>
-          </ng-container>
+        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Rehaceres</h2>
+        <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
+          <div class="w3-amber" style="overflow:auto">
+            <table mat-table [dataSource]="dataSourceTasksByRedo" matSort style="width:100%">
 
-          <ng-container matColumnDef="responsibles">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Responsable</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <ng-container *ngFor="let staff of row['actionResponsibles']">
-                <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
-                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                  <li class="w3-small">{{staff['jobTitle']}}</li>
-                </ul>
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  {{i+1}}
+                </td>
               </ng-container>
 
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="finalPicture">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto final</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <a href="{{row['finalPicture']}}" target="_blank" *ngIf="row['finalPicture']; else defaultPictureAction">
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="{{row['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
-                </div>
-              </a>
-              <ng-template #defaultPictureAction>
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%" class="w3-card-4">
-                </div>
-              </ng-template>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado (Tarea)</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <span class="ms-chip"
-                [ngClass]="{'w3-green':row['status']==='Finalizado', 'w3-amber':row['status']==='Por confirmar', 'w3-indigo':row['status']==='Confirmado', 'w3-red':row['status']==='Rechazado'}">
-                {{row['approved']?row['status']:'***'}}
-              </span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="realTerminationDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de finalización</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <div *ngIf="row['realTerminationDate'] != 0">
-                <span>{{row['realTerminationDate'] | date : 'dd/MM/yyy'}}</span><br>
-                <span class="w3-small">{{row['realTerminationDate'] | date : 'hh:mm:ss'}}</span>
-              </div>
-              <div *ngIf="row['realTerminationDate'] === 0">
-                <span>{{'**/**/**'}}</span><br>
-                <span class="w3-small">{{'**:**:**'}}</span>
-              </div>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="finalArchive">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Archivo</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <a href="{{row['finalArchive']}}" target="_blank" *ngIf="row['finalArchive']; else defaultPictureAction">
-                PDF
-              </a>
-              <ng-template #defaultPictureAction>
-                ***
-              </ng-template>
-            </td>
-          </ng-container>
-
-
-          <ng-container matColumnDef="finalize">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
-            <td mat-cell *matCellDef="let row" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <button mat-raised-button color="primary" matTooltip="Finalizar tarea" (click)="finalizeTask(row)"
-                [disabled]="row['status'] === 'Finalizado' || row['status'] === 'Por confirmar'">
-                <mat-icon>check_circle</mat-icon> Finalizar
-              </button><br>
-            </td>
-          </ng-container>
-
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsTasksByRedo; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsTasksByRedo;"></tr>
-
-        </table>
-      </div>
-      <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </div>
-
-    <!-- MOBIL VERSION REDOS-->
-    <div class="w3-hide-large w3-hide-medium">
-      <ng-container *ngFor="let fred of filteredRedosTasks; let i = index">
-        <div [@openCloseCard]="isOpenActions[i] ? 'open': 'closed'" (click)="toggleCardActions(i)"
-          class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
-          [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
-          <div class="w3-display-topright"
-            style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
-            <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
-          </div>
-          <div [@openCloseDescription]="isOpenActions[i] ? 'openDescription': 'closedDescription'"
-            class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
-            <p style="font-weight:400; color:white; margin: 0px 0.1em">
-              {{(fred['action'].length>25 ? (fred['action'] | slice:0:25)+'...':(fred['action']))}}
-            </p>
-            <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
-              *ngIf="fred['estimatedTerminationDate'] != 0">
-              {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
-            <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
-              *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
-          </div>
-        </div>
-        <div [@openCloseContent]="isOpenActions[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8">
-          <mat-toolbar style="background:#333333">
-            <span class="ms-fill"></span>
-            <button mat-raised-button style="color:white" color="primary" matTooltip="Finalizar Redo"
-              (click)="finalizeTask(fred)" [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado'">
-              <mat-icon>check_circle</mat-icon> Finalizar
-            </button>
-          </mat-toolbar>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Fecha</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
-              <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Acción</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['action']}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Estado (Acción)</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['approved']?'Acción aprobada':'Por aprobar'}}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Responsable</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <ng-container *ngFor="let staff of fred['actionResponsibles']">
-                <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
-                <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                  <li class="w3-small">{{staff['jobTitle']}}</li>
-                </ul>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acción</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  {{row['action']}}
+                </td>
               </ng-container>
-            </div>
-          </div>
 
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Estado (Tarea)</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">
-                <span class="ms-chip"
-                  [ngClass]="{'w3-green':fred['status']==='Finalizado', 'w3-amber':fred['status']==='Por confirmar', 'w3-indigo':fred['status']==='Confirmado', 'w3-red':fred['status']==='Rechazado'}">
-                  {{fred['approved']?fred['status']:'***'}}
-                </span>
-              </span>
-            </div>
+              <ng-container matColumnDef="approved">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado (Acción)</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  {{row['approved']?'Acción aprobada':'Por aprobar'}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="responsibles">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Responsable</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <ng-container *ngFor="let staff of row['actionResponsibles']">
+                    <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">{{staff['jobTitle']}}</li>
+                    </ul>
+                  </ng-container>
+
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="finalPicture">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto final</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <a href="{{row['finalPicture']}}" target="_blank"
+                    *ngIf="row['finalPicture']; else defaultPictureAction">
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="{{row['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                    </div>
+                  </a>
+                  <ng-template #defaultPictureAction>
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                        class="w3-card-4">
+                    </div>
+                  </ng-template>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado (Tarea)</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <span class="ms-chip"
+                    [ngClass]="{'w3-green':row['status']==='Finalizado', 'w3-amber':row['status']==='Por confirmar', 'w3-indigo':row['status']==='Confirmado', 'w3-red':row['status']==='Rechazado'}">
+                    {{row['approved']?row['status']:'***'}}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="realTerminationDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de finalización</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <div *ngIf="row['realTerminationDate'] != 0">
+                    <span>{{row['realTerminationDate'] | date : 'dd/MM/yyy'}}</span><br>
+                    <span class="w3-small">{{row['realTerminationDate'] | date : 'hh:mm:ss'}}</span>
+                  </div>
+                  <div *ngIf="row['realTerminationDate'] === 0">
+                    <span>{{'**/**/**'}}</span><br>
+                    <span class="w3-small">{{'**:**:**'}}</span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="finalArchive">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Archivo</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <a href="{{row['finalArchive']}}" target="_blank"
+                    *ngIf="row['finalArchive']; else defaultPictureAction">
+                    PDF
+                  </a>
+                  <ng-template #defaultPictureAction>
+                    ***
+                  </ng-template>
+                </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="finalize">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones</th>
+                <td mat-cell *matCellDef="let row" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <button mat-raised-button color="primary" matTooltip="Finalizar tarea" (click)="finalizeTask(row)"
+                    [disabled]="row['status'] === 'Finalizado' || row['status'] === 'Por confirmar'">
+                    <mat-icon>check_circle</mat-icon> Finalizar
+                  </button><br>
+                </td>
+              </ng-container>
+
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsTasksByRedo; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsTasksByRedo;"></tr>
+
+            </table>
           </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Fecha de finalización</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <div *ngIf="fred['realTerminationDate'] != 0">
-                <span>{{fred['realTerminationDate'] | date : 'dd/MM/yyy'}}</span><br>
-                <span class="w3-small">{{fred['realTerminationDate'] | date : 'hh:mm:ss'}}</span>
+          <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <!-- MOBIL VERSION REDOS-->
+        <div class="w3-hide-large w3-hide-medium">
+          <ng-container *ngFor="let fred of filteredRedosTasks; let i = index">
+            <div [@openCloseCard]="isOpenActions[i] ? 'open': 'closed'" (click)="toggleCardActions(i)"
+              class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+              [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+              <div class="w3-display-topright"
+                style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+                <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
               </div>
-              <div *ngIf="fred['realTerminationDate'] === 0">
-                <span>{{'**/**/**'}}</span><br>
-                <span class="w3-small">{{'**:**:**'}}</span>
+              <div [@openCloseDescription]="isOpenActions[i] ? 'openDescription': 'closedDescription'"
+                class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+                <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                  {{(fred['action'].length>25 ? (fred['action'] | slice:0:25)+'...':(fred['action']))}}
+                </p>
+                <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                  *ngIf="fred['estimatedTerminationDate'] != 0">
+                  {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+                <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                  *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
               </div>
             </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Archivos</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <a href="{{fred['finalArchive']}}" target="_blank"
-                *ngIf="fred['finalArchive']; else defaultPictureAction">
-                PDF
-              </a>
-              <ng-template #defaultPictureAction>
-                ***
-              </ng-template>
+            <div [@openCloseContent]="isOpenActions[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8">
+              <mat-toolbar style="background:#333333">
+                <span class="ms-fill"></span>
+                <button mat-raised-button style="color:white" color="primary" matTooltip="Finalizar Redo"
+                  (click)="finalizeTask(fred)"
+                  [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado'">
+                  <mat-icon>check_circle</mat-icon> Finalizar
+                </button>
+              </mat-toolbar>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Fecha</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                  <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Acción</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['action']}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Estado (Acción)</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['approved']?'Acción aprobada':'Por aprobar'}}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Responsable</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <ng-container *ngFor="let staff of fred['actionResponsibles']">
+                    <span class="w3-small" style="font-weight:500">{{staff['displayName']}}</span>
+                    <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                      <li class="w3-small">{{staff['jobTitle']}}</li>
+                    </ul>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Estado (Tarea)</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">
+                    <span class="ms-chip"
+                      [ngClass]="{'w3-green':fred['status']==='Finalizado', 'w3-amber':fred['status']==='Por confirmar', 'w3-indigo':fred['status']==='Confirmado', 'w3-red':fred['status']==='Rechazado'}">
+                      {{fred['approved']?fred['status']:'***'}}
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Fecha de finalización</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <div *ngIf="fred['realTerminationDate'] != 0">
+                    <span>{{fred['realTerminationDate'] | date : 'dd/MM/yyy'}}</span><br>
+                    <span class="w3-small">{{fred['realTerminationDate'] | date : 'hh:mm:ss'}}</span>
+                  </div>
+                  <div *ngIf="fred['realTerminationDate'] === 0">
+                    <span>{{'**/**/**'}}</span><br>
+                    <span class="w3-small">{{'**:**:**'}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Archivos</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <a href="{{fred['finalArchive']}}" target="_blank"
+                    *ngIf="fred['finalArchive']; else defaultPictureAction">
+                    PDF
+                  </a>
+                  <ng-template #defaultPictureAction>
+                    ***
+                  </ng-template>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                    *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                  <ng-template #noImageLink>
+                    <span class="w3-small w3-text-gray">No disponible</span>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                    *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                  <ng-template #noImageLink>
+                    <span class="w3-small w3-text-gray">No disponible</span>
+                  </ng-template>
+                </div>
+              </div>
+              <mat-toolbar>
+                <span class="ms-fill"></span>
+                <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardActions(i)">
+                  <mat-icon>keyboard_arrow_up</mat-icon>
+                </button>
+              </mat-toolbar>
             </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
-                *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
-              <ng-template #noImageLink>
-                <span class="w3-small w3-text-gray">No disponible</span>
-              </ng-template>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
-                *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
-              <ng-template #noImageLink>
-                <span class="w3-small w3-text-gray">No disponible</span>
-              </ng-template>
-            </div>
-          </div>
-          <mat-toolbar>
-            <span class="ms-fill"></span>
-            <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardActions(i)">
-              <mat-icon>keyboard_arrow_up</mat-icon>
-            </button>
-          </mat-toolbar>
+          </ng-container>
         </div>
-      </ng-container>
-    </div>
 
-    <div *ngIf="!filteredRedosTasks.length"
-      class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
-      <h2 class="ms-empty-list">
-        Sin novedades
-      </h2>
-    </div>
+        <div *ngIf="!filteredRedosTasks.length"
+          class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+          <h2 class="ms-empty-list">
+            Sin novedades
+          </h2>
+        </div>
 
 
-    <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Inspecciones</h2>
-    <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
-      <div class="w3-amber" style="overflow:auto">
-        <table mat-table [dataSource]="dataSourceTasksByInspections" matSort style="width:100%;">
+        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Inspecciones</h2>
+        <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
+          <div class="w3-amber" style="overflow:auto">
+            <table mat-table [dataSource]="dataSourceTasksByInspections" matSort style="width:100%;">
 
-          <ng-container matColumnDef="index">
-            <th mat-header-cell *matHeaderCellDef
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
-            <td mat-cell *matCellDef="let observation; let i = index"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              {{i+1}}
-            </td>
-          </ng-container>
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
+                <td mat-cell *matCellDef="let observation; let i = index"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  {{i+1}}
+                </td>
+              </ng-container>
 
-          <ng-container matColumnDef="observationDescription">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Descripción de la observación (Condición / Acto Subestándar)</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              {{observation['observationDescription']}}
-            </td>
-          </ng-container>
+              <ng-container matColumnDef="observationDescription">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Descripción de la observación (Condición / Acto Subestándar)</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  {{observation['observationDescription']}}
+                </td>
+              </ng-container>
 
-          <ng-container matColumnDef="initialPicture">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <a href="{{observation['initialPicture']}}" target="_blank">
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="{{observation['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+              <ng-container matColumnDef="initialPicture">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <a href="{{observation['initialPicture']}}" target="_blank">
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="{{observation['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                    </div>
+                  </a>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="recommendationDescription">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Conclusiones / Recomendaciones / Medidas Correctivas</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  {{observation['recommendationDescription']}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="area">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Área observada</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  <span style="font-weight:500">{{observation['area']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                  </ul>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="responsibleArea">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Área responsable</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
+                  </ul>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="terminationDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
+                  Termino / Fecha Realización</th>
+                <td mat-cell *matCellDef="let observation"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">
+                    {{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  <p class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
+                    {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  {{observation['status']}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="finalPicture">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto
+                  Levantamiento</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <a href="{{observation['finalPicture']}}" target="_blank"
+                    *ngIf="observation['finalPicture']; else defaultPicture">
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="{{observation['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                    </div>
+                  </a>
+                  <ng-template #defaultPicture>
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                        class="w3-card-4">
+                    </div>
+                  </ng-template>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones
+                </th>
+                <td mat-cell *matCellDef="let observation"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <button mat-raised-button color="primary" matTooltip="Finalizar tarea"
+                    (click)="finalizeTaskInspection(observation)"
+                    [disabled]="observation['status'] === 'Finalizado' || observation['status'] === 'Por confirmar' || observation['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
+                    <mat-icon>check_circle</mat-icon> Finalizar
+                  </button><br>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsTasksByInspections; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsTasksByInspections;"></tr>
+
+            </table>
+          </div>
+          <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+
+        <!-- MOBIL VERSION INSPECTION OBSERVATIONS-->
+        <div class="w3-hide-large w3-hide-medium">
+          <ng-container *ngFor="let fred of filteredInspectionsTasks; let i = index">
+            <div [@openCloseCard]="isOpenInspections[i] ? 'open': 'closed'" (click)="toggleCardInspections(i)"
+              class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+              [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+              <div class="w3-display-topright"
+                style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+                <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
+              </div>
+              <div [@openCloseDescription]="isOpenInspections[i] ? 'openDescription': 'closedDescription'"
+                class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+                <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                  {{(fred['observationDescription'].length>25 ? (fred['observationDescription'] | slice:0:25)+'...':(fred['observationDescription']))}}
+                </p>
+                <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                  *ngIf="fred['estimatedTerminationDate'] != 0">
+                  {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+                <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                  *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+              </div>
+            </div>
+            <div [@openCloseContent]="isOpenInspections[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8">
+              <mat-toolbar style="background:#333333">
+                <span class="ms-fill"></span>
+                <button mat-raised-button style="color:white" color="primary"
+                  matTooltip="Finalizar observación de inspección" (click)="finalizeTaskInspection(fred)"
+                  [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado' || fred['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
+                  <mat-icon>check_circle</mat-icon> Finalizar
+                </button>
+              </mat-toolbar>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Fecha</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                  <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
                 </div>
-              </a>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="recommendationDescription">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Conclusiones / Recomendaciones / Medidas Correctivas</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              {{observation['recommendationDescription']}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="area">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Área observada</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              <span style="font-weight:500">{{observation['area']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{observation['area']['supervisor']['displayName']}}</li>
-              </ul>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="responsibleArea">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Área responsable</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
-              </ul>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="terminationDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
-              Termino / Fecha Realización</th>
-            <td mat-cell *matCellDef="let observation"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">
-                {{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-              <p class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
-                {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              {{observation['status']}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="finalPicture">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto
-              Levantamiento</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <a href="{{observation['finalPicture']}}" target="_blank"
-                *ngIf="observation['finalPicture']; else defaultPicture">
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="{{observation['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Descripción de la observación (Condición / Acto Subestándar)
                 </div>
-              </a>
-              <ng-template #defaultPicture>
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%" class="w3-card-4">
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['observationDescription']}}</span>
                 </div>
-              </ng-template>
-            </td>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas Correctivas</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['recommendationDescription']}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Área observada</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span style="font-weight:500">{{fred['area']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{fred['area']['supervisor']['displayName']}}</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Área responsable</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span style="font-weight:500">{{fred['responsibleArea']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{fred['responsibleArea']['supervisor']['displayName']}}</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Fecha de
+                  Termino / Fecha Realización</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                    {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                    {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Estado</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['status']}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                    *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                  <ng-template #noImageLink>
+                    <span class="w3-small w3-text-gray">No disponible</span>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                    *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                  <ng-template #noImageLink>
+                    <span class="w3-small w3-text-gray">No disponible</span>
+                  </ng-template>
+                </div>
+              </div>
+              <mat-toolbar>
+                <span class="ms-fill"></span>
+                <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardInspections(i)">
+                  <mat-icon>keyboard_arrow_up</mat-icon>
+                </button>
+              </mat-toolbar>
+            </div>
           </ng-container>
+        </div>
 
-          <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones
-            </th>
-            <td mat-cell *matCellDef="let observation"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <button mat-raised-button color="primary" matTooltip="Finalizar tarea"
-                (click)="finalizeTaskInspection(observation)"
-                [disabled]="observation['status'] === 'Finalizado' || observation['status'] === 'Por confirmar' || observation['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
-                <mat-icon>check_circle</mat-icon> Finalizar
-              </button><br>
-            </td>
+        <div *ngIf="!filteredInspectionsTasks.length"
+          class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+          <h2 class="ms-empty-list">
+            Sin novedades
+          </h2>
+        </div>
+
+
+        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Observaciones personales</h2>
+        <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
+          <div class="w3-amber" style="overflow:auto">
+            <table mat-table [dataSource]="dataSourceTasksBySingleObservations" matSort
+              style="border-radius:10px 10px 0px 0px">
+
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
+                <td mat-cell *matCellDef="let observation; let i = index"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  {{i+1}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="observationDescription">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Descripción de la observación (Condición / Acto Subestándar)</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  {{observation['observationDescription']}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="initialPicture">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <a href="{{observation['initialPicture']}}" target="_blank">
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="{{observation['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                    </div>
+                  </a>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="recommendationDescription">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Conclusiones / Recomendaciones / Medidas Correctivas</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  {{observation['recommendationDescription']}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="area">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Área observada</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  <span style="font-weight:500">{{observation['area']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{observation['area']['supervisor']['displayName']}}</li>
+                  </ul>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="responsibleArea">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  Área responsable</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
+                  <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
+                  </ul>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="terminationDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
+                  Termino / Fecha Realización</th>
+                <td mat-cell *matCellDef="let observation"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">
+                    {{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  <p class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
+                    {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  {{observation['status']}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="finalPicture">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto
+                  Levantamiento</th>
+                <td mat-cell *matCellDef="let observation" class="w3-small"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <a href="{{observation['finalPicture']}}" target="_blank"
+                    *ngIf="observation['finalPicture']; else defaultPicture">
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="{{observation['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                    </div>
+                  </a>
+                  <ng-template #defaultPicture>
+                    <div style="width:200px;height:120px;padding:6px 6px">
+                      <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%"
+                        class="w3-card-4">
+                    </div>
+                  </ng-template>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones
+                </th>
+                <td mat-cell *matCellDef="let observation"
+                  style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
+                  <button mat-raised-button color="primary" matTooltip="Finalizar tarea"
+                    (click)="finalizeTaskObservation(observation)"
+                    [disabled]="observation['status'] === 'Finalizado' || observation['status'] === 'Por confirmar'  || observation['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
+                    <mat-icon>check_circle</mat-icon> Finalizar
+                  </button><br>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsTasksBySingleObservations; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsTasksBySingleObservations;"></tr>
+
+            </table>
+          </div>
+          <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <!-- MOBIL VERSION SINGLE OBSERVATIONS-->
+        <div class="w3-hide-large w3-hide-medium">
+          <ng-container *ngFor="let fred of filteredSingleObservationsTasks; let i = index">
+            <div [@openCloseCard]="isOpenSingleObservations[i] ? 'open': 'closed'"
+              (click)="toggleCardSingleObservations(i)"
+              class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
+              [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
+              <div class="w3-display-topright"
+                style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
+                <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
+              </div>
+              <div [@openCloseDescription]="isOpenSingleObservations[i] ? 'openDescription': 'closedDescription'"
+                class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
+                <p style="font-weight:400; color:white; margin: 0px 0.1em">
+                  {{(fred['observationDescription'].length>25 ? (fred['observationDescription'] | slice:0:25)+'...':(fred['observationDescription']))}}
+                </p>
+                <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                  *ngIf="fred['estimatedTerminationDate'] != 0">
+                  {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
+                <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
+                  *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
+              </div>
+            </div>
+            <div [@openCloseContent]="isOpenSingleObservations[i] ? 'openContent': 'closedContent'"
+              class="mat-elevation-z8">
+              <mat-toolbar style="background:#333333">
+                <span class="ms-fill"></span>
+                <button mat-raised-button style="color:white" color="primary"
+                  matTooltip="Finalizar observación personal" (click)="finalizeTaskObservation(fred)"
+                  [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado' || fred['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
+                  <mat-icon>check_circle</mat-icon> Finalizar
+                </button>
+              </mat-toolbar>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Fecha</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
+                  <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Descripción de la observación (Condición / Acto Subestándar)
+                </div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['observationDescription']}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas Correctivas</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['recommendationDescription']}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Área observada</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span style="font-weight:500">{{fred['area']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{fred['area']['supervisor']['displayName']}}</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Área responsable</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span style="font-weight:500">{{fred['responsibleArea']['name']}}</span>
+                  <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
+                    <li>Sup.: {{fred['responsibleArea']['supervisor']['displayName']}}</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Fecha de
+                  Termino / Fecha Realización</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
+                    {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                  <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
+                  <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
+                    {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Estado</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <span class="w3-small">{{fred['status']}}</span>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
+                    *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
+                  <ng-template #noImageLink>
+                    <span class="w3-small w3-text-gray">No disponible</span>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+                <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                  <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
+                    *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
+                  <ng-template #noImageLink>
+                    <span class="w3-small w3-text-gray">No disponible</span>
+                  </ng-template>
+                </div>
+              </div>
+              <mat-toolbar>
+                <span class="ms-fill"></span>
+                <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardSingleObservations(i)">
+                  <mat-icon>keyboard_arrow_up</mat-icon>
+                </button>
+              </mat-toolbar>
+            </div>
           </ng-container>
+        </div>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsTasksByInspections; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsTasksByInspections;"></tr>
+        <div *ngIf="!filteredSingleObservationsTasks.length"
+          class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
+          <h2 class="ms-empty-list">
+            Sin novedades
+          </h2>
+        </div>
 
-        </table>
+
       </div>
-      <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
-
-
-    <!-- MOBIL VERSION INSPECTION OBSERVATIONS-->
-    <div class="w3-hide-large w3-hide-medium">
-      <ng-container *ngFor="let fred of filteredInspectionsTasks; let i = index">
-        <div [@openCloseCard]="isOpenInspections[i] ? 'open': 'closed'" (click)="toggleCardInspections(i)"
-          class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
-          [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
-          <div class="w3-display-topright"
-            style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
-            <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
-          </div>
-          <div [@openCloseDescription]="isOpenInspections[i] ? 'openDescription': 'closedDescription'"
-            class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
-            <p style="font-weight:400; color:white; margin: 0px 0.1em">
-              {{(fred['observationDescription'].length>25 ? (fred['observationDescription'] | slice:0:25)+'...':(fred['observationDescription']))}}
-            </p>
-            <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
-              *ngIf="fred['estimatedTerminationDate'] != 0">
-              {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
-            <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
-              *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
-          </div>
-        </div>
-        <div [@openCloseContent]="isOpenInspections[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8">
-          <mat-toolbar style="background:#333333">
-            <span class="ms-fill"></span>
-            <button mat-raised-button style="color:white" color="primary"
-              matTooltip="Finalizar observación de inspección" (click)="finalizeTaskInspection(fred)"
-              [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado' || fred['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
-              <mat-icon>check_circle</mat-icon> Finalizar
-            </button>
-          </mat-toolbar>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Fecha</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
-              <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Descripción de la observación (Condición / Acto Subestándar)</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['observationDescription']}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas Correctivas</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['recommendationDescription']}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Área observada</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span style="font-weight:500">{{fred['area']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{fred['area']['supervisor']['displayName']}}</li>
-              </ul>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Área responsable</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span style="font-weight:500">{{fred['responsibleArea']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{fred['responsibleArea']['supervisor']['displayName']}}</li>
-              </ul>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Fecha de
-              Termino / Fecha Realización</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
-                {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-              <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
-                {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Estado</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['status']}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
-                *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
-              <ng-template #noImageLink>
-                <span class="w3-small w3-text-gray">No disponible</span>
-              </ng-template>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
-                *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
-              <ng-template #noImageLink>
-                <span class="w3-small w3-text-gray">No disponible</span>
-              </ng-template>
-            </div>
-          </div>
-          <mat-toolbar>
-            <span class="ms-fill"></span>
-            <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardInspections(i)">
-              <mat-icon>keyboard_arrow_up</mat-icon>
-            </button>
-          </mat-toolbar>
-        </div>
-      </ng-container>
+    <div class="w3-col s0 m1 l1">
+      <p></p>
     </div>
-
-    <div *ngIf="!filteredInspectionsTasks.length"
-      class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
-      <h2 class="ms-empty-list">
-        Sin novedades
-      </h2>
-    </div>
-
-
-    <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Tareas generadas por Observaciones personales</h2>
-    <div class="mat-elevation-z8 w3-margin-top w3-round-large w3-hide-small">
-      <div class="w3-amber" style="overflow:auto">
-        <table mat-table [dataSource]="dataSourceTasksBySingleObservations" matSort
-          style="border-radius:10px 10px 0px 0px">
-
-          <ng-container matColumnDef="index">
-            <th mat-header-cell *matHeaderCellDef
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">N°</th>
-            <td mat-cell *matCellDef="let observation; let i = index"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              {{i+1}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="observationDescription">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Descripción de la observación (Condición / Acto Subestándar)</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              {{observation['observationDescription']}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="initialPicture">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <a href="{{observation['initialPicture']}}" target="_blank">
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="{{observation['initialPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
-                </div>
-              </a>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="recommendationDescription">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Conclusiones / Recomendaciones / Medidas Correctivas</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              {{observation['recommendationDescription']}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="area">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Área observada</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              <span style="font-weight:500">{{observation['area']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{observation['area']['supervisor']['displayName']}}</li>
-              </ul>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="responsibleArea">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              Área responsable</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey;min-width:230px">
-              <span style="font-weight:500">{{observation['responsibleArea']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{observation['responsibleArea']['supervisor']['displayName']}}</li>
-              </ul>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="terminationDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Fecha de
-              Termino / Fecha Realización</th>
-            <td mat-cell *matCellDef="let observation"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="observation['estimatedTerminationDate'] > 0">
-                {{(observation['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-              <p class="w3-small" *ngIf="observation['realTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="observation['realTerminationDate'] > 0">
-                {{(observation['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Estado</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              {{observation['status']}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="finalPicture">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Foto
-              Levantamiento</th>
-            <td mat-cell *matCellDef="let observation" class="w3-small"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <a href="{{observation['finalPicture']}}" target="_blank"
-                *ngIf="observation['finalPicture']; else defaultPicture">
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="{{observation['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
-                </div>
-              </a>
-              <ng-template #defaultPicture>
-                <div style="width:200px;height:120px;padding:6px 6px">
-                  <img src="../../../assets/images/no-image.png" style="max-width:100%;height:100%" class="w3-card-4">
-                </div>
-              </ng-template>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef
-              style="background:#f7f7f7;padding:0px 1em 0px 1em; border-left:1px solid lightgrey">Acciones
-            </th>
-            <td mat-cell *matCellDef="let observation"
-              style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
-              <button mat-raised-button color="primary" matTooltip="Finalizar tarea"
-                (click)="finalizeTaskObservation(observation)"
-                [disabled]="observation['status'] === 'Finalizado' || observation['status'] === 'Por confirmar'  || observation['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
-                <mat-icon>check_circle</mat-icon> Finalizar
-              </button><br>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsTasksBySingleObservations; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsTasksBySingleObservations;"></tr>
-
-        </table>
-      </div>
-      <mat-paginator class="w3-round-large" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </div>
-
-    <!-- MOBIL VERSION SINGLE OBSERVATIONS-->
-    <div class="w3-hide-large w3-hide-medium">
-      <ng-container *ngFor="let fred of filteredSingleObservationsTasks; let i = index">
-        <div [@openCloseCard]="isOpenSingleObservations[i] ? 'open': 'closed'" (click)="toggleCardSingleObservations(i)"
-          class="mat-elevation-z8 ms-hero-image w3-display-container w3-round-large"
-          [ngStyle]="{'background-image': fred['initialPicture'] ? ('url(' + fred['initialPicture'] + ')') : 'url(../../../assets/images/no-image-mobile.jpeg)'}">
-          <div class="w3-display-topright"
-            style="background:rgba(0,0,0,0.8); border-radius: 0px 10px; padding: 0px 8px">
-            <p style="font-size:1em; color:white"><strong>{{fred['status']}}</strong></p>
-          </div>
-          <div [@openCloseDescription]="isOpenSingleObservations[i] ? 'openDescription': 'closedDescription'"
-            class="w3-display-bottomleft w3-padding" style="background:rgba(0,0,0,0.8)">
-            <p style="font-weight:400; color:white; margin: 0px 0.1em">
-              {{(fred['observationDescription'].length>25 ? (fred['observationDescription'] | slice:0:25)+'...':(fred['observationDescription']))}}
-            </p>
-            <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
-              *ngIf="fred['estimatedTerminationDate'] != 0">
-              {{fred['estimatedTerminationDate'] | date : 'dd-MM-yy'}}</p>
-            <p style="font-weight:300; color:white; margin: 0px 0.1em; font-size:0.9m"
-              *ngIf="fred['estimatedTerminationDate'] === 0">Por confirmar</p>
-          </div>
-        </div>
-        <div [@openCloseContent]="isOpenSingleObservations[i] ? 'openContent': 'closedContent'"
-          class="mat-elevation-z8">
-          <mat-toolbar style="background:#333333">
-            <span class="ms-fill"></span>
-            <button mat-raised-button style="color:white" color="primary" matTooltip="Finalizar observación personal"
-              (click)="finalizeTaskObservation(fred)"
-              [disabled]="fred['status']==='Rechazado' || fred['status'] === 'Finalizado' || fred['responsibleArea']['supervisor']['uid'] != auth.userCRC.uid">
-              <mat-icon>check_circle</mat-icon> Finalizar
-            </button>
-          </mat-toolbar>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Fecha</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span>{{fred['regDate'] | date : 'dd/MM/yyy'}}</span><br>
-              <span class="w3-small">{{fred['regDate'] | date : 'hh:mm:ss'}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Descripción de la observación (Condición / Acto Subestándar)</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['observationDescription']}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Conclusiones / Recomendaciones / Medidas Correctivas</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['recommendationDescription']}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Área observada</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span style="font-weight:500">{{fred['area']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{fred['area']['supervisor']['displayName']}}</li>
-              </ul>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Área responsable</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span style="font-weight:500">{{fred['responsibleArea']['name']}}</span>
-              <ul style="margin-top:0px;margin-bottom:7px;padding-left:16px;">
-                <li>Sup.: {{fred['responsibleArea']['supervisor']['displayName']}}</li>
-              </ul>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Fecha de
-              Termino / Fecha Realización</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="fred['estimatedTerminationDate'] > 0">
-                {{(fred['estimatedTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-              <p class="w3-small" *ngIf="fred['realTerminationDate'] === 0">**/**/****</p>
-              <p class="w3-small" *ngIf="fred['realTerminationDate'] > 0">
-                {{(fred['realTerminationDate']) | date: 'dd/MM/yyyy'}}</p>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Estado</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <span class="w3-small">{{fred['status']}}</span>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Imagen inicial</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <a class="w3-medium" target="_blank" [href]="fred['initialPicture']"
-                *ngIf="fred['initialPicture']; else noImageLink">Ver imagen</a>
-              <ng-template #noImageLink>
-                <span class="w3-small w3-text-gray">No disponible</span>
-              </ng-template>
-            </div>
-          </div>
-          <div class="w3-row">
-            <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
-            <div class="w3-col s6" style="padding: 0.5em 0.5em">
-              <a class="w3-medium" target="_blank" [href]="fred['finalPicture']"
-                *ngIf="fred['finalPicture']; else noImageLink">Ver imagen</a>
-              <ng-template #noImageLink>
-                <span class="w3-small w3-text-gray">No disponible</span>
-              </ng-template>
-            </div>
-          </div>
-          <mat-toolbar>
-            <span class="ms-fill"></span>
-            <button mat-icon-button matTooltip="Cerrar" (click)="toggleCardSingleObservations(i)">
-              <mat-icon>keyboard_arrow_up</mat-icon>
-            </button>
-          </mat-toolbar>
-        </div>
-      </ng-container>
-    </div>
-
-    <div *ngIf="!filteredSingleObservationsTasks.length"
-      class="w3-container w3-center w3-hide-large w3-hide-medium ms-empty-container w3-round-large mat-elevation-z8">
-      <h2 class="ms-empty-list">
-        Sin novedades
-      </h2>
-    </div>
-
-
   </div>
-
-
 </div>
