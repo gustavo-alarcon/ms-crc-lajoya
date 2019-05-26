@@ -1,55 +1,56 @@
-<h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em" mat-dialog-title>
+<h2 class="ms-font-rubik ms-color-2b mat-subheader-2" style="font-size:1.2em" mat-dialog-title>
   <mat-icon style="vertical-align:middle">assignment_turned_in</mat-icon> Agregar observación
 </h2>
 <mat-divider></mat-divider>
 <mat-dialog-content class="w3-roung-large">
-  <mat-vertical-stepper #stepperFRED class="w3-margin-top w3-round-large">
-    <mat-step [stepControl]="headerDataFormGroup" errorMessage="Complete todos los campos requeridos" state="done">
 
-      <ng-template matStepLabel>Cabecera</ng-template>
+  <span class="ms-font-rubik mat-subheader-2">Cabecera</span>
 
-      <form [formGroup]="headerDataFormGroup">
+  <form [formGroup]="headerDataFormGroup" style="padding-top:1em">
 
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Área observada</mat-label>
-          <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="area"
-            [matAutocomplete]="autoArea" autocomplete="off">
-          <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="setSelectedArea($event)"
-            [displayWith]="displayArea">
-            <mat-option *ngFor="let area of filteredAreas | async" [value]="area">
-              <strong>{{area['name']}}</strong> | <span class="w3-small">{{area['supervisor']['displayName']}}</span>
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.required">
-            <strong>requerido *</strong>
-          </mat-error><br>
-          <mat-error *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.invalidObject">
-            <strong>Debe seleccionar una opción*</strong>
-          </mat-error>
-          <mat-hint *ngIf="selectedArea['supervisor']['displayName']">
-            {{selectedArea['supervisor']['displayName']}}
-          </mat-hint>
-        </mat-form-field>
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+      <mat-label>Área observada</mat-label>
+      <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="area"
+        [matAutocomplete]="autoArea" autocomplete="off">
+      <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="setSelectedArea($event)"
+        [displayWith]="displayArea">
+        <mat-option *ngFor="let area of filteredAreas | async" [value]="area">
+          <strong>{{area['name']}}</strong> | <span class="w3-small">{{area['supervisor']['displayName']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.required">
+        <strong>requerido *</strong>
+      </mat-error><br>
+      <mat-error *ngIf="(area.dirty || area.touched) && area.invalid && area.errors.invalidObject">
+        <strong>Debe seleccionar una opción*</strong>
+      </mat-error>
+      <mat-hint *ngIf="selectedArea['supervisor']['displayName']">
+        {{selectedArea['supervisor']['displayName']}}
+      </mat-hint>
+    </mat-form-field>
 
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Área responsable</mat-label>
-          <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="responsibleArea"
-            [matAutocomplete]="autoResponsibleArea" autocomplete="off">
-          <mat-error
-            *ngIf="(responsibleArea.dirty || responsibleArea.touched) && responsibleArea.invalid && responsibleArea.errors.required">
-            <strong>requerido *</strong>
-          </mat-error><br>
-          <mat-error
-            *ngIf="(responsibleArea.dirty || responsibleArea.touched) && responsibleArea.invalid && responsibleArea.errors.invalidObject">
-            <strong>Debe seleccionar una opción*</strong>
-          </mat-error>
-          <mat-autocomplete #autoResponsibleArea="matAutocomplete" (optionSelected)="setSelectedResponsibleArea($event)"
-            [displayWith]="displayResponsibleArea">
-            <mat-option *ngFor="let area of filteredResponsibleAreas | async" [value]="area">
-              <strong>{{area['name']}}</strong> | {{area['supervisor']['displayName']}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+      <mat-label>Área responsable</mat-label>
+      <input matInput class="w3-white" type="text" placeholder="Seleccione..." formControlName="responsibleArea"
+        [matAutocomplete]="autoResponsibleArea" autocomplete="off">
+      <mat-error
+        *ngIf="(responsibleArea.dirty || responsibleArea.touched) && responsibleArea.invalid && responsibleArea.errors.required">
+        <strong>requerido *</strong>
+      </mat-error><br>
+      <mat-error
+        *ngIf="(responsibleArea.dirty || responsibleArea.touched) && responsibleArea.invalid && responsibleArea.errors.invalidObject">
+        <strong>Debe seleccionar una opción*</strong>
+      </mat-error>
+      <mat-hint *ngIf="selectedResponsibleArea['supervisor']">
+        {{selectedResponsibleArea['supervisor']['displayName']}}
+      </mat-hint>
+      <mat-autocomplete #autoResponsibleArea="matAutocomplete" (optionSelected)="setSelectedResponsibleArea($event)"
+        [displayWith]="displayResponsibleArea">
+        <mat-option *ngFor="let area of filteredResponsibleAreas | async" [value]="area">
+          <strong>{{area['name']}}</strong> | {{area['supervisor']['displayName']}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field><br>
 
     <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
       <mat-label>Tipo de Observación</mat-label>
@@ -65,20 +66,18 @@
       </mat-error>
     </mat-form-field>
 
-        <!-- <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Causas</mat-label>
-          <input matInput type="text" placeholder="Seleccione..." formControlName="cause" [matAutocomplete]="autoCause"
-            autocomplete="off">
-          <mat-error *ngIf="(cause.dirty || cause.touched) && cause.invalid && cause.errors.required">
-            <strong>requerido *</strong>
-          </mat-error>
-          <mat-autocomplete #autoCause="matAutocomplete">
-            <mat-option *ngFor="let cause of filteredCauses | async" [value]="cause['name']"
-              [matTooltip]="cause['name']" [matTooltipDisabled]="!(cause['name'].length > 20)">
-              {{cause['name']}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field> -->
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="auth.platform.ANDROID || auth.platform.IOS">
+      <mat-label>Tipo de Observación</mat-label>
+      <select matNativeControl formControlName="kindOfObservation" placeholder="Seleccione...">
+        <option *ngFor="let observation of filteredKindOfObservation | async" [value]="observation['name']" [matTooltip]="observation['name']"
+          [matTooltipDisabled]="!(observation['name'].length > 20)">
+          {{observation['name']}}
+        </option>
+      </select>
+      <mat-error *ngIf="(kindOfObservation.dirty || kindOfObservation.touched) && kindOfObservation.invalid && kindOfObservation.errors.required">
+        <strong>requerido *</strong>
+      </mat-error>
+    </mat-form-field>
 
     <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
       <mat-label>Causas</mat-label>
@@ -93,50 +92,51 @@
       </mat-error>
     </mat-form-field>
 
-        <div class="w3-margin-top">
-          <button mat-stroked-button matStepperNext>Siguiente</button>
-        </div>
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="auth.platform.ANDROID || auth.platform.IOS">
+      <mat-label>Causas phone</mat-label>
+      <select matNativeControl formControlName="cause" placeholder="Seleccione...">
+        <option *ngFor="let cause of filteredCauses | async" [value]="cause['name']" [matTooltip]="cause['name']"
+          [matTooltipDisabled]="!(cause['name'].length > 20)">
+          {{cause['name']}}
+        </option>
+      </select>
+      <mat-error *ngIf="(cause.dirty || cause.touched) && cause.invalid && cause.errors.required">
+        <strong>requerido *</strong>
+      </mat-error>
+    </mat-form-field>
 
-      </form>
-    </mat-step>
+  </form>
 
-    <mat-step [stepControl]="descriptionDataFormGroup" errorMessage="Complete todos los campos requeridos" state="done">
+  <span class="ms-font-rubik mat-subheader-2">Reseña</span>
 
-      <ng-template matStepLabel>Reseñas</ng-template>
+  <form [formGroup]="descriptionDataFormGroup" style="padding:1em 0em">
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+      <mat-label>Descripción de la observación</mat-label>
+      <textarea matInput placeholder="Describa..." rows="4" formControlName="observationDescription"
+        required></textarea>
+      <mat-hint>
+        requerido *
+      </mat-hint>
+    </mat-form-field>
 
-      <form [formGroup]="descriptionDataFormGroup">
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Descripción de la observación</mat-label>
-          <textarea matInput placeholder="Describa..." rows="4" formControlName="observationDescription"
-            required></textarea>
-          <mat-hint>
-            requerido *
-          </mat-hint>
-        </mat-form-field>
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+      <mat-label>Conclusiones / Recomendaciones</mat-label>
+      <textarea matInput placeholder="Describa..." rows="4" formControlName="recommendationDescription"
+        required></textarea>
+      <mat-hint>
+        requerido *
+      </mat-hint>
+    </mat-form-field><br>
 
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Conclusiones / Recomendaciones</mat-label>
-          <textarea matInput placeholder="Describa..." rows="4" formControlName="recommendationDescription"
-            required></textarea>
-          <mat-hint>
-            requerido *
-          </mat-hint>
-        </mat-form-field><br>
+    <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
+    <img [src]="imageSrc || '../../../assets/images/no-image.png'" style="width:200px; height:150px; cursor:pointer"
+      class="mat-elevation-z4 w3-hover-shadow" (click)="fileInput.click()">
 
-        <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
-        <img [src]="imageSrc || '../../../assets/images/no-image.png'" style="width:200px; height:150px; cursor:pointer"
-          class="mat-elevation-z4 w3-hover-shadow" (click)="fileInput.click()">
-
-        <div>
-          <button mat-stroked-button matStepperPrevious class="w3-margin-right w3-margin-top">Anterior</button>
-        </div>
-
-      </form>
-    </mat-step>
-  </mat-vertical-stepper>
+  </form>
 </mat-dialog-content>
 
 <mat-dialog-actions class="w3-margin-top w3-margin-bottom" style="border-top: 1px solid lightgray;">
+  <span class="ms-fill"></span>
   <button mat-stroked-button color="warn" class="w3-margin-right" mat-dialog-close>Cancelar</button>
   <button mat-raised-button color="primary" (click)="addObservation()"
     [disabled]="!(headerDataFormGroup.valid && descriptionDataFormGroup.valid)">Crear</button>

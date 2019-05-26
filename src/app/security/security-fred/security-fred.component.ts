@@ -16,8 +16,7 @@ import { startWith, map, tap } from 'rxjs/operators';
 import { FredEditDialogComponent } from './fred-edit-dialog/fred-edit-dialog.component';
 import { AuthService } from 'src/app/core/auth.service';
 import { DatePipe } from '@angular/common';
-import { isObjectValidator } from "../../validators/general/is-object-validator";
-import { typeValidator } from "../../validators/security-fred/type-validator";
+import { isObjectValidator } from '../../validators/general/is-object-validator';
 
 @Component({
   selector: 'app-security-fred',
@@ -200,15 +199,6 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
     // ****************  TAB - FRED
     this.createForms();
 
-    // ------------ FIRST FORM - AUTCOMPLETE DEFINITIONS
-
-    this.filteredTypes = this.firstFormGroup.get('type').valueChanges
-      .pipe(
-        startWith<any>(''),
-        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.fredTypes.filter(option => option.toLowerCase().includes(name)) : this.fredTypes)
-      );
-
     this.filteredAreas = this.firstFormGroup.get('observedArea').valueChanges
       .pipe(
         startWith<any>(''),
@@ -222,42 +212,6 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
         map(value => typeof value === 'string' ? value.toLowerCase() : value.displayName.toLowerCase()),
         map(name => name ? this.dbs.users.filter(option => option['displayName'].toLowerCase().includes(name)) : this.dbs.users)
       )
-
-    // ------------ SECOND FORM - AUTCOMPLETE DEFINITIONS
-    this.filteredObsList1 = this.secondFormGroup.get('list1').valueChanges
-      .pipe(
-        startWith<any>(''),
-        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.dbs.substandard1.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.substandard1)
-      );
-
-    this.filteredObsList2 = this.secondFormGroup.get('list2').valueChanges
-      .pipe(
-        startWith<any>(''),
-        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.dbs.substandard2.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.substandard2)
-      );
-
-    this.filteredObsList3 = this.secondFormGroup.get('list3').valueChanges
-      .pipe(
-        startWith<any>(''),
-        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.dbs.substandard3.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.substandard3)
-      );
-
-    this.filteredObsList4 = this.secondFormGroup.get('list4').valueChanges
-      .pipe(
-        startWith<any>(''),
-        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.dbs.substandard4.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.substandard4)
-      );
-
-    this.filteredObsList5 = this.secondFormGroup.get('list5').valueChanges
-      .pipe(
-        startWith<any>(''),
-        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-        map(name => name ? this.dbs.substandard5.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.substandard5)
-      );
 
     // ****************  TAB - FRED LIST
     let dataSecurityFredsSub = this.dbs.currentDataSecurityFreds.subscribe(res => {
@@ -285,19 +239,19 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
             let _obs5 = '---';
 
             element['observations'].forEach(obs => {
-              if (obs['group'] === "Orden y Limpieza") {
+              if (obs['group'] === 'Orden y Limpieza') {
                 _obs1 = obs['observations'][0];
               }
-              if (obs['group'] === "Equipos de Protección Personal") {
+              if (obs['group'] === 'Equipos de Protección Personal') {
                 _obs2 = obs['observations'][0];
               }
-              if (obs['group'] === "Control de Riesgos Operacionales") {
+              if (obs['group'] === 'Control de Riesgos Operacionales') {
                 _obs3 = obs['observations'][0];
               }
-              if (obs['group'] === "Herramientas y Equipos") {
+              if (obs['group'] === 'Herramientas y Equipos') {
                 _obs4 = obs['observations'][0];
               }
-              if (obs['group'] === "Riesgos Críticos") {
+              if (obs['group'] === 'Riesgos Críticos') {
                 _obs5 = obs['observations'][0];
               }
             })
@@ -556,17 +510,17 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
 
   createForms(): void {
     this.firstFormGroup = this.fb.group({
-      type: ['', [Validators.required, typeValidator]],
+      type: ['', [Validators.required]],
       observedArea: ['', [Validators.required, isObjectValidator]],
       observedStaff: ['', [Validators.required, isObjectValidator]]
     });
 
     this.secondFormGroup = this.fb.group({
-      list1: [{name:'No observado'}, [Validators.required, isObjectValidator]],
-      list2: [{name:'No observado'}, [Validators.required, isObjectValidator]],
-      list3: [{name:'No observado'}, [Validators.required, isObjectValidator]],
-      list4: [{name:'No observado'}, [Validators.required, isObjectValidator]],
-      list5: [{name:'No observado'}, [Validators.required, isObjectValidator]],
+      list1: ['No observado', [Validators.required]],
+      list2: ['No observado', [Validators.required]],
+      list3: ['No observado', [Validators.required]],
+      list4: ['No observado', [Validators.required]],
+      list5: ['No observado', [Validators.required]],
     });
 
     this.thirdFormGroup = this.fb.group({
@@ -651,13 +605,13 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
         this.thirdFormGroup.get('solved').setValue(false);
       }
 
-      if (this.firstFormGroup.value['type'] === "Acto sub-estandar") {
+      if (this.firstFormGroup.value['type'] === 'Acto sub-estandar') {
         if (this.secondFormGroup.value['list1'] === 'No observado' &&
           this.secondFormGroup.value['list2'] === 'No observado' &&
           this.secondFormGroup.value['list3'] === 'No observado' &&
           this.secondFormGroup.value['list4'] === 'No observado' &&
           this.secondFormGroup.value['list5'] === 'No observado') {
-          this.snackbar.open("Debe seleccionar por lo menos una OBSERVACIÓN", "Cerrar", {
+          this.snackbar.open('Debe seleccionar por lo menos una OBSERVACIÓN', 'Cerrar', {
             duration: 6000
           });
 
@@ -666,15 +620,15 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
       }
 
       if (!this.thirdFormGroup.valid) {
-        this.snackbar.open("Debe sugerir una oportunidad de mejora", "Cerrar", {
+        this.snackbar.open('Debe sugerir una oportunidad de mejora', 'Cerrar', {
           duration: 6000
         });
 
         return;
       }
 
-      if (!this.selectedFile && (this.firstFormGroup.value['type'] === "Condición sub-estandar")) {
-        this.snackbar.open("Adjunte una imagen para poder guardar el documento", "Cerrar", {
+      if (!this.selectedFile && (this.firstFormGroup.value['type'] === 'Condición sub-estandar')) {
+        this.snackbar.open('Adjunte una imagen para poder guardar el documento', 'Cerrar', {
           duration: 6000
         });
         return;
@@ -691,7 +645,7 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
       });
 
     } else {
-      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento", "Cerrar", {
+      this.snackbar.open('Complete todo los campos requeridos para poder guardar el documento', 'Cerrar', {
         duration: 6000
       });
     }

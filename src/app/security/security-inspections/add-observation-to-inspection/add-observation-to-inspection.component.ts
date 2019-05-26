@@ -132,18 +132,9 @@ export class AddObservationToInspectionComponent implements OnInit {
     this.selectedResponsibleArea = event.option.value;
   }
 
-  displayKindOfObservation(observation): string | undefined {
-    return observation ? observation['name'] : undefined;
-  }
-
-  displayCause(cause): string | undefined {
-    return cause ? cause['name'] : undefined;
-  }
-
-
   addObservation(): void {
     if (!this.selectedFile) {
-      this.snackbar.open("Adjunte una imagen para poder guardar el documento", "Cerrar", {
+      this.snackbar.open('Adjunte una imagen para poder guardar el documento', 'Cerrar', {
         duration: 6000
       })
       return;
@@ -156,7 +147,7 @@ export class AddObservationToInspectionComponent implements OnInit {
         this.dialogRef.close();
       })
     } else {
-      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento", "Cerrar", {
+      this.snackbar.open('Complete todo los campos requeridos para poder guardar el documento', 'Cerrar', {
         duration: 6000
       });
     }
