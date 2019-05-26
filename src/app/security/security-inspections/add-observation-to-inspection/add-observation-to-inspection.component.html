@@ -52,7 +52,7 @@
       </mat-autocomplete>
     </mat-form-field><br>
 
-    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
       <mat-label>Tipo de Observación</mat-label>
       <mat-select placeholder="Seleccione..." formControlName="kindOfObservation">
         <mat-option *ngFor="let observation of filteredKindOfObservation | async" [value]="observation['name']"
@@ -79,7 +79,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" >
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
       <mat-label>Causas</mat-label>
       <mat-select placeholder="Seleccione..." formControlName="cause">
         <mat-option *ngFor="let cause of filteredCauses | async" [value]="cause['name']" [matTooltip]="cause['name']"
