@@ -67,28 +67,28 @@ export class AddObservationToInspectionComponent implements OnInit {
         startWith<any>(''),
         map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
         map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-      )
+      );
 
     this.filteredResponsibleAreas = this.headerDataFormGroup.get('responsibleArea').valueChanges
       .pipe(
         startWith<any>(''),
         map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
         map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-      )
+      );
 
     this.filteredKindOfObservation = this.headerDataFormGroup.get('kindOfObservation').valueChanges
       .pipe(
         startWith<any>(''),
         map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
         map(name => name ? this.dbs.kindOfObservation.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.kindOfObservation)
-      )
+      );
 
     this.filteredCauses = this.headerDataFormGroup.get('cause').valueChanges
       .pipe(
         startWith<any>(''),
         map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
         map(name => name ? this.dbs.causes.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.causes)
-      )
+      );
 
     // ************* DESCRIPTION FORM GROUP DEFINITIONS
 
