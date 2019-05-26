@@ -4,14 +4,19 @@
     <mat-icon style="vertical-align:middle; font-size: 30px; width:30px; height: 30px">assistant</mat-icon> FRED
   </h1>
 
-  <mat-tab-group animationDuration="500ms">
-    <mat-tab label="Formulario" *ngIf="auth.permits['securityFredForm']">
-      <div class="w3-padding">
-        <h2 class="ms-font-rubik ms-color-2b" style="font-size:1.2em">Formulario FRED</h2>
-        <mat-vertical-stepper #stepperFRED class="mat-elevation-z8 w3-margin-top w3-round-large">
-          <mat-step [stepControl]="firstFormGroup" errorMessage="Complete todos los campos requeridos" state="done">
-            <form [formGroup]="firstFormGroup">
-              <ng-template matStepLabel>Cabecera</ng-template>
+                    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                      appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+                      <mat-label>Tipo de observación</mat-label>
+                      <mat-select placeholder="Escriba y seleccione" formControlName="type">
+                        <mat-option *ngFor="let type of fredTypes" [value]="type" style="font-size:14px">
+                          {{type}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="(fredType.dirty || fredType.touched) && fredType.invalid && fredType.errors.required">
+                        <strong>requerido *</strong>
+                      </mat-error><br>
+                    </mat-form-field>
 
               <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
                 appearance="outline">
@@ -107,19 +112,17 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
-                appearance="outline">
-                <mat-label>Control de Riesgos Operacionales</mat-label>
-                <input type="text" matInput placeholder="Seleccione..." formControlName="list3"
-                  [matAutocomplete]="autoList3" required>
-              </mat-form-field>
-              <mat-autocomplete #autoList3="matAutocomplete">
-                <mat-option *ngFor="let option of filteredObsList3 | async" [value]="option['name']"
-                  style="font-size:14px" [matTooltip]="option['name']"
-                  [matTooltipDisabled]="!(option['name'].length > 27)">
-                  {{option['name']}}
-                </mat-option>
-              </mat-autocomplete>
+                    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                      appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+                      <mat-label>Orden y Limpeza</mat-label>
+                      <mat-select placeholder="Seleccione..." formControlName="list1">
+                        <mat-option *ngFor="let option of dbs.currentDataSubstandard1 | async" [value]="option['name']"
+                          style="font-size:14px" [matTooltip]="option['name']"
+                          [matTooltipDisabled]="!(option['name'].length > 27)">
+                          {{option['name']}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
               <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
                 appearance="outline">
@@ -135,19 +138,17 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
-                appearance="outline">
-                <mat-label>Riesgos Críticos</mat-label>
-                <input type="text" matInput placeholder="Seleccione..." formControlName="list5"
-                  [matAutocomplete]="autoList5" required>
-              </mat-form-field>
-              <mat-autocomplete #autoList5="matAutocomplete">
-                <mat-option *ngFor="let option of filteredObsList5 | async" [value]="option['name']"
-                  style="font-size:14px" [matTooltip]="option['name']"
-                  [matTooltipDisabled]="!(option['name'].length > 27)">
-                  {{option['name']}}
-                </mat-option>
-              </mat-autocomplete>
+                    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                      appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+                      <mat-label>Equipos de Protección Personal</mat-label>
+                      <mat-select placeholder="Seleccione..." formControlName="list2">
+                        <mat-option *ngFor="let option of dbs.currentDataSubstandard2 | async" [value]="option['name']"
+                          style="font-size:14px" [matTooltip]="option['name']"
+                          [matTooltipDisabled]="!(option['name'].length > 27)">
+                          {{option['name']}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
               <div class="w3-margin-top">
                 <button mat-stroked-button matStepperPrevious class="w3-margin-right">Anterior</button>
@@ -167,11 +168,17 @@
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
-                appearance="outline" *ngIf="firstFormGroup.value['type'] === 'Acto sub-estandar'">
-                <mat-label>Acto sub-estandar</mat-label>
-                <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardAct"></textarea>
-              </mat-form-field>
+                    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                      appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+                      <mat-label>Control de Riesgos Operacionales</mat-label>
+                      <mat-select placeholder="Seleccione..." formControlName="list3">
+                        <mat-option *ngFor="let option of dbs.currentDataSubstandard3 | async" [value]="option['name']"
+                          style="font-size:14px" [matTooltip]="option['name']"
+                          [matTooltipDisabled]="!(option['name'].length > 27)">
+                          {{option['name']}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
               <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
                 appearance="outline" *ngIf="firstFormGroup.value['type'] === 'Condición sub-estandar'">
@@ -179,11 +186,17 @@
                 <textarea matInput placeholder="Describa..." rows="4" formControlName="substandardCondition"></textarea>
               </mat-form-field>
 
-              <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
-                appearance="outline" *ngIf="firstFormGroup.value['type'] === 'Acto destacable'">
-                <mat-label>Acto destacable</mat-label>
-                <textarea matInput placeholder="Describa..." rows="4" formControlName="remarkableAct"></textarea>
-              </mat-form-field>
+                    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                      appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+                      <mat-label>Herramientas y Equipos</mat-label>
+                      <mat-select placeholder="Seleccione..." formControlName="list4">
+                        <mat-option *ngFor="let option of dbs.currentDataSubstandard4 | async" [value]="option['name']"
+                          style="font-size:14px" [matTooltip]="option['name']"
+                          [matTooltipDisabled]="!(option['name'].length > 27)">
+                          {{option['name']}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
               <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
                 appearance="outline">
@@ -192,10 +205,17 @@
                   required></textarea>
               </mat-form-field>
 
-              <input #fileInput style="display: none" type="file" (change)="onFileSelected($event)">
-              <img [src]="imageSrc || '../../../assets/images/no-image.png'"
-                style="width:200px; height:150px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
-                (click)="fileInput.click()">
+                    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
+                      appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+                      <mat-label>Riesgos Críticos</mat-label>
+                      <mat-select placeholder="Seleccione..." formControlName="list5" required>
+                        <mat-option *ngFor="let option of dbs.currentDataSubstandard5 | async" [value]="option['name']"
+                          style="font-size:14px" [matTooltip]="option['name']"
+                          [matTooltipDisabled]="!(option['name'].length > 27)">
+                          {{option['name']}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
               <div class="w3-margin-top">
                 <button mat-stroked-button matStepperPrevious class="w3-margin-right w3-margin-top">Anterior</button>

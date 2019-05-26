@@ -51,21 +51,19 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Tipo de Observación</mat-label>
-          <input matInput type="text" placeholder="Seleccione..." formControlName="kindOfObservation"
-            [matAutocomplete]="autoKindOfObservation" autocomplete="off">
-          <mat-error
-            *ngIf="(kindOfObservation.dirty || kindOfObservation.touched) && kindOfObservation.invalid && kindOfObservation.errors.required">
-            <strong>requerido *</strong>
-          </mat-error>
-          <mat-autocomplete #autoKindOfObservation="matAutocomplete">
-            <mat-option *ngFor="let observation of filteredKindOfObservation | async" [value]="observation['name']"
-              [matTooltip]="observation['name']" [matTooltipDisabled]="!(observation['name'].length > 27)">
-              {{observation['name']}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+      <mat-label>Tipo de Observación</mat-label>
+      <mat-select placeholder="Seleccione..." formControlName="kindOfObservation">
+        <mat-option *ngFor="let observation of filteredKindOfObservation | async" [value]="observation['name']"
+          [matTooltip]="observation['name']" [matTooltipDisabled]="!(observation['name'].length > 27)">
+          {{observation['name']}}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="(kindOfObservation.dirty || kindOfObservation.touched) && kindOfObservation.invalid && kindOfObservation.errors.required">
+        <strong>requerido *</strong>
+      </mat-error>
+    </mat-form-field>
 
         <!-- <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
           <mat-label>Causas</mat-label>
@@ -82,20 +80,18 @@
           </mat-autocomplete>
         </mat-form-field> -->
 
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline">
-          <mat-label>Causas</mat-label>
-          <mat-select formControlName="cause" placeholder="Seleccione...">
-            <mat-option *ngFor="let cause of filteredCauses | async"
-                        [value]="cause['name']"
-                        [matTooltip]="cause['name']"
-                        [matTooltipDisabled]="!(cause['name'].length > 20)">
-              {{cause['name']}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="(cause.dirty || cause.touched) && cause.invalid && cause.errors.required">
-            <strong>requerido *</strong>
-          </mat-error>
-        </mat-form-field>
+    <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px" appearance="outline" *ngIf="!auth.platform.ANDROID && !auth.platform.IOS">
+      <mat-label>Causas</mat-label>
+      <mat-select placeholder="Seleccione..." formControlName="cause">
+        <mat-option *ngFor="let cause of filteredCauses | async" [value]="cause['name']" [matTooltip]="cause['name']"
+          [matTooltipDisabled]="!(cause['name'].length > 20)">
+          {{cause['name']}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="(cause.dirty || cause.touched) && cause.invalid && cause.errors.required">
+        <strong>requerido *</strong>
+      </mat-error>
+    </mat-form-field>
 
         <div class="w3-margin-top">
           <button mat-stroked-button matStepperNext>Siguiente</button>
