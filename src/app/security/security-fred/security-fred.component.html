@@ -34,7 +34,7 @@
                     </mat-form-field>
 
                     <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:250px"
-                      appearance="outline" *ngIf="auth.platform.ANDROID && auth.platform.IOS">
+                      appearance="outline" *ngIf="auth.platform.ANDROID || auth.platform.IOS">
                       <mat-label>Tipo de observación</mat-label>
                       <select matNativeControl placeholder="Escriba y seleccione" formControlName="type">
                         <option label="--Seleccione--"></option>
