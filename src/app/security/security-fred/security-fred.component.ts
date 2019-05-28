@@ -269,7 +269,7 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
             _object['observador usuario'] = element['createdBy']['displayName'];
 
             // Adding observer area
-            _object['observador area'] = element['createdBy']['area']['name'];
+            _object['observador area'] = element['createdBy']['area'] ? element['createdBy']['area']['name'] : '---';
 
             // Adding observed area name
             _object['area observada nombre'] = element['observedArea']['name'];
@@ -314,6 +314,7 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
         this.filteredSubstandardActFreds.forEach(element => {
           this.isOpenSubstandardAct.push(false);
         })
+        console.log(res);
       })
 
     this.subscriptions.push(dataSecurityFredCat1Sub);
