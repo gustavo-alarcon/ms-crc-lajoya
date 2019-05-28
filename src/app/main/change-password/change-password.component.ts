@@ -41,7 +41,6 @@ export class ChangePasswordComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         map(res => {
-          console.log(res);
           this.samePassword = false;
           if(res === this.password.value){
             this.samePassword = true;
@@ -68,7 +67,6 @@ export class ChangePasswordComponent implements OnInit {
         ,this.httpOptions)
         .subscribe(res => {
           if(res['result'] === "ERROR"){
-            console.log(res['code'])
             this.loading = false;
             this.dialogRef.close();
             this.snackbar.open("Error al actualizar la clave", "Cerrar",{

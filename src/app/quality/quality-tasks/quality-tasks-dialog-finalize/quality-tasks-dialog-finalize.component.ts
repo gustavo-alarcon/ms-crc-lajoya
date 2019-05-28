@@ -110,7 +110,6 @@ export class QualityTasksDialogFinalizeComponent implements OnInit {
   onFileSelected_4(event): void{
     if(event.target.files[0].type === 'application/pdf'){
       this.selectedFile_4 = event.target.files[0];
-      console.log(event.target.files[0]);
     }else{
       this.snackbar.open("Seleccione un archivo PDF","Cerrar", {
         duration: 6000

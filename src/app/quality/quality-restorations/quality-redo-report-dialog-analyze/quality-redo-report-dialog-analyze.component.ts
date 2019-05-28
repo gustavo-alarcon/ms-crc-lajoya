@@ -298,7 +298,6 @@ export class QualityRedoReportDialogAnalyzeComponent implements OnInit {
   }
 
   save(): void{
-    console.log(this.analyzeFormGroup);
 
     if(this.analyzeFormGroup.valid){
 

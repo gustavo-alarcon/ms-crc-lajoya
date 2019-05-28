@@ -47,8 +47,6 @@ export class FredConfirmEditComponent implements OnInit {
       this.observations.push({group: 'Riesgos Críticos', observations: [this.data['form']['list5']]});
     }
 
-    console.log(this.data['form']);
-
   }
 
   save(): void{

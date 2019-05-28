@@ -23,14 +23,12 @@ export class QualityRedosActionsConfirmRequestClosingComponent implements OnInit
   ) { }
 
   ngOnInit() {
-    // console.log("default list",this.data['confirmationList']);
     this.data['confirmationList'].forEach(element => {
       let index = this.filteredList.map(e => {return e['uid']}).indexOf(element['uid']);
       if(index === -1){
         this.filteredList.push(element)
       }
     })
-    // console.log("filtered",this.filteredList);
   }
 
   save(): void{

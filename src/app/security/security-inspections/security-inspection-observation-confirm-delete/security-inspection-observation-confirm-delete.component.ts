@@ -19,7 +19,6 @@ export class SecurityInspectionObservationConfirmDeleteComponent implements OnIn
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   delete(): void{
