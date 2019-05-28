@@ -37,6 +37,7 @@
                       appearance="outline" *ngIf="auth.platform.ANDROID || auth.platform.IOS">
                       <mat-label>Tipo de observación</mat-label>
                       <select matNativeControl placeholder="Escriba y seleccione" formControlName="type">
+                        <option label="--Seleccione--"></option>
                         <option *ngFor="let type of fredTypes" [value]="type" style="font-size:14px">
                           {{type}}
                         </option>

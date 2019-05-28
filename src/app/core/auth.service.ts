@@ -29,7 +29,7 @@ export class AuthService {
 
   public dataNotifications = new BehaviorSubject<any[]>([]);
   currentDataNotifications = this.dataNotifications.asObservable();
-  
+
   // *********** NOTIFICATIONS - (START) ***************************
   notificationsCompleteCollection: AngularFirestoreCollection<any[]>;
   notificationsComplete: Array<any> = [];
@@ -68,21 +68,29 @@ export class AuthService {
     // PLATFORM
 
     // USER PERSISTENCE VALIDATION
-    this.afAuth.authState.subscribe( user => {
+    this.afAuth.authState.subscribe(user => {
       if (user) {
         this.afs.doc<User>(`users/${user.uid}`).valueChanges().subscribe(user => {
           this.userCRC = user;
+          console.log(this.userCRC);
+          if (!this.userCRC.area) {
+            this.signOut();
+            this.snackbar.open('No tiene un área de trabajo asignada. Solicite al administrador del sistema que le asigne una para poder ingresar', 'Cerrar', {
+              duration: 10000
+            });
+            return;
+          }
 
           this.permitsDocument = this.afs.doc(`db/systemConfigurations/permits/${this.userCRC.permit.id}`);
-          this.permitsDocument.valueChanges().subscribe( res => {
+          this.permitsDocument.valueChanges().subscribe(res => {
             this.permits = res;
             this.dataPermits.next(res);
           });
 
           this.notificationsCollection =
-          this.afs.collection(`users/${this.userCRC.uid}/notifications`, ref => ref.where('status', '==', 'unseen'));
+            this.afs.collection(`users/${this.userCRC.uid}/notifications`, ref => ref.where('status', '==', 'unseen'));
 
-          this.notificationsCollection.valueChanges().subscribe( res => {
+          this.notificationsCollection.valueChanges().subscribe(res => {
             const sorted = res.sort((a, b) => b['regDate'] - a['regDate']);
             this.notifications = sorted;
             this.dataNotifications.next(sorted);
@@ -93,7 +101,7 @@ export class AuthService {
           });
 
           this.notificationsCompleteCollection =
-          this.afs.collection(`users/${this.userCRC.uid}/notifications`, ref => ref.orderBy('regDate', 'desc'));
+            this.afs.collection(`users/${this.userCRC.uid}/notifications`, ref => ref.orderBy('regDate', 'desc'));
 
           this.notificationsCompleteCollection.valueChanges().subscribe(res => {
             this.notificationsComplete = res;
@@ -110,20 +118,20 @@ export class AuthService {
 
   // ************* NOTIFICATIONS
   // Play notification Sound
-  playNotification(): void{
+  playNotification(): void {
     this.audio_android.play();
     this.audio_ios.play();
   }
 
   // Change status of notification to seen
-  notificationSeen(id): void{
+  notificationSeen(id): void {
     this.notificationsCollection.doc(`${id}`).update({
       status: 'seen'
     });
   }
 
   // Change state of notification to unseen
-  notificationUnseen(id): void{
+  notificationUnseen(id): void {
     this.notificationsCollection.doc(`${id}`).update({
       status: 'unseen'
     });
@@ -133,9 +141,9 @@ export class AuthService {
 
   emailLogin(email: string, password: string) {
     this.authLoader = true;
-    return this.afAuth.auth.signInWithEmailAndPassword(email,password)
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then(credential => {
-        if(credential){
+        if (credential) {
           this.authLoader = false;
           this.router.navigateByUrl('/main');
         }
@@ -152,7 +160,7 @@ export class AuthService {
 
     this.afAuth.auth.signOut().then(() => {
       this.router.navigate(['/']);
-    })
+    });
   }
 
   // ********** ERROR HANDLING
@@ -169,7 +177,7 @@ export class AuthService {
       case 'auth/wrong-password':
         message = 'Error: El password es incorrecto o el usuario no tiene un password';
         break;
-    
+
       case 'auth/user-disabled':
         message = 'Error: El usuario esta deshabilitado';
         break;
@@ -189,7 +197,7 @@ export class AuthService {
     this.authLoader = false;
   }
 
-  
+
 
 
 }
