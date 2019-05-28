@@ -33,7 +33,6 @@ export class QualityRedosClosingConfirmClosingComponent implements OnInit {
   onFileSelected(event): void{
     if(event.target.files[0].type === 'application/pdf'){
       this.selectedFile = event.target.files[0];
-      console.log(event.target.files[0]);
     }else{
       this.snackbar.open("Seleccione un archivo PDF","Cerrar", {
         duration: 6000

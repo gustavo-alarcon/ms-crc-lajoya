@@ -335,7 +335,6 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
   downloadObservations(inspections): void {
     this.downloadableInspectionsObservations = [];
     inspections.forEach((inspection, index) => {
-      // console.log('Inspection ' + index + ': ', inspection);
       if (inspection['id']) {
         this.dbs.qualityInspectionsCollection
           .doc(inspection['id'])
@@ -343,7 +342,6 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
 
             snapshot.docs.forEach(doc => {
               let observation = doc.data();
-              // console.log(observation);
               // Initializing _object
               let _object = {}
 

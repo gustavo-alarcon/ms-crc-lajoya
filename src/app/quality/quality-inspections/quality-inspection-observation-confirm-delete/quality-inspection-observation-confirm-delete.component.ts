@@ -19,7 +19,6 @@ export class QualityInspectionObservationConfirmDeleteComponent implements OnIni
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   delete(): void{

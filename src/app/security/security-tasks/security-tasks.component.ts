@@ -203,7 +203,6 @@ export class SecurityTasksComponent implements OnInit, OnDestroy {
   }
 
   saveProgressOnObservation(observation): void {
-    console.log(observation)
     this.dialog.open(SecurityTasksDialogProgressComponent, {
       data: {
         task: observation,
