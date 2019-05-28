@@ -160,8 +160,6 @@ export class ConfigEditUserComponent implements OnInit {
             break;
         }
       }
-
-      console.log(res);
       
       if(res['result'] === "OK"){
 

@@ -170,9 +170,7 @@ export class QualityRedoAnalyzeDialogEditComponent implements OnInit {
       const value = event.value;
 
       if(typeof value === 'object'){
-        console.log(value);
         let alreadyExists = this.data['involvedAreas'].filter(option => option['name'].includes(value['name']));
-        console.log(alreadyExists);
         if(alreadyExists.length === 0){
           this.involvedAreasArray.push(value);
         }else{
@@ -233,9 +231,7 @@ export class QualityRedoAnalyzeDialogEditComponent implements OnInit {
       const value = event.value;
 
       if(typeof value === 'object'){
-        console.log(value);
         let alreadyExists = this.data['responsibleStaff'].filter(option => option['uid'].includes(value['uid']));
-        console.log(alreadyExists);
         if(alreadyExists.length === 0){
           this.responsibleStaffArray.push(value);
         }else{

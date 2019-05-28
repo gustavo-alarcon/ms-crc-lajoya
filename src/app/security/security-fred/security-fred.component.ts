@@ -505,7 +505,6 @@ export class SecurityFredComponent implements OnInit, OnDestroy {
   }
 
   show(event): void {
-    console.log(event);
   }
 
   createForms(): void {
