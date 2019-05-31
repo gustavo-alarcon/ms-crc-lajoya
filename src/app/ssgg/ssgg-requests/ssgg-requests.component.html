@@ -86,7 +86,7 @@
                   <mat-label>Fecha límite de solución</mat-label>
                   <input matInput [matDatepicker]="dateSsgEstimated" formControlName="estimatedTerminationDate">
                   <mat-hint>
-                    <strong>requerido *</strong>
+                    opcional
                   </mat-hint>
                   <mat-datepicker-toggle matSuffix [for]="dateSsgEstimated"></mat-datepicker-toggle>
                   <mat-datepicker #dateSsgEstimated></mat-datepicker>
@@ -120,16 +120,7 @@
                   <mat-label>Coordinaciones previas</mat-label>
                   <textarea matInput placeholder="Describa..." rows="4" formControlName="coordinations"></textarea>
                   <mat-hint>
-                    opcional
-                  </mat-hint>
-                </mat-form-field>
-                <br>
-
-                <mat-form-field class="w3-margin-right w3-block" style="max-width:572px" appearance="outline">
-                  <mat-label>Más detalles</mat-label>
-                  <textarea matInput placeholder="Describa..." rows="4" formControlName="moreDetails"></textarea>
-                  <mat-hint>
-                    opcional
+                    <strong>requerido *</strong>
                   </mat-hint>
                 </mat-form-field>
                 <br>
