@@ -311,6 +311,26 @@
                         style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
                         <span class="ms-chip"
                           [ngClass]="{'w3-amber': request['status'] === 'Por confirmar','w3-red': request['status'] === 'Rechazado', 'w3-indigo': request['status'] === 'Confirmado', 'w3-green': request['status'] === 'Finalizado'}">{{request['status']}}</span>
+                        <br>
+                        <br>
+                        <div class="w3-container">
+                          <mat-progress-bar style="width:90%" *ngIf="request['status'] === 'Por confirmar'"
+                            mode="buffer" [bufferValue]=0 [value]=0></mat-progress-bar>
+                        </div>
+                        <div class="w3-container">
+                          <mat-progress-bar style="width:90%" *ngIf="request['status'] === 'Rechazado'" mode="buffer"
+                            [bufferValue]=0 [value]=0></mat-progress-bar>
+                        </div>
+                        <div class="w3-container">
+                          <mat-progress-bar style="width:90%" *ngIf="request['status'] === 'Confirmado'" mode="buffer"
+                            [bufferValue]=0 [value]=0></mat-progress-bar>
+                        </div>
+                        <div class="w3-container">
+                          <mat-progress-bar style="width:90%" *ngIf="request['status'] === 'Finalizado'" mode="buffer"
+                            [bufferValue]=100 [value]=100></mat-progress-bar>
+                        </div>
+                        <!-- <div class="w3-container"><mat-progress-bar style="width:90%" *ngIf="request['status'] === 'En proceso'" mode="buffer" [bufferValue]="value" [(NgModel)]="value"></mat-progress-bar></div> -->
+
                       </td>
                     </ng-container>
 
@@ -493,6 +513,30 @@
                       <div class="w3-col s6 ms-header-mobile">Estado</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small">{{request['status']}}</span>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Progreso</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <br>
+                        <div class="w3-container" style="padding: 0px">
+                          <mat-progress-bar style="width:80%; padding: 0px"
+                            *ngIf="request['status'] === 'Por confirmar'" mode="buffer" [bufferValue]=0 [value]=0>
+                          </mat-progress-bar>
+                        </div>
+                        <div class="w3-container" style="padding: 0px">
+                          <mat-progress-bar style="width:80%; padding: 0px" *ngIf="request['status'] === 'Rechazado'"
+                            mode="buffer" [bufferValue]=0 [value]=0></mat-progress-bar>
+                        </div>
+                        <div class="w3-container" style="padding: 0px">
+                          <mat-progress-bar style="width:80%; padding: 0px" *ngIf="request['status'] === 'Confirmado'"
+                            mode="buffer" [bufferValue]=0 [value]=0></mat-progress-bar>
+                        </div>
+                        <div class="w3-container" style="padding: 0px">
+                          <mat-progress-bar style="width:80%; padding: 0px" *ngIf="request['status'] === 'Finalizado'"
+                            mode="buffer" [bufferValue]=100 [value]=100></mat-progress-bar>
+                        </div>
+                        <!-- <div class="w3-container" style="padding: 0px"><mat-progress-bar style="width:80%; padding: 0px" *ngIf="request['status'] === 'En proceso'" mode="buffer" [bufferValue]="value" [(NgModel)]="value"></mat-progress-bar></div> -->
                       </div>
                     </div>
                     <div class="w3-row">
