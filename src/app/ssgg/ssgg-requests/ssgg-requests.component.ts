@@ -89,7 +89,7 @@ export class SsggRequestsComponent implements OnInit {
 
   monthFormControl = new FormControl({value:new Date(), disabled: true});
 
-  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'mainArea', 'createdBy', 'type', 'priority', 'resumen', 'involvedAreas', 'coordinations', 'moreDetails', 'status', 'finalPicture', 'realTerminationDate', 'comments', 'edit'];
+  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'mainArea', 'createdBy', 'type', 'priority', 'resumen', 'involvedAreas', 'coordinations', 'status', 'finalPicture', 'realTerminationDate', 'comments', 'edit'];
   dataSourceRequests = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -221,10 +221,9 @@ export class SsggRequestsComponent implements OnInit {
     });
 
     this.additionalsFormGroup = this.fb.group({
-      estimatedTerminationDate: ['', [Validators.required]],
+      estimatedTerminationDate: '',
       involvedAreas: '',
-      coordinations: '',
-      moreDetails: ''
+      coordinations: ['', [Validators.required]],
     });
   }
 
