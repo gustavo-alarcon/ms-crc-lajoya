@@ -57,13 +57,14 @@ export class SsggRequestsConfirmSaveComponent implements OnInit {
                 type: this.data['form']['type'],
                 priority: this.data['form']['priority'],
                 resumen: this.data['form']['resumen'],
+                percentage: 0,
                 estimatedTerminationDate: this.data['form']['estimatedTerminationDate'].valueOf(),
                 involvedAreas: this.data['involvedAreas'],
                 coordinations: this.data['form']['coordinations'],
                 moreDetails: this.data['form']['moreDetails'],
                 comments: '',
                 source: 'ssgg',
-                uid: this.auth.userCRC.uid
+                uid: this.auth.userCRC.uid,
               };
 
               this.dbs.ssggRequestsCollection.add(requestObject).then(refRequest => {

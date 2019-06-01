@@ -13,12 +13,21 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
 
   taskFormGroup: FormGroup;
 
-  selectedFile_final = null;
-  imageSrc_final: string | ArrayBuffer; 
+  selectedFile_1 = null;
+  imageSrc_1: string | ArrayBuffer; 
+  selectedFile_2 = null;
+  imageSrc_2: string | ArrayBuffer; 
+  selectedFile_3 = null;
+  imageSrc_3: string | ArrayBuffer; 
+  selectedFile_4 = null;
+  imageSrc_4: string | ArrayBuffer; 
+  selectedFile_5 = null;
+  imageSrc_5: string | ArrayBuffer; 
 
   statusList: Array<string> = [
     'Por confirmar',
     'Confirmado',
+    'En proceso',
     'Rechazado',
     'Finalizado'
   ];
@@ -34,25 +43,31 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
 
   ngOnInit() {
     this.createForms();
+    console.log(this.data)
   }
 
   createForms(): void{
     this.taskFormGroup = this.fb.group({
-      status: 'Finalizado',
+      status: this.data['status'],
+      percentage: this.data['percentage'],
       comments: this.data['comments'],
     });
     
-    this.imageSrc_final = this.data['finalPicture'];
+    this.imageSrc_1 = this.data['finalPicture1'];
+    this.imageSrc_2 = this.data['finalPicture2'];
+    this.imageSrc_3 = this.data['finalPicture3'];
+    this.imageSrc_4 = this.data['finalPicture4'];
+    this.imageSrc_5 = this.data['finalPicture5'];
   }
 
-  onFileSelected_final(event): void{
-    this.selectedFile_final = event.target.files[0];
+  onFileSelected_1(event): void{
+    this.selectedFile_1 = event.target.files[0];
 
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
 
       const reader = new FileReader();
-      reader.onload = e => this.imageSrc_final = reader.result;
+      reader.onload = e => this.imageSrc_1 = reader.result;
 
       reader.readAsDataURL(file);
 
@@ -62,7 +77,7 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
 
   save(): void{
 
-    if(!this.imageSrc_final && (this.taskFormGroup.value['status'] === "Finalizado")){
+    if(!this.imageSrc_1 && (this.taskFormGroup.value['status'] === "Finalizado")){
       this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento","Cerrar", {
         duration: 6000
       });
@@ -75,7 +90,7 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
         data: {
           form: this.taskFormGroup.value,
           requestId: this.data['id'],
-          finalImage: this.selectedFile_final,
+          finalImage: this.selectedFile_1,
           involvedAreas: this.data['involvedAreas']
         }
       });
