@@ -311,7 +311,10 @@
                         style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
                         <span class="ms-chip"
                           [ngClass]="{'w3-amber': request['status'] === 'Por confirmar','w3-red': request['status'] === 'Rechazado', 'w3-indigo': request['status'] === 'Confirmado', 'w3-green': request['status'] === 'Finalizado'}">{{request['status']}}</span>
-                      </td>
+                          <br>
+                          <br>
+                         <p>{{percentage.percentage}}</p>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="finalPicture">
@@ -372,8 +375,8 @@
                           [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar' || request['status'] === 'Rechazado' || !isSupervisor">
                           <mat-icon>check_circle</mat-icon> Actualizar
                         </button>
-                        <button mat-raised-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud"
-                          (click)="edit(request)" [disabled]="auth.permits['ssggRequestsEdit']">
+                        <button mat-raised-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud" 
+                          (click)="edit(request)">
                           <mat-icon>edit</mat-icon> Editar
                         </button><br>
                         <button mat-raised-button class="w3-margin-bottom" color="warn" matTooltip="Borrar solicitud"

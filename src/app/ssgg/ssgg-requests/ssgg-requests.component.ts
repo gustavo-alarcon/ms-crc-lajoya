@@ -11,12 +11,13 @@ import { SsggRequestsConfirmDeleteComponent } from './ssgg-requests-confirm-dele
 import { SsggRequestsDialogEditComponent } from './ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
 import { SsggRequestsDialogTaskComponent } from './ssgg-requests-dialog-task/ssgg-requests-dialog-task.component';
 import { AuthService } from 'src/app/core/auth.service';
+import { PercentageService } from 'src/app/core/percentage.service';
 
 @Component({
   selector: 'app-ssgg-requests',
   templateUrl: './ssgg-requests.component.html',
   animations: [
-    trigger('openCloseCard',[
+    trigger('openCloseCard', [
       state('open', style({
         height: '120px',
         opacity: 0.8,
@@ -36,7 +37,7 @@ import { AuthService } from 'src/app/core/auth.service';
         animate('0.5s ease-out')
       ])
     ]),
-    trigger('openCloseContent',[
+    trigger('openCloseContent', [
       state('openContent', style({
         maxHeight: '2000px',
         opacity: 1,
@@ -55,7 +56,7 @@ import { AuthService } from 'src/app/core/auth.service';
         animate('0.5s')
       ])
     ]),
-    trigger('openCloseDescription',[
+    trigger('openCloseDescription', [
       state('openDescription', style({
         borderRadius: '0px 10px 0px 0px'
       })),
@@ -81,13 +82,14 @@ export class SsggRequestsComponent implements OnInit {
   selectedFile = null;
   imageSrc: string | ArrayBuffer;
 
-  monthsKey: Array<string> = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  monthsKey: Array<string> = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   monthIndex: number;
   currentMonth: string;
   currentYear: number;
   year: number;
-
-  monthFormControl = new FormControl({value:new Date(), disabled: true});
+  progress : number=0;
+  
+  monthFormControl = new FormControl({ value: new Date(), disabled: true });
 
   displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'mainArea', 'createdBy', 'type', 'priority', 'resumen', 'involvedAreas', 'coordinations', 'moreDetails', 'status', 'finalPicture', 'realTerminationDate', 'comments', 'edit'];
   dataSourceRequests = new MatTableDataSource();
@@ -114,74 +116,75 @@ export class SsggRequestsComponent implements OnInit {
   addOnBlur = true;
 
   involvedAreasArray: Array<any> = [];
-  separatorKeysCodes: number[] = [ENTER, COMMA];  
+  separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
     public dbs: DatabaseService,
-    public auth: AuthService
+    public auth: AuthService,
+    public percentage: PercentageService,
+
   ) { }
 
   ngOnInit() {
-    
     this.monthIndex = this.monthFormControl.value.getMonth();
     this.currentMonth = this.monthsKey[this.monthIndex];
     this.currentYear = this.monthFormControl.value.getFullYear();
 
     this.createForms();
 
-    this.filteredSsggTypes =  this.requestFormGroup.get('type').valueChanges
-                                .pipe(
-                                  startWith<any>(''),
-                                  map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                  map(name => name ? this.dbs.ssggTypes.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.ssggTypes)
-                                ); 
+    this.filteredSsggTypes = this.requestFormGroup.get('type').valueChanges
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.ssggTypes.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.ssggTypes)
+      );
 
     this.filteredSsggPriorities = this.requestFormGroup.get('priority').valueChanges
-                                    .pipe(
-                                      startWith<any>(''),
-                                      map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                      map(name => name ? this.dbs.ssggPriorities.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.ssggPriorities)
-                                    );
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.ssggPriorities.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.ssggPriorities)
+      );
 
     this.filteredAreas = this.requestFormGroup.get('mainArea').valueChanges
-                          .pipe(
-                            startWith<any>(''),
-                            map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                            map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-                          );
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+      );
 
     this.filteredInvolvedAreas = this.additionalsFormGroup.get('involvedAreas').valueChanges
-                                  .pipe(
-                                    startWith<any>(''),
-                                    map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
-                                    map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
-                                  );
+      .pipe(
+        startWith<any>(''),
+        map(value => typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase()),
+        map(name => name ? this.dbs.areas.filter(option => option['name'].toLowerCase().includes(name)) : this.dbs.areas)
+      );
 
     // ************** TAB - REQUEST LIST
     let dataSsggRequestsSubs = this.dbs.currentDataSsggRequests.subscribe(res => {
-                                        this.filteredSsggRequests = res;
-                                        this.dataSourceRequests.data = res;
-                                        this.filteredSsggRequests.forEach(element => {
-                                          this.isOpenRequest.push(false);
-                                        })
-                                      });
+      this.filteredSsggRequests = res;
+      this.dataSourceRequests.data = res;
+      this.filteredSsggRequests.forEach(element => {
+        this.isOpenRequest.push(false);
+      })
+    });
 
     this.subscriptions.push(dataSsggRequestsSubs);
 
-    let ssggSupervisorSubs =  this.dbs.currentDataSsggSupervisors
-                                .subscribe(res => {
-                                  if(res){
-                                    this.isSupervisor = false;
-                                    res.forEach(element => {
-                                      if(element['uid'] === this.auth.userCRC.uid){
-                                        this.isSupervisor = true;
-                                      }
-                                    })
-                                  }
-                                })
+    let ssggSupervisorSubs = this.dbs.currentDataSsggSupervisors
+      .subscribe(res => {
+        if (res) {
+          this.isSupervisor = false;
+          res.forEach(element => {
+            if (element['uid'] === this.auth.userCRC.uid) {
+              this.isSupervisor = true;
+            }
+          })
+        }
+      })
 
     this.subscriptions.push(ssggSupervisorSubs);
 
@@ -192,17 +195,17 @@ export class SsggRequestsComponent implements OnInit {
   }
 
   setMonthOfView(event, datepicker): void {
-    this.monthFormControl = new FormControl({value:event, disabled:true});
+    this.monthFormControl = new FormControl({ value: event, disabled: true });
     this.monthIndex = this.monthFormControl.value.getMonth();
     this.currentMonth = this.monthsKey[this.monthIndex];
     this.currentYear = this.monthFormControl.value.getFullYear();
     let fromDate: Date = new Date(this.currentYear, this.monthIndex, 1);
 
-    let toMonth = (fromDate.getMonth()+ 1) % 12;
+    let toMonth = (fromDate.getMonth() + 1) % 12;
     let toYear = this.currentYear;
 
-    if(fromDate.getMonth() + 1 >= 13){
-      toYear ++;
+    if (fromDate.getMonth() + 1 >= 13) {
+      toYear++;
     }
 
     let toDate: Date = new Date(toYear, toMonth, 1);
@@ -212,7 +215,7 @@ export class SsggRequestsComponent implements OnInit {
     datepicker.close();
   }
 
-  createForms(): void{
+  createForms(): void {
     this.requestFormGroup = this.fb.group({
       mainArea: ['', [Validators.required]],
       type: ['', [Validators.required]],
@@ -233,10 +236,10 @@ export class SsggRequestsComponent implements OnInit {
   }
 
   showSelectedArea(area): string | undefined {
-    return area? area['name'] : undefined;
+    return area ? area['name'] : undefined;
   }
 
-  selectedArea(event): void{
+  selectedArea(event): void {
     this.involvedAreasArray.push(event.option.value);
   }
 
@@ -247,7 +250,7 @@ export class SsggRequestsComponent implements OnInit {
       const input = event.input;
       const value = event.value;
 
-      if(typeof value === 'object'){
+      if (typeof value === 'object') {
         this.involvedAreasArray.push(value);
       }
 
@@ -274,7 +277,7 @@ export class SsggRequestsComponent implements OnInit {
   }
   // ********************************************************
 
-  onFileSelected(event): void{
+  onFileSelected(event): void {
     this.selectedFile = event.target.files[0];
 
     if (event.target.files && event.target.files[0]) {
@@ -286,19 +289,19 @@ export class SsggRequestsComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-  
-  save(): void{
 
-    if(!this.selectedFile){
-      this.snackbar.open("Adjunte una imagen para poder guardar el documento","Cerrar", {
+  save(): void {
+
+    if (!this.selectedFile) {
+      this.snackbar.open("Adjunte una imagen para poder guardar el documento", "Cerrar", {
         duration: 6000
       });
       return;
     }
 
-    if(this.requestFormGroup.valid){
-      
-      let dialogRef = this.dialog.open(SsggRequestsConfirmSaveComponent,{
+    if (this.requestFormGroup.valid) {
+
+      let dialogRef = this.dialog.open(SsggRequestsConfirmSaveComponent, {
         data: {
           form: Object.assign(this.requestFormGroup.value, this.additionalsFormGroup.value),
           image: this.selectedFile,
@@ -307,21 +310,21 @@ export class SsggRequestsComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(res => {
-        if(res){
+        if (res) {
           this.createForms();
           this.involvedAreasArray = [];
         }
       });
 
-    }else{
-      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento","Cerrar", {
+    } else {
+      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento", "Cerrar", {
         duration: 6000
       });
     }
 
   }
 
-  delete(id_request, involvedAreas): void{
+  delete(id_request, involvedAreas): void {
     this.dialog.open(SsggRequestsConfirmDeleteComponent, {
       data: {
         id_request: id_request,
@@ -330,15 +333,15 @@ export class SsggRequestsComponent implements OnInit {
     });
   }
 
-  edit(request): void{
-    this.dialog.open(SsggRequestsDialogEditComponent,{
+  edit(request): void {
+    this.dialog.open(SsggRequestsDialogEditComponent, {
       data: request,
       autoFocus: false
     })
   }
 
-  task(request): void{
-    this.dialog.open(SsggRequestsDialogTaskComponent,{
+  task(request): void {
+    this.dialog.open(SsggRequestsDialogTaskComponent, {
       data: request,
       autoFocus: false
     })
