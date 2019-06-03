@@ -1,181 +1,178 @@
 <div class="w3-container">
-    <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
-      <mat-icon style="vertical-align:middle">extension</mat-icon> Editar solicitud SSGG
-    </h2>
-    <mat-divider></mat-divider>
-    <mat-dialog-content>
+  <h2 class="ms-font-rubik ms-color-bt" mat-dialog-title style="font-size:1.3em">
+    <mat-icon style="vertical-align:middle">extension</mat-icon> Editar solicitud SSGG
+  </h2>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
 
-      <form [formGroup]="requestFormGroup">
+    <form [formGroup]="requestFormGroup">
 
-        <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Incidente</h2>
+      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Incidente</h2>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
-          <mat-label>¿Dónde ocurrio?</mat-label>
-          <input type="text" matInput placeholder="Escriba y seleccione" formControlName="mainArea"
-            [matAutocomplete]="autoArea" required readonly>
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:280px" appearance="outline">
+        <mat-label>¿Dónde ocurrio?</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="mainArea"
+          [matAutocomplete]="autoArea" required readonly>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+        <mat-error>
+          <strong>requerido *</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
+        [displayWith]="showSelectedArea">
+        <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
+          <strong>{{option['name']}}</strong> | <span class="w3-small">{{option['supervisor']['displayName']}}</span>
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field class="w3-margin-right w3-block w3-white ms-color-2b" style="max-width:280px"
+        appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="type"
+          [matAutocomplete]="autoType" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoType="matAutocomplete">
+        <mat-option *ngFor="let type of filteredSsggTypes | async" [value]="type['name']" style="font-size:14px">
+          {{type['name']}}
+        </mat-option>
+      </mat-autocomplete>
+      <br>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Prioridad</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="priority"
+          [matAutocomplete]="autoPriority" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoPriority="matAutocomplete">
+        <mat-option *ngFor="let priority of filteredSsggPriorities | async" [value]="priority['name']"
+          style="font-size:14px">
+          {{priority['name']}}
+        </mat-option>
+      </mat-autocomplete>
+      <br>
+
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:572px" appearance="outline">
+        <mat-label>Resumen</mat-label>
+        <textarea matInput placeholder="Describa qué sucedio o cómo sucedio el incidente ..." rows="4"
+          formControlName="resumen"></textarea>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <br>
+
+    </form>
+
+
+    <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Adicionales</h2>
+
+    <form [formGroup]="additionalsFormGroup">
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Fecha límite de solución</mat-label>
+        <input matInput [matDatepicker]="dateSsgEstimated" formControlName="estimatedTerminationDate" readonly>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="dateSsgEstimated"></mat-datepicker-toggle>
+        <mat-datepicker #dateSsgEstimated></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Areas involucradas</mat-label>
+        <mat-chip-list #chipList>
+          <mat-chip *ngFor="let involved of involvedAreasArray" [selectable]="selectable" color="primary">
+            {{involved['name']}}
+          </mat-chip>
+          <input placeholder="Escriba y seleccione" #involvedAreasInput formControlName="involvedAreas"
+            [matAutocomplete]="autoInvolvedAreas" [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)">
           <mat-hint>
-            <strong>requerido *</strong>
+            No se pueden borrar las áreas seleccionadas previamente, pero puede aumentar más.
           </mat-hint>
-          <mat-error>
-            <strong>requerido *</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="selectedArea($event)"
-          [displayWith]="showSelectedArea">
-          <mat-option *ngFor="let option of filteredAreas | async" [value]="option" style="font-size:14px">
-            <strong>{{option['name']}}</strong> | <span
-              class="w3-small">{{option['supervisor']['displayName']}}</span>
+        </mat-chip-list>
+        <mat-autocomplete #autoInvolvedAreas="matAutocomplete" (optionSelected)="selectedInvolvedArea($event)">
+          <mat-option *ngFor="let area of filteredInvolvedAreas | async" [value]="area">
+            <strong>{{area['name']}}</strong> | <span class="w3-small">{{area['supervisor']['displayName']}}</span>
           </mat-option>
         </mat-autocomplete>
+      </mat-form-field>
+      <br>
 
-        <mat-form-field class="w3-margin-right w3-block w3-white ms-color-2b" style="max-width:280px" appearance="outline">
-          <mat-label>Tipo</mat-label>
-          <input type="text" matInput placeholder="Escriba y seleccione" formControlName="type"
-            [matAutocomplete]="autoType" required>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #autoType="matAutocomplete">
-          <mat-option *ngFor="let type of filteredSsggTypes | async" [value]="type['name']" style="font-size:14px">
-            {{type['name']}}
-          </mat-option>
-        </mat-autocomplete>
-        <br>
+      <mat-form-field class="w3-margin-right w3-block" style="max-width: 572px" appearance="outline">
+        <mat-label>Coordinaciones previas</mat-label>
+        <textarea matInput placeholder="Describa..." rows="4" formControlName="coordinations"></textarea>
+        <mat-hint>
+          opcional
+        </mat-hint>
+      </mat-form-field>
+      <br>
 
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
-          <mat-label>Prioridad</mat-label>
-          <input type="text" matInput placeholder="Escriba y seleccione" formControlName="priority"
-            [matAutocomplete]="autoPriority" required>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #autoPriority="matAutocomplete">
-          <mat-option *ngFor="let priority of filteredSsggPriorities | async" [value]="priority['name']" style="font-size:14px">
-            {{priority['name']}}
-          </mat-option>
-        </mat-autocomplete>
-        <br>
+      <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" style="max-width:572px" appearance="outline">
+        <mat-label>Más detalles</mat-label>
+        <textarea matInput placeholder="Describa..." rows="4" formControlName="moreDetails"></textarea>
+        <mat-hint>
+          opcional
+        </mat-hint>
+      </mat-form-field>
+      <br>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:572px" appearance="outline">
-          <mat-label>Resumen</mat-label>
-          <textarea matInput placeholder="Describa qué sucedio o cómo sucedio el incidente ..." rows="4" formControlName="resumen"></textarea>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-        </mat-form-field>
-        <br>
+      <input #fileInput_initial style="display: none" type="file" (change)="onFileSelected($event)">
+      <img [src]="imageSrc_initial || '../../../assets/images/no-image.png'"
+        style="width:200px; height:150px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
+        (click)="fileInput_initial.click()">
+    </form>
 
-      </form>
+    <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Cierre de solicitud</h2>
 
-      
-      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Adicionales</h2>
+    <form [formGroup]="taskFormGroup">
 
-      <form [formGroup]="additionalsFormGroup">
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
-          <mat-label>Fecha límite de solución</mat-label>
-          <input matInput [matDatepicker]="dateSsgEstimated" formControlName="estimatedTerminationDate" readonly>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-          <mat-datepicker-toggle matSuffix [for]="dateSsgEstimated"></mat-datepicker-toggle>
-          <mat-datepicker #dateSsgEstimated></mat-datepicker>
-        </mat-form-field>
+      <mat-form-field class="w3-margin-right w3-block" style="max-width:572px" appearance="outline">
+        <mat-label>Detalles de cierre</mat-label>
+        <textarea matInput
+          placeholder="Describa como se llevo a cabo el cierre o si tiene alguna acotación adicional ..." rows="4"
+          formControlName="comments"></textarea>
+      </mat-form-field>
+      <br>
 
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
-          <mat-label>Areas involucradas</mat-label>
-          <mat-chip-list #chipList>
-            <mat-chip
-              *ngFor="let involved of involvedAreasArray"
-              [selectable]="selectable"
-              color="primary">
-              {{involved['name']}}
-            </mat-chip>
-            <input
-              placeholder="Escriba y seleccione"
-              #involvedAreasInput
-              formControlName="involvedAreas"
-              [matAutocomplete]="autoInvolvedAreas"
-              [matChipInputFor]="chipList"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              [matChipInputAddOnBlur]="addOnBlur"
-              (matChipInputTokenEnd)="add($event)">
-            <mat-hint>
-              No se pueden borrar las áreas seleccionadas previamente, pero puede aumentar más.
-            </mat-hint>
-          </mat-chip-list>
-          <mat-autocomplete #autoInvolvedAreas="matAutocomplete"
-                            (optionSelected)="selectedInvolvedArea($event)">
-            <mat-option *ngFor="let area of filteredInvolvedAreas | async" [value]="area">
-                <strong>{{area['name']}}</strong> | <span
-                class="w3-small">{{area['supervisor']['displayName']}}</span>   
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <br>
+      <mat-label>Progreso</mat-label>
+      <mat-slider [max]=100 [min]=0 [step]=1 [thumbLabel]=true [(formControl)]="progress" [(ngModel)]="percentage.percentage"></mat-slider>
 
-        <mat-form-field class="w3-margin-right w3-block" style="max-width: 572px" appearance="outline">
-          <mat-label>Coordinaciones previas</mat-label>
-          <textarea matInput placeholder="Describa..." rows="4" formControlName="coordinations"></textarea>
-          <mat-hint>
-            opcional
-          </mat-hint>
-        </mat-form-field>
-        <br>
+      <br>
 
-        <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" style="max-width:572px" appearance="outline">
-          <mat-label>Más detalles</mat-label>
-          <textarea matInput placeholder="Describa..." rows="4" formControlName="moreDetails"></textarea>
-          <mat-hint>
-            opcional
-          </mat-hint>
-        </mat-form-field>
-        <br>
+      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
+        <mat-label>Estado</mat-label>
+        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="status"
+          [matAutocomplete]="autoStatus" required>
+        <mat-hint>
+          <strong>requerido *</strong>
+        </mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autoStatus="matAutocomplete">
+        <mat-option *ngFor="let status of statusList" [value]="status" style="font-size:14px">
+          {{status}}
+        </mat-option>
+      </mat-autocomplete>
+      <br>
 
-        <input #fileInput_initial style="display: none" type="file" (change)="onFileSelected($event)">
-        <img  [src]="imageSrc_initial || '../../../assets/images/no-image.png'"
-              style="width:200px; height:150px; cursor:pointer"
-              class="mat-elevation-z4 w3-hover-shadow"
-              (click)="fileInput_initial.click()">
-      </form>
+      <input #fileInput_final style="display: none" type="file" (change)="onFileSelected_final($event)">
+      <img [src]="imageSrc_final || '../../../assets/images/no-image.png'"
+        style="width:200px; height:150px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow w3-margin-bottom"
+        (click)="fileInput_final.click()">
+      <br>
+    </form>
 
-      <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Cierre de solicitud</h2>
-
-      <form [formGroup]="taskFormGroup">
-
-        <mat-form-field class="w3-margin-right w3-block" style="max-width:572px" appearance="outline">
-          <mat-label>Detalles de cierre</mat-label>
-          <textarea matInput placeholder="Describa como se llevo a cabo el cierre o si tiene alguna acotación adicional ..." rows="4" formControlName="comments"></textarea>
-        </mat-form-field>
-        <br>
-
-        <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
-          <mat-label>Estado</mat-label>
-          <input type="text" matInput placeholder="Escriba y seleccione" formControlName="status"
-            [matAutocomplete]="autoStatus" required>
-          <mat-hint>
-            <strong>requerido *</strong>
-          </mat-hint>
-        </mat-form-field>
-        <mat-autocomplete #autoStatus="matAutocomplete">
-          <mat-option *ngFor="let status of statusList" [value]="status" style="font-size:14px">
-            {{status}}
-          </mat-option>
-        </mat-autocomplete>
-        <br>
-
-        <input #fileInput_final style="display: none" type="file" (change)="onFileSelected_final($event)">
-        <img  [src]="imageSrc_final || '../../../assets/images/no-image.png'"
-              style="width:200px; height:150px; cursor:pointer"
-              class="mat-elevation-z4 w3-hover-shadow w3-margin-bottom"
-              (click)="fileInput_final.click()">
-        <br>
-      </form>
-  
-    </mat-dialog-content>
-    <mat-dialog-actions class="w3-margin-bottom">
-      <button mat-stroked-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
-      <button mat-raised-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
-    </mat-dialog-actions>
-  </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="w3-margin-bottom">
+    <button mat-stroked-button color="warn" style="margin:0em 0.5em 0em 0em" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary" style="margin:0em 0.5em 0em 0.5em" (click)="save()">Guardar</button>
+  </mat-dialog-actions>
+</div>

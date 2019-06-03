@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy, Inject } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { MatAutocomplete, MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { SsggRequestsConfirmEditComponent } from '../ssgg-requests-confirm-edit/ssgg-requests-confirm-edit.component';
+import { PercentageService } from 'src/app/core/percentage.service';
 
 @Component({
   selector: 'app-ssgg-requests-dialog-edit',
@@ -42,11 +43,13 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
 
   involvedAreasArray: Array<any> = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  progress = new (FormControl);
 
   statusList: Array<string> = [
     'Por confirmar',
     'Confirmado',
     'Rechazado',
+    'En proceso',
     'Finalizado'
   ];
 
@@ -58,12 +61,24 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     public dbs: DatabaseService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<SsggRequestsDialogEditComponent>
+    private dialogRef: MatDialogRef<SsggRequestsDialogEditComponent>,
+    public percentage: PercentageService,
   ) { }
 
   ngOnInit() {
-
+    
     this.createForms();
+    this.progress.valueChanges.subscribe(res=> {
+      this.percentage.percentage=res;
+    })
+    this.taskFormGroup.get('percentage').valueChanges.subscribe(res => {
+      if(res == 100){
+        this.data.status = "'Finalizado'"
+      }
+      else{
+        this.data.status = "'En proceso'"
+      }
+    })
 
     this.filteredSsggTypes =  this.requestFormGroup.get('type').valueChanges
                                 .pipe(
@@ -198,7 +213,7 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
 
   save(): void{
 
-    if(!this.imageSrc_final && (this.taskFormGroup.value['status'] === "Finalizado")){
+    if(!this.imageSrc_final && (this.taskFormGroup.value['status'])){
       this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento","Cerrar", {
         duration: 6000
       });

@@ -15,8 +15,8 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
   taskFormGroup: FormGroup;
   selectedFile_final = null;
   imageSrc_final: string | ArrayBuffer;
-  min: number = 0;
  
+
   statusList: Array<string> = [
     'Por confirmar',
     'Confirmado',
@@ -40,15 +40,14 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
     
 
     this.taskFormGroup.get('percentage').valueChanges.subscribe(res => {
-      if(res = 100){
-        this.data.status = "'Finalizado'"
+      console.log(res)
+      if (res == 100) {
+        this.taskFormGroup.get('status').setValue('Finalizado')
       }
-      else{
-        this.data.status = "'En proceso'"
+      else {
+        this.taskFormGroup.get('status').setValue('En proceso')
       }
     })
-
-    
   }
 
   createForms(): void {
@@ -77,8 +76,28 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
   }
 
   save(): void {
+    if ((this.taskFormGroup.value['status']) === 'En Proceso') { 
+      if (this.taskFormGroup.valid) {
 
-    if (!this.imageSrc_final && (this.taskFormGroup.value['status'] === "Finalizado")) {
+        let dialogRef = this.dialog.open(SsggRequestsConfirmTaskComponent, {
+          data: {
+            form: this.taskFormGroup.value,
+            requestId: this.data['id'],
+            finalImage: this.selectedFile_final,
+            involvedAreas: this.data['involvedAreas']
+          }
+        });
+  
+        dialogRef.afterClosed().subscribe(res => {
+          if (res) {
+            this.dialogRef.close(true);
+          }
+        });
+  
+      }
+    }
+    
+    if (!this.imageSrc_final && (this.taskFormGroup.value['status']) === 'Finalizado') {
       this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento", "Cerrar", {
         duration: 6000
       });

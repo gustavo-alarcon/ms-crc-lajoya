@@ -87,7 +87,7 @@ export class SsggRequestsComponent implements OnInit {
   currentMonth: string;
   currentYear: number;
   year: number;
-  progress : number=0;
+  percentage : number=0;
   
   monthFormControl = new FormControl({ value: new Date(), disabled: true });
 
@@ -124,7 +124,7 @@ export class SsggRequestsComponent implements OnInit {
     private snackbar: MatSnackBar,
     public dbs: DatabaseService,
     public auth: AuthService,
-    public percentage: PercentageService,
+   
 
   ) { }
 

@@ -15,12 +15,10 @@
           placeholder="Describa como se llevo a cabo el cierre o si tiene alguna acotación adicional ..." rows="4"
           formControlName="comments"></textarea>
       </mat-form-field>
-      <br>
-
-      
-        <mat-label>Progreso</mat-label>
+           
+        <mat-label>Progreso </mat-label>
         <mat-slider [max]=100 [min]=0 [step]=1 [thumbLabel]=true
-        [value]="percentage.percentage"></mat-slider>
+        formControlName="percentage"></mat-slider>
       
       <br>
 
