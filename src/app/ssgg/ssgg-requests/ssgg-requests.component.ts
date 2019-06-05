@@ -11,7 +11,6 @@ import { SsggRequestsConfirmDeleteComponent } from './ssgg-requests-confirm-dele
 import { SsggRequestsDialogEditComponent } from './ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
 import { SsggRequestsDialogTaskComponent } from './ssgg-requests-dialog-task/ssgg-requests-dialog-task.component';
 import { AuthService } from 'src/app/core/auth.service';
-import { PercentageService } from 'src/app/core/percentage.service';
 
 @Component({
   selector: 'app-ssgg-requests',
@@ -134,6 +133,7 @@ export class SsggRequestsComponent implements OnInit {
     this.currentYear = this.monthFormControl.value.getFullYear();
 
     this.createForms();
+    
 
     this.filteredSsggTypes = this.requestFormGroup.get('type').valueChanges
       .pipe(

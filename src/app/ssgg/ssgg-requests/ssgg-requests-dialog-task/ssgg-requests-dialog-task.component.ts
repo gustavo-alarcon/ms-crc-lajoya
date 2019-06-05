@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, MatFormFieldControl } from '@angular/material';
 import { DatabaseService } from 'src/app/core/database.service';
 import { SsggRequestsConfirmTaskComponent } from '../ssgg-requests-confirm-task/ssgg-requests-confirm-task.component';
-import { PercentageService } from 'src/app/core/percentage.service';
 
 @Component({
   selector: 'app-ssgg-requests-dialog-task',
@@ -15,7 +14,7 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
   taskFormGroup: FormGroup;
   selectedFile_final = null;
   imageSrc_final: string | ArrayBuffer;
- 
+  percentage: number = 0;
 
   statusList: Array<string> = [
     'Por confirmar',
@@ -32,20 +31,22 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
     public dbs: DatabaseService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<SsggRequestsDialogTaskComponent>,
-    public percentage: PercentageService,
   ) { }
 
   ngOnInit() {
     this.createForms();
-    
 
     this.taskFormGroup.get('percentage').valueChanges.subscribe(res => {
       console.log(res)
-      if (res == 100) {
+      if (res === 100) {
         this.taskFormGroup.get('status').setValue('Finalizado')
+        this.percentage = res
+        console.log(this.percentage)
       }
       else {
         this.taskFormGroup.get('status').setValue('En proceso')
+        this.percentage = res
+        console.log(this.percentage)
       }
     })
   }
@@ -76,27 +77,22 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
   }
 
   save(): void {
-    if ((this.taskFormGroup.value['status']) === 'En Proceso') { 
-      if (this.taskFormGroup.valid) {
+    if ((this.taskFormGroup.value['status']) === 'En Proceso') {
+      let dialogRef = this.dialog.open(SsggRequestsConfirmTaskComponent, {
+        data: {
+          form: this.taskFormGroup.value,
+          requestId: this.data['id'],
+          involvedAreas: this.data['involvedAreas']
+        }
+      });
 
-        let dialogRef = this.dialog.open(SsggRequestsConfirmTaskComponent, {
-          data: {
-            form: this.taskFormGroup.value,
-            requestId: this.data['id'],
-            finalImage: this.selectedFile_final,
-            involvedAreas: this.data['involvedAreas']
-          }
-        });
-  
-        dialogRef.afterClosed().subscribe(res => {
-          if (res) {
-            this.dialogRef.close(true);
-          }
-        });
-  
-      }
+      dialogRef.afterClosed().subscribe(res => {
+        if (res) {
+          this.dialogRef.close(true);
+        }
+      });
     }
-    
+
     if (!this.imageSrc_final && (this.taskFormGroup.value['status']) === 'Finalizado') {
       this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento", "Cerrar", {
         duration: 6000

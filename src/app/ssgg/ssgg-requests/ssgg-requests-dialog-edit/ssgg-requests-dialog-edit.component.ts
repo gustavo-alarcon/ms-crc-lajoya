@@ -6,7 +6,6 @@ import { MatAutocomplete, MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef,
 import { startWith, map } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { SsggRequestsConfirmEditComponent } from '../ssgg-requests-confirm-edit/ssgg-requests-confirm-edit.component';
-import { PercentageService } from 'src/app/core/percentage.service';
 
 @Component({
   selector: 'app-ssgg-requests-dialog-edit',
@@ -54,6 +53,7 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
   ];
 
   _estimatedDate: Date;
+  percentage: number=0;
 
   constructor(
     private fb: FormBuilder,
@@ -62,24 +62,27 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     public dbs: DatabaseService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<SsggRequestsDialogEditComponent>,
-    public percentage: PercentageService,
+    
   ) { }
 
   ngOnInit() {
     
     this.createForms();
-    this.progress.valueChanges.subscribe(res=> {
-      this.percentage.percentage=res;
-    })
-    this.taskFormGroup.get('percentage').valueChanges.subscribe(res => {
-      if(res == 100){
-        this.data.status = "'Finalizado'"
-      }
-      else{
-        this.data.status = "'En proceso'"
-      }
-    })
 
+    this.taskFormGroup.get('percentage').valueChanges.subscribe(res => {
+      console.log(res)
+      if (res == 100) {
+        this.taskFormGroup.get('status').setValue('Finalizado')
+        this.percentage = res
+        console.log(this.percentage)
+      }
+      else {
+        this.taskFormGroup.get('status').setValue('En proceso')
+        this.percentage = res
+        console.log(this.percentage)
+      }
+    })
+       
     this.filteredSsggTypes =  this.requestFormGroup.get('type').valueChanges
                                 .pipe(
                                   startWith<any>(''),
@@ -135,6 +138,7 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     this.taskFormGroup = this.fb.group({
       status: this.data['status'],
       comments: this.data['comments'],
+      percentage: this.data['percentage']
     });
     
     this.imageSrc_initial = this.data['initialPicture'];
