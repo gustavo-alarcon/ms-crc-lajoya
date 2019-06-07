@@ -195,6 +195,7 @@ import { CreateNewCustomerComponent } from './configuration/system/system-genera
 import { CustomerDialogEditComponent } from './configuration/system/system-general-area/config-customer/customer-dialog-edit/customer-dialog-edit.component';
 import { CustomerConfirmDeleteComponent } from './configuration/system/system-general-area/config-customer/customer-confirm-delete/customer-confirm-delete.component';
 import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-csv.component';
+import { SsggRequestsPicturesComponent } from './ssgg/ssgg-requests-pictures/ssgg-requests-pictures.component';
 
 
 
@@ -328,7 +329,8 @@ import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-c
     CreateNewCustomerComponent,
     CustomerDialogEditComponent,
     CustomerConfirmDeleteComponent,
-    CustomAngularCsvComponent
+    CustomAngularCsvComponent,
+    SsggRequestsPicturesComponent
 
   ],
   imports: [
@@ -479,7 +481,8 @@ import { CustomAngularCsvComponent } from './custom-angular-csv/custom-angular-c
     SystemGeneralAreaConfirmEditComponent,
     CreateNewCustomerComponent,
     CustomerDialogEditComponent,
-    CustomerConfirmDeleteComponent
+    CustomerConfirmDeleteComponent,
+    SsggRequestsPicturesComponent
   ],
   bootstrap: [AppComponent]
 })

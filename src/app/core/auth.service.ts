@@ -72,7 +72,6 @@ export class AuthService {
       if (user) {
         this.afs.doc<User>(`users/${user.uid}`).valueChanges().subscribe(user => {
           this.userCRC = user;
-          console.log(this.userCRC);
           if (!this.userCRC.area) {
             this.signOut();
             this.snackbar.open('No tiene un área de trabajo asignada. Solicite al administrador del sistema que le asigne una para poder ingresar', 'Cerrar', {

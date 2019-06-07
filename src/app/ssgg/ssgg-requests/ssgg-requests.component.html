@@ -86,7 +86,7 @@
                   <mat-label>Fecha límite de solución</mat-label>
                   <input matInput [matDatepicker]="dateSsgEstimated" formControlName="estimatedTerminationDate">
                   <mat-hint>
-                    <strong>requerido *</strong>
+                    opcional
                   </mat-hint>
                   <mat-datepicker-toggle matSuffix [for]="dateSsgEstimated"></mat-datepicker-toggle>
                   <mat-datepicker #dateSsgEstimated></mat-datepicker>
@@ -120,16 +120,7 @@
                   <mat-label>Coordinaciones previas</mat-label>
                   <textarea matInput placeholder="Describa..." rows="4" formControlName="coordinations"></textarea>
                   <mat-hint>
-                    opcional
-                  </mat-hint>
-                </mat-form-field>
-                <br>
-
-                <mat-form-field class="w3-margin-right w3-block" style="max-width:572px" appearance="outline">
-                  <mat-label>Más detalles</mat-label>
-                  <textarea matInput placeholder="Describa..." rows="4" formControlName="moreDetails"></textarea>
-                  <mat-hint>
-                    opcional
+                    <strong>requerido *</strong>
                   </mat-hint>
                 </mat-form-field>
                 <br>
@@ -293,16 +284,6 @@
                       </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="moreDetails">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header
-                        style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Detalles
-                        adicionales</th>
-                      <td mat-cell *matCellDef="let request"
-                        style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
-                        <span class="w3-small">{{request['moreDetails']}}</span>
-                      </td>
-                    </ng-container>
-
                     <ng-container matColumnDef="status">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header
                         style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Estado
@@ -311,19 +292,25 @@
                         style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey; min-width:200px">
                         <span class="ms-chip"
                           [ngClass]="{'w3-amber': request['status'] === 'Por confirmar','w3-red': request['status'] === 'Rechazado', 'w3-indigo': request['status'] === 'Confirmado', 'w3-green': request['status'] === 'Finalizado'}">{{request['status']}}</span>
-                      </td>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="finalPicture">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header
-                        style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Foto final
+                        style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">Fotos proceso
                       </th>
                       <td mat-cell *matCellDef="let request"
                         style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
-                        <a href="{{request['finalPicture']}}" target="_blank"
-                          *ngIf="request['finalPicture']; else defaultPictureTable1">
-                          <div style="width:200px;height:120px;padding:6px 6px">
-                            <img src="{{request['finalPicture']}}" style="max-width:100%;height:100%" class="w3-card-4">
+                        <a target="_blank" (click)="openPictures(request)"
+                          *ngIf="request['pictureCounter']; else defaultPictureTable1">
+                          <div class="w3-display-container" style="width:200px;height:120px;padding:6px 6px">
+                            <img [src]="request['finalPicture1'] || request['finalPicture2'] || request['finalPicture3'] || request['finalPicture4']" style="max-width:100%;height:100%" class="w3-card-4">
+                            <div class="w3-display-middle w3-round-large"
+                              style="background: rgba(0,0,0,0.7);padding:0.5em 0.5em;" *ngIf="request['pictureCounter'] > 1">
+                              <span style="color:white; font-size:2em; font-weight:600">
+                                <mat-icon style="vertical-align:middle">add</mat-icon> {{request['pictureCounter']}}
+                              </span>
+                            </div>
                           </div>
                         </a>
                         <ng-template #defaultPictureTable1>
@@ -349,10 +336,20 @@
                       </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="percentage">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header
+                        style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                        Porcentaje</th>
+                      <td mat-cell *matCellDef="let request"
+                        style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
+                        <span class="w3-small">{{request['percentage'] | number : '2.'}} %</span>
+                      </td>
+                    </ng-container>
+
                     <ng-container matColumnDef="comments">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header
                         style="background:#eaeaea;padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
-                        Comentarios de cierre</th>
+                        Comentarios de proceso</th>
                       <td mat-cell *matCellDef="let request"
                         style="color:#2b2b2b; padding:0px 1.5em 0px 1em; border-left:1px solid lightgrey">
                         <span class="w3-small">{{request['comments']}}</span>
@@ -372,8 +369,8 @@
                           [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar' || request['status'] === 'Rechazado' || !isSupervisor">
                           <mat-icon>check_circle</mat-icon> Actualizar
                         </button>
-                        <button mat-raised-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud"
-                          (click)="edit(request)" [disabled]="auth.permits['ssggRequestsEdit']">
+                        <button mat-raised-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud" 
+                          (click)="edit(request)">
                           <mat-icon>edit</mat-icon> Editar
                         </button><br>
                         <button mat-raised-button class="w3-margin-bottom" color="warn" matTooltip="Borrar solicitud"
@@ -484,12 +481,6 @@
                       </div>
                     </div>
                     <div class="w3-row">
-                      <div class="w3-col s6 ms-header-mobile">Detalles adicionales</div>
-                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                        <span class="w3-small">{{request['moreDetails']}}</span>
-                      </div>
-                    </div>
-                    <div class="w3-row">
                       <div class="w3-col s6 ms-header-mobile">Estado</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small">{{request['status']}}</span>
@@ -506,7 +497,13 @@
                       </div>
                     </div>
                     <div class="w3-row">
-                      <div class="w3-col s6 ms-header-mobile">Comentarios de cierre</div>
+                      <div class="w3-col s6 ms-header-mobile">Porcentaje</div>
+                      <div class="w3-col s6" style="padding: 0.5em 0.5em">
+                        <span class="w3-small">{{request['percentage'] | number: '2.'}} %</span>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-col s6 ms-header-mobile">Comentarios de proceso</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
                         <span class="w3-small">{{request['comments']}}</span>
                       </div>
@@ -522,10 +519,25 @@
                       </div>
                     </div>
                     <div class="w3-row">
-                      <div class="w3-col s6 ms-header-mobile">Imagen levantamiento</div>
+                      <div class="w3-col s6 ms-header-mobile">Imágenes levantamiento</div>
                       <div class="w3-col s6" style="padding: 0.5em 0.5em">
-                        <a class="w3-medium" target="_blank" [href]="request['finalPicture']"
-                          *ngIf="request['finalPicture']; else noImageLink">Ver imagen</a>
+                        <a class="w3-medium" target="_blank" [href]="request['finalPicture1']"
+                          *ngIf="request['finalPicture1']; else noImageLink">Ver imagen 1</a>
+                        <ng-template #noImageLink>
+                          <span class="w3-small w3-text-gray">No disponible</span>
+                        </ng-template>
+                        <a class="w3-medium" target="_blank" [href]="request['finalPicture2']"
+                          *ngIf="request['finalPicture2']; else noImageLink">Ver imagen 2</a>
+                        <ng-template #noImageLink>
+                          <span class="w3-small w3-text-gray">No disponible</span>
+                        </ng-template>
+                        <a class="w3-medium" target="_blank" [href]="request['finalPicture3']"
+                          *ngIf="request['finalPicture3']; else noImageLink">Ver imagen 3</a>
+                        <ng-template #noImageLink>
+                          <span class="w3-small w3-text-gray">No disponible</span>
+                        </ng-template>
+                        <a class="w3-medium" target="_blank" [href]="request['finalPicture4']"
+                          *ngIf="request['finalPicture4']; else noImageLink">Ver imagen 4</a>
                         <ng-template #noImageLink>
                           <span class="w3-small w3-text-gray">No disponible</span>
                         </ng-template>

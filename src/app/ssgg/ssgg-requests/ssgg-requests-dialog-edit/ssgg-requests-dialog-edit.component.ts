@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy, Inject } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { MatAutocomplete, MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
@@ -42,15 +42,18 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
 
   involvedAreasArray: Array<any> = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  progress = new (FormControl);
 
   statusList: Array<string> = [
     'Por confirmar',
     'Confirmado',
     'Rechazado',
+    'En proceso',
     'Finalizado'
   ];
 
   _estimatedDate: Date;
+  percentage: number=0;
 
   constructor(
     private fb: FormBuilder,
@@ -58,13 +61,14 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     private snackbar: MatSnackBar,
     public dbs: DatabaseService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<SsggRequestsDialogEditComponent>
+    private dialogRef: MatDialogRef<SsggRequestsDialogEditComponent>,
+    
   ) { }
 
   ngOnInit() {
-
+    
     this.createForms();
-
+       
     this.filteredSsggTypes =  this.requestFormGroup.get('type').valueChanges
                                 .pipe(
                                   startWith<any>(''),
@@ -111,19 +115,12 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     this.additionalsFormGroup = this.fb.group({
       estimatedTerminationDate: [{value: this.data['estimatedTerminationDate']? this._estimatedDate:'', disabled: false}],
       involvedAreas: this.data['involvedAreas'],
-      coordinations: this.data['coordinations'],
-      moreDetails: this.data['moreDetails']
+      coordinations: this.data['coordinations']
     });
 
     this.involvedAreasArray = this.data['involvedAreas'];
-
-    this.taskFormGroup = this.fb.group({
-      status: this.data['status'],
-      comments: this.data['comments'],
-    });
     
     this.imageSrc_initial = this.data['initialPicture'];
-    this.imageSrc_final = this.data['finalPicture'];
   }
 
   showSelectedArea(area): string | undefined {
@@ -181,39 +178,16 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileSelected_final(event): void{
-    this.selectedFile_final = event.target.files[0];
-
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-
-      const reader = new FileReader();
-      reader.onload = e => this.imageSrc_final = reader.result;
-
-      reader.readAsDataURL(file);
-
-      this.taskFormGroup.get('status').setValue('Finalizado');
-    }
-  }
-
   save(): void{
-
-    if(!this.imageSrc_final && (this.taskFormGroup.value['status'] === "Finalizado")){
-      this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento","Cerrar", {
-        duration: 6000
-      });
-      return;
-    }
 
     if(this.requestFormGroup.valid){
 
       let dialogRef = this.dialog.open(SsggRequestsConfirmEditComponent,{
         data: {
-          form: Object.assign(this.requestFormGroup.value, this.additionalsFormGroup.value, this.taskFormGroup.value),
+          form: Object.assign(this.requestFormGroup.value, this.additionalsFormGroup.value),
           requestId: this.data['id'],
           involvedAreas: this.involvedAreasArray,
-          initialImage: this.selectedFile_initial,
-          finalImage: this.selectedFile_final
+          initialImage: this.selectedFile_initial
         }
       });
 

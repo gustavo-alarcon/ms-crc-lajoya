@@ -779,11 +779,11 @@ export class QualityRestorationsComponent implements OnInit, OnDestroy {
   openPictures(data): void {
     this.dialog.open(QualityRedoAnalyzePicturesComponent, {
       data: data
-    })
+    });
   }
 
   editAnalyze(redo): void {
-    let dialogRef = this.dialog.open(QualityRedoAnalyzeDialogEditComponent, {
+    const dialogRef = this.dialog.open(QualityRedoAnalyzeDialogEditComponent, {
       data: redo,
       autoFocus: false
     })
