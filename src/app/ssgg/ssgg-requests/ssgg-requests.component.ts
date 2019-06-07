@@ -11,6 +11,7 @@ import { SsggRequestsConfirmDeleteComponent } from './ssgg-requests-confirm-dele
 import { SsggRequestsDialogEditComponent } from './ssgg-requests-dialog-edit/ssgg-requests-dialog-edit.component';
 import { SsggRequestsDialogTaskComponent } from './ssgg-requests-dialog-task/ssgg-requests-dialog-task.component';
 import { AuthService } from 'src/app/core/auth.service';
+import { SsggRequestsPicturesComponent } from '../ssgg-requests-pictures/ssgg-requests-pictures.component';
 
 @Component({
   selector: 'app-ssgg-requests',
@@ -90,7 +91,7 @@ export class SsggRequestsComponent implements OnInit {
   
   monthFormControl = new FormControl({ value: new Date(), disabled: true });
 
-  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'mainArea', 'createdBy', 'type', 'priority', 'resumen', 'involvedAreas', 'coordinations', 'moreDetails', 'status', 'finalPicture', 'realTerminationDate', 'comments', 'edit'];
+  displayedColumnsRequests: string[] = ['index', 'date', 'initialPicture', 'mainArea', 'createdBy', 'type', 'priority', 'resumen', 'involvedAreas', 'coordinations', 'status', 'finalPicture', 'percentage', 'realTerminationDate', 'comments', 'edit'];
   dataSourceRequests = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -164,17 +165,31 @@ export class SsggRequestsComponent implements OnInit {
       );
 
     // ************** TAB - REQUEST LIST
-    let dataSsggRequestsSubs = this.dbs.currentDataSsggRequests.subscribe(res => {
+    const dataSsggRequestsSubs = this.dbs.currentDataSsggRequests
+    .pipe(
+      map(res => {
+        res.forEach(element => {
+          let counter = 0;
+          if (!!element['finalPicture1']) { counter++; }
+          if (!!element['finalPicture2']) { counter++; }
+          if (!!element['finalPicture3']) { counter++; }
+          if (!!element['finalPicture4']) { counter++; }
+          element['pictureCounter'] = counter;
+        });
+        return res;
+      })
+    )
+    .subscribe(res => {
       this.filteredSsggRequests = res;
       this.dataSourceRequests.data = res;
       this.filteredSsggRequests.forEach(element => {
         this.isOpenRequest.push(false);
-      })
+      });
     });
 
     this.subscriptions.push(dataSsggRequestsSubs);
 
-    let ssggSupervisorSubs = this.dbs.currentDataSsggSupervisors
+    const ssggSupervisorSubs = this.dbs.currentDataSsggSupervisors
       .subscribe(res => {
         if (res) {
           this.isSupervisor = false;
@@ -226,8 +241,7 @@ export class SsggRequestsComponent implements OnInit {
     this.additionalsFormGroup = this.fb.group({
       estimatedTerminationDate: ['', [Validators.required]],
       involvedAreas: '',
-      coordinations: '',
-      moreDetails: ''
+      coordinations: ''
     });
   }
 
@@ -345,6 +359,12 @@ export class SsggRequestsComponent implements OnInit {
       data: request,
       autoFocus: false
     })
+  }
+
+  openPictures(data): void {
+    this.dialog.open(SsggRequestsPicturesComponent, {
+      data: data
+    });
   }
 
 }

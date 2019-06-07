@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, MatFormFieldControl } from '@angular/material';
 import { DatabaseService } from 'src/app/core/database.service';
 import { SsggRequestsConfirmTaskComponent } from '../ssgg-requests-confirm-task/ssgg-requests-confirm-task.component';
+import { debounce, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ssgg-requests-dialog-task',
@@ -12,9 +13,18 @@ import { SsggRequestsConfirmTaskComponent } from '../ssgg-requests-confirm-task/
 export class SsggRequestsDialogTaskComponent implements OnInit {
 
   taskFormGroup: FormGroup;
-  selectedFile_final = null;
-  imageSrc_final: string | ArrayBuffer;
-  percentage: number = 0;
+
+  selectedFile_final1 = null;
+  imageSrc_final1: string | ArrayBuffer;
+
+  selectedFile_final2 = null;
+  imageSrc_final2: string | ArrayBuffer;
+
+  selectedFile_final3 = null;
+  imageSrc_final3: string | ArrayBuffer;
+
+  selectedFile_final4 = null;
+  imageSrc_final4: string | ArrayBuffer;
 
   statusList: Array<string> = [
     'Por confirmar',
@@ -36,65 +46,105 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
   ngOnInit() {
     this.createForms();
 
-    this.taskFormGroup.get('percentage').valueChanges.subscribe(res => {
-      console.log(res)
-      if (res === 100) {
-        this.taskFormGroup.get('status').setValue('Finalizado')
-        this.percentage = res
-        console.log(this.percentage)
-      }
-      else {
-        this.taskFormGroup.get('status').setValue('En proceso')
-        this.percentage = res
-        console.log(this.percentage)
-      }
-    })
+    this.taskFormGroup.get('percentage').valueChanges
+      .pipe(
+        debounceTime(500)
+      )
+      .subscribe(res => {
+        if (res === 100) {
+          this.taskFormGroup.get('status').setValue('Finalizado');
+        } else {
+          this.taskFormGroup.get('status').setValue('En proceso');
+        }
+      });
   }
 
   createForms(): void {
     this.taskFormGroup = this.fb.group({
-      status: this.data['status'],
-      comments: this.data['comments'],
-      percentage: this.data['percentage']
+      status: [this.data['status'], [Validators.required]],
+      comments: [this.data['comments'], [Validators.required]],
+      percentage: [this.data['percentage'], [Validators.required]]
     });
 
-    this.imageSrc_final = this.data['finalPicture'];
+    this.imageSrc_final1 = this.data['finalPicture1'];
+    this.imageSrc_final2 = this.data['finalPicture2'];
+    this.imageSrc_final3 = this.data['finalPicture3'];
+    this.imageSrc_final4 = this.data['finalPicture4'];
   }
 
-  onFileSelected_final(event): void {
-    this.selectedFile_final = event.target.files[0];
+  onFileSelected_final1(event): void {
+    this.selectedFile_final1 = event.target.files[0];
 
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
 
       const reader = new FileReader();
-      reader.onload = e => this.imageSrc_final = reader.result;
+      reader.onload = e => this.imageSrc_final1 = reader.result;
 
       reader.readAsDataURL(file);
+    }
+  }
 
-      this.taskFormGroup.get('status').setValue('Finalizado');
+  onFileSelected_final2(event): void {
+    this.selectedFile_final2 = event.target.files[0];
+
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc_final2 = reader.result;
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onFileSelected_final3(event): void {
+    this.selectedFile_final3 = event.target.files[0];
+
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc_final3 = reader.result;
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onFileSelected_final4(event): void {
+    this.selectedFile_final4 = event.target.files[0];
+
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc_final4 = reader.result;
+
+      reader.readAsDataURL(file);
     }
   }
 
   save(): void {
-    if ((this.taskFormGroup.value['status']) === 'En Proceso') {
-      let dialogRef = this.dialog.open(SsggRequestsConfirmTaskComponent, {
-        data: {
-          form: this.taskFormGroup.value,
-          requestId: this.data['id'],
-          involvedAreas: this.data['involvedAreas']
-        }
-      });
+    let imgCounter = 0;
 
-      dialogRef.afterClosed().subscribe(res => {
-        if (res) {
-          this.dialogRef.close(true);
-        }
-      });
+    if (!!this.imageSrc_final1) {
+      imgCounter++;
     }
 
-    if (!this.imageSrc_final && (this.taskFormGroup.value['status']) === 'Finalizado') {
-      this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento", "Cerrar", {
+    if (!!this.imageSrc_final2) {
+      imgCounter++;
+    }
+
+    if (!!this.imageSrc_final3) {
+      imgCounter++;
+    }
+
+    if (!!this.imageSrc_final4) {
+      imgCounter++;
+    }
+
+    if (imgCounter === 0) {
+      this.snackbar.open('Adjunte por lo menos una imagen para actualizar la solicitud', 'Cerrar', {
         duration: 6000
       });
       return;
@@ -102,12 +152,14 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
 
     if (this.taskFormGroup.valid) {
 
-      let dialogRef = this.dialog.open(SsggRequestsConfirmTaskComponent, {
+      const dialogRef = this.dialog.open(SsggRequestsConfirmTaskComponent, {
         data: {
           form: this.taskFormGroup.value,
-          requestId: this.data['id'],
-          finalImage: this.selectedFile_final,
-          involvedAreas: this.data['involvedAreas']
+          request: this.data,
+          finalImage1: this.selectedFile_final1,
+          finalImage2: this.selectedFile_final2,
+          finalImage3: this.selectedFile_final3,
+          finalImage4: this.selectedFile_final4
         }
       });
 
@@ -118,7 +170,7 @@ export class SsggRequestsDialogTaskComponent implements OnInit {
       });
 
     } else {
-      this.snackbar.open("Complete todo los campos requeridos para poder guardar el documento", "Cerrar", {
+      this.snackbar.open('Complete todo los campos requeridos para poder guardar la solicitud', 'Cerrar', {
         duration: 6000
       });
     }

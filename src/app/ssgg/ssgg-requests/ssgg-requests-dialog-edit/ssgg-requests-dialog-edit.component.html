@@ -116,61 +116,10 @@
       </mat-form-field>
       <br>
 
-      <mat-form-field class="w3-margin-right w3-margin-bottom w3-block" style="max-width:572px" appearance="outline">
-        <mat-label>Más detalles</mat-label>
-        <textarea matInput placeholder="Describa..." rows="4" formControlName="moreDetails"></textarea>
-        <mat-hint>
-          opcional
-        </mat-hint>
-      </mat-form-field>
-      <br>
-
       <input #fileInput_initial style="display: none" type="file" (change)="onFileSelected($event)">
       <img [src]="imageSrc_initial || '../../../assets/images/no-image.png'"
         style="width:200px; height:150px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow"
         (click)="fileInput_initial.click()">
-    </form>
-
-    <h2 class="ms-font-rubik ms-color-bt" style="font-size:1.5em">Cierre de solicitud</h2>
-
-    <form [formGroup]="taskFormGroup">
-
-      <mat-form-field class="w3-margin-right w3-block" style="max-width:572px" appearance="outline">
-        <mat-label>Detalles de cierre</mat-label>
-        <textarea matInput
-          placeholder="Describa como se llevo a cabo el cierre o si tiene alguna acotación adicional ..." rows="4"
-          formControlName="comments"></textarea>
-      </mat-form-field>
-      <br>
-
-      <mat-label>Progreso </mat-label>
-      <mat-toolbar style="background: none">
-        <span class="ms-fill"></span>
-        <mat-slider [max]=100 [min]=0 [step]=1 [thumbLabel]=true formControlName="percentage"></mat-slider>
-        <span class="ms-fill"></span>
-      </mat-toolbar>
-      <br>
-
-      <mat-form-field class="w3-margin-right w3-block w3-margin-bottom" style="max-width:280px" appearance="outline">
-        <mat-label>Estado</mat-label>
-        <input type="text" matInput placeholder="Escriba y seleccione" formControlName="status"
-          [matAutocomplete]="autoStatus" required>
-        <mat-hint>
-          <strong>requerido *</strong>
-        </mat-hint>
-      </mat-form-field>
-      <mat-autocomplete #autoStatus="matAutocomplete">
-        <mat-option *ngFor="let status of statusList" [value]="status" style="font-size:14px">
-          {{status}}
-        </mat-option>
-      </mat-autocomplete>
-      <br>
-
-      <input #fileInput_final style="display: none" type="file" (change)="onFileSelected_final($event)">
-      <img [src]="imageSrc_final || '../../../assets/images/no-image.png'"
-        style="width:200px; height:150px; cursor:pointer" class="mat-elevation-z4 w3-hover-shadow w3-margin-bottom"
-        (click)="fileInput_final.click()">
-      <br>
     </form>
 
   </mat-dialog-content>

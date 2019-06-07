@@ -68,20 +68,6 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     
     this.createForms();
-
-    this.taskFormGroup.get('percentage').valueChanges.subscribe(res => {
-      console.log(res)
-      if (res == 100) {
-        this.taskFormGroup.get('status').setValue('Finalizado')
-        this.percentage = res
-        console.log(this.percentage)
-      }
-      else {
-        this.taskFormGroup.get('status').setValue('En proceso')
-        this.percentage = res
-        console.log(this.percentage)
-      }
-    })
        
     this.filteredSsggTypes =  this.requestFormGroup.get('type').valueChanges
                                 .pipe(
@@ -129,20 +115,12 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     this.additionalsFormGroup = this.fb.group({
       estimatedTerminationDate: [{value: this.data['estimatedTerminationDate']? this._estimatedDate:'', disabled: false}],
       involvedAreas: this.data['involvedAreas'],
-      coordinations: this.data['coordinations'],
-      moreDetails: this.data['moreDetails']
+      coordinations: this.data['coordinations']
     });
 
     this.involvedAreasArray = this.data['involvedAreas'];
-
-    this.taskFormGroup = this.fb.group({
-      status: this.data['status'],
-      comments: this.data['comments'],
-      percentage: this.data['percentage']
-    });
     
     this.imageSrc_initial = this.data['initialPicture'];
-    this.imageSrc_final = this.data['finalPicture'];
   }
 
   showSelectedArea(area): string | undefined {
@@ -200,39 +178,16 @@ export class SsggRequestsDialogEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileSelected_final(event): void{
-    this.selectedFile_final = event.target.files[0];
-
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-
-      const reader = new FileReader();
-      reader.onload = e => this.imageSrc_final = reader.result;
-
-      reader.readAsDataURL(file);
-
-      this.taskFormGroup.get('status').setValue('Finalizado');
-    }
-  }
-
   save(): void{
-
-    if(!this.imageSrc_final && (this.taskFormGroup.value['status'])){
-      this.snackbar.open("Adjunte imagen FINAL para poder guardar el documento","Cerrar", {
-        duration: 6000
-      });
-      return;
-    }
 
     if(this.requestFormGroup.valid){
 
       let dialogRef = this.dialog.open(SsggRequestsConfirmEditComponent,{
         data: {
-          form: Object.assign(this.requestFormGroup.value, this.additionalsFormGroup.value, this.taskFormGroup.value),
+          form: Object.assign(this.requestFormGroup.value, this.additionalsFormGroup.value),
           requestId: this.data['id'],
           involvedAreas: this.involvedAreasArray,
-          initialImage: this.selectedFile_initial,
-          finalImage: this.selectedFile_final
+          initialImage: this.selectedFile_initial
         }
       });
 
