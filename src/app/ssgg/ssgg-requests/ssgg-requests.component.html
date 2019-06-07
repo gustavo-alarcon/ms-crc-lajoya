@@ -370,12 +370,12 @@
                           <mat-icon>check_circle</mat-icon> Actualizar
                         </button>
                         <button mat-raised-button class="w3-margin-bottom" color="primary" matTooltip="Editar solicitud" 
-                          (click)="edit(request)">
+                          (click)="edit(request)" [disabled]="!auth.permits['ssggRequestsEdit']">
                           <mat-icon>edit</mat-icon> Editar
                         </button><br>
                         <button mat-raised-button class="w3-margin-bottom" color="warn" matTooltip="Borrar solicitud"
                           (click)="delete(request['id'],request['involvedAreas'])"
-                          [disabled]="auth.permits['ssggRequestsDelete']">
+                          [disabled]="!auth.permits['ssggRequestsDelete']">
                           <mat-icon>delete</mat-icon> Borrar
                         </button><br>
                       </td>
@@ -413,19 +413,19 @@
                   </div>
                   <div [@openCloseContent]="isOpenRequest[i] ? 'openContent': 'closedContent'" class="mat-elevation-z8">
                     <mat-toolbar style="background:#333333">
-                      <button mat-icon-button color="primary" class="w3-text-white" matTooltip="Registrar cierre"
+                      <button mat-raised-button color="primary" class="w3-text-white" matTooltip="Registrar cierre"
                         (click)="task(request)"
-                        [disabled]="request['status'] === 'Finalizado' && request['status'] === 'Por confirmar' || !isSupervisor">
+                        [disabled]="request['status'] === 'Finalizado' || request['status'] === 'Por confirmar' || request['status'] === 'Rechazado' || !isSupervisor">
                         <mat-icon>check_circle</mat-icon> Actualizar
                       </button>
                       <span class="ms-fill"></span>
                       <button mat-icon-button color="primary" matTooltip="Editar solicitud" (click)="edit(request)"
-                        [disabled]="auth.permits['ssggRequestsEdit']">
+                        [disabled]="!auth.permits['ssggRequestsEdit']">
                         <mat-icon>edit</mat-icon>
                       </button>
                       <button mat-icon-button color="warn" matTooltip="Borrar solicitud"
                         (click)="delete(request['id'],request['involvedAreas'])"
-                        [disabled]="auth.permits['ssggRequestsDelete']">
+                        [disabled]="!auth.permits['ssggRequestsDelete']">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </mat-toolbar>
