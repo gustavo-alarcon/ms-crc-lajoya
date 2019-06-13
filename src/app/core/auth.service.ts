@@ -84,6 +84,7 @@ export class AuthService {
           this.permitsDocument.valueChanges().subscribe(res => {
             this.permits = res;
             this.dataPermits.next(res);
+            console.log(this.permits);
           });
 
           this.notificationsCollection =

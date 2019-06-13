@@ -71,7 +71,6 @@ export class SsggRequestsConfirmTaskComponent implements OnInit {
 
       this.dbs.addSsggRequestLog(this.data['request']['id'], log)
         .then(() => {
-          this.dialogRef.close(true);
         })
         .catch(error => {
           console.log(error);
@@ -117,6 +116,7 @@ export class SsggRequestsConfirmTaskComponent implements OnInit {
               this.dbs.ssggRequestsCollection.doc(this.data['request']['id']).set(newData, { merge: true })
                 .then(() => {
                   this.uploading_final1 = false;
+                  this.dialogRef.close(true);
                 })
                 .catch(err => {
                   console.log(err);
@@ -152,6 +152,7 @@ export class SsggRequestsConfirmTaskComponent implements OnInit {
               this.dbs.ssggRequestsCollection.doc(this.data['request']['id']).set(newData, { merge: true })
                 .then(() => {
                   this.uploading_final2 = false;
+                  this.dialogRef.close(true);
                 })
                 .catch(err => {
                   console.log(err);
@@ -187,6 +188,7 @@ export class SsggRequestsConfirmTaskComponent implements OnInit {
               this.dbs.ssggRequestsCollection.doc(this.data['request']['id']).set(newData, { merge: true })
                 .then(() => {
                   this.uploading_final3 = false;
+                  this.dialogRef.close(true);
                 })
                 .catch(err => {
                   console.log(err);
@@ -222,6 +224,7 @@ export class SsggRequestsConfirmTaskComponent implements OnInit {
               this.dbs.ssggRequestsCollection.doc(this.data['request']['id']).set(newData, { merge: true })
                 .then(() => {
                   this.uploading_final4 = false;
+                  this.dialogRef.close(true);
                 })
                 .catch(err => {
                   console.log(err);

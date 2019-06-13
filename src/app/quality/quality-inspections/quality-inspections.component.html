@@ -271,7 +271,7 @@
                   style="background:#a6a6a6" class="ms-color-2b">
                   <button mat-raised-button color="primary" class="w3-margin-right" matTooltip="Agregar observación"
                     (click)="addObservation(inspection)"
-                    [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
+                    [disabled]="inspection['inspector']['uid'] != auth.userCRC.uid">
                     <mat-icon class="example-icon">add_circle</mat-icon> Observación
                   </button>
                   <button mat-stroked-button color="primary" class="w3-margin-right" matTooltip="Finalizar Inspección"
@@ -410,7 +410,7 @@
                         style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                         <button mat-icon-button color="warn" matTooltip="Borrar observación"
                           (click)="deleteObservation(inspection['id'],observation['id'], observation['responsibleArea']['supervisor']['uid'])"
-                          [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
+                          [disabled]="inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                           <mat-icon>delete</mat-icon>
                         </button>
                       </td>
@@ -444,7 +444,7 @@
                         <span class="ms-fill"></span>
                         <button mat-icon-button class="w3-text-white" matTooltip="Agregar observación"
                           (click)="addObservation(inspection)"
-                          [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid">
+                          [disabled]="inspection['inspector']['uid'] != auth.userCRC.uid">
                           <mat-icon>add_circle</mat-icon>
                         </button>
                         <button mat-icon-button class="w3-text-white" matTooltip="Finalizar inspección"
@@ -489,7 +489,7 @@
                         <span class="ms-fill"></span>
                         <button mat-icon-button style="color:white" matTooltip="Borrar observación"
                           (click)="deleteObservation(inspection['id'],observation['id'],observation['responsibleArea']['supervisor']['uid'])"
-                          [disabled]="inspection['status'] === 'Finalizado' || inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
+                          [disabled]="inspection['inspector']['uid'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
                           <mat-icon>delete</mat-icon>
                         </button>
                       </mat-toolbar>
@@ -745,7 +745,7 @@
                     style="color:#2b2b2b; padding:1em 1em 0px 1em; border-left:1px solid lightgrey">
                     <button mat-icon-button color="warn" matTooltip="Borrar observación"
                       (click)="deleteSingleObservation(observation['id'],observation['responsibleArea']['supervisor']['uid'])"
-                      [disabled]="observation['status'] === 'Finalizado' || observation['uidSupervisor'] != auth.userCRC.uid || !auth.permits['qualityInspectionsSingleObservationsDelete']">
+                      [disabled]="!auth.permits['qualityInspectionsSingleObservationsDelete']">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
@@ -768,7 +768,7 @@
                       <span class="ms-fill"></span>
                       <button mat-icon-button style="color:white" matTooltip="Borrar observación"
                         (click)="deleteSingleObservation(observation['id'],observation['responsibleArea']['supervisor']['uid'])"
-                        [disabled]="observation['status'] === 'Finalizado' ||!auth.permits['qualityInspectionsSingleObservationsDelete']">
+                        [disabled]="!auth.permits['qualityInspectionsSingleObservationsDelete']">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </mat-toolbar>

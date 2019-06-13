@@ -3,7 +3,7 @@
 <mat-dialog-content>
   <p class="ms-font-roboto">¿Está seguro de querer modificar el documento?</p>
   <br>
-  <mat-progress-bar mode="indeterminate" *ngIf="uploading && !uploading_final"></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" *ngIf="uploading"></mat-progress-bar>
   
   <mat-progress-bar mode="buffer" [value]="uploadPercent_initial | async" *ngIf="uploading_initial"></mat-progress-bar>
   <p style="font-size:0.8em;margin-bottom:1em" *ngIf="uploading_initial && data[4]">{{uploadPercent_initial | async | number: '.2'}}/100 % ... Subiendo imagen inicial</p>
