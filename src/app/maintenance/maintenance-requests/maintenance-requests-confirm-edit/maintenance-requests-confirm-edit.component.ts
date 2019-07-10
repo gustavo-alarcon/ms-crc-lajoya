@@ -56,6 +56,7 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
                 initialPicture: res,
                 realTerminationDate: realDate,
                 status: this.data['form']['status'],
+                maintenanceDetails: this.data['form']['maintenanceDetails'],
                 priority: this.data['form']['priority'],
                 equipment: this.data['form']['equipment'],
                 source: 'maintenance',
@@ -116,6 +117,7 @@ export class MaintenanceRequestsConfirmEditComponent implements OnInit {
       let requestObject = {
         realTerminationDate: realDate,
         status: this.data['form']['status'],
+        maintenanceDetails: this.data['form']['maintenanceDetails'],
         priority: this.data['form']['priority'],
         equipment: this.data['form']['equipment'],
         source: 'maintenance',

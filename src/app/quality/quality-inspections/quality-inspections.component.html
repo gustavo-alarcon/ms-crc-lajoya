@@ -107,7 +107,7 @@
                         <ul style="margin-top:0px;margin-bottom:7px;padding-left:32px;">
                           <li matTooltip="Correo">{{inspection['inspector']['email']}}</li>
                           <li matTooltip="Puesto">{{inspection['inspector']['jobTitle']}}</li>
-                          <li matTooltip="Área">{{inspection['inspector']['area']['name']}}</li>
+                          <li matTooltip="Área">{{inspection['inspector']['area'] ? inspection['inspector']['area']['name'] : '---'}}</li>
                         </ul>
                       </td>
                     </ng-container>

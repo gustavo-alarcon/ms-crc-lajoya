@@ -1,6 +1,6 @@
 {
   "name": "ms-crc-lajoya",
-  "version": "1.2.23",
+  "version": "1.2.24",
   "author": "Meraki Solutions",
   "scripts": {
     "ng": "ng",

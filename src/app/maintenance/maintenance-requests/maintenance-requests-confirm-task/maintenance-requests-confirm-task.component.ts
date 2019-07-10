@@ -54,7 +54,7 @@ export class MaintenanceRequestsConfirmTaskComponent implements OnInit {
                 status: this.data['form']['status'],
                 maintenanceDetails: this.data['form']['maintenanceDetails'],
                 source: 'maintenance',
-                closeddBy: this.auth.userCRC,
+                closedBy: this.auth.userCRC,
                 uidCloser: this.auth.userCRC.uid
               };
       

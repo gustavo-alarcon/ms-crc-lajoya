@@ -14,6 +14,7 @@ import { QualityInspectionObservationConfirmDeleteComponent } from './quality-in
 import { QualityDialogAddSingleObservationComponent } from './quality-dialog-add-single-observation/quality-dialog-add-single-observation.component';
 import { QualityConfirmDeleteSingleObservationComponent } from './quality-confirm-delete-single-observation/quality-confirm-delete-single-observation.component';
 import { DatePipe } from '@angular/common';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-quality-inspections',
@@ -134,7 +135,7 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
     quoteStrings: '"',
     decimalseparator: '.',
     showLabels: true,
-    headers: ['Fecha de inspección','Inspector - Usuario', 'Área - Nombre', 'Descripción de la observación', 'Recomendación', 'Foto inicial', 'Área observada - Nombre', 'Área observada - Supervisor',  'Área responsable - Nombre', 'Área responsable - Supervisor', 'Foto final', 'Fecha propuesta', 'Fecha real', 'Estado'],
+    headers: ['Fecha de inspección', 'Inspector - Usuario', 'Área - Nombre', 'Descripción de la observación', 'Recomendación', 'Foto inicial', 'Área observada - Nombre', 'Área observada - Supervisor', 'Área responsable - Nombre', 'Área responsable - Supervisor', 'Foto final', 'Fecha propuesta', 'Fecha real', 'Estado'],
     showTitle: true,
     title: '',
     useBom: false,
@@ -147,7 +148,7 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
     quoteStrings: '"',
     decimalseparator: '.',
     showLabels: true,
-    headers: ['Descripción de la observación', 'Recomendación', 'Foto inicial', 'Área observada - Nombre', 'Área observada - Supervisor',  'Área responsable - Nombre', 'Área responsable - Supervisor', 'Foto final', 'Fecha propuesta', 'Fecha real', 'Estado'],
+    headers: ['Descripción de la observación', 'Recomendación', 'Foto inicial', 'Área observada - Nombre', 'Área observada - Supervisor', 'Área responsable - Nombre', 'Área responsable - Supervisor', 'Foto final', 'Fecha propuesta', 'Fecha real', 'Estado'],
     showTitle: true,
     title: '',
     useBom: false,
@@ -169,7 +170,8 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     public dbs: DatabaseService,
     public auth: AuthService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private af: AngularFirestore
   ) { }
 
   ngOnInit() {
@@ -210,7 +212,7 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
             _object['inspector usuario'] = element['inspector']['displayName'];
 
             // Adding inspector - area
-            _object['inspector area'] = element['inspector']['area']['name'];
+            _object['inspector area'] = element['inspector']['area'] ? element['inspector']['area']['name'] : '---';
 
             // Adding area of inspection - name
             _object['area inspeccion nombre'] = element['area']['name'];
@@ -233,12 +235,14 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(res => {
-        this.filteredInspections = res;
-        this.dataSource.data = res;
-        this.filteredInspections.forEach(element => {
-          this.isOpenInspection.push(false);
-        });
-        this.downloadObservations(res);
+        if (res) {
+          this.filteredInspections = res;
+          this.dataSource.data = res;
+          this.filteredInspections.forEach(element => {
+            this.isOpenInspection.push(false);
+          });
+          this.downloadObservations(res);
+        }
       });
 
     this.subscriptions.push(qualitySubs);
@@ -255,45 +259,43 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
         tap(res => {
           this.downloadableSingleObservations = [];
           res.forEach(observation => {
-              // Initializing _object
-              let _object = {}
+            // Initializing _object
+            let _object = {}
 
-              // Adding observation description
-              _object['observationDescription'] = observation['observationDescription'] ? observation['observationDescription'] : '---';
+            // Adding observation description
+            _object['observationDescription'] = observation['observationDescription'] ? observation['observationDescription'] : '---';
 
-              // Adding recommendation description
-              _object['recommendationDescription'] = observation['recommendationDescription'] ? observation['recommendationDescription'] : '---';
+            // Adding recommendation description
+            _object['recommendationDescription'] = observation['recommendationDescription'] ? observation['recommendationDescription'] : '---';
 
-              // Adding initial picture link
-              _object['initialPicture'] = observation['initialPicture'] ? observation['initialPicture'] : '---';
+            // Adding initial picture link
+            _object['initialPicture'] = observation['initialPicture'] ? observation['initialPicture'] : '---';
 
-              // Adding area - name
-              _object['areaObservationName'] = observation['area']['name'] ? observation['area']['name'] : '---';
+            // Adding area - name
+            _object['areaObservationName'] = observation['area']['name'] ? observation['area']['name'] : '---';
 
-              // Adding area - supervisor
-              _object['areaSupervisor'] = observation['area']['supervisor']['displayName'];
+            // Adding area - supervisor
+            _object['areaSupervisor'] = observation['area']['supervisor']['displayName'];
 
-              // Adding area - name
-              _object['areaResponsibleName'] = observation['responsibleArea']['name'] ? observation['responsibleArea']['name'] : '---';
+            // Adding area - name
+            _object['areaResponsibleName'] = observation['responsibleArea']['name'] ? observation['responsibleArea']['name'] : '---';
 
-              // Adding area - supervisor
-              _object['areResponsibleaSupervisor'] = observation['responsibleArea']['supervisor']['displayName'] ? observation['responsibleArea']['supervisor']['displayName'] : '---';
+            // Adding area - supervisor
+            _object['areResponsibleaSupervisor'] = observation['responsibleArea']['supervisor']['displayName'] ? observation['responsibleArea']['supervisor']['displayName'] : '---';
 
-              // Adding final picture link
-              _object['finalPicture'] = observation['finalPicture'] ? observation['finalPicture'] : '---';
+            // Adding final picture link
+            _object['finalPicture'] = observation['finalPicture'] ? observation['finalPicture'] : '---';
 
-              // Adding observation estimated date
-              _object['obsEstimatedTerminationDate'] = observation['estimatedTerminationDate'] ? this.datePipe.transform(new Date(observation['estimatedTerminationDate']), 'dd/MM/yyyy') : '---';
+            // Adding observation estimated date
+            _object['obsEstimatedTerminationDate'] = observation['estimatedTerminationDate'] ? this.datePipe.transform(new Date(observation['estimatedTerminationDate']), 'dd/MM/yyyy') : '---';
 
-              // Adding observation real date
-              _object['obsRealTerminationDate'] = observation['realTerminationDate'] ? this.datePipe.transform(new Date(observation['realTerminationDate']), 'dd/MM/yyyy') : '---';
+            // Adding observation real date
+            _object['obsRealTerminationDate'] = observation['realTerminationDate'] ? this.datePipe.transform(new Date(observation['realTerminationDate']), 'dd/MM/yyyy') : '---';
 
-              // Adding status
-              _object['status'] = observation['status'] ? observation['status'] : '---';
+            // Adding status
+            _object['status'] = observation['status'] ? observation['status'] : '---';
 
-              
-
-              this.downloadableSingleObservations.push(_object);
+            this.downloadableSingleObservations.push(_object);
           })
         })
       )
@@ -335,12 +337,15 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
   downloadObservations(inspections): void {
     this.downloadableInspectionsObservations = [];
     inspections.forEach((inspection, index) => {
+      console.log('id', inspection['id']);
       if (inspection['id']) {
+        
         this.dbs.qualityInspectionsCollection
           .doc(inspection['id'])
           .collection('observations').get().forEach(snapshot => {
 
             snapshot.docs.forEach(doc => {
+
               let observation = doc.data();
               // Initializing _object
               let _object = {}
@@ -393,7 +398,7 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
       }
 
     })
-
+    console.log('observations', this.downloadableInspectionsObservations);
   }
 
   toggleCardInspection(index, id_inspection) {
@@ -412,7 +417,7 @@ export class QualityInspectionsComponent implements OnInit, OnDestroy {
   addObservation(inspectionData): void {
     let addObsSubs = this.dialog.open(QualityAddObservationToInspectionComponent, {
       data: inspectionData
-    }).afterClosed().subscribe( res => {
+    }).afterClosed().subscribe(res => {
       this.downloadObservations(this.filteredInspections);
     })
 

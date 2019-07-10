@@ -65,8 +65,6 @@ export class AuthService {
     // NOTIFICATION COUNTER DECLARATION
     let notificationsCounter = 0;
 
-    // PLATFORM
-
     // USER PERSISTENCE VALIDATION
     this.afAuth.authState.subscribe(user => {
       if (user) {
@@ -84,7 +82,6 @@ export class AuthService {
           this.permitsDocument.valueChanges().subscribe(res => {
             this.permits = res;
             this.dataPermits.next(res);
-            console.log(this.permits);
           });
 
           this.notificationsCollection =

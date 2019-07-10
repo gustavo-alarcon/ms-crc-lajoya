@@ -1,10 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar, MatChipInputEvent, MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { Observable, Subscription } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, tap } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/core/database.service';
 import { SsggRequestsConfirmSaveComponent } from './ssgg-requests-confirm-save/ssgg-requests-confirm-save.component';
 import { SsggRequestsConfirmDeleteComponent } from './ssgg-requests-confirm-delete/ssgg-requests-confirm-delete.component';
@@ -118,12 +119,31 @@ export class SsggRequestsComponent implements OnInit {
   involvedAreasArray: Array<any> = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
+  optionsRequests = {
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalseparator: '.',
+    showLabels: true,
+    headers: ['Fecha de solicitud', 'Foto inicial', 'Área principal', 'Solicitante - Nombre', 'Solicitante - Área', 'Modificado por', 'Cerrado por', 'Confirmado por', 'Tipo', 'Prioridad', 'Resumen', 'Área inv.- Nombre', 'Área inv. - Supervisor', 'Coordinaciones', 'Estado', 'Foto - final', 'percentage', 'Fecha estimada', 'Fecha real', 'Comentarios'],
+    showTitle: true,
+    title: '',
+    useBom: false,
+    removeNewLines: true
+    //keys: ['approved','age','name' ]
+  };
+
+  titleRequests: string = '';
+
+  downloadableRequests = [];
+  downloadableInspections: any;
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
     public dbs: DatabaseService,
     public auth: AuthService,
+    private datePipe: DatePipe,
    
 
   ) { }
@@ -133,8 +153,11 @@ export class SsggRequestsComponent implements OnInit {
     this.currentMonth = this.monthsKey[this.monthIndex];
     this.currentYear = this.monthFormControl.value.getFullYear();
 
+    this.titleRequests = 'Servicios_Generales_Solicitudes' + this.currentMonth + '_' + this.currentYear;
+
+    this.optionsRequests['title'] = 'Servicios Generales - Solicitudes ' + this.currentMonth + ' ' + this.currentYear;
+
     this.createForms();
-    
 
     this.filteredSsggTypes = this.requestFormGroup.get('type').valueChanges
       .pipe(
@@ -167,6 +190,76 @@ export class SsggRequestsComponent implements OnInit {
     // ************** TAB - REQUEST LIST
     const dataSsggRequestsSubs = this.dbs.currentDataSsggRequests
     .pipe(
+      tap(res => {
+        this.downloadableRequests = [];
+        res.forEach(element => {
+          // Initializing _object
+          let _object = {}
+
+          // Adding date with format
+          _object['fecha de creación'] = element['regDate'] ? this.datePipe.transform(new Date(element['regDate']), 'dd/MM/yyyy') : '---';
+
+          // Adding initial picture
+          _object['initial picture'] = element['initialPicture'] ? element['initialPicture'] : '---';
+
+          // Adding main area
+          _object['main area'] = element['mainArea'] ? element['mainArea']['name'] : '---';
+
+          // Adding Creted by
+          _object['created by name'] = element['createdBy']['displayName'];
+
+          // Adding Creted by
+          _object['created by area'] = element['createdBy']['area']['name'];
+
+          // Adding Modified by
+          _object['modified by'] = element['modifiedBy'] ? element['modifiedBy']['displayName'] : '---';
+
+          // Adding Closed by
+          _object['closed by'] = element['closedBy'] ? element['closedBy']['displayName'] : '---';
+
+          // Adding Confirmed by
+          _object['confirmed by'] = element['confirmedBy'] ? element['confirmedBy'] : '---';
+
+          // Adding type
+          _object['type'] = element['type'];
+
+          // Adding priority
+          _object['priority'] = element['priority'];
+
+          // Adding resumen
+          _object['resumen'] = element['resumen'];
+
+           // Adding Area name
+           _object['area name'] = element['involvedAreas'][0]['name'];
+
+           // Adding Area supervisor
+           _object['area supervisor'] = element['involvedAreas'][0]['supervisor']['displayName'];
+
+           // Adding coordinations
+          _object['coordinations'] = element['coordinations'];
+
+          // Adding status
+          _object['status'] = element['status'];
+
+          // Adding final picture
+          _object['final picture'] = element['finalPicture'] ? element['finalPicture'] : '---';
+
+          // Adding percentage
+          _object['percentage'] = element['percentage'];
+
+          // Adding inspection date
+          _object['fecha estimada'] = element['estimatedTerminationDate'] ? this.datePipe.transform(new Date(element['estimatedTerminationDate']), 'dd/MM/yyyy') : '---';
+
+          // Adding real date
+          _object['fecha real'] = element['realTerminationDate'] ? this.datePipe.transform(new Date(element['realTerminationDate']), 'dd/MM/yyyy') : '---';
+
+          // Adding comments
+          _object['comments'] = element['comments'];
+
+          this.downloadableRequests.push(_object);
+
+        });
+      }),
       map(res => {
         res.forEach(element => {
           let counter = 0;
